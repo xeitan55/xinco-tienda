@@ -220,16 +220,6 @@ tailwind.config = {
     border-color: #000;
   }
 </style>
-
-<script>
-window.CLOUDINARY_CONFIG = {
-  cloudName: "TU_CLOUD_NAME",
-  uploadPreset: "xinco_unsigned",
-  signedMode: false,
-  maxImagesPerProduct: 4
-};
-</script>
-
 </head>
 <body>
 
@@ -1046,6 +1036,9 @@ window.CLOUDINARY_CONFIG = {
         <button class="admin-nav-item w-full" id="admin-nav-tracking" onclick="showAdminSection('tracking')">
           <span class="material-symbols-outlined">local_shipping</span> TRACKING
         </button>
+        <button class="admin-nav-item w-full" id="admin-nav-vercel" onclick="showAdminSection('vercel')">
+          <span class="material-symbols-outlined">public</span> DOMINIO / VERCEL
+        </button>
       </div>
       <div class="border-t border-white/10 p-4">
         <button class="admin-nav-item w-full" onclick="doLogout()"><span class="material-symbols-outlined">logout</span> SALIR</button>
@@ -1812,14 +1805,14 @@ let bannerState = {
 };
 
 const PRODUCTS = [
-  {id:1, name:'ARCHIVE HEAVY TEE', price:14500, oldPrice:null, cat:'remeras', badge:'NUEVO', desc:'Remera oversized de algodón 300g. Corte boxy, costuras reforzadas. El básico definitivo.', sizes:['S','M','L','XL'], colors:['negro','blanco'], stock:45, sku:'XNC-REM-001', rating:4.8, reviews:32, img:'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80', images:['https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80','https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80','https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80'], tags:['newdrops','esenciales']},
-  {id:2, name:'TACTICAL CARGO PANT', price:28900, oldPrice:38000, cat:'pantalones', badge:'SALE', desc:'Cargo técnico con 8 bolsillos. Tela ripstop resistente al agua. Para la calle y más allá.', sizes:['M','L','XL'], colors:['negro','gris'], stock:18, sku:'XNC-PAN-002', rating:4.9, reviews:18, img:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80', images:['https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80','https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80','https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80'], tags:['esenciales']},
-  {id:3, name:'XINCO 01 HOODIE', price:42000, oldPrice:null, cat:'buzos', badge:'DROP EXCLUSIVO', desc:'Buzo pesado con capucha ajustable. Bordado frontal. Fabricado localmente en Argentina.', sizes:['S','M','L','XL','XXL'], colors:['negro','violeta'], stock:30, sku:'XNC-BUZ-003', rating:5.0, reviews:47, img:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80', images:['https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80','https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80','https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80'], tags:['newdrops','stylo']},
-  {id:4, name:'SIGNAL TRACK JACKET', price:55000, oldPrice:null, cat:'buzos', badge:'NUEVO', desc:'Campera track con detalles violeta. Tela técnica anti-viento. Íconos de la calle porteña.', sizes:['S','M','L'], colors:['negro','violeta'], stock:12, sku:'XNC-BUZ-004', rating:4.7, reviews:11, img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80', images:['https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80','https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80','https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80'], tags:['newdrops','stylo']},
-  {id:5, name:'MONO LOGO TEE', price:12000, oldPrice:15000, cat:'remeras', badge:'SALE', desc:'Remera slim con logo monocromático. Algodón peinado suave. Clásica y versátil.', sizes:['XS','S','M','L','XL'], colors:['blanco','negro','gris'], stock:60, sku:'XNC-REM-005', rating:4.5, reviews:28, img:'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80', images:['https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80','https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80','https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80'], tags:['esenciales']},
-  {id:6, name:'STREET JOGGER V2', price:22000, oldPrice:null, cat:'pantalones', badge:null, desc:'Jogging urbano con puños en las piernas y pretina ancha. Para moverse sin límites.', sizes:['S','M','L','XL'], colors:['negro','gris'], stock:25, sku:'XNC-PAN-006', rating:4.6, reviews:15, img:'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80', images:['https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80','https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80','https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80'], tags:['esenciales']},
-  {id:7, name:'NOIR ZIP HOODIE', price:38000, oldPrice:45000, cat:'buzos', badge:'SALE', desc:'Buzo con cierre completo. Interior polar. Bolsillos kangaroo. Invierno urbano.', sizes:['M','L','XL','XXL'], colors:['negro'], stock:8, sku:'XNC-BUZ-007', rating:4.8, reviews:22, img:'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80', images:['https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80','https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80','https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80'], tags:['stylo']},
-  {id:8, name:'XINCO CAP 01', price:8500, oldPrice:null, cat:'accesorios', badge:'NEW', desc:'Gorra snapback con bordado frontal. Panel estructurado. Ajuste universal.', sizes:['U'], colors:['negro','blanco'], stock:80, sku:'XNC-ACC-008', rating:4.4, reviews:9, img:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80', images:['https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80','https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80','https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80'], tags:['esenciales','newdrops']},
+  {id:1, name:'ARCHIVE HEAVY TEE', price:14500, oldPrice:null, cat:'remeras', badge:'NUEVO', desc:'Remera oversized de algodón 300g. Corte boxy, costuras reforzadas. El básico definitivo.', sizes:['S','M','L','XL'], colors:['negro','blanco'], stock:45, sku:'XNC-REM-001', rating:4.8, reviews:32, img:'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80', tags:['newdrops','esenciales']},
+  {id:2, name:'TACTICAL CARGO PANT', price:28900, oldPrice:38000, cat:'pantalones', badge:'SALE', desc:'Cargo técnico con 8 bolsillos. Tela ripstop resistente al agua. Para la calle y más allá.', sizes:['M','L','XL'], colors:['negro','gris'], stock:18, sku:'XNC-PAN-002', rating:4.9, reviews:18, img:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80', tags:['esenciales']},
+  {id:3, name:'XINCO 01 HOODIE', price:42000, oldPrice:null, cat:'buzos', badge:'DROP EXCLUSIVO', desc:'Buzo pesado con capucha ajustable. Bordado frontal. Fabricado localmente en Argentina.', sizes:['S','M','L','XL','XXL'], colors:['negro','violeta'], stock:30, sku:'XNC-BUZ-003', rating:5.0, reviews:47, img:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80', tags:['newdrops','stylo']},
+  {id:4, name:'SIGNAL TRACK JACKET', price:55000, oldPrice:null, cat:'buzos', badge:'NUEVO', desc:'Campera track con detalles violeta. Tela técnica anti-viento. Íconos de la calle porteña.', sizes:['S','M','L'], colors:['negro','violeta'], stock:12, sku:'XNC-BUZ-004', rating:4.7, reviews:11, img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80', tags:['newdrops','stylo']},
+  {id:5, name:'MONO LOGO TEE', price:12000, oldPrice:15000, cat:'remeras', badge:'SALE', desc:'Remera slim con logo monocromático. Algodón peinado suave. Clásica y versátil.', sizes:['XS','S','M','L','XL'], colors:['blanco','negro','gris'], stock:60, sku:'XNC-REM-005', rating:4.5, reviews:28, img:'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80', tags:['esenciales']},
+  {id:6, name:'STREET JOGGER V2', price:22000, oldPrice:null, cat:'pantalones', badge:null, desc:'Jogging urbano con puños en las piernas y pretina ancha. Para moverse sin límites.', sizes:['S','M','L','XL'], colors:['negro','gris'], stock:25, sku:'XNC-PAN-006', rating:4.6, reviews:15, img:'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80', tags:['esenciales']},
+  {id:7, name:'NOIR ZIP HOODIE', price:38000, oldPrice:45000, cat:'buzos', badge:'SALE', desc:'Buzo con cierre completo. Interior polar. Bolsillos kangaroo. Invierno urbano.', sizes:['M','L','XL','XXL'], colors:['negro'], stock:8, sku:'XNC-BUZ-007', rating:4.8, reviews:22, img:'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80', tags:['stylo']},
+  {id:8, name:'XINCO CAP 01', price:8500, oldPrice:null, cat:'accesorios', badge:'NEW', desc:'Gorra snapback con bordado frontal. Panel estructurado. Ajuste universal.', sizes:['U'], colors:['negro','blanco'], stock:80, sku:'XNC-ACC-008', rating:4.4, reviews:9, img:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80', tags:['esenciales','newdrops']},
 ];
 
 let ORDERS = [
@@ -3108,266 +3101,5 @@ updateCartCount();
 renderAnnouncementBar();
 renderHeroBanner();
 </script>
-
-<script>
-function getProductImages(product){
-  if(product.images && Array.isArray(product.images)){
-    return product.images.slice(0,4);
-  }
-  return [product.img];
-}
-
-function changeMainImage(src){
-  const main = document.getElementById('product-main-img');
-  if(main) main.src = src;
-}
-</script>
-
-
-<script>
-window.demoTrackingOrders = [
-  {
-    id: 'XNC-1001',
-    customer: 'Cliente Demo',
-    status: 'En camino',
-    tracking: 'AR123456789'
-  }
-];
-
-window.demoPayments = [
-  {
-    orderId: 'XNC-1001',
-    amount: '$45.000',
-    status: 'Aprobado',
-    method: 'Mercado Pago'
-  }
-];
-
-function renderAdminWidgets(){
-  const trackingSection = document.getElementById('admin-section-tracking');
-  const paymentsSection = document.getElementById('admin-section-cobranzas');
-
-  if(trackingSection && !document.getElementById('tracking-live-widget')){
-    trackingSection.innerHTML += `
-      <div id="tracking-live-widget" class="border-[3px] border-primary p-6 mt-6 bg-white">
-        <h3 style="font-family:Montserrat;font-size:24px;font-weight:800;">TRACKING ACTIVO</h3>
-        ${window.demoTrackingOrders.map(order => `
-          <div class="border-2 border-black p-4 mt-4">
-            <p><strong>Pedido:</strong> ${order.id}</p>
-            <p><strong>Cliente:</strong> ${order.customer}</p>
-            <p><strong>Estado:</strong> ${order.status}</p>
-            <p><strong>Tracking:</strong> ${order.tracking}</p>
-          </div>
-        `).join('')}
-      </div>
-    `;
-  }
-
-  if(paymentsSection && !document.getElementById('payments-live-widget')){
-    paymentsSection.innerHTML += `
-      <div id="payments-live-widget" class="border-[3px] border-primary p-6 mt-6 bg-white">
-        <h3 style="font-family:Montserrat;font-size:24px;font-weight:800;">COBRANZAS</h3>
-        ${window.demoPayments.map(payment => `
-          <div class="border-2 border-black p-4 mt-4">
-            <p><strong>Orden:</strong> ${payment.orderId}</p>
-            <p><strong>Monto:</strong> ${payment.amount}</p>
-            <p><strong>Estado:</strong> ${payment.status}</p>
-            <p><strong>Método:</strong> ${payment.method}</p>
-          </div>
-        `).join('')}
-      </div>
-    `;
-  }
-}
-
-window.addEventListener('load', renderAdminWidgets);
-</script>
-
-
-<script>
-window.MERCADOPAGO_CONFIG = {
-  enabled: true,
-  publicKey: "TU_PUBLIC_KEY",
-  redirectMoneyTo: "mercado_pago"
-};
-</script>
-
-
-<script>
-window.productColorImages = {};
-
-function createColorImageUploader(containerId){
-  const container = document.getElementById(containerId);
-  if(!container) return;
-
-  container.innerHTML = `
-    <div class="border-[3px] border-primary p-6 mt-6 bg-white">
-      <h3 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="mb-4">
-        IMÁGENES POR COLOR
-      </h3>
-
-      <div class="grid md:grid-cols-2 gap-4 mb-6">
-        <div>
-          <label class="font-label-caps text-label-caps block mb-2">
-            COLOR
-          </label>
-
-          <select id="variant-color-select" class="input-field">
-            <option value="negro">NEGRO</option>
-            <option value="blanco">BLANCO</option>
-            <option value="violeta">VIOLETA</option>
-            <option value="gris">GRIS</option>
-            <option value="rojo">ROJO</option>
-            <option value="azul">AZUL</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="font-label-caps text-label-caps block mb-2">
-            SUBIR IMÁGENES
-          </label>
-
-          <input 
-            type="file" 
-            id="variant-image-input"
-            class="input-field"
-            accept="image/*"
-            multiple
-          />
-        </div>
-      </div>
-
-      <button 
-        class="btn-violet mb-6"
-        onclick="saveColorVariantImages()"
-      >
-        GUARDAR IMÁGENES
-      </button>
-
-      <div id="color-image-preview-grid"
-        class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      </div>
-    </div>
-  `;
-}
-
-function saveColorVariantImages(){
-  const color = document.getElementById('variant-color-select').value;
-  const files = document.getElementById('variant-image-input').files;
-
-  if(!files.length){
-    alert('Seleccioná imágenes');
-    return;
-  }
-
-  if(!window.productColorImages[color]){
-    window.productColorImages[color] = [];
-  }
-
-  Array.from(files).slice(0,4).forEach(file => {
-    const reader = new FileReader();
-
-    reader.onload = function(e){
-      window.productColorImages[color].push(e.target.result);
-      renderColorImagePreviews();
-    };
-
-    reader.readAsDataURL(file);
-  });
-
-  document.getElementById('variant-image-input').value = '';
-}
-
-function renderColorImagePreviews(){
-  const grid = document.getElementById('color-image-preview-grid');
-
-  if(!grid) return;
-
-  let html = '';
-
-  Object.entries(window.productColorImages).forEach(([color, images]) => {
-
-    images.forEach((img, index) => {
-
-      html += `
-        <div class="border-[3px] border-primary bg-white overflow-hidden">
-          
-          <div class="aspect-square overflow-hidden border-b-[3px] border-primary">
-            <img 
-              src="${img}" 
-              class="w-full h-full object-cover"
-            />
-          </div>
-
-          <div class="p-3">
-            <div class="flex items-center justify-between gap-2">
-              
-              <span 
-                class="badge badge-black"
-                style="background:${color === 'blanco' ? '#fff' : color};
-                color:${color === 'blanco' ? '#000' : '#fff'};
-                border:2px solid #000;">
-                ${color.toUpperCase()}
-              </span>
-
-              <button
-                onclick="removeVariantImage('${color}', ${index})"
-                class="text-red-600 font-bold"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-
-  });
-
-  grid.innerHTML = html;
-}
-
-function removeVariantImage(color, index){
-  window.productColorImages[color].splice(index,1);
-
-  if(window.productColorImages[color].length === 0){
-    delete window.productColorImages[color];
-  }
-
-  renderColorImagePreviews();
-}
-
-window.addEventListener('load', () => {
-
-  const possibleAdminContainers = [
-    'admin-products',
-    'products-admin',
-    'admin-products-panel',
-    'admin-section-products'
-  ];
-
-  let found = false;
-
-  possibleAdminContainers.forEach(id => {
-    if(document.getElementById(id) && !found){
-      createColorImageUploader(id);
-      found = true;
-    }
-  });
-
-  if(!found){
-    const body = document.body;
-
-    const floating = document.createElement('div');
-    floating.id = 'floating-admin-color-system';
-    floating.style.margin = '40px';
-
-    body.appendChild(floating);
-
-    createColorImageUploader('floating-admin-color-system');
-  }
-});
-</script>
-
 </body>
 </html>
