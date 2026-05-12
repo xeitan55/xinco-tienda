@@ -1036,9 +1036,6 @@ tailwind.config = {
         <button class="admin-nav-item w-full" id="admin-nav-tracking" onclick="showAdminSection('tracking')">
           <span class="material-symbols-outlined">local_shipping</span> TRACKING
         </button>
-        <button class="admin-nav-item w-full" id="admin-nav-vercel" onclick="showAdminSection('vercel')">
-          <span class="material-symbols-outlined">public</span> DOMINIO / VERCEL
-        </button>
       </div>
       <div class="border-t border-white/10 p-4">
         <button class="admin-nav-item w-full" onclick="doLogout()"><span class="material-symbols-outlined">logout</span> SALIR</button>
@@ -1153,70 +1150,24 @@ tailwind.config = {
               <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCRIPCIÓN</label><textarea id="pf-desc" class="input-field" rows="3" placeholder="Descripción del producto..."></textarea></div>
               <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BADGE (opcional)</label><input id="pf-badge" class="input-field" placeholder="NUEVO / SALE / etc"/></div>
             </div>
-            <!-- Cloudinary Image Uploader -->
+            <!-- Multi-image uploader (hasta 4 imágenes) -->
             <div class="border-[3px] border-primary p-5 mb-4 bg-surface-container-low">
-              <label class="font-label-caps text-label-caps text-primary block mb-3 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[16px]">cloud_upload</span> IMAGEN DEL PRODUCTO
-              </label>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Left: Upload zone + URL -->
-                <div class="flex flex-col gap-3">
-                  <!-- Drop zone -->
-                  <div id="pf-dropzone"
-                    class="border-[3px] border-dashed border-primary p-6 text-center cursor-pointer hover:bg-surface-container transition-colors relative"
-                    onclick="document.getElementById('pf-file-input').click()"
-                    ondragover="event.preventDefault();this.classList.add('bg-surface-container')"
-                    ondragleave="this.classList.remove('bg-surface-container')"
-                    ondrop="handleProductFileDrop(event)">
-                    <span class="material-symbols-outlined text-[40px] text-on-surface-variant block mb-2">add_photo_alternate</span>
-                    <p class="font-label-caps text-label-caps text-on-surface-variant">ARRASTRÁ UNA IMAGEN</p>
-                    <p class="font-label-caps text-[10px] text-outline mt-1">O HACÉ CLIC PARA SELECCIONAR</p>
-                    <p class="font-label-caps text-[10px] text-outline mt-1">JPG, PNG, WEBP — MÁX 10MB</p>
-                    <input type="file" id="pf-file-input" accept="image/*" class="hidden" onchange="uploadProductImage(this.files[0])"/>
-                  </div>
-                  <!-- Divider -->
-                  <div class="flex items-center gap-2">
-                    <div class="flex-1 h-px bg-outline-variant"></div>
-                    <span class="font-label-caps text-[10px] text-on-surface-variant">O PEGÁ UNA URL</span>
-                    <div class="flex-1 h-px bg-outline-variant"></div>
-                  </div>
-                  <!-- URL input -->
-                  <div class="flex gap-2">
-                    <input id="pf-img-url" class="input-field flex-1 py-2" placeholder="https://..." oninput="previewProductUrl(this.value)"/>
-                    <button class="btn-outline py-2 px-3 text-[10px]" onclick="useProductUrl()">USAR</button>
-                  </div>
-                  <!-- Hidden final img field -->
-                  <input type="hidden" id="pf-img"/>
-                </div>
-                <!-- Right: Preview -->
-                <div class="flex flex-col gap-2">
-                  <p class="font-label-caps text-[10px] text-on-surface-variant">PREVISUALIZACIÓN</p>
-                  <div id="pf-img-preview-container" class="border-[3px] border-primary bg-surface-container aspect-[3/4] flex items-center justify-center overflow-hidden relative">
-                    <img id="pf-img-preview" src="" alt="" class="w-full h-full object-cover hidden"/>
-                    <div id="pf-img-placeholder" class="flex flex-col items-center gap-2 text-on-surface-variant">
-                      <span class="material-symbols-outlined text-[48px]">image</span>
-                      <span class="font-label-caps text-[10px]">SIN IMAGEN</span>
-                    </div>
-                  </div>
-                  <!-- Upload progress -->
-                  <div id="pf-upload-progress" class="hidden">
-                    <div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant mb-1">
-                      <span id="pf-upload-status">SUBIENDO A CLOUDINARY...</span>
-                      <span id="pf-upload-pct">0%</span>
-                    </div>
-                    <div class="w-full h-1 bg-outline-variant">
-                      <div id="pf-upload-bar" class="h-1 bg-secondary-container transition-all duration-300" style="width:0%"></div>
-                    </div>
-                  </div>
-                  <!-- Success URL display -->
-                  <div id="pf-upload-result" class="hidden">
-                    <p class="font-label-caps text-[10px] text-secondary-container flex items-center gap-1">
-                      <span class="material-symbols-outlined text-[14px]">check_circle</span> IMAGEN SUBIDA A CLOUDINARY
-                    </p>
-                    <p id="pf-result-url" class="font-label-caps text-[9px] text-on-surface-variant truncate mt-1"></p>
-                  </div>
-                </div>
+              <div class="flex justify-between items-center mb-3">
+                <label class="font-label-caps text-label-caps text-primary flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px]">photo_library</span> IMÁGENES DEL PRODUCTO (HASTA 4)
+                </label>
+                <span class="font-label-caps text-[10px] text-on-surface-variant">LA PRIMERA ES LA IMAGEN PRINCIPAL</span>
               </div>
+              <!-- 4 image slots -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3" id="pf-image-slots">
+                <!-- slots rendered by JS -->
+              </div>
+              <!-- URL input -->
+              <div class="flex gap-2 mt-3">
+                <input id="pf-img-url" class="input-field flex-1 py-2" placeholder="O pegá una URL de imagen y presioná AGREGAR"/>
+                <button class="btn-outline py-2 px-3 text-[10px]" onclick="addProductImageUrl()">AGREGAR URL</button>
+              </div>
+              <input type="hidden" id="pf-img"/>
             </div>
             <div class="flex gap-3">
               <button class="btn-primary" onclick="saveProduct()">GUARDAR PRODUCTO</button>
@@ -1388,365 +1339,159 @@ tailwind.config = {
         <!-- ===== COBRANZAS SECTION ===== -->
         <div id="admin-section-cobranzas" class="hidden">
           <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">GESTIÓN DE COBRANZAS</h2>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-8">CONFIGURACIÓN DE MÉTODOS DE PAGO Y ESTADÍSTICAS</p>
-
-          <!-- Stats cobros -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-6 card-hover relative overflow-hidden group">
-              <div class="flex justify-between items-start mb-3">
-                <span class="font-label-caps text-[10px] text-on-surface-variant">MERCADO PAGO</span>
-                <span class="badge badge-violet">62%</span>
-              </div>
-              <div style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary mb-1">$77.190</div>
-              <div class="w-full h-2 bg-surface-container mt-3"><div class="h-2 bg-secondary-container" style="width:62%"></div></div>
-              <div class="absolute top-0 left-0 w-full h-1 bg-secondary-container transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-5">CONFIGURACIÓN DE MÉTODOS DE PAGO Y ESTADÍSTICAS</p>
+          <!-- Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white border-[3px] border-primary p-5 card-hover relative overflow-hidden group">
+              <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[18px]">account_balance_wallet</span></div><span class="badge badge-violet">62%</span></div>
+              <div class="font-label-caps text-[10px] text-on-surface-variant mb-1">MERCADO PAGO</div>
+              <div style="font-family:Montserrat;font-size:26px;font-weight:800;" class="text-primary">$77.190</div>
+              <div class="w-full h-1.5 bg-surface-container mt-3"><div class="h-1.5 bg-secondary-container" style="width:62%"></div></div>
             </div>
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-6 card-hover relative overflow-hidden group">
-              <div class="flex justify-between items-start mb-3">
-                <span class="font-label-caps text-[10px] text-on-surface-variant">TARJETA CRÉDITO</span>
-                <span class="badge badge-black">24%</span>
-              </div>
-              <div style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary mb-1">$29.880</div>
-              <div class="w-full h-2 bg-surface-container mt-3"><div class="h-2 bg-primary" style="width:24%"></div></div>
-              <div class="absolute top-0 left-0 w-full h-1 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+            <div class="bg-white border-[3px] border-primary p-5 card-hover relative overflow-hidden group">
+              <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[18px]">credit_card</span></div><span class="badge badge-black">24%</span></div>
+              <div class="font-label-caps text-[10px] text-on-surface-variant mb-1">TARJETA CRÉ/DÉB</div>
+              <div style="font-family:Montserrat;font-size:26px;font-weight:800;" class="text-primary">$29.880</div>
+              <div class="w-full h-1.5 bg-surface-container mt-3"><div class="h-1.5 bg-primary" style="width:24%"></div></div>
             </div>
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-6 card-hover relative overflow-hidden group">
-              <div class="flex justify-between items-start mb-3">
-                <span class="font-label-caps text-[10px] text-on-surface-variant">TRANSFERENCIA</span>
-                <span class="badge badge-outline">14%</span>
-              </div>
-              <div style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary mb-1">$17.430</div>
-              <div class="w-full h-2 bg-surface-container mt-3"><div class="h-2 bg-outline" style="width:14%"></div></div>
-              <div class="absolute top-0 left-0 w-full h-1 bg-outline transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+            <div class="bg-white border-[3px] border-primary p-5 card-hover relative overflow-hidden group">
+              <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[18px]">swap_horiz</span></div><span class="badge badge-outline">14%</span></div>
+              <div class="font-label-caps text-[10px] text-on-surface-variant mb-1">TRANSFERENCIA</div>
+              <div style="font-family:Montserrat;font-size:26px;font-weight:800;" class="text-primary">$17.430</div>
+              <div class="w-full h-1.5 bg-surface-container mt-3"><div class="h-1.5 bg-outline" style="width:14%"></div></div>
             </div>
           </div>
 
-          <!-- Config Mercado Pago -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6 mb-6">
-            <div class="flex items-center gap-3 mb-5">
-              <div class="w-10 h-10 flex items-center justify-center" style="background:#009ee3;">
-                <span class="material-symbols-outlined text-white text-[20px]">account_balance_wallet</span>
-              </div>
-              <div>
-                <h3 class="font-label-caps text-label-caps text-primary">MERCADO PAGO</h3>
-                <p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">CONFIGURACIÓN DE INTEGRACIÓN</p>
-              </div>
-              <span id="mp-status-badge" class="badge badge-outline ml-auto">NO CONFIGURADO</span>
+          <!-- MERCADO PAGO VINCULAR -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[20px]">account_balance_wallet</span></div>
+              <div class="flex-1"><h3 class="font-label-caps text-label-caps text-primary">MERCADO PAGO — VINCULAR CUENTA</h3><p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">LOS PAGOS SE ACREDITAN DIRECTO EN TU CBU/CVU DE MERCADO PAGO</p></div>
+              <span id="mp-status-badge" class="badge badge-outline shrink-0">NO CONFIGURADO</span>
+            </div>
+            <div class="bg-surface-container-low border-l-4 border-secondary-container p-4 mb-4">
+              <p class="font-label-caps text-[10px] text-primary mb-1">¿CÓMO FUNCIONA?</p>
+              <p class="font-body-md text-sm text-on-surface-variant">Con tu <strong>Public Key</strong> y <strong>Access Token</strong> de Mercado Pago, cada compra genera un link de pago. El dinero se acredita directo en tu cuenta MP (CBU/CVU). No necesitás servidor propio.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PUBLIC KEY *</label>
-                <input id="mp-public-key" class="input-field" placeholder="APP_USR-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" type="password"/>
-                <p class="font-label-caps text-[9px] text-on-surface-variant mt-1">Encontrala en mercadopago.com → Tu negocio → Credenciales</p>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PUBLIC KEY * <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="text-secondary-container underline ml-2 text-[9px]">OBTENER →</a></label>
+                <div class="relative"><input id="mp-public-key" class="input-field pr-10" placeholder="APP_USR-xxxxxxxx..." type="password"/><button onclick="togglePass('mp-public-key')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
               </div>
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ACCESS TOKEN *</label>
-                <input id="mp-access-token" class="input-field" placeholder="APP_USR-xxxxxxxx-xxxx..." type="password"/>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ACCESS TOKEN * <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="text-secondary-container underline ml-2 text-[9px]">OBTENER →</a></label>
+                <div class="relative"><input id="mp-access-token" class="input-field pr-10" placeholder="APP_USR-xxxxxxxx..." type="password"/><button onclick="togglePass('mp-access-token')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
               </div>
               <div>
                 <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CUOTAS SIN INTERÉS</label>
-                <select id="mp-cuotas" class="input-field">
-                  <option value="1">Sin cuotas</option>
-                  <option value="3">Hasta 3 cuotas</option>
-                  <option value="6" selected>Hasta 6 cuotas</option>
-                  <option value="12">Hasta 12 cuotas</option>
-                  <option value="18">Hasta 18 cuotas</option>
-                </select>
+                <select id="mp-cuotas" class="input-field"><option value="1">Sin cuotas</option><option value="3">3 cuotas</option><option value="6" selected>6 cuotas</option><option value="12">12 cuotas</option><option value="18">18 cuotas</option></select>
               </div>
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCUENTO CON MP</label>
-                <div class="flex gap-2 items-center">
-                  <input id="mp-descuento" class="input-field" type="number" placeholder="0" min="0" max="50" style="width:80px;"/>
-                  <span class="font-label-caps text-label-caps">%</span>
-                  <span class="font-label-caps text-[10px] text-on-surface-variant ml-2">(0 = sin descuento adicional)</span>
-                </div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCUENTO EXCLUSIVO MP</label>
+                <div class="flex items-center gap-2"><input id="mp-descuento" class="input-field" type="number" value="0" min="0" max="50" style="width:80px;"/><span class="font-label-caps text-label-caps">%</span></div>
               </div>
             </div>
             <div class="flex items-center gap-3 p-3 bg-surface-container-low border-[2px] border-outline-variant mb-4">
-              <input type="checkbox" id="mp-enabled" class="form-checkbox text-primary border-2 border-primary rounded-none h-5 w-5"/>
+              <input type="checkbox" id="mp-enabled" checked class="form-checkbox text-primary border-2 border-primary rounded-none h-5 w-5"/>
               <label for="mp-enabled" class="font-label-caps text-label-caps cursor-pointer">HABILITAR MERCADO PAGO EN EL CHECKOUT</label>
             </div>
-            <button class="btn-violet py-2 px-5 text-[11px]" onclick="saveMPConfig()">
-              <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR CONFIGURACIÓN MP
-            </button>
+            <div class="flex gap-3 flex-wrap">
+              <button class="btn-violet py-2 px-5 text-[11px]" onclick="saveMPConfig()"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR Y VINCULAR</button>
+              <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="btn-outline py-2 px-5 text-[11px]"><span class="material-symbols-outlined text-[14px]">open_in_new</span> IR A CREDENCIALES MP</a>
+            </div>
           </div>
 
-          <!-- Config Tarjetas -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6 mb-6">
-            <div class="flex items-center gap-3 mb-5">
-              <div class="w-10 h-10 bg-primary flex items-center justify-center">
-                <span class="material-symbols-outlined text-white text-[20px]">credit_card</span>
-              </div>
-              <div>
-                <h3 class="font-label-caps text-label-caps text-primary">DÉBITO Y CRÉDITO DIRECTO</h3>
-                <p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">PROCESADOR STRIPE / DECIDIR</p>
-              </div>
-            </div>
+          <!-- Tarjetas -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[20px]">credit_card</span></div><div><h3 class="font-label-caps text-label-caps text-primary">DÉBITO Y CRÉDITO</h3><p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">GESTIONADAS VÍA MERCADO PAGO</p></div></div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TARJETAS HABILITADAS</label>
                 <div class="flex flex-wrap gap-2">
-                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer"><input type="checkbox" checked class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> VISA</label>
-                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer"><input type="checkbox" checked class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> MASTERCARD</label>
-                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer"><input type="checkbox" class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> AMEX</label>
-                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer"><input type="checkbox" checked class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> NARANJA</label>
-                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer"><input type="checkbox" class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> CABAL</label>
+                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer p-2 border border-outline-variant"><input type="checkbox" checked class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> VISA</label>
+                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer p-2 border border-outline-variant"><input type="checkbox" checked class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> MASTERCARD</label>
+                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer p-2 border border-outline-variant"><input type="checkbox" class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> AMEX</label>
+                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer p-2 border border-outline-variant"><input type="checkbox" checked class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> NARANJA</label>
+                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer p-2 border border-outline-variant"><input type="checkbox" class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> CABAL</label>
                 </div>
               </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">RECARGO TARJETA CRÉDITO</label>
-                <div class="flex gap-2 items-center">
-                  <input class="input-field" type="number" placeholder="0" min="0" max="30" style="width:80px;" value="0"/>
-                  <span class="font-label-caps text-label-caps">%</span>
-                </div>
-              </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCUENTO DÉBITO</label>
-                <div class="flex gap-2 items-center">
-                  <input class="input-field" type="number" placeholder="0" min="0" max="30" style="width:80px;" value="5"/>
-                  <span class="font-label-caps text-label-caps">% (ej: 5% off débito)</span>
-                </div>
+              <div class="space-y-3">
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">RECARGO CRÉDITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="0" min="0" max="30" style="width:80px;"/><span class="font-label-caps text-label-caps">%</span></div></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCUENTO DÉBITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="5" min="0" max="30" style="width:80px;"/><span class="font-label-caps text-label-caps">%</span></div></div>
               </div>
             </div>
-            <button class="btn-primary py-2 px-5 text-[11px]" onclick="showToast('Configuración de tarjetas guardada ✅')">
-              <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR CONFIG TARJETAS
-            </button>
+            <button class="btn-primary py-2 px-5 text-[11px]" onclick="showToast('Configuración de tarjetas guardada ✅')"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR CONFIG TARJETAS</button>
           </div>
 
-          <!-- Config Transferencia -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6">
-            <div class="flex items-center gap-3 mb-5">
-              <div class="w-10 h-10 bg-primary flex items-center justify-center">
-                <span class="material-symbols-outlined text-white text-[20px]">swap_horiz</span>
-              </div>
-              <div>
-                <h3 class="font-label-caps text-label-caps text-primary">TRANSFERENCIA BANCARIA</h3>
-                <p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">DATOS QUE VERÁ EL CLIENTE AL PAGAR</p>
-              </div>
-            </div>
+          <!-- Transferencia -->
+          <div class="bg-white border-[3px] border-primary p-6">
+            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[20px]">swap_horiz</span></div><div><h3 class="font-label-caps text-label-caps text-primary">TRANSFERENCIA BANCARIA / CBU</h3><p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">DATOS QUE VE EL CLIENTE AL ELEGIR ESTA OPCIÓN</p></div></div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BANCO</label><input id="bank-name" class="input-field" placeholder="Banco Nación / Galicia / etc" value="Banco Galicia"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TITULAR</label><input id="bank-titular" class="input-field" placeholder="Nombre y Apellido" value="XINCO S.R.L."/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BANCO</label><input id="bank-name" class="input-field" value="Banco Galicia"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TITULAR</label><input id="bank-titular" class="input-field" value="XINCO S.R.L."/></div>
               <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CBU / CVU</label><input id="bank-cbu" class="input-field" placeholder="0000000000000000000000"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ALIAS</label><input id="bank-alias" class="input-field" placeholder="XINCO.TIENDA.MP" value="XINCO.TIENDA"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCUENTO TRANSFERENCIA</label>
-                <div class="flex gap-2 items-center"><input class="input-field" type="number" value="10" min="0" max="50" style="width:80px;"/><span class="font-label-caps text-label-caps">% (ej: 10% off)</span></div>
-              </div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ALIAS</label><input id="bank-alias" class="input-field" value="XINCO.TIENDA"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCUENTO TRANSFERENCIA</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="10" min="0" max="50" style="width:80px;"/><span class="font-label-caps text-label-caps">% OFF</span></div></div>
             </div>
-            <button class="btn-primary py-2 px-5 text-[11px]" onclick="showToast('Datos bancarios guardados ✅')">
-              <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR DATOS BANCARIOS
-            </button>
+            <button class="btn-primary py-2 px-5 text-[11px]" onclick="showToast('Datos bancarios guardados ✅')"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR DATOS BANCARIOS</button>
           </div>
         </div>
 
         <!-- ===== TRACKING SECTION ===== -->
         <div id="admin-section-tracking" class="hidden">
           <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">SEGUIMIENTO DE ENVÍOS</h2>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-8">CORREO ARGENTINO — ASIGNACIÓN Y TRACKING DE PAQUETES</p>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-5">CORREO ARGENTINO — ASIGNACIÓN Y CONSULTA DE PAQUETES</p>
 
-          <!-- Asignar tracking a un pedido -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6 mb-6">
-            <h3 class="font-label-caps text-label-caps text-primary mb-5 flex items-center gap-2">
-              <span class="material-symbols-outlined text-[18px]">add_box</span> ASIGNAR NÚMERO DE SEGUIMIENTO
-            </h3>
+          <!-- Asignar -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">add_box</span> ASIGNAR NÚMERO DE SEGUIMIENTO</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PEDIDO</label>
-                <select id="track-order-select" class="input-field" onchange="loadTrackingOrder(this.value)">
-                  <option value="">SELECCIONAR PEDIDO...</option>
-                </select>
-              </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">Nº DE SEGUIMIENTO</label>
-                <input id="track-number-input" class="input-field" placeholder="CX000000000AR"/>
-              </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">SERVICIO</label>
-                <select id="track-service" class="input-field">
-                  <option value="correoarg">Correo Argentino</option>
-                  <option value="andreani">Andreani</option>
-                  <option value="oca">OCA</option>
-                  <option value="dhl">DHL</option>
-                </select>
-              </div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PEDIDO</label><select id="track-order-select" class="input-field" onchange="loadTrackingOrder(this.value)"><option value="">SELECCIONAR PEDIDO...</option></select></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">Nº DE SEGUIMIENTO</label><input id="track-number-input" class="input-field" placeholder="CX000000000AR"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">SERVICIO</label><select id="track-service" class="input-field"><option value="correoarg">Correo Argentino</option><option value="andreani">Andreani</option><option value="oca">OCA</option><option value="dhl">DHL</option></select></div>
             </div>
-            <button class="btn-primary text-[11px]" onclick="assignTracking()">
-              <span class="material-symbols-outlined text-[14px]">local_shipping</span> ASIGNAR Y NOTIFICAR CLIENTE
-            </button>
+            <div id="track-order-detail" class="hidden bg-surface-container-low border-[2px] border-outline-variant p-4 mb-4">
+              <div class="font-label-caps text-[10px] text-on-surface-variant mb-1">DETALLE DEL PEDIDO SELECCIONADO</div>
+              <div id="track-order-info" class="font-label-caps text-label-caps text-primary"></div>
+            </div>
+            <button class="btn-primary text-[11px]" onclick="assignTracking()"><span class="material-symbols-outlined text-[14px]">local_shipping</span> ASIGNAR Y MARCAR COMO ENVIADO</button>
           </div>
 
-          <!-- Buscar tracking -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6 mb-6">
-            <h3 class="font-label-caps text-label-caps text-primary mb-5 flex items-center gap-2">
-              <span class="material-symbols-outlined text-[18px]">search</span> CONSULTAR ESTADO DE ENVÍO
-            </h3>
-            <div class="flex gap-3 mb-4">
-              <input id="track-search-input" class="input-field flex-1" placeholder="INGRESÁ EL Nº DE SEGUIMIENTO — ej: CX123456789AR"/>
-              <button class="btn-primary text-[11px]" onclick="consultarTracking()">
-                <span class="material-symbols-outlined text-[14px]">search</span> CONSULTAR
-              </button>
+          <!-- Consultar -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">search</span> CONSULTAR ESTADO DE ENVÍO</h3>
+            <div class="flex gap-3 mb-5">
+              <input id="track-search-input" class="input-field flex-1" placeholder="Ej: CX123456789AR — número de seguimiento"/>
+              <button class="btn-primary text-[11px]" onclick="consultarTracking()"><span class="material-symbols-outlined text-[14px]">search</span> CONSULTAR</button>
             </div>
-            <!-- Tracking result -->
-            <div id="tracking-result" class="hidden border-[3px] border-primary p-5">
-              <div class="flex justify-between items-start mb-5">
-                <div>
-                  <div id="tr-number" class="font-label-caps text-label-caps text-primary mb-1"></div>
-                  <div id="tr-service" class="font-label-caps text-[10px] text-on-surface-variant"></div>
+            <div id="tracking-result" class="hidden">
+              <div class="border-[3px] border-primary p-5 bg-surface-container-low">
+                <div class="flex justify-between items-start mb-5">
+                  <div><div id="tr-number" class="font-label-caps text-label-caps text-primary mb-1"></div><div id="tr-service" class="font-label-caps text-[10px] text-on-surface-variant"></div></div>
+                  <span id="tr-status-badge" class="badge badge-violet"></span>
                 </div>
-                <span id="tr-status-badge" class="badge badge-violet"></span>
-              </div>
-              <!-- Timeline -->
-              <div id="tr-timeline" class="space-y-0"></div>
-              <!-- Correo Argentino link -->
-              <div class="mt-5 pt-4 border-t-2 border-outline-variant flex justify-between items-center">
-                <span class="font-label-caps text-[10px] text-on-surface-variant">Ver tracking completo en sitio oficial</span>
-                <a id="tr-official-link" href="#" target="_blank" class="btn-outline py-2 px-4 text-[10px]">
-                  CORREO ARGENTINO <span class="material-symbols-outlined text-[12px]">open_in_new</span>
-                </a>
+                <div id="tr-timeline" class="relative border-l-[3px] border-primary ml-4 pl-5 space-y-0"></div>
+                <div class="mt-5 pt-4 border-t-[2px] border-outline-variant flex justify-between items-center flex-wrap gap-3">
+                  <span class="font-label-caps text-[10px] text-on-surface-variant">Ver en el sitio oficial</span>
+                  <a id="tr-official-link" href="#" target="_blank" class="btn-outline py-2 px-4 text-[10px]">VER TRACKING OFICIAL <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Tabla pedidos con tracking -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary">
-            <div class="p-5 border-b-[3px] border-primary">
-              <h3 class="font-label-caps text-label-caps text-primary">PEDIDOS CON SEGUIMIENTO ASIGNADO</h3>
+          <!-- Tabla envíos -->
+          <div class="bg-white border-[3px] border-primary">
+            <div class="p-5 border-b-[3px] border-primary flex justify-between items-center">
+              <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">inventory</span> PEDIDOS CON SEGUIMIENTO ASIGNADO</h3>
+              <span id="tracking-count" class="font-label-caps text-[10px] text-on-surface-variant"></span>
             </div>
-            <div id="tracking-list" class="overflow-x-auto"></div>
+            <div id="tracking-list" class="overflow-x-auto min-h-[80px]"></div>
           </div>
         </div>
 
-        <!-- ===== VERCEL / DOMINIO SECTION ===== -->
-        <div id="admin-section-vercel" class="hidden">
-          <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">DOMINIO Y DEPLOYMENT</h2>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-8">PUBLICÁ XINCO CON TU PROPIO DOMINIO USANDO VERCEL</p>
+        <!-- ===== END ADMIN SECTIONS ===== -->
 
-          <!-- Por qué Vercel -->
-          <div class="bg-primary text-on-primary p-6 mb-6 border-[3px] border-primary">
-            <div class="flex items-start gap-4">
-              <span class="material-symbols-outlined text-secondary-container text-[36px]">rocket_launch</span>
-              <div>
-                <h3 style="font-family:Montserrat;font-size:20px;font-weight:800;" class="mb-2">¿POR QUÉ VERCEL?</h3>
-                <ul class="space-y-1 font-label-caps text-[10px] text-white/70">
-                  <li>✅ Deploy automático cada vez que actualizás el archivo en GitHub</li>
-                  <li>✅ HTTPS gratis y automático (SSL)</li>
-                  <li>✅ CDN global — carga rápido desde Argentina y el mundo</li>
-                  <li>✅ Podés conectar tu dominio propio (ej: xinco.com.ar)</li>
-                  <li>✅ Plan gratuito más que suficiente para una tienda</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pasos -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <!-- Paso 1 -->
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-5">
-              <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 bg-primary text-on-primary flex items-center justify-center font-label-caps text-label-caps shrink-0">1</div>
-                <h4 class="font-label-caps text-label-caps text-primary">SUBÍ EL ARCHIVO A GITHUB</h4>
-              </div>
-              <ol class="space-y-2 font-label-caps text-[10px] text-on-surface-variant">
-                <li>→ Ir a <strong class="text-primary">github.com</strong> → New repository</li>
-                <li>→ Nombre: <strong class="text-primary">xinco-tienda</strong> (público)</li>
-                <li>→ Subí el archivo renombrado como <strong class="text-primary">index.html</strong></li>
-                <li>→ Commit changes</li>
-              </ol>
-            </div>
-            <!-- Paso 2 -->
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-5">
-              <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 bg-primary text-on-primary flex items-center justify-center font-label-caps text-label-caps shrink-0">2</div>
-                <h4 class="font-label-caps text-label-caps text-primary">CONECTÁ VERCEL CON GITHUB</h4>
-              </div>
-              <ol class="space-y-2 font-label-caps text-[10px] text-on-surface-variant">
-                <li>→ Ir a <strong class="text-primary">vercel.com</strong> → Sign up con GitHub</li>
-                <li>→ Clic en <strong class="text-primary">"Add New → Project"</strong></li>
-                <li>→ Seleccioná el repo <strong class="text-primary">xinco-tienda</strong></li>
-                <li>→ Framework: <strong class="text-primary">Other</strong> → Deploy</li>
-              </ol>
-            </div>
-            <!-- Paso 3 -->
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-5">
-              <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 bg-secondary-container text-on-primary flex items-center justify-center font-label-caps text-label-caps shrink-0">3</div>
-                <h4 class="font-label-caps text-label-caps text-primary">CONECTÁ TU DOMINIO PROPIO</h4>
-              </div>
-              <ol class="space-y-2 font-label-caps text-[10px] text-on-surface-variant">
-                <li>→ En Vercel: <strong class="text-primary">Settings → Domains</strong></li>
-                <li>→ Agregá tu dominio ej: <strong class="text-primary">xinco.com.ar</strong></li>
-                <li>→ En tu registrador de dominio (NIC.ar, Godaddy, etc.) apuntá los DNS a Vercel</li>
-                <li>→ Vercel genera el SSL automáticamente en minutos</li>
-              </ol>
-            </div>
-            <!-- Paso 4 -->
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-5">
-              <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 bg-secondary-container text-on-primary flex items-center justify-center font-label-caps text-label-caps shrink-0">4</div>
-                <h4 class="font-label-caps text-label-caps text-primary">ACTUALIZACIONES AUTOMÁTICAS</h4>
-              </div>
-              <ol class="space-y-2 font-label-caps text-[10px] text-on-surface-variant">
-                <li>→ Cada vez que subas un <strong class="text-primary">index.html</strong> nuevo a GitHub</li>
-                <li>→ Vercel lo detecta y redeploya <strong class="text-primary">automáticamente</strong></li>
-                <li>→ En menos de 30 segundos tu tienda está actualizada</li>
-                <li>→ Sin tocar configuración, sin servidores</li>
-              </ol>
-            </div>
-          </div>
-
-          <!-- Dominio actual -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6 mb-6">
-            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-[18px]">language</span> REGISTRAR MI DOMINIO
-            </h3>
-            <p class="font-body-md text-on-surface-variant text-sm mb-4">Registradores recomendados para dominios .com.ar y .ar:</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <a href="https://nic.ar" target="_blank" class="flex items-center gap-3 p-4 border-[2px] border-primary hover:bg-primary hover:text-on-primary transition-colors group">
-                <span class="material-symbols-outlined group-hover:text-on-primary">public</span>
-                <div><div class="font-label-caps text-[11px]">NIC.AR</div><div class="font-label-caps text-[9px] text-on-surface-variant group-hover:text-on-primary/70">.com.ar / .ar — GRATUITO</div></div>
-              </a>
-              <a href="https://godaddy.com" target="_blank" class="flex items-center gap-3 p-4 border-[2px] border-primary hover:bg-primary hover:text-on-primary transition-colors group">
-                <span class="material-symbols-outlined group-hover:text-on-primary">public</span>
-                <div><div class="font-label-caps text-[11px]">GODADDY</div><div class="font-label-caps text-[9px] text-on-surface-variant group-hover:text-on-primary/70">.com / internacional</div></div>
-              </a>
-              <a href="https://namecheap.com" target="_blank" class="flex items-center gap-3 p-4 border-[2px] border-primary hover:bg-primary hover:text-on-primary transition-colors group">
-                <span class="material-symbols-outlined group-hover:text-on-primary">public</span>
-                <div><div class="font-label-caps text-[11px]">NAMECHEAP</div><div class="font-label-caps text-[9px] text-on-surface-variant group-hover:text-on-primary/70">.com / internacional</div></div>
-              </a>
-            </div>
-          </div>
-
-          <!-- DNS Records helper -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6">
-            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-[18px]">dns</span> REGISTROS DNS A CONFIGURAR
-            </h3>
-            <p class="font-body-md text-on-surface-variant text-sm mb-4">Copialé estos valores al registrador de tu dominio en la sección DNS:</p>
-            <div class="overflow-x-auto">
-              <table class="w-full border-collapse font-label-caps text-[10px]">
-                <thead><tr class="bg-primary text-on-primary">
-                  <th class="p-3 text-left">TIPO</th><th class="p-3 text-left">NOMBRE</th><th class="p-3 text-left">VALOR</th><th class="p-3 text-left">TTL</th>
-                </tr></thead>
-                <tbody>
-                  <tr class="border-b border-outline-variant hover:bg-surface-container-low">
-                    <td class="p-3"><span class="badge badge-black">A</span></td>
-                    <td class="p-3 text-primary">@</td>
-                    <td class="p-3 font-mono">76.76.21.21</td>
-                    <td class="p-3 text-on-surface-variant">Auto</td>
-                  </tr>
-                  <tr class="border-b border-outline-variant hover:bg-surface-container-low">
-                    <td class="p-3"><span class="badge badge-violet">CNAME</span></td>
-                    <td class="p-3 text-primary">www</td>
-                    <td class="p-3 font-mono">cname.vercel-dns.com</td>
-                    <td class="p-3 text-on-surface-variant">Auto</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p class="font-label-caps text-[9px] text-on-surface-variant mt-3">Los cambios DNS pueden tardar hasta 48hs en propagarse, aunque usualmente son minutos.</p>
-          </div>
-        </div>
-
+        <!-- ===== END ADMIN SECTIONS ===== -->
       </div>
     </main>
   </div>
@@ -1805,14 +1550,14 @@ let bannerState = {
 };
 
 const PRODUCTS = [
-  {id:1, name:'ARCHIVE HEAVY TEE', price:14500, oldPrice:null, cat:'remeras', badge:'NUEVO', desc:'Remera oversized de algodón 300g. Corte boxy, costuras reforzadas. El básico definitivo.', sizes:['S','M','L','XL'], colors:['negro','blanco'], stock:45, sku:'XNC-REM-001', rating:4.8, reviews:32, img:'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80', tags:['newdrops','esenciales']},
-  {id:2, name:'TACTICAL CARGO PANT', price:28900, oldPrice:38000, cat:'pantalones', badge:'SALE', desc:'Cargo técnico con 8 bolsillos. Tela ripstop resistente al agua. Para la calle y más allá.', sizes:['M','L','XL'], colors:['negro','gris'], stock:18, sku:'XNC-PAN-002', rating:4.9, reviews:18, img:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80', tags:['esenciales']},
-  {id:3, name:'XINCO 01 HOODIE', price:42000, oldPrice:null, cat:'buzos', badge:'DROP EXCLUSIVO', desc:'Buzo pesado con capucha ajustable. Bordado frontal. Fabricado localmente en Argentina.', sizes:['S','M','L','XL','XXL'], colors:['negro','violeta'], stock:30, sku:'XNC-BUZ-003', rating:5.0, reviews:47, img:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80', tags:['newdrops','stylo']},
-  {id:4, name:'SIGNAL TRACK JACKET', price:55000, oldPrice:null, cat:'buzos', badge:'NUEVO', desc:'Campera track con detalles violeta. Tela técnica anti-viento. Íconos de la calle porteña.', sizes:['S','M','L'], colors:['negro','violeta'], stock:12, sku:'XNC-BUZ-004', rating:4.7, reviews:11, img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80', tags:['newdrops','stylo']},
-  {id:5, name:'MONO LOGO TEE', price:12000, oldPrice:15000, cat:'remeras', badge:'SALE', desc:'Remera slim con logo monocromático. Algodón peinado suave. Clásica y versátil.', sizes:['XS','S','M','L','XL'], colors:['blanco','negro','gris'], stock:60, sku:'XNC-REM-005', rating:4.5, reviews:28, img:'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80', tags:['esenciales']},
-  {id:6, name:'STREET JOGGER V2', price:22000, oldPrice:null, cat:'pantalones', badge:null, desc:'Jogging urbano con puños en las piernas y pretina ancha. Para moverse sin límites.', sizes:['S','M','L','XL'], colors:['negro','gris'], stock:25, sku:'XNC-PAN-006', rating:4.6, reviews:15, img:'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80', tags:['esenciales']},
-  {id:7, name:'NOIR ZIP HOODIE', price:38000, oldPrice:45000, cat:'buzos', badge:'SALE', desc:'Buzo con cierre completo. Interior polar. Bolsillos kangaroo. Invierno urbano.', sizes:['M','L','XL','XXL'], colors:['negro'], stock:8, sku:'XNC-BUZ-007', rating:4.8, reviews:22, img:'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80', tags:['stylo']},
-  {id:8, name:'XINCO CAP 01', price:8500, oldPrice:null, cat:'accesorios', badge:'NEW', desc:'Gorra snapback con bordado frontal. Panel estructurado. Ajuste universal.', sizes:['U'], colors:['negro','blanco'], stock:80, sku:'XNC-ACC-008', rating:4.4, reviews:9, img:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80', tags:['esenciales','newdrops']},
+  {id:1, name:'ARCHIVE HEAVY TEE', price:14500, oldPrice:null, cat:'remeras', badge:'NUEVO', desc:'Remera oversized de algodón 300g. Corte boxy, costuras reforzadas. El básico definitivo.', sizes:['S','M','L','XL'], colors:['negro','blanco'], stock:45, sku:'XNC-REM-001', rating:4.8, reviews:32, img:'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80', images:['https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80','https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80','https://images.unsplash.com/photo-1562157873-818bc0726f68?w=600&q=80'], tags:['newdrops','esenciales']},
+  {id:2, name:'TACTICAL CARGO PANT', price:28900, oldPrice:38000, cat:'pantalones', badge:'SALE', desc:'Cargo técnico con 8 bolsillos. Tela ripstop resistente al agua. Para la calle y más allá.', sizes:['M','L','XL'], colors:['negro','gris'], stock:18, sku:'XNC-PAN-002', rating:4.9, reviews:18, img:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80', images:['https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80','https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80'], tags:['esenciales']},
+  {id:3, name:'XINCO 01 HOODIE', price:42000, oldPrice:null, cat:'buzos', badge:'DROP EXCLUSIVO', desc:'Buzo pesado con capucha ajustable. Bordado frontal. Fabricado localmente en Argentina.', sizes:['S','M','L','XL','XXL'], colors:['negro','violeta'], stock:30, sku:'XNC-BUZ-003', rating:5.0, reviews:47, img:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80', images:['https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80','https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80','https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80'], tags:['newdrops','stylo']},
+  {id:4, name:'SIGNAL TRACK JACKET', price:55000, oldPrice:null, cat:'buzos', badge:'NUEVO', desc:'Campera track con detalles violeta. Tela técnica anti-viento. Íconos de la calle porteña.', sizes:['S','M','L'], colors:['negro','violeta'], stock:12, sku:'XNC-BUZ-004', rating:4.7, reviews:11, img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80', images:['https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80','https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80'], tags:['newdrops','stylo']},
+  {id:5, name:'MONO LOGO TEE', price:12000, oldPrice:15000, cat:'remeras', badge:'SALE', desc:'Remera slim con logo monocromático. Algodón peinado suave. Clásica y versátil.', sizes:['XS','S','M','L','XL'], colors:['blanco','negro','gris'], stock:60, sku:'XNC-REM-005', rating:4.5, reviews:28, img:'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80', images:['https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80','https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80'], tags:['esenciales']},
+  {id:6, name:'STREET JOGGER V2', price:22000, oldPrice:null, cat:'pantalones', badge:null, desc:'Jogging urbano con puños en las piernas y pretina ancha. Para moverse sin límites.', sizes:['S','M','L','XL'], colors:['negro','gris'], stock:25, sku:'XNC-PAN-006', rating:4.6, reviews:15, img:'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80', images:['https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80','https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80'], tags:['esenciales']},
+  {id:7, name:'NOIR ZIP HOODIE', price:38000, oldPrice:45000, cat:'buzos', badge:'SALE', desc:'Buzo con cierre completo. Interior polar. Bolsillos kangaroo. Invierno urbano.', sizes:['M','L','XL','XXL'], colors:['negro'], stock:8, sku:'XNC-BUZ-007', rating:4.8, reviews:22, img:'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80', images:['https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80','https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80'], tags:['stylo']},
+  {id:8, name:'XINCO CAP 01', price:8500, oldPrice:null, cat:'accesorios', badge:'NEW', desc:'Gorra snapback con bordado frontal. Panel estructurado. Ajuste universal.', sizes:['U'], colors:['negro','blanco'], stock:80, sku:'XNC-ACC-008', rating:4.4, reviews:9, img:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80', images:['https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80'], tags:['esenciales','newdrops']},
 ];
 
 let ORDERS = [
@@ -2470,15 +2215,29 @@ function checkAdminAccess() {
 }
 
 function showAdminSection(section) {
-  ['dashboard','orders','products','inventory','customers','banners'].forEach(s => {
-    document.getElementById('admin-section-'+s).classList.toggle('hidden', s !== section);
+  ['dashboard','orders','products','inventory','customers','banners','cobranzas','tracking'].forEach(s => {
+    const el = document.getElementById('admin-section-'+s);
+    if (el) el.classList.toggle('hidden', s !== section);
     const navEl = document.getElementById('admin-nav-'+s);
     if (navEl) navEl.classList.toggle('active', s === section);
   });
-  const titles = {dashboard:'TABLERO', orders:'GESTIÓN DE PEDIDOS', products:'PRODUCTOS', inventory:'INVENTARIO', customers:'CLIENTES', banners:'EDITOR DE BANNERS'};
-  document.getElementById('admin-section-title').textContent = titles[section];
+  const titles = {
+    dashboard:'TABLERO', orders:'GESTIÓN DE PEDIDOS', products:'PRODUCTOS',
+    inventory:'INVENTARIO', customers:'CLIENTES', banners:'EDITOR DE BANNERS',
+    cobranzas:'GESTIÓN DE COBRANZAS', tracking:'SEGUIMIENTO DE ENVÍOS'
+  };
+  document.getElementById('admin-section-title').textContent = titles[section] || section.toUpperCase();
+  const subs = {
+    dashboard:'VISTA GENERAL', orders:'TODOS LOS PEDIDOS', products:'CATÁLOGO DE PRODUCTOS',
+    inventory:'STOCK Y UNIDADES', customers:'BASE DE CLIENTES', banners:'PERSONALIZACIÓN DE LA TIENDA',
+    cobranzas:'MÉTODOS DE PAGO Y COBRANZA', tracking:'CORREO ARGENTINO Y OTROS TRANSPORTES'
+  };
+  const subEl = document.getElementById('admin-section-sub');
+  if (subEl) subEl.textContent = subs[section] || '';
   state.adminSection = section;
   if (section === 'banners') initBannerEditor();
+  if (section === 'tracking') initTrackingSection();
+  if (section === 'cobranzas') initCobranzasSection();
 }
 
 function renderAdminDashboard() {
@@ -2628,133 +2387,312 @@ const CLOUDINARY = {
   uploadUrl: function() { return `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`; }
 };
 
-// Library of uploaded images (persists in session)
 let uploadedImages = [];
 
-// =================== CLOUDINARY UPLOAD ENGINE ===================
 async function uploadToCloudinary(file, onProgress, onSuccess, onError) {
   if (!file) return;
   if (file.size > 10 * 1024 * 1024) { onError('El archivo supera los 10MB'); return; }
   if (!file.type.startsWith('image/')) { onError('Solo se permiten imágenes'); return; }
-
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY.uploadPreset);
   formData.append('folder', 'xinco-tienda');
-
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', CLOUDINARY.uploadUrl(), true);
-
     xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) {
-        const pct = Math.round((e.loaded / e.total) * 100);
-        onProgress(pct);
-      }
+      if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
     };
-
     xhr.onload = () => {
       if (xhr.status === 200) {
         const res = JSON.parse(xhr.responseText);
-        // Use auto-quality optimized URL
-        const optimizedUrl = res.secure_url.replace('/upload/', '/upload/q_auto,f_auto,w_1200/');
-        uploadedImages.unshift({ url: optimizedUrl, original: res.secure_url, name: file.name, size: file.size, public_id: res.public_id });
-        onSuccess(optimizedUrl, res);
-        resolve(optimizedUrl);
+        // Use secure_url directly — no signed transforms for unsigned preset
+        const finalUrl = res.secure_url;
+        uploadedImages.unshift({ url: finalUrl, name: file.name, public_id: res.public_id });
+        onSuccess(finalUrl, res);
+        resolve(finalUrl);
       } else {
-        const err = JSON.parse(xhr.responseText);
-        onError(err.error?.message || 'Error al subir la imagen');
-        reject(err);
+        try {
+          const err = JSON.parse(xhr.responseText);
+          onError(err.error?.message || 'Error Cloudinary ' + xhr.status);
+          reject(err);
+        } catch(e) { onError('Error al subir imagen'); reject(e); }
       }
     };
-
-    xhr.onerror = () => { onError('Error de conexión con Cloudinary'); reject('Network error'); };
+    xhr.onerror = () => { onError('Error de conexión'); reject('Network error'); };
     xhr.send(formData);
   });
 }
 
-// =================== PRODUCT IMAGE UPLOAD ===================
-function handleProductFileDrop(e) {
+// =================== MULTI-IMAGE PRODUCT UPLOADER ===================
+let pfImages = []; // array of up to 4 URLs
+
+function renderProductImageSlots() {
+  const el = document.getElementById('pf-image-slots');
+  if (!el) return;
+  const slots = [];
+  for (let i = 0; i < 4; i++) {
+    const url = pfImages[i] || null;
+    slots.push(`
+      <div class="relative border-[3px] ${i===0?'border-secondary-container':'border-primary'} bg-surface-container aspect-square overflow-hidden flex items-center justify-center group"
+           id="pf-slot-${i}">
+        ${url ? `
+          <img src="${url}" class="w-full h-full object-cover"/>
+          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
+            <button class="p-1 bg-white text-black text-[10px] font-label-caps" onclick="removeProductImage(${i})">
+              <span class="material-symbols-outlined text-[16px]">delete</span>
+            </button>
+            ${i>0?`<button class="p-1 bg-white text-black text-[10px] font-label-caps" onclick="moveProductImageFirst(${i})" title="Hacer principal">
+              <span class="material-symbols-outlined text-[16px]">star</span>
+            </button>`:''}
+          </div>
+          ${i===0?'<span class="absolute top-1 left-1 badge badge-violet text-[9px] pointer-events-none">PRINCIPAL</span>':''}
+        ` : `
+          <div class="flex flex-col items-center gap-1 text-on-surface-variant cursor-pointer w-full h-full items-center justify-center"
+               onclick="document.getElementById('pf-file-${i}').click()"
+               ondragover="event.preventDefault();this.closest('[id]').classList.add('bg-surface-container-high')"
+               ondragleave="this.closest('[id]').classList.remove('bg-surface-container-high')"
+               ondrop="handleSlotDrop(event,${i})">
+            <span class="material-symbols-outlined text-[32px]">${i===0?'add_photo_alternate':'add_circle'}</span>
+            <span class="font-label-caps text-[9px]">${i===0?'FOTO PRINCIPAL':'FOTO '+(i+1)}</span>
+            <input type="file" id="pf-file-${i}" accept="image/*" class="hidden" onchange="uploadSlotImage(this.files[0],${i})"/>
+          </div>
+          <div id="pf-slot-progress-${i}" class="hidden absolute bottom-0 left-0 right-0 bg-black/70 p-1">
+            <div class="w-full h-1 bg-white/20"><div id="pf-slot-bar-${i}" class="h-1 bg-secondary-container" style="width:0%"></div></div>
+          </div>
+        `}
+      </div>`);
+  }
+  el.innerHTML = slots.join('');
+}
+
+function handleSlotDrop(e, slotIndex) {
   e.preventDefault();
-  document.getElementById('pf-dropzone').classList.remove('bg-surface-container');
   const file = e.dataTransfer.files[0];
-  if (file) uploadProductImage(file);
+  if (file) uploadSlotImage(file, slotIndex);
 }
 
-async function uploadProductImage(file) {
-  if (!file) return;
-  const progress = document.getElementById('pf-upload-progress');
-  const bar = document.getElementById('pf-upload-bar');
-  const pct = document.getElementById('pf-upload-pct');
-  const status = document.getElementById('pf-upload-status');
-  const result = document.getElementById('pf-upload-result');
-  const resultUrl = document.getElementById('pf-result-url');
-  const preview = document.getElementById('pf-img-preview');
-  const placeholder = document.getElementById('pf-img-placeholder');
-
-  // Show local preview instantly
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    preview.src = e.target.result;
-    preview.classList.remove('hidden');
-    placeholder.classList.add('hidden');
-  };
-  reader.readAsDataURL(file);
-
-  // Show progress
-  progress.classList.remove('hidden');
-  result.classList.add('hidden');
-  bar.style.width = '0%';
-  pct.textContent = '0%';
-  status.textContent = 'SUBIENDO A CLOUDINARY...';
-
+async function uploadSlotImage(file, slotIndex) {
+  if (!file || pfImages.length >= 4) { showToast('Máximo 4 imágenes por producto'); return; }
+  const progressEl = document.getElementById('pf-slot-progress-'+slotIndex);
+  const barEl = document.getElementById('pf-slot-bar-'+slotIndex);
+  if (progressEl) progressEl.classList.remove('hidden');
   try {
-    const url = await uploadToCloudinary(
-      file,
-      (p) => { bar.style.width = p + '%'; pct.textContent = p + '%'; },
-      (finalUrl) => {
-        document.getElementById('pf-img').value = finalUrl;
-        document.getElementById('pf-img-url').value = finalUrl;
-        preview.src = finalUrl;
-        result.classList.remove('hidden');
-        resultUrl.textContent = finalUrl;
-        status.textContent = '¡SUBIDA EXITOSA!';
-        bar.style.width = '100%';
-        pct.textContent = '100%';
-        bar.style.background = '#5d22ff';
-        showToast('¡Imagen subida a Cloudinary! ☁️✅');
+    await uploadToCloudinary(file,
+      (pct) => { if(barEl) barEl.style.width = pct+'%'; },
+      (url) => {
+        pfImages[slotIndex] = url;
+        // fill gaps
+        pfImages = pfImages.filter(Boolean);
+        document.getElementById('pf-img').value = pfImages[0] || '';
+        renderProductImageSlots();
+        showToast('Imagen '+(slotIndex+1)+' subida ☁️✅');
       },
-      (err) => {
-        status.textContent = 'ERROR: ' + err;
-        bar.style.background = '#ba1a1a';
-        showToast('Error al subir: ' + err + ' ❌');
-      }
+      (err) => { showToast('Error: '+err+' ❌'); if(progressEl) progressEl.classList.add('hidden'); }
     );
-  } catch(e) {
-    console.error('Upload failed', e);
-  }
+  } catch(e) { console.error(e); }
 }
 
-function previewProductUrl(url) {
-  const preview = document.getElementById('pf-img-preview');
-  const placeholder = document.getElementById('pf-img-placeholder');
-  if (url && url.startsWith('http')) {
-    preview.src = url;
-    preview.classList.remove('hidden');
-    placeholder.classList.add('hidden');
-    preview.onerror = () => { preview.classList.add('hidden'); placeholder.classList.remove('hidden'); };
-  } else {
-    preview.classList.add('hidden');
-    placeholder.classList.remove('hidden');
-  }
-}
-
-function useProductUrl() {
+function addProductImageUrl() {
+  if (pfImages.length >= 4) { showToast('Máximo 4 imágenes por producto'); return; }
   const url = document.getElementById('pf-img-url').value.trim();
-  if (!url) { showToast('Ingresá una URL válida'); return; }
-  document.getElementById('pf-img').value = url;
-  previewProductUrl(url);
-  showToast('URL de imagen aplicada ✅');
+  if (!url || !url.startsWith('http')) { showToast('URL no válida'); return; }
+  pfImages.push(url);
+  document.getElementById('pf-img').value = pfImages[0] || '';
+  document.getElementById('pf-img-url').value = '';
+  renderProductImageSlots();
+  showToast('Imagen agregada ✅');
+}
+
+function removeProductImage(i) {
+  pfImages.splice(i, 1);
+  document.getElementById('pf-img').value = pfImages[0] || '';
+  renderProductImageSlots();
+}
+
+function moveProductImageFirst(i) {
+  const img = pfImages.splice(i, 1)[0];
+  pfImages.unshift(img);
+  document.getElementById('pf-img').value = pfImages[0] || '';
+  renderProductImageSlots();
+  showToast('Imagen principal actualizada ✅');
+}
+
+// =================== TRACKING SECTION ===================
+let trackingData = {}; // {orderId: {number, service, events}}
+
+function initTrackingSection() {
+  const sel = document.getElementById('track-order-select');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">SELECCIONAR PEDIDO...</option>' +
+    state.orders.map(o => {
+      const hasTracking = trackingData[o.id] ? ' ✓' : '';
+      return `<option value="${o.id}">#${o.id} — ${o.customer} (${o.status.toUpperCase()})${hasTracking}</option>`;
+    }).join('');
+  renderTrackingList();
+  const countEl = document.getElementById('tracking-count');
+  if (countEl) countEl.textContent = Object.keys(trackingData).length + ' ENVÍOS';
+}
+
+function loadTrackingOrder(orderId) {
+  const detailEl = document.getElementById('track-order-detail');
+  const infoEl = document.getElementById('track-order-info');
+  if (!orderId) { if (detailEl) detailEl.classList.add('hidden'); return; }
+  const order = state.orders.find(o => o.id === orderId);
+  const existing = trackingData[orderId];
+  if (existing) {
+    document.getElementById('track-number-input').value = existing.number || '';
+    document.getElementById('track-service').value = existing.service || 'correoarg';
+  }
+  if (order && detailEl && infoEl) {
+    detailEl.classList.remove('hidden');
+    infoEl.innerHTML = `
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+        <div><span class="font-label-caps text-[9px] text-on-surface-variant block">CLIENTE</span>${order.customer}</div>
+        <div><span class="font-label-caps text-[9px] text-on-surface-variant block">TOTAL</span>${fmtPrice(order.total)}</div>
+        <div><span class="font-label-caps text-[9px] text-on-surface-variant block">FECHA</span>${order.date}</div>
+        <div><span class="font-label-caps text-[9px] text-on-surface-variant block">ESTADO</span><span class="badge badge-black text-[9px]">${order.status.toUpperCase()}</span></div>
+      </div>
+      <div class="mt-2 text-[10px] text-on-surface-variant">${order.items.map(i=>i.name+'×'+i.qty).join(' · ')}</div>`;
+  }
+}
+
+function assignTracking() {
+  const orderId = document.getElementById('track-order-select').value;
+  const number = document.getElementById('track-number-input').value.trim().toUpperCase();
+  const service = document.getElementById('track-service').value;
+  if (!orderId) { showToast('Seleccioná un pedido ❌'); return; }
+  if (!number) { showToast('Ingresá el número de seguimiento ❌'); return; }
+  trackingData[orderId] = { number, service, assignedAt: new Date().toLocaleDateString('es-AR'),
+    events: [
+      {date: new Date().toLocaleDateString('es-AR'), time: new Date().toLocaleTimeString('es-AR', {hour:'2-digit',minute:'2-digit'}), status:'EN PREPARACIÓN', desc:'El paquete está siendo preparado para envío', icon:'inventory_2'},
+    ]
+  };
+  const order = state.orders.find(o => o.id === orderId);
+  if (order && order.status === 'pending') order.status = 'shipped';
+  showToast(`✅ Tracking #${number} asignado al pedido #${orderId}`);
+  renderTrackingList();
+  renderAdminOrders();
+  renderAdminDashboard();
+}
+
+function consultarTracking() {
+  const num = document.getElementById('track-search-input').value.trim().toUpperCase();
+  if (!num) { showToast('Ingresá un número de seguimiento'); return; }
+  const resultEl = document.getElementById('tracking-result');
+  // Find in local data
+  const found = Object.entries(trackingData).find(([id, t]) => t.number === num);
+  const serviceNames = {correoarg:'Correo Argentino',andreani:'Andreani',oca:'OCA',dhl:'DHL'};
+  const serviceUrls = {correoarg:`https://www.correoargentino.com.ar/formularios/e-commerce?numero=${num}`,andreani:`https://www.andreani.com/rastreo/${num}`,oca:`https://www.oca.com.ar/rastreo/?query=${num}`,dhl:`https://www.dhl.com/ar-es/home/rastreo.html?tracking-id=${num}`};
+
+  let events = [];
+  let service = 'correoarg';
+  let orderId = null;
+  if (found) {
+    [orderId, {service, events}] = found;
+    // Simulate progression
+    const order = state.orders.find(o => o.id === orderId);
+    if (order && order.status === 'shipped' && events.length < 3) {
+      events = [...events,
+        {date: new Date().toLocaleDateString('es-AR'), time:'10:30', status:'EN TRÁNSITO', desc:'El paquete está en camino hacia su destino', icon:'local_shipping'},
+        {date: new Date().toLocaleDateString('es-AR'), time:'14:00', status:'EN DISTRIBUCIÓN', desc:'El paquete está siendo distribuido en la zona de entrega', icon:'delivery_dining'},
+      ];
+    }
+    if (order && order.status === 'delivered') {
+      events = [...events, {date: new Date().toLocaleDateString('es-AR'), time:'16:45', status:'ENTREGADO', desc:'El paquete fue entregado exitosamente', icon:'check_circle'}];
+    }
+  } else {
+    // Demo tracking for unknown numbers
+    events = [
+      {date: new Date().toLocaleDateString('es-AR'), time:'09:00', status:'ADMITIDO', desc:'Pieza admitida en sucursal de origen', icon:'inventory_2'},
+      {date: new Date().toLocaleDateString('es-AR'), time:'18:30', status:'EN TRÁNSITO', desc:'Pieza en camino al centro de distribución', icon:'local_shipping'},
+    ];
+  }
+
+  const lastEvent = events[events.length-1];
+  const statusColors = {'ENTREGADO':'badge-violet','EN TRÁNSITO':'badge-black','EN DISTRIBUCIÓN':'','EN PREPARACIÓN':'','ADMITIDO':'badge-outline'};
+  document.getElementById('tr-number').textContent = '# ' + num;
+  document.getElementById('tr-service').textContent = serviceNames[service] || service;
+  document.getElementById('tr-status-badge').textContent = lastEvent?.status || 'EN PROCESO';
+  document.getElementById('tr-status-badge').className = 'badge ' + (statusColors[lastEvent?.status] || 'badge-black');
+  document.getElementById('tr-official-link').href = serviceUrls[service] || '#';
+  document.getElementById('tr-official-link').textContent = (serviceNames[service] || 'VER TRACKING').toUpperCase() + ' ↗';
+
+  // Timeline — border-l on parent container, dots positioned correctly
+  document.getElementById('tr-timeline').innerHTML = events.map((ev, i) => `
+    <div class="relative pb-5 ${i === events.length-1 ? '' : ''}">
+      <div class="absolute -left-[29px] w-5 h-5 ${i===events.length-1?'bg-secondary-container':'bg-primary'} flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-[12px]">${ev.icon}</span>
+      </div>
+      <div class="flex justify-between items-start gap-2 mb-0.5">
+        <span class="font-label-caps text-[11px] text-primary">${ev.status}</span>
+        <span class="font-label-caps text-[10px] text-on-surface-variant whitespace-nowrap">${ev.date} ${ev.time}</span>
+      </div>
+      <p class="font-body-md text-on-surface-variant text-sm">${ev.desc}</p>
+    </div>`).join('');
+
+  resultEl.classList.remove('hidden');
+}
+
+function renderTrackingList() {
+  const el = document.getElementById('tracking-list');
+  if (!el) return;
+  const entries = Object.entries(trackingData);
+  if (entries.length === 0) {
+    el.innerHTML = '<div class="p-8 text-center"><span class="material-symbols-outlined text-[48px] text-outline-variant">local_shipping</span><p class="font-label-caps text-[10px] text-on-surface-variant mt-3">NO HAY PEDIDOS CON TRACKING ASIGNADO AÚN</p></div>';
+    return;
+  }
+  const serviceNames = {correoarg:'Correo Argentino',andreani:'Andreani',oca:'OCA',dhl:'DHL'};
+  el.innerHTML = `<table class="w-full text-left border-collapse">
+    <thead><tr class="border-b-2 border-primary bg-surface font-label-caps text-label-caps text-on-surface-variant">
+      <th class="p-4">PEDIDO</th><th class="p-4">CLIENTE</th><th class="p-4">Nº TRACKING</th>
+      <th class="p-4 hidden md:table-cell">SERVICIO</th><th class="p-4">ÚLTIMO ESTADO</th><th class="p-4 w-10"></th>
+    </tr></thead>
+    <tbody>
+      ${entries.map(([orderId, t]) => {
+        const order = state.orders.find(o => o.id === orderId);
+        const lastEvt = t.events?.[t.events.length-1];
+        return `<tr class="border-b border-outline-variant hover:bg-surface-variant font-body-md">
+          <td class="p-4 font-label-caps text-[11px] text-primary">#${orderId}</td>
+          <td class="p-4">${order?.customer || '—'}</td>
+          <td class="p-4 font-label-caps text-[11px] text-secondary-container">${t.number}</td>
+          <td class="p-4 font-label-caps text-[10px] text-on-surface-variant hidden md:table-cell">${serviceNames[t.service]||t.service}</td>
+          <td class="p-4"><span class="badge badge-black text-[9px]">${lastEvt?.status||'—'}</span></td>
+          <td class="p-4">
+            <button class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors"
+              onclick="document.getElementById('track-search-input').value='${t.number}';consultarTracking()">
+              <span class="material-symbols-outlined text-[16px]">search</span>
+            </button>
+          </td>
+        </tr>`;}).join('')}
+    </tbody></table>`;
+}
+
+// =================== COBRANZAS / MP ===================
+function initCobranzasSection() {
+  // Update stats from real orders
+  const total = state.orders.reduce((s,o) => s + o.total, 0);
+  const mpTotal = Math.round(total * 0.62);
+  const cardTotal = Math.round(total * 0.24);
+  const transTotal = total - mpTotal - cardTotal;
+  const statEls = document.querySelectorAll('.cobr-stat');
+  if (statEls[0]) statEls[0].textContent = fmtPrice(mpTotal);
+  if (statEls[1]) statEls[1].textContent = fmtPrice(cardTotal);
+  if (statEls[2]) statEls[2].textContent = fmtPrice(transTotal);
+}
+
+function saveMPConfig() {
+  const pk = document.getElementById('mp-public-key').value.trim();
+  const at = document.getElementById('mp-access-token').value.trim();
+  const enabled = document.getElementById('mp-enabled').checked;
+  if (!pk || !at) { showToast('Ingresá Public Key y Access Token ❌'); return; }
+  state.mpConfig = { publicKey: pk, accessToken: at,
+    cuotas: document.getElementById('mp-cuotas').value,
+    descuento: document.getElementById('mp-descuento').value,
+    enabled };
+  const badge = document.getElementById('mp-status-badge');
+  if (badge) { badge.textContent = enabled ? 'ACTIVO ✓' : 'CONFIGURADO'; badge.className = enabled ? 'badge badge-violet ml-auto' : 'badge badge-outline ml-auto'; }
+  showToast(enabled ? '✅ Mercado Pago activado en el checkout' : '✅ Configuración guardada (deshabilitado)');
 }
 
 // =================== HERO IMAGE UPLOAD ===================
