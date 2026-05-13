@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Acceder — XINCO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/xinco.css"/>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{surface:"#f9f9f9","surface-container-low":"#f4f3f3","on-surface":"#1a1c1c","on-surface-variant":"#4c4546",primary:"#000000","on-primary":"#ffffff",secondary:"#4500d1","secondary-container":"#5d22ff",error:"#ba1a1a","error-container":"#ffdad6","on-error-container":"#93000a",background:"#f9f9f9"},borderRadius:{DEFAULT:"0px",lg:"0px",xl:"0px",full:"9999px"}}}}</script>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<div class="min-h-screen flex items-center justify-center bg-background px-6 py-12">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-10">
+      <a href="index.html"><h1 style="font-family:Montserrat;font-size:48px;font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">XINCO</h1></a>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex border-[3px] border-primary mb-8">
+      <button id="tab-login" class="flex-1 py-3 font-label-caps text-label-caps bg-primary text-on-primary" onclick="showTab('login')">INICIAR SESIÓN</button>
+      <button id="tab-register" class="flex-1 py-3 font-label-caps text-label-caps bg-surface text-on-surface border-l-[3px] border-primary" onclick="showTab('register')">REGISTRARSE</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="panel-login">
+      <div id="login-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
+      <div class="mb-4">
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL</label>
+        <input id="login-email" class="input-field" type="email" placeholder="tu@email.com"/>
+      </div>
+      <div class="mb-5">
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONTRASEÑA</label>
+        <div class="relative">
+          <input id="login-pass" class="input-field" type="password" placeholder="••••••••"/>
+          <button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('login-pass')"><span class="material-symbols-outlined text-[20px] text-on-surface-variant">visibility</span></button>
+        </div>
+      </div>
+      <button class="btn-primary w-full justify-center py-4 mb-4" onclick="doLogin()">INICIAR SESIÓN</button>
+      <div class="text-center">
+        <button class="font-label-caps text-[10px] text-on-surface-variant underline">¿Olvidaste tu contraseña?</button>
+      </div>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="panel-register" class="hidden">
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label><input id="reg-nombre" class="input-field" placeholder="Juan"/></div>
+        <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO *</label><input id="reg-apellido" class="input-field" placeholder="Pérez"/></div>
+      </div>
+      <div class="mb-4"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL *</label><input id="reg-email" class="input-field" type="email" placeholder="tu@email.com"/></div>
+      <div class="mb-4">
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONTRASEÑA *</label>
+        <div class="relative"><input id="reg-pass" class="input-field" type="password" placeholder="Mínimo 6 caracteres"/><button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('reg-pass')"><span class="material-symbols-outlined text-[20px] text-on-surface-variant">visibility</span></button></div>
+      </div>
+      <div class="mb-5">
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONFIRMAR CONTRASEÑA *</label>
+        <div class="relative"><input id="reg-pass2" class="input-field" type="password" placeholder="Repetí tu contraseña"/><button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('reg-pass2')"><span class="material-symbols-outlined text-[20px] text-on-surface-variant">visibility</span></button></div>
+      </div>
+      <label class="flex items-start gap-3 mb-5 cursor-pointer">
+        <input type="checkbox" id="reg-terms" class="mt-1 form-checkbox text-primary border-2 border-primary rounded-none h-5 w-5"/>
+        <span class="font-body-md text-sm text-on-surface-variant">Acepto los <a href="#" class="text-primary underline">Términos y Condiciones</a></span>
+      </label>
+      <button class="btn-primary w-full justify-center py-4" onclick="doRegister()">CREAR CUENTA</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initStore } from './js/store.js';
+import { doLogin, doRegister, togglePass } from './js/auth.js';
+import { showToast } from './js/ui.js';
+
+window.doLogin = doLogin;
+window.doRegister = doRegister;
+window.togglePass = togglePass;
+window.showToast = showToast;
+
+window.showTab = (tab) => {
+  document.getElementById('panel-login').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('panel-register').classList.toggle('hidden', tab !== 'register');
+  document.getElementById('tab-login').className = `flex-1 py-3 font-label-caps text-label-caps ${tab==='login'?'bg-primary text-on-primary':'bg-surface text-on-surface border-l-[3px] border-primary'}`;
+  document.getElementById('tab-register').className = `flex-1 py-3 font-label-caps text-label-caps border-l-[3px] border-primary ${tab==='register'?'bg-primary text-on-primary':'bg-surface text-on-surface'}`;
+};
+
+// Check URL param
+const tab = new URLSearchParams(location.search).get('tab');
+if (tab === 'register') window.showTab('register');
+
+initStore();
+</script>
+</body>
+</html>
