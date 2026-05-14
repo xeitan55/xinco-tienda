@@ -159,9 +159,11 @@ import { renderAnnouncementBar, updateAuthUI, updateCartBadge, productCard, regi
 
 let tagFilter = null;
 
-registerGlobals({ renderCatalog, resetFilters });
+// Exponer al window ANTES del boot para que los onclick del HTML funcionen
 window.renderCatalog = renderCatalog;
 window.resetFilters = resetFilters;
+
+registerGlobals({ renderCatalog, resetFilters });
 
 function renderCatalog() {
   let filtered = [...store.products];

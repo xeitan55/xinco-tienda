@@ -272,7 +272,18 @@ window.doLogout = doLogout;
 const ADMIN_EMAIL = 'admin@xinco.com';
 const SECTIONS = ['dashboard','orders','products','inventory','customers','banners','cobranzas','tracking'];
 
+// Exponer showSection al window INMEDIATAMENTE para que los onclick del HTML funcionen
+// (los módulos ES son async, el HTML se renderiza antes)
 window.showSection = (s) => {
+  // Si el store no está listo aún, esperar
+  if (!window._adminReady) {
+    window._pendingSection = s;
+    return;
+  }
+  _showSection(s);
+};
+
+function _showSection(s) {
   SECTIONS.forEach(id => {
     document.getElementById('admin-'+id).classList.toggle('hidden', id!==s);
     const nav = document.getElementById('admin-nav-'+id);
@@ -282,6 +293,10 @@ window.showSection = (s) => {
   document.getElementById('section-title').textContent = titles[s]||s.toUpperCase();
   if (s==='banners') loadBannerFields();
   if (s==='tracking') loadTrackingSection();
+  if (s==='orders') window.renderOrders();
+  if (s==='products') renderProductsTable();
+  if (s==='inventory') renderInventory();
+  if (s==='customers') renderCustomers();
 };
 
 // ---- Dashboard ----
@@ -635,10 +650,21 @@ async function boot() {
   await initStore();
   if (!store.user || store.user.email !== ADMIN_EMAIL) { location.href='login.html'; return; }
   document.getElementById('admin-email').textContent = store.user.email;
+
+  // Continuar escuchando cambios de auth
+  fbOnAuthChange(user => { store.user = user; if (!user) location.href='login.html'; });
+
   renderDashboard();
   renderProductsTable();
   renderInventory();
   renderCustomers();
+
+  // Admin listo — procesar click pendiente si hubo alguno antes del boot
+  window._adminReady = true;
+  if (window._pendingSection) {
+    _showSection(window._pendingSection);
+    window._pendingSection = null;
+  }
 }
 
 onStoreChange(e => {
