@@ -57,9 +57,15 @@ export async function fbDeleteProduct(id) {
 // PEDIDOS
 // =============================================
 export async function fbGetOrders() {
-  const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  try {
+    const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch(e) {
+    // Si el índice no existe aún, traer sin ordenar
+    const snap = await getDocs(collection(db, 'orders'));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
 }
 
 export async function fbSaveOrder(order) {

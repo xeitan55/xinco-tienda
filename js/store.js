@@ -141,10 +141,14 @@ export async function initStore() {
   // Carrito desde localStorage (instantáneo)
   store.cart = lsLoad(LS.cart, []);
 
-  // Auth listener
-  fbOnAuthChange(user => {
-    store.user = user;
-    emit('auth', user);
+  // Auth — esperar confirmación de Firebase antes de continuar
+  await new Promise(resolve => {
+    const unsub = fbOnAuthChange(user => {
+      store.user = user;
+      emit('auth', user);
+      unsub(); // desuscribir después de la primera confirmación
+      resolve();
+    });
   });
 
   try {
@@ -172,8 +176,7 @@ export async function initStore() {
     if (mp) store.mpConfig = mp;
 
   } catch(e) {
-    console.warn('Firebase offline, usando caché local', e.message);
-    // Fallback a productos por defecto si Firebase falla
+    console.warn('Firebase error, usando datos por defecto:', e.message);
     if (store.products.length === 0) store.products = DEFAULT_PRODUCTS;
   }
 
