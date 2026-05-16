@@ -374,24 +374,60 @@ tailwind.config = {
   <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary">
     <div class="flex justify-between items-end mb-8">
       <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase">Categorías</h2>
+      <button id="edit-cats-btn" class="hidden btn-outline py-2 px-4 text-[10px]" onclick="toggleCatEditor()">
+        <span class="material-symbols-outlined text-[16px]">edit</span> EDITAR IMÁGENES
+      </button>
+    </div>
+    <!-- Editor de categorías (solo admin) -->
+    <div id="cat-editor" class="hidden mb-6 border-[3px] border-secondary-container p-5 bg-surface-container-low">
+      <p class="font-label-caps text-label-caps text-primary mb-4">EDITAR IMÁGENES DE CATEGORÍAS</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="font-label-caps text-[10px] text-on-surface-variant block mb-2">REMERAS — URL O SUBIR</label>
+          <div class="flex gap-2 mb-2">
+            <input id="cat-img-remeras" class="input-field flex-1 py-2" placeholder="https://..." value="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80"/>
+            <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('cat-file-remeras').click()"><span class="material-symbols-outlined text-[16px]">upload</span></button>
+            <input type="file" id="cat-file-remeras" accept="image/*" class="hidden" onchange="uploadCatImg('remeras',this.files[0])"/>
+          </div>
+          <button class="btn-primary w-full py-2 text-[10px]" onclick="saveCatImg('remeras')">GUARDAR REMERAS</button>
+        </div>
+        <div>
+          <label class="font-label-caps text-[10px] text-on-surface-variant block mb-2">PANTALONES — URL O SUBIR</label>
+          <div class="flex gap-2 mb-2">
+            <input id="cat-img-pantalones" class="input-field flex-1 py-2" placeholder="https://..." value="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80"/>
+            <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('cat-file-pantalones').click()"><span class="material-symbols-outlined text-[16px]">upload</span></button>
+            <input type="file" id="cat-file-pantalones" accept="image/*" class="hidden" onchange="uploadCatImg('pantalones',this.files[0])"/>
+          </div>
+          <button class="btn-primary w-full py-2 text-[10px]" onclick="saveCatImg('pantalones')">GUARDAR PANTALONES</button>
+        </div>
+        <div>
+          <label class="font-label-caps text-[10px] text-on-surface-variant block mb-2">BUZOS — URL O SUBIR</label>
+          <div class="flex gap-2 mb-2">
+            <input id="cat-img-buzos" class="input-field flex-1 py-2" placeholder="https://..." value="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80"/>
+            <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('cat-file-buzos').click()"><span class="material-symbols-outlined text-[16px]">upload</span></button>
+            <input type="file" id="cat-file-buzos" accept="image/*" class="hidden" onchange="uploadCatImg('buzos',this.files[0])"/>
+          </div>
+          <button class="btn-primary w-full py-2 text-[10px]" onclick="saveCatImg('buzos')">GUARDAR BUZOS</button>
+        </div>
+      </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[560px]">
       <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer" onclick="filterCatalog('remeras')">
-        <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Remeras</h3>
         </div>
       </div>
       <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer" onclick="filterCatalog('pantalones')">
-        <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80" alt="Pantalones" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <img id="cat-img-pantalones-display" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80" alt="Pantalones" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Pantalones</h3>
         </div>
       </div>
       <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer" onclick="filterCatalog('buzos')">
-        <img src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80" alt="Buzos" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <img id="cat-img-buzos-display" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80" alt="Buzos" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Buzos</h3>
@@ -842,17 +878,24 @@ tailwind.config = {
           </div>
         </div>
         <button class="btn-primary w-full justify-center py-4 mb-4" onclick="doLogin()">INICIAR SESIÓN</button>
+        <!-- Divider -->
+        <div class="flex items-center gap-3 my-4">
+          <div class="flex-1 h-px bg-outline-variant"></div>
+          <span class="font-label-caps text-[10px] text-on-surface-variant">O CONTINUÁ CON</span>
+          <div class="flex-1 h-px bg-outline-variant"></div>
+        </div>
+        <!-- Google Login -->
+        <button class="btn-outline w-full justify-center py-3 mb-5" onclick="doLoginGoogle()">
+          <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+          INICIAR CON GOOGLE
+        </button>
         <div class="text-center">
           <span class="font-body-md text-on-surface-variant text-sm">¿No tenés cuenta? </span>
           <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('register')">REGISTRATE</a>
         </div>
         <div class="text-center mt-3">
-          <a class="font-label-caps text-label-caps text-on-surface-variant underline cursor-pointer text-[10px]">¿Olvidaste tu contraseña?</a>
+          <a class="font-label-caps text-label-caps text-on-surface-variant underline cursor-pointer text-[10px]" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a>
         </div>
-      </div>
-      <div class="mt-4 text-center">
-        <p class="font-label-caps text-[10px] text-on-surface-variant mb-2">ADMIN DEMO: admin@xinco.com / admin123</p>
-        <p class="font-label-caps text-[10px] text-on-surface-variant">USER DEMO: user@xinco.com / user123</p>
       </div>
     </div>
   </div>
@@ -2113,13 +2156,104 @@ async function doLogout() {
 }
 
 function updateAuthUI() {
-  const btn = document.getElementById('auth-btn');
   const label = document.getElementById('auth-label');
+  const isAdmin = state.user && (state.user.role === 'admin' || state.user.email === 'admin@xinco.com');
   if (state.user) {
-    label.textContent = state.user.role === 'admin' ? 'ADMIN' : state.user.name.split(' ')[0].toUpperCase();
+    if (label) label.textContent = isAdmin ? 'ADMIN' : (state.user.displayName || state.user.name || state.user.email.split('@')[0]).split(' ')[0].toUpperCase();
   } else {
-    label.textContent = 'ACCEDER';
+    if (label) label.textContent = 'ACCEDER';
   }
+  // Mostrar botón de editar categorías SOLO si es admin
+  const editBtn = document.getElementById('edit-cats-btn');
+  if (editBtn) editBtn.classList.toggle('hidden', !isAdmin);
+}
+
+// =================== GOOGLE LOGIN ===================
+async function doLoginGoogle() {
+  try {
+    const { GoogleAuthProvider, signInWithPopup } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(fbAuth, provider);
+    state.user = result.user;
+    updateAuthUI();
+    showToast(`¡Bienvenido, ${result.user.displayName || result.user.email}! 👋`);
+    nav('home');
+  } catch(e) {
+    if (e.code === 'auth/popup-closed-by-user') return;
+    if (e.code === 'auth/popup-blocked') {
+      showToast('El popup fue bloqueado. Permitilo en tu navegador ❌');
+    } else if (!fbAuth) {
+      showToast('Firebase no disponible. Usá email y contraseña ❌');
+    } else {
+      showToast('Error al iniciar con Google: ' + (e.message || e.code) + ' ❌');
+    }
+  }
+}
+
+// =================== FORGOT PASSWORD ===================
+async function showForgotPassword() {
+  const email = document.getElementById('login-email')?.value.trim();
+  if (!email) { showToast('Ingresá tu email arriba primero'); return; }
+  try {
+    const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+    await sendPasswordResetEmail(fbAuth, email);
+    showToast('¡Email de recuperación enviado! Revisá tu bandeja 📧');
+  } catch(e) {
+    showToast('Error: ' + (e.code === 'auth/user-not-found' ? 'Email no registrado' : e.message) + ' ❌');
+  }
+}
+
+// =================== CATEGORY IMAGE EDITOR ===================
+function toggleCatEditor() {
+  const el = document.getElementById('cat-editor');
+  el.classList.toggle('hidden');
+  // Precargar valores actuales
+  const cats = bannerState.categories || {};
+  if (cats.remeras) document.getElementById('cat-img-remeras').value = cats.remeras;
+  if (cats.pantalones) document.getElementById('cat-img-pantalones').value = cats.pantalones;
+  if (cats.buzos) document.getElementById('cat-img-buzos').value = cats.buzos;
+}
+
+function saveCatImg(cat) {
+  const url = document.getElementById('cat-img-' + cat).value.trim();
+  if (!url) { showToast('Ingresá una URL de imagen'); return; }
+  if (!bannerState.categories) bannerState.categories = {};
+  bannerState.categories[cat] = url;
+  // Actualizar imagen visible
+  const display = document.getElementById('cat-img-' + cat + '-display');
+  if (display) display.src = url;
+  persistAll();
+  fbSaveBannersRemote(bannerState).catch(e => console.warn('Firebase banner sync:', e));
+  showToast('Imagen de ' + cat + ' actualizada ✅');
+}
+
+async function uploadCatImg(cat, file) {
+  if (!file) return;
+  showToast('Subiendo imagen...');
+  const CLOUD = 'damwe7juy', PRESET = 'XINCO TIENDA';
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', PRESET);
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`, {method:'POST', body:formData});
+    const data = await res.json();
+    if (data.secure_url) {
+      document.getElementById('cat-img-' + cat).value = data.secure_url;
+      saveCatImg(cat);
+    } else {
+      showToast('Error al subir imagen ❌');
+    }
+  } catch(e) {
+    showToast('Error de conexión ❌');
+  }
+}
+
+// Aplicar imágenes de categorías guardadas al cargar
+function applySavedCatImages() {
+  const cats = bannerState.categories || {};
+  if (cats.remeras) { const el = document.getElementById('cat-img-remeras-display'); if(el) el.src = cats.remeras; }
+  if (cats.pantalones) { const el = document.getElementById('cat-img-pantalones-display'); if(el) el.src = cats.pantalones; }
+  if (cats.buzos) { const el = document.getElementById('cat-img-buzos-display'); if(el) el.src = cats.buzos; }
 }
 
 function togglePass(id) {
@@ -2162,14 +2296,50 @@ function renderCheckoutPage() {
 
 function placeOrder() {
   if (state.cart.length === 0) { showToast('Tu carrito está vacío'); return; }
+
+  // Validar datos personales
+  const nombre  = document.getElementById('co-nombre')?.value.trim();
+  const email   = document.getElementById('co-email')?.value.trim();
+  const dir     = document.getElementById('co-dir')?.value.trim();
+  const ciudad  = document.getElementById('co-ciudad')?.value.trim();
+  if (!nombre) { showToast('Ingresá tu nombre ❌'); checkoutStep(1); return; }
+  if (!email || !email.includes('@')) { showToast('Ingresá un email válido ❌'); checkoutStep(1); return; }
+  if (!dir)   { showToast('Ingresá tu dirección de envío ❌'); checkoutStep(1); return; }
+  if (!ciudad){ showToast('Ingresá tu ciudad ❌'); checkoutStep(1); return; }
+
+  // Validar método de pago
+  const payMethod = document.querySelector('input[name="payment"]:checked')?.value;
+  if (payMethod === 'card') {
+    const cardNum  = document.querySelector('#card-form input[placeholder="0000 0000 0000 0000"]')?.value.replace(/\s/g,'');
+    const cardExp  = document.querySelector('#card-form input[placeholder="MM/AA"]')?.value.trim();
+    const cardCvv  = document.querySelector('#card-form input[placeholder="000"]')?.value.trim();
+    const cardName = document.querySelector('#card-form input[placeholder="JUAN PEREZ"]')?.value.trim();
+    if (!cardNum || cardNum.length < 15) { showToast('Ingresá un número de tarjeta válido ❌'); checkoutStep(3); return; }
+    if (!cardExp || !/^\d{2}\/\d{2}$/.test(cardExp)) { showToast('Ingresá la fecha de vencimiento (MM/AA) ❌'); checkoutStep(3); return; }
+    if (!cardCvv || cardCvv.length < 3) { showToast('Ingresá el CVV ❌'); checkoutStep(3); return; }
+    if (!cardName) { showToast('Ingresá el nombre de la tarjeta ❌'); checkoutStep(3); return; }
+    // Validar fecha no vencida
+    const [mm, yy] = cardExp.split('/');
+    const expDate = new Date(2000 + parseInt(yy), parseInt(mm) - 1, 1);
+    if (expDate < new Date()) { showToast('Tu tarjeta está vencida ❌'); checkoutStep(3); return; }
+  }
+
+  // Validar CBU si eligió transferencia
+  if (payMethod === 'transfer') {
+    const cbu = document.getElementById('bank-cbu')?.value.trim();
+    // Solo info — no bloquear, pero avisar
+  }
+
+  // Todo ok — confirmar pedido
   const orderNum = 'ORD-' + String(Math.floor(Math.random()*9000)+1000);
   const newOrder = {
     id: orderNum,
-    customer: state.user ? state.user.name : 'Invitado',
-    email: state.user ? state.user.email : (document.getElementById('co-email').value||'invitado@mail.com'),
+    customer: nombre + ' ' + (document.getElementById('co-apellido')?.value.trim() || ''),
+    email: email,
     date: new Date().toLocaleDateString('es-AR'),
     total: cartTotal(),
     status: 'pending',
+    payMethod: payMethod || 'mercadopago',
     items: state.cart.map(i => ({name: i.name, qty: i.qty, price: i.price}))
   };
   state.orders.unshift(newOrder);
@@ -3110,7 +3280,10 @@ async function initFirebase() {
       updateAuthUI();
       if (user) {
         const label = document.getElementById('auth-label');
-        if (label) label.textContent = user.email === 'admin@xinco.com' ? 'ADMIN' : user.email.split('@')[0].toUpperCase();
+        const isAdmin = user.email === 'admin@xinco.com';
+        if (label) label.textContent = isAdmin ? 'ADMIN' : (user.displayName || user.email.split('@')[0]).split(' ')[0].toUpperCase();
+        const editBtn = document.getElementById('edit-cats-btn');
+        if (editBtn) editBtn.classList.toggle('hidden', !isAdmin);
       }
     });
 
@@ -3155,6 +3328,7 @@ async function syncFromFirebase() {
       dbSave(DB_KEYS.banners, bannerState);
       renderAnnouncementBar();
       renderHeroBanner();
+      applySavedCatImages();
     }
   } catch(e) {
     console.warn('Sync Firebase error:', e.message);
@@ -3268,6 +3442,7 @@ renderCatalog();
 updateCartCount();
 renderAnnouncementBar();
 renderHeroBanner();
+applySavedCatImages();
 
 // Firebase — conectar en paralelo sin bloquear la UI
 initFirebase();
