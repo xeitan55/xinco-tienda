@@ -448,9 +448,7 @@ tailwind.config = {
       </div>
       <a class="hidden md:inline-flex items-center font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 hover:text-secondary-container hover:border-secondary-container transition-colors cursor-pointer" onclick="nav('catalog')">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
     </div>
-    <div id="home-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-    <div class="col-span-4 xinco-loader"></div>
-  </div>
+    <div id="home-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
   </section>
 
   <!-- Banner Promo -->
@@ -3720,9 +3718,10 @@ function buildReportHTML(tipo, orders) {
   }
 
   if (tipo === 'completo') {
+    const ventasHTML = buildReportHTML('ventas', orders);
+    const clientesHTML = buildReportHTML('clientes', orders);
     return header + `
       <div style="font-size:18px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;border-left:4px solid #000;padding-left:12px;">REPORTE COMPLETO DE OPERACIONES</div>
-      <!-- Resumen ejecutivo -->
       <div style="background:#000;color:#fff;padding:16px;margin-bottom:20px;">
         <div style="font-family:monospace;font-size:10px;text-transform:uppercase;margin-bottom:8px;color:#aaa;">RESUMEN EJECUTIVO — ${now}</div>
         <div style="display:flex;gap:24px;flex-wrap:wrap;">
@@ -3732,10 +3731,10 @@ function buildReportHTML(tipo, orders) {
           <div><div style="font-size:22px;font-weight:bold;">${orders.length ? fmtPrice(Math.round(totalVentas/orders.length)) : '$0'}</div><div style="font-size:10px;color:#aaa;font-family:monospace;">TICKET PROMEDIO</div></div>
         </div>
       </div>
-      ${buildReportHTML('ventas', orders).split('DETALLE DE PEDIDOS')[1] ? '<div style="font-size:14px;font-weight:bold;margin-bottom:12px;font-family:monospace;text-transform:uppercase;">DETALLE DE PEDIDOS</div>' + buildReportHTML('ventas', orders) : buildReportHTML('ventas', orders)}
+      ${ventasHTML}
       <div style="page-break-before:always;padding-top:48px;">
         ${header}
-        ${buildReportHTML('clientes', orders)}
+        ${clientesHTML}
       </div>`;
   }
 
@@ -3856,30 +3855,39 @@ async function syncFromFirebase() {
 }
 
 // =================== INIT ===================
-// Mostrar loading mientras esperamos Firebase
-document.getElementById('home-products')?.innerHTML = '<div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;padding:60px;"><div style="width:32px;height:32px;border:3px solid #e2e2e2;border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;"></div></div>';
 
-// 1. Cargar localStorage inmediatamente (caché offline)
+// PASO 1 — Cargar localStorage YA (instantáneo, sin esperar nada)
 loadPersistedData();
+
+// PASO 2 — Renderizar inmediatamente con lo que hay en localStorage
+renderHomeProducts();
+renderCatalog();
+renderAnnouncementBar();
+renderHeroBanner();
+applySavedCatImages();
 updateCartCount();
 
-// 2. Intentar cargar Firebase y sobreescribir con datos reales
-async function bootApp() {
+// PASO 3 — Conectar Firebase en segundo plano sin bloquear nada
+// Si Firebase tarda más de 8 segundos o falla → la página ya funciona igual
+async function syncFirebaseBackground() {
   try {
-    await initFirebase(); // conecta + syncFromFirebase() adentro
+    await initFirebase();
+    // Firebase cargó OK → re-renderizar con datos actualizados
+    renderHomeProducts();
+    renderCatalog();
+    renderAnnouncementBar();
+    renderHeroBanner();
+    applySavedCatImages();
+    updateCartCount();
+    console.log('✅ Firebase sincronizado — datos actualizados');
   } catch(e) {
-    console.warn('Firebase falló, usando localStorage como fallback:', e.message);
+    // Firebase falló — la página ya está funcionando con localStorage, no pasa nada
+    console.warn('⚠️ Firebase no disponible, usando datos locales:', e.message);
   }
-  // 3. Renderizar TODO con los datos finales (Firebase o localStorage)
-  renderHomeProducts();
-  renderCatalog();
-  renderAnnouncementBar();
-  renderHeroBanner();
-  applySavedCatImages();
-  updateCartCount();
 }
 
-bootApp();
+// Ejecutar sync de Firebase sin bloquear
+syncFirebaseBackground();
 
 // Autoguardado localStorage cada 30 segundos
 setInterval(persistAll, 30000);
