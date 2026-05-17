@@ -200,7 +200,10 @@ tailwind.config = {
     background: #000;
     color: #fff;
   }
-  /* Suggestion chips */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .xinco-loader { display:flex;align-items:center;justify-content:center;padding:60px; }
+  .xinco-loader::after { content:'';width:32px;height:32px;border:3px solid #e2e2e2;border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite; }
+</style>
   .suggestion-chip {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
@@ -445,7 +448,9 @@ tailwind.config = {
       </div>
       <a class="hidden md:inline-flex items-center font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 hover:text-secondary-container hover:border-secondary-container transition-colors cursor-pointer" onclick="nav('catalog')">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
     </div>
-    <div id="home-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+    <div id="home-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="col-span-4 xinco-loader"></div>
+  </div>
   </section>
 
   <!-- Banner Promo -->
@@ -1079,6 +1084,9 @@ tailwind.config = {
         <button class="admin-nav-item w-full" id="admin-nav-tracking" onclick="showAdminSection('tracking')">
           <span class="material-symbols-outlined">local_shipping</span> TRACKING
         </button>
+        <button class="admin-nav-item w-full" id="admin-nav-reportes" onclick="showAdminSection('reportes')">
+          <span class="material-symbols-outlined">print</span> REPORTES / PDF
+        </button>
       </div>
       <div class="border-t border-white/10 p-4">
         <button class="admin-nav-item w-full" onclick="doLogout()"><span class="material-symbols-outlined">logout</span> SALIR</button>
@@ -1533,7 +1541,78 @@ tailwind.config = {
           </div>
         </div>
 
-        <!-- ===== END ADMIN SECTIONS ===== -->
+        <!-- ===== REPORTES SECTION ===== -->
+        <div id="admin-section-reportes" class="hidden">
+          <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">REPORTES Y PDF</h2>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-6">GENERÁ DOCUMENTOS IMPRIMIBLES CON DATOS DE VENTAS Y CLIENTES</p>
+
+          <!-- Filtros del reporte -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <h3 class="font-label-caps text-label-caps text-primary mb-5 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">tune</span> CONFIGURAR REPORTE
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-5">
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TIPO DE REPORTE</label>
+                <select id="rep-tipo" class="input-field" onchange="previewReport()">
+                  <option value="ventas">RESUMEN DE VENTAS</option>
+                  <option value="clientes">DATOS DE CLIENTES</option>
+                  <option value="pedido">PEDIDO INDIVIDUAL</option>
+                  <option value="completo">REPORTE COMPLETO</option>
+                </select>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ESTADO</label>
+                <select id="rep-estado" class="input-field" onchange="previewReport()">
+                  <option value="all">TODOS</option>
+                  <option value="pending">PENDIENTES</option>
+                  <option value="shipped">ENVIADOS</option>
+                  <option value="delivered">ENTREGADOS</option>
+                  <option value="cancelled">CANCELADOS</option>
+                </select>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PEDIDO ESPECÍFICO</label>
+                <select id="rep-pedido" class="input-field" onchange="previewReport()">
+                  <option value="">TODOS LOS PEDIDOS</option>
+                </select>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ORDENAR POR</label>
+                <select id="rep-orden" class="input-field" onchange="previewReport()">
+                  <option value="fecha-desc">FECHA — MÁS RECIENTE</option>
+                  <option value="fecha-asc">FECHA — MÁS ANTIGUO</option>
+                  <option value="monto-desc">MONTO — MAYOR A MENOR</option>
+                  <option value="monto-asc">MONTO — MENOR A MAYOR</option>
+                </select>
+              </div>
+            </div>
+            <div class="flex gap-3 flex-wrap">
+              <button class="btn-violet py-3 px-6 text-[11px]" onclick="printReport()">
+                <span class="material-symbols-outlined text-[16px]">print</span> IMPRIMIR / GUARDAR PDF
+              </button>
+              <button class="btn-outline py-3 px-6 text-[11px]" onclick="previewReport()">
+                <span class="material-symbols-outlined text-[16px]">preview</span> ACTUALIZAR VISTA PREVIA
+              </button>
+            </div>
+          </div>
+
+          <!-- Vista previa del reporte -->
+          <div class="bg-white border-[3px] border-primary p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">preview</span> VISTA PREVIA DEL DOCUMENTO
+              </h3>
+              <span id="rep-count" class="font-label-caps text-[10px] text-on-surface-variant"></span>
+            </div>
+            <!-- Preview container — simula hoja A4 -->
+            <div id="rep-preview-container" class="border-2 border-outline-variant overflow-auto" style="background:#e8e8e8; padding:24px; max-height:70vh;">
+              <div id="rep-preview" style="background:#fff; width:794px; min-height:1123px; margin:0 auto; padding:48px; font-family:Arial,sans-serif; font-size:12px; color:#000; box-shadow:0 4px 24px rgba(0,0,0,0.15);">
+                <p class="font-label-caps text-label-caps text-on-surface-variant text-center mt-8">Seleccioná un tipo de reporte para ver la vista previa</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- ===== END ADMIN SECTIONS ===== -->
       </div>
@@ -2406,7 +2485,7 @@ function checkAdminAccess() {
 }
 
 function showAdminSection(section) {
-  ['dashboard','orders','products','inventory','customers','banners','cobranzas','tracking'].forEach(s => {
+  ['dashboard','orders','products','inventory','customers','banners','cobranzas','tracking','reportes'].forEach(s => {
     const el = document.getElementById('admin-section-'+s);
     if (el) el.classList.toggle('hidden', s !== section);
     const navEl = document.getElementById('admin-nav-'+s);
@@ -2415,13 +2494,15 @@ function showAdminSection(section) {
   const titles = {
     dashboard:'TABLERO', orders:'GESTIÓN DE PEDIDOS', products:'PRODUCTOS',
     inventory:'INVENTARIO', customers:'CLIENTES', banners:'EDITOR DE BANNERS',
-    cobranzas:'GESTIÓN DE COBRANZAS', tracking:'SEGUIMIENTO DE ENVÍOS'
+    cobranzas:'GESTIÓN DE COBRANZAS', tracking:'SEGUIMIENTO DE ENVÍOS',
+    reportes:'REPORTES Y PDF'
   };
   document.getElementById('admin-section-title').textContent = titles[section] || section.toUpperCase();
   const subs = {
     dashboard:'VISTA GENERAL', orders:'TODOS LOS PEDIDOS', products:'CATÁLOGO DE PRODUCTOS',
     inventory:'STOCK Y UNIDADES', customers:'BASE DE CLIENTES', banners:'PERSONALIZACIÓN DE LA TIENDA',
-    cobranzas:'MÉTODOS DE PAGO Y COBRANZA', tracking:'CORREO ARGENTINO Y OTROS TRANSPORTES'
+    cobranzas:'MÉTODOS DE PAGO Y COBRANZA', tracking:'CORREO ARGENTINO Y OTROS TRANSPORTES',
+    reportes:'DOCUMENTOS IMPRIMIBLES Y EXPORTACIÓN'
   };
   const subEl = document.getElementById('admin-section-sub');
   if (subEl) subEl.textContent = subs[section] || '';
@@ -2429,6 +2510,7 @@ function showAdminSection(section) {
   if (section === 'banners') initBannerEditor();
   if (section === 'tracking') initTrackingSection();
   if (section === 'cobranzas') initCobranzasSection();
+  if (section === 'reportes') initReportesSection();
 }
 
 function renderAdminDashboard() {
@@ -3435,17 +3517,369 @@ function loadPersistedData() {
   if (savedMP) state.mpConfig = savedMP;
 }
 
-// =================== INIT ===================
-loadPersistedData();
-renderHomeProducts();
-renderCatalog();
-updateCartCount();
-renderAnnouncementBar();
-renderHeroBanner();
-applySavedCatImages();
+// =================== REPORTES Y PDF ===================
 
-// Firebase — conectar en paralelo sin bloquear la UI
-initFirebase();
+function initReportesSection() {
+  // Poblar select de pedidos específicos
+  const sel = document.getElementById('rep-pedido');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">TODOS LOS PEDIDOS</option>' +
+    state.orders.map(o => `<option value="${o.id}">#${o.id} — ${o.customer} (${fmtPrice(o.total)})</option>`).join('');
+  previewReport();
+}
+
+function getFilteredOrders() {
+  const estado = document.getElementById('rep-estado')?.value || 'all';
+  const pedidoId = document.getElementById('rep-pedido')?.value || '';
+  const orden = document.getElementById('rep-orden')?.value || 'fecha-desc';
+
+  let orders = [...state.orders];
+  if (estado !== 'all') orders = orders.filter(o => o.status === estado);
+  if (pedidoId) orders = orders.filter(o => o.id === pedidoId);
+
+  if (orden === 'fecha-asc') orders.reverse();
+  else if (orden === 'monto-desc') orders.sort((a,b) => b.total - a.total);
+  else if (orden === 'monto-asc') orders.sort((a,b) => a.total - b.total);
+
+  return orders;
+}
+
+function statusLabel(s) {
+  return {pending:'PENDIENTE', shipped:'ENVIADO', delivered:'ENTREGADO', cancelled:'CANCELADO'}[s] || s.toUpperCase();
+}
+function statusColor(s) {
+  return {pending:'#e65100', shipped:'#1565c0', delivered:'#2e7d32', cancelled:'#c62828'}[s] || '#000';
+}
+
+function buildReportHTML(tipo, orders) {
+  const now = new Date().toLocaleDateString('es-AR', {day:'2-digit', month:'long', year:'numeric'});
+  const totalVentas = orders.reduce((s,o) => s + o.total, 0);
+  const totalPendiente = orders.filter(o=>o.status==='pending').reduce((s,o)=>s+o.total,0);
+  const totalEntregado = orders.filter(o=>o.status==='delivered').reduce((s,o)=>s+o.total,0);
+
+  const header = `
+    <div style="border-bottom:3px solid #000;padding-bottom:20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div style="font-family:Arial,sans-serif;font-size:32px;font-weight:900;letter-spacing:-2px;line-height:1;">XINCO</div>
+        <div style="font-size:10px;color:#666;margin-top:4px;font-family:monospace;letter-spacing:1px;">URBAN STREETWEAR — MAR DEL PLATA, BUENOS AIRES, ARGENTINA</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:10px;color:#666;font-family:monospace;">GENERADO EL ${now}</div>
+        <div style="font-size:10px;color:#666;font-family:monospace;margin-top:2px;">USO EXCLUSIVO INTERNO</div>
+      </div>
+    </div>`;
+
+  if (tipo === 'ventas') {
+    return header + `
+      <div style="font-size:18px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;border-left:4px solid #000;padding-left:12px;">RESUMEN DE VENTAS</div>
+      <!-- Totales -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
+        <tr>
+          <td style="padding:12px;border:2px solid #000;background:#000;color:#fff;font-family:monospace;font-size:11px;font-weight:bold;text-transform:uppercase;">TOTAL GENERAL</td>
+          <td style="padding:12px;border:2px solid #000;font-family:monospace;font-size:16px;font-weight:bold;text-align:right;">${fmtPrice(totalVentas)}</td>
+          <td style="padding:12px;border:2px solid #000;background:#000;color:#fff;font-family:monospace;font-size:11px;font-weight:bold;text-transform:uppercase;">PEDIDOS TOTALES</td>
+          <td style="padding:12px;border:2px solid #000;font-family:monospace;font-size:16px;font-weight:bold;text-align:right;">${orders.length}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;border:1px solid #ccc;font-family:monospace;font-size:10px;text-transform:uppercase;color:#666;">PENDIENTE DE COBRO</td>
+          <td style="padding:10px;border:1px solid #ccc;font-family:monospace;font-size:12px;font-weight:bold;text-align:right;color:#e65100;">${fmtPrice(totalPendiente)}</td>
+          <td style="padding:10px;border:1px solid #ccc;font-family:monospace;font-size:10px;text-transform:uppercase;color:#666;">YA ENTREGADO</td>
+          <td style="padding:10px;border:1px solid #ccc;font-family:monospace;font-size:12px;font-weight:bold;text-align:right;color:#2e7d32;">${fmtPrice(totalEntregado)}</td>
+        </tr>
+      </table>
+      <!-- Tabla de pedidos -->
+      <div style="font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-family:monospace;">DETALLE DE PEDIDOS</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px;font-family:Arial,sans-serif;">
+        <thead>
+          <tr style="background:#000;color:#fff;">
+            <th style="padding:8px;text-align:left;font-family:monospace;font-size:10px;">ID PEDIDO</th>
+            <th style="padding:8px;text-align:left;font-family:monospace;font-size:10px;">CLIENTE</th>
+            <th style="padding:8px;text-align:left;font-family:monospace;font-size:10px;">EMAIL</th>
+            <th style="padding:8px;text-align:left;font-family:monospace;font-size:10px;">FECHA</th>
+            <th style="padding:8px;text-align:left;font-family:monospace;font-size:10px;">MÉTODO PAGO</th>
+            <th style="padding:8px;text-align:right;font-family:monospace;font-size:10px;">TOTAL</th>
+            <th style="padding:8px;text-align:center;font-family:monospace;font-size:10px;">ESTADO</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${orders.map((o,i) => `
+          <tr style="background:${i%2===0?'#f9f9f9':'#fff'};border-bottom:1px solid #e0e0e0;">
+            <td style="padding:8px;font-family:monospace;font-size:10px;font-weight:bold;">#${o.id}</td>
+            <td style="padding:8px;font-size:11px;">${o.customer}</td>
+            <td style="padding:8px;font-size:10px;color:#555;">${o.email||'—'}</td>
+            <td style="padding:8px;font-size:10px;">${o.date}</td>
+            <td style="padding:8px;font-size:10px;font-family:monospace;text-transform:uppercase;">${o.payMethod||'MP'}</td>
+            <td style="padding:8px;text-align:right;font-weight:bold;font-family:monospace;">${fmtPrice(o.total)}</td>
+            <td style="padding:8px;text-align:center;"><span style="background:${statusColor(o.status)};color:#fff;padding:2px 8px;font-family:monospace;font-size:9px;font-weight:bold;">${statusLabel(o.status)}</span></td>
+          </tr>`).join('')}
+        </tbody>
+        <tfoot>
+          <tr style="background:#000;color:#fff;font-weight:bold;">
+            <td colspan="5" style="padding:10px;font-family:monospace;font-size:11px;text-transform:uppercase;">TOTAL</td>
+            <td style="padding:10px;text-align:right;font-family:monospace;font-size:13px;">${fmtPrice(totalVentas)}</td>
+            <td style="padding:10px;text-align:center;font-family:monospace;font-size:10px;">${orders.length} PEDIDOS</td>
+          </tr>
+        </tfoot>
+      </table>`;
+  }
+
+  if (tipo === 'clientes') {
+    const emails = [...new Set(orders.map(o=>o.email).filter(Boolean))];
+    return header + `
+      <div style="font-size:18px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;border-left:4px solid #000;padding-left:12px;">DATOS DE CLIENTES</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px;">
+        <thead>
+          <tr style="background:#000;color:#fff;">
+            <th style="padding:8px;text-align:left;font-family:monospace;font-size:10px;">#</th>
+            <th style="padding:8px;text-align:left;font-family:monospace;font-size:10px;">NOMBRE Y APELLIDO</th>
+            <th style="padding:8px;text-align:left;font-family:monospace;font-size:10px;">EMAIL</th>
+            <th style="padding:8px;text-align:center;font-family:monospace;font-size:10px;">PEDIDOS</th>
+            <th style="padding:8px;text-align:right;font-family:monospace;font-size:10px;">TOTAL GASTADO</th>
+            <th style="padding:8px;text-align:left;font-family:monospace;font-size:10px;">ÚLTIMO PEDIDO</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${emails.map((email,i) => {
+            const clientOrders = orders.filter(o=>o.email===email);
+            const total = clientOrders.reduce((s,o)=>s+o.total,0);
+            const nombre = clientOrders[0]?.customer || email;
+            const ultimo = clientOrders[0]?.date || '—';
+            return `<tr style="background:${i%2===0?'#f9f9f9':'#fff'};border-bottom:1px solid #e0e0e0;">
+              <td style="padding:8px;font-family:monospace;font-size:10px;color:#666;">${i+1}</td>
+              <td style="padding:8px;font-size:11px;font-weight:bold;">${nombre}</td>
+              <td style="padding:8px;font-size:10px;color:#555;">${email}</td>
+              <td style="padding:8px;text-align:center;font-family:monospace;">${clientOrders.length}</td>
+              <td style="padding:8px;text-align:right;font-weight:bold;font-family:monospace;">${fmtPrice(total)}</td>
+              <td style="padding:8px;font-size:10px;">${ultimo}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+      <div style="margin-top:16px;padding:12px;border:2px solid #000;background:#f5f5f5;font-family:monospace;font-size:10px;">
+        TOTAL DE CLIENTES ÚNICOS: ${emails.length} &nbsp;|&nbsp; TOTAL RECAUDADO: ${fmtPrice(totalVentas)}
+      </div>`;
+  }
+
+  if (tipo === 'pedido') {
+    return orders.map(o => `
+      <div style="${orders.indexOf(o) > 0 ? 'page-break-before:always;padding-top:48px;' : ''}">
+        ${orders.indexOf(o) > 0 ? header : ''}
+        <div style="font-size:18px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;border-left:4px solid #000;padding-left:12px;">
+          COMPROBANTE DE PEDIDO — #${o.id}
+        </div>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+          <tr>
+            <td style="width:50%;padding:12px;border:1px solid #000;vertical-align:top;">
+              <div style="font-family:monospace;font-size:10px;font-weight:bold;text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid #ccc;padding-bottom:4px;">DATOS DEL CLIENTE</div>
+              <div style="font-size:12px;font-weight:bold;margin-bottom:4px;">${o.customer}</div>
+              <div style="font-size:11px;color:#555;margin-bottom:2px;">${o.email||'Sin email'}</div>
+              <div style="font-size:11px;color:#555;">${o.phone||'Sin teléfono'}</div>
+            </td>
+            <td style="width:50%;padding:12px;border:1px solid #000;vertical-align:top;border-left:none;">
+              <div style="font-family:monospace;font-size:10px;font-weight:bold;text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid #ccc;padding-bottom:4px;">DATOS DEL PEDIDO</div>
+              <div style="font-size:11px;margin-bottom:2px;"><b>Fecha:</b> ${o.date}</div>
+              <div style="font-size:11px;margin-bottom:2px;"><b>Estado:</b> <span style="color:${statusColor(o.status)};font-weight:bold;">${statusLabel(o.status)}</span></div>
+              <div style="font-size:11px;margin-bottom:2px;"><b>Método:</b> ${(o.payMethod||'MP').toUpperCase()}</div>
+              ${state.tracking[o.id] ? `<div style="font-size:11px;"><b>Tracking:</b> ${state.tracking[o.id].number} (${state.tracking[o.id].service})</div>` : ''}
+            </td>
+          </tr>
+        </table>
+        <!-- Items -->
+        <div style="font-family:monospace;font-size:10px;font-weight:bold;text-transform:uppercase;margin-bottom:8px;">DETALLE DE PRODUCTOS</div>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
+          <thead>
+            <tr style="background:#000;color:#fff;">
+              <th style="padding:8px;text-align:left;font-family:monospace;font-size:10px;">PRODUCTO</th>
+              <th style="padding:8px;text-align:center;font-family:monospace;font-size:10px;">CANT.</th>
+              <th style="padding:8px;text-align:right;font-family:monospace;font-size:10px;">P. UNIT.</th>
+              <th style="padding:8px;text-align:right;font-family:monospace;font-size:10px;">SUBTOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(o.items||[]).map((item,i) => `
+            <tr style="background:${i%2===0?'#f9f9f9':'#fff'};border-bottom:1px solid #e0e0e0;">
+              <td style="padding:8px;font-size:11px;">${item.name}</td>
+              <td style="padding:8px;text-align:center;font-family:monospace;">${item.qty}</td>
+              <td style="padding:8px;text-align:right;font-family:monospace;">${fmtPrice(item.price)}</td>
+              <td style="padding:8px;text-align:right;font-family:monospace;font-weight:bold;">${fmtPrice(item.price*item.qty)}</td>
+            </tr>`).join('')}
+          </tbody>
+          <tfoot>
+            <tr style="border-top:2px solid #000;">
+              <td colspan="3" style="padding:10px;font-family:monospace;font-size:11px;font-weight:bold;text-transform:uppercase;text-align:right;">TOTAL DEL PEDIDO</td>
+              <td style="padding:10px;text-align:right;font-family:monospace;font-size:14px;font-weight:bold;">${fmtPrice(o.total)}</td>
+            </tr>
+          </tfoot>
+        </table>
+        <!-- Firma -->
+        <div style="margin-top:40px;display:flex;gap:40px;">
+          <div style="flex:1;border-top:1px solid #000;padding-top:8px;text-align:center;font-family:monospace;font-size:10px;color:#666;">FIRMA DEL CLIENTE</div>
+          <div style="flex:1;border-top:1px solid #000;padding-top:8px;text-align:center;font-family:monospace;font-size:10px;color:#666;">SELLO / FIRMA XINCO</div>
+        </div>
+      </div>`).join('');
+  }
+
+  if (tipo === 'completo') {
+    return header + `
+      <div style="font-size:18px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;border-left:4px solid #000;padding-left:12px;">REPORTE COMPLETO DE OPERACIONES</div>
+      <!-- Resumen ejecutivo -->
+      <div style="background:#000;color:#fff;padding:16px;margin-bottom:20px;">
+        <div style="font-family:monospace;font-size:10px;text-transform:uppercase;margin-bottom:8px;color:#aaa;">RESUMEN EJECUTIVO — ${now}</div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+          <div><div style="font-size:22px;font-weight:bold;">${fmtPrice(totalVentas)}</div><div style="font-size:10px;color:#aaa;font-family:monospace;">TOTAL RECAUDADO</div></div>
+          <div><div style="font-size:22px;font-weight:bold;">${orders.length}</div><div style="font-size:10px;color:#aaa;font-family:monospace;">PEDIDOS</div></div>
+          <div><div style="font-size:22px;font-weight:bold;">${[...new Set(orders.map(o=>o.email).filter(Boolean))].length}</div><div style="font-size:10px;color:#aaa;font-family:monospace;">CLIENTES</div></div>
+          <div><div style="font-size:22px;font-weight:bold;">${orders.length ? fmtPrice(Math.round(totalVentas/orders.length)) : '$0'}</div><div style="font-size:10px;color:#aaa;font-family:monospace;">TICKET PROMEDIO</div></div>
+        </div>
+      </div>
+      ${buildReportHTML('ventas', orders).split('DETALLE DE PEDIDOS')[1] ? '<div style="font-size:14px;font-weight:bold;margin-bottom:12px;font-family:monospace;text-transform:uppercase;">DETALLE DE PEDIDOS</div>' + buildReportHTML('ventas', orders) : buildReportHTML('ventas', orders)}
+      <div style="page-break-before:always;padding-top:48px;">
+        ${header}
+        ${buildReportHTML('clientes', orders)}
+      </div>`;
+  }
+
+  return header + '<p style="text-align:center;color:#666;margin-top:40px;font-family:monospace;">Seleccioná un tipo de reporte</p>';
+}
+
+function previewReport() {
+  const tipo   = document.getElementById('rep-tipo')?.value || 'ventas';
+  const orders = getFilteredOrders();
+  const countEl = document.getElementById('rep-count');
+  if (countEl) countEl.textContent = `${orders.length} PEDIDO${orders.length !== 1 ? 'S' : ''}`;
+  const preview = document.getElementById('rep-preview');
+  if (!preview) return;
+  if (orders.length === 0) {
+    preview.innerHTML = '<div style="text-align:center;padding:60px;color:#666;font-family:monospace;font-size:12px;">NO HAY PEDIDOS QUE COINCIDAN CON LOS FILTROS SELECCIONADOS</div>';
+    return;
+  }
+  preview.innerHTML = buildReportHTML(tipo, orders);
+}
+
+function printReport() {
+  const tipo   = document.getElementById('rep-tipo')?.value || 'ventas';
+  const orders = getFilteredOrders();
+  if (orders.length === 0) { showToast('No hay pedidos para imprimir'); return; }
+
+  const now = new Date().toLocaleDateString('es-AR', {day:'2-digit', month:'long', year:'numeric'});
+  const content = buildReportHTML(tipo, orders);
+  const tipoLabels = {ventas:'Resumen de Ventas', clientes:'Datos de Clientes', pedido:'Comprobante de Pedido', completo:'Reporte Completo'};
+
+  const printWin = window.open('', '_blank', 'width=900,height=700');
+  printWin.document.write(`<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>XINCO — ${tipoLabels[tipo]} — ${now}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; font-size: 12px; color: #000; background: #fff; }
+    @page { size: A4; margin: 20mm 15mm; }
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .no-print { display: none !important; }
+      thead { display: table-header-group; }
+      tr { page-break-inside: avoid; }
+    }
+    table { border-collapse: collapse; }
+    .page-break { page-break-before: always; }
+  </style>
+</head>
+<body>
+  <!-- Botón imprimir — se oculta al imprimir -->
+  <div class="no-print" style="background:#000;color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:0;font-family:monospace;font-size:11px;">
+    <span>XINCO — ${tipoLabels[tipo].toUpperCase()} — ${now} — ${orders.length} PEDIDO${orders.length!==1?'S':''}</span>
+    <div style="display:flex;gap:8px;">
+      <button onclick="window.print()" style="background:#5d22ff;color:#fff;border:none;padding:8px 20px;font-family:monospace;font-size:11px;font-weight:bold;cursor:pointer;text-transform:uppercase;">
+        ▶ IMPRIMIR / GUARDAR PDF
+      </button>
+      <button onclick="window.close()" style="background:#fff;color:#000;border:2px solid #fff;padding:8px 16px;font-family:monospace;font-size:11px;font-weight:bold;cursor:pointer;">
+        ✕ CERRAR
+      </button>
+    </div>
+  </div>
+  <div style="padding:32px 32px 48px;">
+    ${content}
+  </div>
+</body>
+</html>`);
+  printWin.document.close();
+  // Dar tiempo a que cargue antes de ofrecer impresión
+  setTimeout(() => { try { printWin.focus(); } catch(e) {} }, 500);
+}
+
+async function syncFromFirebase() {
+  if (!fbDb || !window._fb) return;
+  const { collection, getDocs, getDoc, doc, query, orderBy } = window._fb;
+  try {
+    // ── Productos ──────────────────────────────────────────────
+    const prodSnap = await getDocs(collection(fbDb, 'products'));
+    if (!prodSnap.empty) {
+      // SIEMPRE sobreescribir con lo que dice Firebase (fuente de verdad)
+      state.products = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      dbSave(DB_KEYS.products, state.products);
+    } else {
+      // Primera vez — subir los por defecto a Firebase
+      await seedFirebaseProducts();
+    }
+
+    // ── Pedidos ────────────────────────────────────────────────
+    try {
+      const ordSnap = await getDocs(query(collection(fbDb, 'orders'), orderBy('createdAt','desc')));
+      state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      dbSave(DB_KEYS.orders, state.orders);
+    } catch(e) {
+      const ordSnap = await getDocs(collection(fbDb, 'orders'));
+      state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      dbSave(DB_KEYS.orders, state.orders);
+    }
+
+    // ── Banners ────────────────────────────────────────────────
+    const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
+    if (bannerSnap.exists()) {
+      // SIEMPRE sobreescribir con Firebase
+      const fbBanners = bannerSnap.data();
+      Object.assign(bannerState, fbBanners);
+      dbSave(DB_KEYS.banners, bannerState);
+    }
+
+    // ── Tracking ───────────────────────────────────────────────
+    try {
+      const trackSnap = await getDocs(collection(fbDb, 'tracking'));
+      trackSnap.docs.forEach(d => { trackingData[d.id] = d.data(); });
+      dbSave(DB_KEYS.tracking, trackingData);
+    } catch(e) {}
+
+  } catch(e) {
+    console.warn('Sync Firebase error:', e.message);
+  }
+}
+
+// =================== INIT ===================
+// Mostrar loading mientras esperamos Firebase
+document.getElementById('home-products')?.innerHTML = '<div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;padding:60px;"><div style="width:32px;height:32px;border:3px solid #e2e2e2;border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;"></div></div>';
+
+// 1. Cargar localStorage inmediatamente (caché offline)
+loadPersistedData();
+updateCartCount();
+
+// 2. Intentar cargar Firebase y sobreescribir con datos reales
+async function bootApp() {
+  try {
+    await initFirebase(); // conecta + syncFromFirebase() adentro
+  } catch(e) {
+    console.warn('Firebase falló, usando localStorage como fallback:', e.message);
+  }
+  // 3. Renderizar TODO con los datos finales (Firebase o localStorage)
+  renderHomeProducts();
+  renderCatalog();
+  renderAnnouncementBar();
+  renderHeroBanner();
+  applySavedCatImages();
+  updateCartCount();
+}
+
+bootApp();
 
 // Autoguardado localStorage cada 30 segundos
 setInterval(persistAll, 30000);
