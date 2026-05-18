@@ -4173,6 +4173,21 @@ async function bootFromFirebase() {
 
 bootFromFirebase();
 
+// Si viene de verificar email, mostrar mensaje de bienvenida
+const _urlParams = new URLSearchParams(window.location.search);
+if (_urlParams.get('verified') === 'true') {
+  const _verEmail = _urlParams.get('email') || '';
+  setTimeout(() => {
+    showToast('✅ Email verificado correctamente — ahora podés iniciar sesión');
+    // Navegar directo al login
+    nav('login');
+    if (_verEmail) {
+      const loginInput = document.getElementById('login-email');
+      if (loginInput) loginInput.value = _verEmail;
+    }
+  }, 1500);
+}
+
 // Guardar solo el carrito en localStorage
 setInterval(() => dbSave(DB_KEYS.cart, state.cart), 30000);
 </script>
