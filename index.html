@@ -203,7 +203,6 @@ tailwind.config = {
   @keyframes spin { to { transform: rotate(360deg); } }
   .xinco-loader { display:flex;align-items:center;justify-content:center;padding:60px; }
   .xinco-loader::after { content:'';width:32px;height:32px;border:3px solid #e2e2e2;border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite; }
-</style>
   .suggestion-chip {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
@@ -867,27 +866,42 @@ tailwind.config = {
         </a>
         <p class="font-label-caps text-label-caps text-on-surface-variant mt-2">ACCEDÉ A TU CUENTA</p>
       </div>
+      <!-- Email not verified warning -->
+      <div id="login-verify-warning" class="hidden border-[3px] border-secondary-container p-4 mb-5 flex items-start gap-3">
+        <span class="material-symbols-outlined text-secondary-container shrink-0">mark_email_unread</span>
+        <div>
+          <p class="font-label-caps text-label-caps text-primary mb-1">VERIFICÁ TU EMAIL</p>
+          <p class="font-body-md text-sm text-on-surface-variant">Tu cuenta no está verificada. Revisá tu bandeja de entrada y hacé clic en el link que te enviamos.</p>
+          <button class="font-label-caps text-[10px] text-secondary-container underline mt-2" onclick="resendVerificationEmail()">REENVIAR EMAIL DE VERIFICACIÓN</button>
+        </div>
+      </div>
       <div class="border-[3px] border-primary p-8">
-        <div id="login-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-6 border-2 border-error"></div>
+        <div id="login-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
         <div class="mb-5">
           <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL</label>
-          <input id="login-email" class="input-field" type="email" placeholder="tu@email.com"/>
+          <input id="login-email" class="input-field" type="email" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
         </div>
-        <div class="mb-6">
+        <div class="mb-4">
           <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONTRASEÑA</label>
           <div class="relative">
-            <input id="login-pass" class="input-field" type="password" placeholder="••••••••"/>
+            <input id="login-pass" class="input-field" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
             <button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant" onclick="togglePass('login-pass')"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
           </div>
         </div>
+        <!-- Remember me -->
+        <div class="flex items-center justify-between mb-5">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="login-remember" class="form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5" checked/>
+            <span class="font-label-caps text-label-caps text-on-surface-variant">RECORDAR MI CUENTA</span>
+          </label>
+          <a class="font-label-caps text-[10px] text-on-surface-variant underline cursor-pointer" onclick="showForgotPassword()">¿OLVIDASTE TU CONTRASEÑA?</a>
+        </div>
         <button class="btn-primary w-full justify-center py-4 mb-4" onclick="doLogin()">INICIAR SESIÓN</button>
-        <!-- Divider -->
         <div class="flex items-center gap-3 my-4">
           <div class="flex-1 h-px bg-outline-variant"></div>
           <span class="font-label-caps text-[10px] text-on-surface-variant">O CONTINUÁ CON</span>
           <div class="flex-1 h-px bg-outline-variant"></div>
         </div>
-        <!-- Google Login -->
         <button class="btn-outline w-full justify-center py-3 mb-5" onclick="doLoginGoogle()">
           <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
           INICIAR CON GOOGLE
@@ -895,9 +909,6 @@ tailwind.config = {
         <div class="text-center">
           <span class="font-body-md text-on-surface-variant text-sm">¿No tenés cuenta? </span>
           <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('register')">REGISTRATE</a>
-        </div>
-        <div class="text-center mt-3">
-          <a class="font-label-caps text-label-caps text-on-surface-variant underline cursor-pointer text-[10px]" onclick="showForgotPassword()">¿Olvidaste tu contraseña?</a>
         </div>
       </div>
     </div>
@@ -916,30 +927,86 @@ tailwind.config = {
         </a>
         <p class="font-label-caps text-label-caps text-on-surface-variant mt-2">CREÁ TU CUENTA</p>
       </div>
-      <div class="border-[3px] border-primary p-8">
-        <div class="grid grid-cols-2 gap-4 mb-5">
-          <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label><input id="reg-nombre" class="input-field" placeholder="Juan"/></div>
-          <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO *</label><input id="reg-apellido" class="input-field" placeholder="Pérez"/></div>
+
+      <!-- FORMULARIO DE REGISTRO -->
+      <div id="register-form-panel" class="border-[3px] border-primary p-8">
+        <div id="reg-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label>
+            <input id="reg-nombre" class="input-field" placeholder="Juan"/>
+          </div>
+          <div>
+            <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO *</label>
+            <input id="reg-apellido" class="input-field" placeholder="Pérez"/>
+          </div>
         </div>
-        <div class="mb-5"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL *</label><input id="reg-email" class="input-field" type="email" placeholder="tu@email.com"/></div>
-        <div class="mb-5">
+        <div class="mb-4">
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL *</label>
+          <div class="relative">
+            <input id="reg-email" class="input-field pr-10" type="email" placeholder="tu@email.com" oninput="validateEmailField()"/>
+            <span id="reg-email-icon" class="absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] hidden"></span>
+          </div>
+          <p id="reg-email-hint" class="font-label-caps text-[10px] mt-1 hidden"></p>
+        </div>
+        <div class="mb-4">
           <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONTRASEÑA *</label>
-          <div class="relative"><input id="reg-pass" class="input-field" type="password" placeholder="Mínimo 8 caracteres"/><button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('reg-pass')"><span class="material-symbols-outlined text-[20px]">visibility</span></button></div>
+          <div class="relative">
+            <input id="reg-pass" class="input-field pr-10" type="password" placeholder="Mínimo 8 caracteres" oninput="checkPasswordStrength()"/>
+            <button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('reg-pass')"><span class="material-symbols-outlined text-[20px] text-on-surface-variant">visibility</span></button>
+          </div>
+          <!-- Password strength bar -->
+          <div class="mt-2 space-y-1">
+            <div class="flex gap-1">
+              <div id="str-bar-1" class="flex-1 h-1 bg-outline-variant transition-all"></div>
+              <div id="str-bar-2" class="flex-1 h-1 bg-outline-variant transition-all"></div>
+              <div id="str-bar-3" class="flex-1 h-1 bg-outline-variant transition-all"></div>
+              <div id="str-bar-4" class="flex-1 h-1 bg-outline-variant transition-all"></div>
+            </div>
+            <p id="str-label" class="font-label-caps text-[10px] text-on-surface-variant"></p>
+          </div>
         </div>
-        <div class="mb-6">
+        <div class="mb-5">
           <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONFIRMAR CONTRASEÑA *</label>
-          <div class="relative"><input id="reg-pass2" class="input-field" type="password" placeholder="Repetí tu contraseña"/><button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('reg-pass2')"><span class="material-symbols-outlined text-[20px]">visibility</span></button></div>
+          <div class="relative">
+            <input id="reg-pass2" class="input-field pr-10" type="password" placeholder="Repetí tu contraseña" oninput="checkPasswordMatch()"/>
+            <button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('reg-pass2')"><span class="material-symbols-outlined text-[20px] text-on-surface-variant">visibility</span></button>
+          </div>
+          <p id="reg-pass-match" class="font-label-caps text-[10px] mt-1 hidden"></p>
         </div>
-        <label class="flex items-start gap-3 mb-6 cursor-pointer">
+        <label class="flex items-start gap-3 mb-5 cursor-pointer">
           <input type="checkbox" id="reg-terms" class="mt-1 form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5"/>
-          <span class="font-body-md text-sm text-on-surface-variant">Acepto los <a class="text-primary underline">Términos y Condiciones</a> y la <a class="text-primary underline">Política de Privacidad</a></span>
+          <span class="font-body-md text-sm text-on-surface-variant">Acepto los <a class="text-primary underline cursor-pointer">Términos y Condiciones</a> y la <a class="text-primary underline cursor-pointer">Política de Privacidad</a></span>
         </label>
-        <button class="btn-primary w-full justify-center py-4 mb-4" onclick="doRegister()">CREAR CUENTA</button>
+        <button id="reg-submit-btn" class="btn-primary w-full justify-center py-4 mb-4" onclick="doRegister()">CREAR CUENTA</button>
         <div class="text-center">
           <span class="font-body-md text-on-surface-variant text-sm">¿Ya tenés cuenta? </span>
           <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('login')">INICIÁ SESIÓN</a>
         </div>
       </div>
+
+      <!-- PANTALLA: EMAIL ENVIADO -->
+      <div id="register-success-panel" class="hidden border-[3px] border-primary p-8 text-center">
+        <div class="w-20 h-20 bg-primary flex items-center justify-center mx-auto mb-6">
+          <span class="material-symbols-outlined text-white text-[48px]">mark_email_read</span>
+        </div>
+        <h2 style="font-family:Montserrat;font-size:28px;font-weight:900;letter-spacing:-0.02em;" class="text-primary uppercase mb-3">¡REVISÁ TU EMAIL!</h2>
+        <p class="font-body-md text-on-surface-variant mb-2">Te enviamos un correo de verificación a:</p>
+        <div class="border-[2px] border-secondary-container px-5 py-3 mb-5 inline-block">
+          <span id="reg-sent-email" class="font-label-caps text-label-caps text-secondary-container"></span>
+        </div>
+        <p class="font-body-md text-on-surface-variant text-sm mb-6">Hacé clic en el link del email para activar tu cuenta. Luego podés iniciar sesión normalmente.</p>
+        <div class="space-y-3">
+          <button class="btn-primary w-full justify-center py-4" onclick="nav('login')">
+            <span class="material-symbols-outlined text-[16px]">login</span> IR AL INICIO DE SESIÓN
+          </button>
+          <button class="btn-outline w-full justify-center py-3" onclick="resendFromRegister()">
+            <span class="material-symbols-outlined text-[16px]">refresh</span> REENVIAR EMAIL
+          </button>
+        </div>
+        <p class="font-label-caps text-[10px] text-on-surface-variant mt-4">¿No lo encontrás? Revisá la carpeta de spam o correo no deseado.</p>
+      </div>
+
     </div>
   </div>
 </div>
@@ -2173,55 +2240,199 @@ function quickAddToCart(id, size, color) {
 
 // =================== AUTH ===================
 async function doLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pass  = document.getElementById('login-pass').value;
-  const err   = document.getElementById('login-error');
+  const email    = document.getElementById('login-email').value.trim();
+  const pass     = document.getElementById('login-pass').value;
+  const remember = document.getElementById('login-remember')?.checked !== false;
+  const err      = document.getElementById('login-error');
+  const verWarn  = document.getElementById('login-verify-warning');
+
   if (!email || !pass) { showToast('Completá email y contraseña'); return; }
-  // Intentar Firebase primero
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('El email no tiene un formato válido ❌'); return; }
+
+  const btn = document.querySelector('#page-login .btn-primary');
+  if (btn) { btn.textContent = 'INGRESANDO...'; btn.disabled = true; }
+
   try {
+    // Configurar persistencia según "recordar cuenta"
+    const { setPersistence, browserLocalPersistence, browserSessionPersistence } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+    await setPersistence(fbAuth, remember ? browserLocalPersistence : browserSessionPersistence);
+
     const user = await fbLoginUser(email, pass);
+
+    // Verificar si el email está verificado (excepto admin)
+    if (!user.emailVerified && email !== 'admin@xinco.com') {
+      if (verWarn) verWarn.classList.remove('hidden');
+      if (err) { err.textContent = 'DEBÉS VERIFICAR TU EMAIL ANTES DE INICIAR SESIÓN'; err.classList.remove('hidden'); }
+      await fbLogoutUser();
+      if (btn) { btn.textContent = 'INICIAR SESIÓN'; btn.disabled = false; }
+      return;
+    }
+
     state.user = user;
     updateAuthUI();
+    if (err) err.classList.add('hidden');
+    if (verWarn) verWarn.classList.add('hidden');
     showToast(`¡Bienvenido! 👋`);
-    err.classList.add('hidden');
     if (email === 'admin@xinco.com') nav('admin');
     else nav('home');
-    return;
+
   } catch(e) {
-    // Fallback usuarios demo locales
-    const localUser = USERS.find(u => u.email === email && u.pass === pass);
-    if (localUser) {
-      state.user = localUser;
-      updateAuthUI();
-      showToast(`¡Bienvenido, ${localUser.name}! 👋`);
-      err.classList.add('hidden');
-      if (localUser.role === 'admin') nav('admin');
-      else nav('home');
-    } else {
-      err.textContent = 'EMAIL O CONTRASEÑA INCORRECTOS';
-      err.classList.remove('hidden');
-      showToast('Credenciales incorrectas ❌');
-    }
+    if (btn) { btn.textContent = 'INICIAR SESIÓN'; btn.disabled = false; }
+    let msg = 'EMAIL O CONTRASEÑA INCORRECTOS';
+    if (e.code === 'auth/user-not-found')   msg = 'NO EXISTE UNA CUENTA CON ESE EMAIL';
+    if (e.code === 'auth/wrong-password')   msg = 'CONTRASEÑA INCORRECTA';
+    if (e.code === 'auth/too-many-requests') msg = 'DEMASIADOS INTENTOS — ESPERÁ UNOS MINUTOS';
+    if (e.code === 'auth/invalid-email')    msg = 'EL EMAIL NO ES VÁLIDO';
+    if (err) { err.textContent = msg; err.classList.remove('hidden'); }
+    showToast(msg + ' ❌');
   }
 }
 
-function doRegister() {
-  const nombre = document.getElementById('reg-nombre').value.trim();
-  const apellido = document.getElementById('reg-apellido').value.trim();
+let _lastRegisteredUser = null;
+
+async function doRegister() {
+  const nombre  = document.getElementById('reg-nombre').value.trim();
+  const apellido= document.getElementById('reg-apellido').value.trim();
+  const email   = document.getElementById('reg-email').value.trim();
+  const pass    = document.getElementById('reg-pass').value;
+  const pass2   = document.getElementById('reg-pass2').value;
+  const terms   = document.getElementById('reg-terms').checked;
+  const errEl   = document.getElementById('reg-error');
+
+  function showRegError(msg) {
+    if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
+    showToast(msg + ' ❌');
+  }
+
+  // ── Validaciones ──────────────────────────────────────────
+  if (!nombre)  { showRegError('INGRESÁ TU NOMBRE'); return; }
+  if (!apellido){ showRegError('INGRESÁ TU APELLIDO'); return; }
+  if (!email)   { showRegError('INGRESÁ TU EMAIL'); return; }
+  // Formato email estricto
+  if (!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email)) {
+    showRegError('EL EMAIL NO TIENE UN FORMATO VÁLIDO'); return;
+  }
+  // Dominios claramente falsos
+  const fakeDomains = ['test.com','fake.com','asdf.com','abc.com','xxx.com','aaa.com','bbb.com','ccc.com','mailinator.com','guerrillamail.com','tempmail.com','throwam.com','yopmail.com'];
+  const domain = email.split('@')[1]?.toLowerCase();
+  if (fakeDomains.includes(domain)) {
+    showRegError('USÁ UN EMAIL REAL Y VÁLIDO'); return;
+  }
+  if (pass.length < 8)  { showRegError('LA CONTRASEÑA DEBE TENER AL MENOS 8 CARACTERES'); return; }
+  if (!/[A-Z]/.test(pass)) { showRegError('LA CONTRASEÑA DEBE TENER AL MENOS UNA MAYÚSCULA'); return; }
+  if (!/[0-9]/.test(pass)) { showRegError('LA CONTRASEÑA DEBE TENER AL MENOS UN NÚMERO'); return; }
+  if (pass !== pass2)   { showRegError('LAS CONTRASEÑAS NO COINCIDEN'); return; }
+  if (!terms)           { showRegError('DEBÉS ACEPTAR LOS TÉRMINOS Y CONDICIONES'); return; }
+
+  const btn = document.getElementById('reg-submit-btn');
+  if (btn) { btn.textContent = 'CREANDO CUENTA...'; btn.disabled = true; }
+  if (errEl) errEl.classList.add('hidden');
+
+  try {
+    // Crear usuario en Firebase
+    const { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+    const cred = await createUserWithEmailAndPassword(fbAuth, email, pass);
+    const user = cred.user;
+
+    // Guardar nombre en Firebase
+    await updateProfile(user, { displayName: nombre + ' ' + apellido });
+
+    // Enviar email de verificación
+    await sendEmailVerification(user);
+
+    // Cerrar sesión — no permitir acceso hasta verificar email
+    _lastRegisteredUser = { email, name: nombre + ' ' + apellido };
+    await fbLogoutUser();
+
+    // Mostrar pantalla de éxito
+    document.getElementById('register-form-panel').classList.add('hidden');
+    document.getElementById('register-success-panel').classList.remove('hidden');
+    const sentEl = document.getElementById('reg-sent-email');
+    if (sentEl) sentEl.textContent = email;
+
+  } catch(e) {
+    if (btn) { btn.textContent = 'CREAR CUENTA'; btn.disabled = false; }
+    let msg = 'ERROR AL CREAR LA CUENTA';
+    if (e.code === 'auth/email-already-in-use') msg = 'ESE EMAIL YA TIENE UNA CUENTA REGISTRADA';
+    if (e.code === 'auth/invalid-email')        msg = 'EL EMAIL NO ES VÁLIDO';
+    if (e.code === 'auth/weak-password')        msg = 'LA CONTRASEÑA ES MUY DÉBIL';
+    showRegError(msg);
+  }
+}
+
+async function resendVerificationEmail() {
+  if (!fbAuth?.currentUser) { showToast('Iniciá sesión primero para reenviar el email'); return; }
+  try {
+    const { sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+    await sendEmailVerification(fbAuth.currentUser);
+    showToast('Email de verificación reenviado 📧');
+  } catch(e) {
+    showToast('Error al reenviar: ' + e.message);
+  }
+}
+
+async function resendFromRegister() {
+  if (!_lastRegisteredUser) { showToast('Registrate primero'); return; }
+  showToast('Para reenviar el email, iniciá sesión brevemente y cerrá sesión.');
+}
+
+// ── Validación en tiempo real del email ──
+function validateEmailField() {
   const email = document.getElementById('reg-email').value.trim();
-  const pass = document.getElementById('reg-pass').value;
-  const pass2 = document.getElementById('reg-pass2').value;
-  const terms = document.getElementById('reg-terms').checked;
-  if (!nombre || !email || !pass) { showToast('Completá todos los campos obligatorios'); return; }
-  if (pass !== pass2) { showToast('Las contraseñas no coinciden ❌'); return; }
-  if (pass.length < 6) { showToast('La contraseña debe tener al menos 6 caracteres'); return; }
-  if (!terms) { showToast('Debés aceptar los Términos y Condiciones'); return; }
-  const newUser = {id: USERS.length+1, email, pass, name: nombre + ' ' + apellido, role: 'user'};
-  USERS.push(newUser);
-  state.user = newUser;
-  updateAuthUI();
-  showToast(`¡Cuenta creada exitosamente! Bienvenido, ${nombre}! 🎉`);
-  nav('home');
+  const icon  = document.getElementById('reg-email-icon');
+  const hint  = document.getElementById('reg-email-hint');
+  if (!email) { icon.classList.add('hidden'); hint.classList.add('hidden'); return; }
+  const valid = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email);
+  const fakeDomains = ['test.com','fake.com','asdf.com','abc.com','mailinator.com','guerrillamail.com','tempmail.com','yopmail.com'];
+  const domain = email.split('@')[1]?.toLowerCase();
+  const isFake = fakeDomains.includes(domain);
+  icon.classList.remove('hidden');
+  hint.classList.remove('hidden');
+  if (!valid || isFake) {
+    icon.textContent = 'cancel';
+    icon.style.color = '#ba1a1a';
+    hint.textContent = isFake ? 'USÁ UN EMAIL REAL' : 'FORMATO DE EMAIL INVÁLIDO';
+    hint.style.color = '#ba1a1a';
+  } else {
+    icon.textContent = 'check_circle';
+    icon.style.color = '#2e7d32';
+    hint.textContent = 'EMAIL VÁLIDO';
+    hint.style.color = '#2e7d32';
+  }
+}
+
+// ── Medidor de fortaleza de contraseña ──
+function checkPasswordStrength() {
+  const pass  = document.getElementById('reg-pass').value;
+  const bars  = [1,2,3,4].map(i => document.getElementById('str-bar-'+i));
+  const label = document.getElementById('str-label');
+  let score = 0;
+  if (pass.length >= 8)  score++;
+  if (pass.length >= 12) score++;
+  if (/[A-Z]/.test(pass) && /[0-9]/.test(pass)) score++;
+  if (/[^A-Za-z0-9]/.test(pass)) score++;
+  const colors = ['#ba1a1a','#e65100','#f9a825','#2e7d32'];
+  const labels = ['MUY DÉBIL','DÉBIL','BUENA','FUERTE'];
+  bars.forEach((b,i) => {
+    if (!b) return;
+    b.style.background = i < score ? colors[score-1] : '#cfc4c5';
+  });
+  if (label) {
+    label.textContent = pass ? labels[Math.max(0,score-1)] : '';
+    label.style.color = pass ? colors[Math.max(0,score-1)] : '#4c4546';
+  }
+  checkPasswordMatch();
+}
+
+// ── Verificar que las contraseñas coincidan ──
+function checkPasswordMatch() {
+  const p1 = document.getElementById('reg-pass').value;
+  const p2 = document.getElementById('reg-pass2').value;
+  const el = document.getElementById('reg-pass-match');
+  if (!el || !p2) { if(el) el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  if (p1 === p2) { el.textContent = '✓ LAS CONTRASEÑAS COINCIDEN'; el.style.color = '#2e7d32'; }
+  else           { el.textContent = '✗ LAS CONTRASEÑAS NO COINCIDEN'; el.style.color = '#ba1a1a'; }
 }
 
 async function doLogout() {
@@ -2626,9 +2837,9 @@ function adjustStock(id, delta) {
   if (p) {
     p.stock = Math.max(0, p.stock + delta);
     document.getElementById('inv-stock-'+id).textContent = p.stock;
-    showToast(`Stock de "${p.name}" actualizado: ${p.stock} unidades`);
     renderAdminProducts();
     persistAll();
+    fbSaveProductRemote(p).catch(e => console.error('Stock sync error:', e));
   }
 }
 
@@ -3345,14 +3556,14 @@ async function initFirebase() {
   try {
     const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
     const { getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
-    const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+    const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
 
     fbApp  = initializeApp(FB_CONFIG);
     fbDb   = getFirestore(fbApp);
     fbAuth = getAuth(fbApp);
 
     // Guardar funciones Firestore para uso global
-    window._fb = { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged };
+    window._fb = { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence };
 
     // Escuchar cambios de auth
     onAuthStateChanged(fbAuth, user => {
@@ -3369,7 +3580,11 @@ async function initFirebase() {
 
     // Sincronizar datos desde Firebase
     await syncFromFirebase();
-    console.log('✅ Firebase conectado');
+
+    // ✅ Firebase listo — resolver la promesa para desbloquear escrituras
+    if (_fbReadyResolve) _fbReadyResolve();
+
+    console.log('✅ Firebase conectado y listo');
   } catch(e) {
     console.warn('⚠️ Firebase no disponible, usando localStorage:', e.message);
   }
@@ -3423,35 +3638,84 @@ async function seedFirebaseProducts() {
   }
 }
 
+// =================== FIREBASE READY PROMISE ===================
+// Garantiza que Firebase esté listo antes de cualquier escritura
+let _fbReadyResolve;
+const fbReady = new Promise(resolve => { _fbReadyResolve = resolve; });
+
+async function waitForFirebase() {
+  if (fbDb && window._fb) return true;
+  // Esperar máximo 8 segundos
+  try {
+    await Promise.race([
+      fbReady,
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Firebase timeout')), 8000))
+    ]);
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
 async function fbSaveProductRemote(product) {
-  if (!fbDb || !window._fb) return;
+  const ready = await waitForFirebase();
+  if (!ready) { showToast('⚠️ Sin conexión a Firebase — cambio guardado solo localmente'); return; }
   const { doc, setDoc } = window._fb;
-  await setDoc(doc(fbDb, 'products', String(product.id)), product, { merge: true });
+  try {
+    await setDoc(doc(fbDb, 'products', String(product.id)), product, { merge: true });
+    showToast('✅ Producto guardado en Firebase');
+  } catch(e) {
+    showToast('❌ Error guardando en Firebase: ' + e.message);
+    console.error('fbSaveProductRemote error:', e);
+  }
 }
 
 async function fbDeleteProductRemote(id) {
-  if (!fbDb || !window._fb) return;
+  const ready = await waitForFirebase();
+  if (!ready) { showToast('⚠️ Sin conexión a Firebase'); return; }
   const { doc, deleteDoc } = window._fb;
-  await deleteDoc(doc(fbDb, 'products', String(id)));
+  try {
+    await deleteDoc(doc(fbDb, 'products', String(id)));
+    showToast('✅ Producto eliminado de Firebase');
+  } catch(e) {
+    showToast('❌ Error eliminando de Firebase: ' + e.message);
+  }
 }
 
 async function fbSaveOrderRemote(order) {
-  if (!fbDb || !window._fb) return;
+  const ready = await waitForFirebase();
+  if (!ready) return;
   const { collection, addDoc } = window._fb;
-  const ref = await addDoc(collection(fbDb, 'orders'), { ...order, createdAt: new Date().toISOString() });
-  return ref.id;
+  try {
+    const ref = await addDoc(collection(fbDb, 'orders'), { ...order, createdAt: new Date().toISOString() });
+    return ref.id;
+  } catch(e) {
+    console.error('fbSaveOrderRemote error:', e);
+  }
 }
 
 async function fbUpdateOrderStatusRemote(id, status) {
-  if (!fbDb || !window._fb) return;
+  const ready = await waitForFirebase();
+  if (!ready) return;
   const { doc, updateDoc } = window._fb;
-  try { await updateDoc(doc(fbDb, 'orders', String(id)), { status }); } catch(e) {}
+  try {
+    await updateDoc(doc(fbDb, 'orders', String(id)), { status });
+  } catch(e) {
+    console.error('fbUpdateOrderStatusRemote error:', e);
+  }
 }
 
 async function fbSaveBannersRemote(data) {
-  if (!fbDb || !window._fb) return;
+  const ready = await waitForFirebase();
+  if (!ready) { showToast('⚠️ Sin conexión a Firebase — banner guardado solo localmente'); return; }
   const { doc, setDoc } = window._fb;
-  await setDoc(doc(fbDb, 'config', 'banners'), data);
+  try {
+    await setDoc(doc(fbDb, 'config', 'banners'), data);
+    showToast('✅ Banner guardado en Firebase');
+  } catch(e) {
+    showToast('❌ Error guardando banner: ' + e.message);
+    console.error('fbSaveBannersRemote error:', e);
+  }
 }
 
 async function fbLoginUser(email, password) {
@@ -3493,26 +3757,13 @@ function dbLoad(key, fallback) {
 }
 
 function persistAll() {
-  dbSave(DB_KEYS.products,  state.products);
-  dbSave(DB_KEYS.orders,    state.orders);
-  dbSave(DB_KEYS.customers, CUSTOMERS);
-  dbSave(DB_KEYS.cart,      state.cart);
-  dbSave(DB_KEYS.banners,   bannerState);
-  dbSave(DB_KEYS.tracking,  trackingData);
+  // localStorage SOLO para el carrito (datos del usuario, no del admin)
+  dbSave(DB_KEYS.cart, state.cart);
 }
 
-function loadPersistedData() {
-  state.products  = dbLoad(DB_KEYS.products,  PRODUCTS);
-  state.orders    = dbLoad(DB_KEYS.orders,     ORDERS);
-  const savedCustomers = dbLoad(DB_KEYS.customers, null);
-  if (savedCustomers) CUSTOMERS.splice(0, CUSTOMERS.length, ...savedCustomers);
-  state.cart      = dbLoad(DB_KEYS.cart,       []);
-  const savedBanners = dbLoad(DB_KEYS.banners, null);
-  if (savedBanners) Object.assign(bannerState, savedBanners);
-  const savedTracking = dbLoad(DB_KEYS.tracking, null);
-  if (savedTracking) Object.assign(trackingData, savedTracking);
-  const savedMP = dbLoad(DB_KEYS.mpConfig, null);
-  if (savedMP) state.mpConfig = savedMP;
+function loadCart() {
+  // Solo cargar el carrito desde localStorage
+  state.cart = dbLoad(DB_KEYS.cart, []);
 }
 
 // =================== REPORTES Y PDF ===================
@@ -3808,89 +4059,89 @@ function printReport() {
 }
 
 async function syncFromFirebase() {
-  if (!fbDb || !window._fb) return;
+  // Firebase es la UNICA fuente de verdad
+  if (!fbDb || !window._fb) throw new Error('Firebase no inicializado');
   const { collection, getDocs, getDoc, doc, query, orderBy } = window._fb;
-  try {
-    // ── Productos ──────────────────────────────────────────────
-    const prodSnap = await getDocs(collection(fbDb, 'products'));
-    if (!prodSnap.empty) {
-      // SIEMPRE sobreescribir con lo que dice Firebase (fuente de verdad)
-      state.products = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      dbSave(DB_KEYS.products, state.products);
-    } else {
-      // Primera vez — subir los por defecto a Firebase
-      await seedFirebaseProducts();
-    }
 
-    // ── Pedidos ────────────────────────────────────────────────
-    try {
-      const ordSnap = await getDocs(query(collection(fbDb, 'orders'), orderBy('createdAt','desc')));
-      state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      dbSave(DB_KEYS.orders, state.orders);
-    } catch(e) {
-      const ordSnap = await getDocs(collection(fbDb, 'orders'));
-      state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      dbSave(DB_KEYS.orders, state.orders);
-    }
-
-    // ── Banners ────────────────────────────────────────────────
-    const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
-    if (bannerSnap.exists()) {
-      // SIEMPRE sobreescribir con Firebase
-      const fbBanners = bannerSnap.data();
-      Object.assign(bannerState, fbBanners);
-      dbSave(DB_KEYS.banners, bannerState);
-    }
-
-    // ── Tracking ───────────────────────────────────────────────
-    try {
-      const trackSnap = await getDocs(collection(fbDb, 'tracking'));
-      trackSnap.docs.forEach(d => { trackingData[d.id] = d.data(); });
-      dbSave(DB_KEYS.tracking, trackingData);
-    } catch(e) {}
-
-  } catch(e) {
-    console.warn('Sync Firebase error:', e.message);
+  // Productos
+  const prodSnap = await getDocs(collection(fbDb, 'products'));
+  if (!prodSnap.empty) {
+    state.products = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } else {
+    await seedFirebaseProducts();
+    const prodSnap2 = await getDocs(collection(fbDb, 'products'));
+    state.products = prodSnap2.docs.map(d => ({ id: d.id, ...d.data() }));
   }
+
+  // Pedidos
+  try {
+    const ordSnap = await getDocs(query(collection(fbDb, 'orders'), orderBy('createdAt','desc')));
+    state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch(e) {
+    const ordSnap = await getDocs(collection(fbDb, 'orders'));
+    state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+
+  // Banners
+  const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
+  if (bannerSnap.exists()) {
+    Object.assign(bannerState, bannerSnap.data());
+  }
+
+  // Tracking
+  try {
+    const trackSnap = await getDocs(collection(fbDb, 'tracking'));
+    trackSnap.docs.forEach(d => { trackingData[d.id] = d.data(); });
+  } catch(e) {}
+
+  // Config MP
+  try {
+    const mpSnap = await getDoc(doc(fbDb, 'config', 'mercadopago'));
+    if (mpSnap.exists()) state.mpConfig = mpSnap.data();
+  } catch(e) {}
 }
 
 // =================== INIT ===================
-
-// PASO 1 — Cargar localStorage YA (instantáneo, sin esperar nada)
-loadPersistedData();
-
-// PASO 2 — Renderizar inmediatamente con lo que hay en localStorage
-renderHomeProducts();
-renderCatalog();
-renderAnnouncementBar();
-renderHeroBanner();
-applySavedCatImages();
+// Solo el carrito desde localStorage (es del usuario, no del admin)
+loadCart();
 updateCartCount();
 
-// PASO 3 — Conectar Firebase en segundo plano sin bloquear nada
-// Si Firebase tarda más de 8 segundos o falla → la página ya funciona igual
-async function syncFirebaseBackground() {
+// Mostrar loading mientras Firebase carga
+function showPageLoading() {
+  const hp = document.getElementById('home-products');
+  if (hp) hp.innerHTML = '<div class="col-span-4" style="display:flex;align-items:center;justify-content:center;padding:80px;gap:12px;"><div style="width:28px;height:28px;border:3px solid #e2e2e2;border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;"></div><span style="font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.1em;color:#4c4546;">CARGANDO TIENDA...</span></div>';
+  const cg = document.getElementById('catalog-grid');
+  if (cg) cg.innerHTML = '<div class="col-span-3" style="display:flex;align-items:center;justify-content:center;padding:80px;"><div style="width:28px;height:28px;border:3px solid #e2e2e2;border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;"></div></div>';
+}
+
+let retryCount = 0;
+async function bootFromFirebase() {
+  showPageLoading();
   try {
     await initFirebase();
-    // Firebase cargó OK → re-renderizar con datos actualizados
+    // Renderizar con datos REALES de Firebase
     renderHomeProducts();
     renderCatalog();
     renderAnnouncementBar();
     renderHeroBanner();
     applySavedCatImages();
     updateCartCount();
-    console.log('✅ Firebase sincronizado — datos actualizados');
+    retryCount = 0;
+    console.log('Firebase cargado correctamente');
   } catch(e) {
-    // Firebase falló — la página ya está funcionando con localStorage, no pasa nada
-    console.warn('⚠️ Firebase no disponible, usando datos locales:', e.message);
+    retryCount++;
+    console.error('Firebase error (intento ' + retryCount + '):', e.message);
+    const hp = document.getElementById('home-products');
+    if (hp) hp.innerHTML = '<div class="col-span-4" style="text-align:center;padding:60px;"><p style="font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.1em;color:#ba1a1a;">ERROR DE CONEXION</p><p style="font-family:JetBrains Mono,monospace;font-size:10px;color:#4c4546;margin-top:8px;">Reintentando en ' + Math.min(retryCount * 3, 15) + ' segundos...</p></div>';
+    // Reintentar con backoff
+    setTimeout(bootFromFirebase, Math.min(retryCount * 3000, 15000));
   }
 }
 
-// Ejecutar sync de Firebase sin bloquear
-syncFirebaseBackground();
+bootFromFirebase();
 
-// Autoguardado localStorage cada 30 segundos
-setInterval(persistAll, 30000);
+// Guardar solo el carrito en localStorage
+setInterval(() => dbSave(DB_KEYS.cart, state.cart), 30000);
 </script>
 </body>
 </html>
