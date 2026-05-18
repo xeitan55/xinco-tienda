@@ -56,6 +56,10 @@ tailwind.config = {
   }
 };
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  (function(){ emailjs.init({ publicKey: 'oMkYlKHW6eJXZrEkY' }); })();
+</script>
 <style>
   * { box-sizing: border-box; }
   body { font-family: 'Inter', sans-serif; background: #f9f9f9; color: #1a1c1c; overflow-x: hidden; }
@@ -2288,6 +2292,29 @@ async function doLogin() {
   }
 }
 
+// =================== EMAILJS CONFIG ===================
+const EMAILJS = {
+  serviceId:  'service_x844xxw',
+  templateId: 'XINCO-VERICATION',
+};
+
+async function sendVerificationEmail(toEmail, toName, verificationLink) {
+  try {
+    await emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, {
+      to_email:          toEmail,
+      to_name:           toName,
+      verification_link: verificationLink,
+      from_name:         'XINCO Tienda',
+      reply_to:          'noreply@xinco.com.ar',
+    });
+    console.log('✅ Email de verificación enviado via EmailJS');
+    return true;
+  } catch(e) {
+    console.error('EmailJS error:', e);
+    return false;
+  }
+}
+
 let _lastRegisteredUser = null;
 
 async function doRegister() {
@@ -2308,43 +2335,45 @@ async function doRegister() {
   if (!nombre)  { showRegError('INGRESÁ TU NOMBRE'); return; }
   if (!apellido){ showRegError('INGRESÁ TU APELLIDO'); return; }
   if (!email)   { showRegError('INGRESÁ TU EMAIL'); return; }
-  // Formato email estricto
   if (!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email)) {
     showRegError('EL EMAIL NO TIENE UN FORMATO VÁLIDO'); return;
   }
-  // Dominios claramente falsos
   const fakeDomains = ['test.com','fake.com','asdf.com','abc.com','xxx.com','aaa.com','bbb.com','ccc.com','mailinator.com','guerrillamail.com','tempmail.com','throwam.com','yopmail.com'];
   const domain = email.split('@')[1]?.toLowerCase();
-  if (fakeDomains.includes(domain)) {
-    showRegError('USÁ UN EMAIL REAL Y VÁLIDO'); return;
-  }
-  if (pass.length < 8)  { showRegError('LA CONTRASEÑA DEBE TENER AL MENOS 8 CARACTERES'); return; }
-  if (!/[A-Z]/.test(pass)) { showRegError('LA CONTRASEÑA DEBE TENER AL MENOS UNA MAYÚSCULA'); return; }
-  if (!/[0-9]/.test(pass)) { showRegError('LA CONTRASEÑA DEBE TENER AL MENOS UN NÚMERO'); return; }
-  if (pass !== pass2)   { showRegError('LAS CONTRASEÑAS NO COINCIDEN'); return; }
-  if (!terms)           { showRegError('DEBÉS ACEPTAR LOS TÉRMINOS Y CONDICIONES'); return; }
+  if (fakeDomains.includes(domain)) { showRegError('USÁ UN EMAIL REAL Y VÁLIDO'); return; }
+  if (pass.length < 8)              { showRegError('LA CONTRASEÑA DEBE TENER AL MENOS 8 CARACTERES'); return; }
+  if (!/[A-Z]/.test(pass))          { showRegError('LA CONTRASEÑA DEBE TENER AL MENOS UNA MAYÚSCULA'); return; }
+  if (!/[0-9]/.test(pass))          { showRegError('LA CONTRASEÑA DEBE TENER AL MENOS UN NÚMERO'); return; }
+  if (pass !== pass2)               { showRegError('LAS CONTRASEÑAS NO COINCIDEN'); return; }
+  if (!terms)                       { showRegError('DEBÉS ACEPTAR LOS TÉRMINOS Y CONDICIONES'); return; }
 
   const btn = document.getElementById('reg-submit-btn');
   if (btn) { btn.textContent = 'CREANDO CUENTA...'; btn.disabled = true; }
   if (errEl) errEl.classList.add('hidden');
 
   try {
-    // Crear usuario en Firebase
+    // 1. Crear usuario en Firebase Auth
     const { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
     const cred = await createUserWithEmailAndPassword(fbAuth, email, pass);
     const user = cred.user;
 
-    // Guardar nombre en Firebase
+    // 2. Guardar nombre en Firebase
     await updateProfile(user, { displayName: nombre + ' ' + apellido });
 
-    // Enviar email de verificación
+    // 3. Obtener link de verificación de Firebase (para el template)
+    // Firebase también manda su propio email — lo usamos como fallback
     await sendEmailVerification(user);
 
-    // Cerrar sesión — no permitir acceso hasta verificar email
-    _lastRegisteredUser = { email, name: nombre + ' ' + apellido };
+    // 4. Enviar email personalizado via EmailJS con diseño XINCO
+    const verificationLink = `https://xinco-tienda.firebaseapp.com/__/auth/action?mode=verifyEmail&oobCode=AUTO&continueUrl=${encodeURIComponent(window.location.origin)}`;
+    const fullName = nombre + ' ' + apellido;
+    await sendVerificationEmail(email, fullName, verificationLink);
+
+    // 5. Cerrar sesión hasta que verifique
+    _lastRegisteredUser = { email, name: fullName };
     await fbLogoutUser();
 
-    // Mostrar pantalla de éxito
+    // 6. Mostrar pantalla de éxito
     document.getElementById('register-form-panel').classList.add('hidden');
     document.getElementById('register-success-panel').classList.remove('hidden');
     const sentEl = document.getElementById('reg-sent-email');
@@ -2356,24 +2385,28 @@ async function doRegister() {
     if (e.code === 'auth/email-already-in-use') msg = 'ESE EMAIL YA TIENE UNA CUENTA REGISTRADA';
     if (e.code === 'auth/invalid-email')        msg = 'EL EMAIL NO ES VÁLIDO';
     if (e.code === 'auth/weak-password')        msg = 'LA CONTRASEÑA ES MUY DÉBIL';
+    if (e.code === 'auth/network-request-failed') msg = 'ERROR DE CONEXIÓN — VERIFICÁ TU INTERNET';
     showRegError(msg);
   }
 }
 
 async function resendVerificationEmail() {
-  if (!fbAuth?.currentUser) { showToast('Iniciá sesión primero para reenviar el email'); return; }
-  try {
-    const { sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
-    await sendEmailVerification(fbAuth.currentUser);
-    showToast('Email de verificación reenviado 📧');
-  } catch(e) {
-    showToast('Error al reenviar: ' + e.message);
+  // Reenviar via EmailJS si tenemos los datos del último registro
+  if (_lastRegisteredUser) {
+    const sent = await sendVerificationEmail(
+      _lastRegisteredUser.email,
+      _lastRegisteredUser.name,
+      `${window.location.origin}/login`
+    );
+    if (sent) showToast('Email de verificación reenviado ✅ — revisá tu bandeja');
+    else showToast('Error al reenviar. Revisá spam o intentá más tarde');
+    return;
   }
+  showToast('Revisá tu bandeja o registrate nuevamente');
 }
 
 async function resendFromRegister() {
-  if (!_lastRegisteredUser) { showToast('Registrate primero'); return; }
-  showToast('Para reenviar el email, iniciá sesión brevemente y cerrá sesión.');
+  await resendVerificationEmail();
 }
 
 // ── Validación en tiempo real del email ──
