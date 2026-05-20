@@ -2254,16 +2254,24 @@ async function doLogin() {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('El email no tiene un formato válido ❌'); return; }
 
   const btn = document.querySelector('#page-login .btn-primary');
-  if (btn) { btn.textContent = 'INGRESANDO...'; btn.disabled = true; }
+  if (btn) { btn.textContent = 'CONECTANDO...'; btn.disabled = true; }
 
   try {
+    // Asegurarse que Firebase esté inicializado antes de hacer login
+    if (!fbAuth || !window._fb) {
+      if (btn) btn.textContent = 'INICIANDO FIREBASE...';
+      await initFirebase();
+    }
+
+    if (btn) btn.textContent = 'INGRESANDO...';
+
     // Configurar persistencia según "recordar cuenta"
     const { setPersistence, browserLocalPersistence, browserSessionPersistence } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
     await setPersistence(fbAuth, remember ? browserLocalPersistence : browserSessionPersistence);
 
     const user = await fbLoginUser(email, pass);
 
-    // Verificar si el email está verificado (excepto admin)
+    // Verificar email (excepto admin)
     if (!user.emailVerified && email !== 'admin@xinco.com') {
       if (verWarn) verWarn.classList.remove('hidden');
       if (err) { err.textContent = 'DEBÉS VERIFICAR TU EMAIL ANTES DE INICIAR SESIÓN'; err.classList.remove('hidden'); }
@@ -2276,17 +2284,22 @@ async function doLogin() {
     updateAuthUI();
     if (err) err.classList.add('hidden');
     if (verWarn) verWarn.classList.add('hidden');
-    showToast(`¡Bienvenido! 👋`);
+    if (btn) { btn.textContent = 'INICIAR SESIÓN'; btn.disabled = false; }
+    showToast('¡Bienvenido! 👋');
+
+    // Redirigir según rol
     if (email === 'admin@xinco.com') nav('admin');
     else nav('home');
 
   } catch(e) {
     if (btn) { btn.textContent = 'INICIAR SESIÓN'; btn.disabled = false; }
     let msg = 'EMAIL O CONTRASEÑA INCORRECTOS';
-    if (e.code === 'auth/user-not-found')   msg = 'NO EXISTE UNA CUENTA CON ESE EMAIL';
-    if (e.code === 'auth/wrong-password')   msg = 'CONTRASEÑA INCORRECTA';
-    if (e.code === 'auth/too-many-requests') msg = 'DEMASIADOS INTENTOS — ESPERÁ UNOS MINUTOS';
-    if (e.code === 'auth/invalid-email')    msg = 'EL EMAIL NO ES VÁLIDO';
+    if (e.code === 'auth/user-not-found')     msg = 'NO EXISTE UNA CUENTA CON ESE EMAIL';
+    if (e.code === 'auth/wrong-password')     msg = 'CONTRASEÑA INCORRECTA';
+    if (e.code === 'auth/invalid-credential') msg = 'EMAIL O CONTRASEÑA INCORRECTOS';
+    if (e.code === 'auth/too-many-requests')  msg = 'DEMASIADOS INTENTOS — ESPERÁ UNOS MINUTOS';
+    if (e.code === 'auth/invalid-email')      msg = 'EL EMAIL NO ES VÁLIDO';
+    if (e.message === 'Firebase no disponible') msg = 'ERROR DE CONEXIÓN — RECARGÁ LA PÁGINA';
     if (err) { err.textContent = msg; err.classList.remove('hidden'); }
     showToast(msg + ' ❌');
   }
@@ -3752,6 +3765,10 @@ async function fbSaveBannersRemote(data) {
 }
 
 async function fbLoginUser(email, password) {
+  // Esperar Firebase si no está listo
+  if (!fbAuth || !window._fb) {
+    await initFirebase();
+  }
   if (!fbAuth || !window._fb) throw new Error('Firebase no disponible');
   const { signInWithEmailAndPassword } = window._fb;
   const cred = await signInWithEmailAndPassword(fbAuth, email, password);
