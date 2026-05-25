@@ -204,10 +204,27 @@ tailwind.config = {
     background: #000;
     color: #fff;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .xinco-loader { display:flex;align-items:center;justify-content:center;padding:60px; }
-  .xinco-loader::after { content:'';width:32px;height:32px;border:3px solid #e2e2e2;border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite; }
-  .suggestion-chip {
+  /* ---- Color swatches (producto) ---- */
+  .color-swatch { width:32px; height:32px; border-radius:50%; border:3px solid transparent; cursor:pointer; transition:all 0.15s; position:relative; }
+  .color-swatch.selected { border-color:#000; box-shadow:0 0 0 2px #fff, 0 0 0 4px #000; }
+  .color-swatch:hover { transform:scale(1.15); }
+  /* ---- Avatar usuario ---- */
+  .user-avatar { width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid #000; }
+  .user-avatar-placeholder { width:48px; height:48px; border-radius:50%; background:#000; display:flex; align-items:center; justify-content:center; border:2px solid #000; color:#fff; font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:700; }
+  /* ---- Tooltip hover ---- */
+  .has-tooltip { position:relative; }
+  .has-tooltip .tooltip { display:none; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#000; color:#fff; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.05em; padding:5px 10px; white-space:nowrap; z-index:100; pointer-events:none; }
+  .has-tooltip .tooltip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:#000; }
+  .has-tooltip:hover .tooltip { display:block; }
+  /* ---- Image slots producto ---- */
+  .img-slot { aspect-ratio:3/4; border:2px dashed #cfc4c5; background:#f4f3f3; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:all 0.15s; position:relative; overflow:hidden; }
+  .img-slot:hover { border-color:#000; background:#e8e8e8; }
+  .img-slot.has-image { border-style:solid; border-color:#000; }
+  .img-slot.is-main { border-color:#5d22ff; border-width:3px; }
+  .img-slot img { width:100%; height:100%; object-fit:cover; }
+  .img-slot .slot-badge { position:absolute; top:4px; left:4px; background:#5d22ff; color:#fff; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; padding:2px 6px; }
+  .img-slot .slot-remove { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.7); color:#fff; border:none; width:22px; height:22px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+</style>
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.1em;
@@ -1022,28 +1039,64 @@ tailwind.config = {
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
     <h1 style="font-family:Montserrat;font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-[3px] border-primary pb-6">MI CUENTA</h1>
     <div class="flex flex-col md:flex-row gap-8">
+
       <!-- Sidebar -->
-      <aside class="w-full md:w-64 shrink-0">
+      <aside class="w-full md:w-72 shrink-0">
         <div class="border-[3px] border-primary overflow-hidden md:sticky md:top-24">
-          <div class="bg-primary text-on-primary p-4">
-            <div class="w-16 h-16 border-2 border-white flex items-center justify-center mb-2">
-              <span class="material-symbols-outlined text-[40px]">account_circle</span>
+          <!-- Avatar + Info -->
+          <div class="bg-primary text-on-primary p-6">
+            <div class="flex flex-col items-center text-center">
+              <!-- Avatar editable -->
+              <div class="relative mb-4 group cursor-pointer" onclick="document.getElementById('avatar-file-input').click()">
+                <div id="account-avatar-container" class="w-24 h-24 border-3 border-white overflow-hidden flex items-center justify-center" style="border:3px solid #fff;border-radius:50%;">
+                  <img id="account-avatar-img" src="" alt="" class="hidden w-full h-full object-cover" style="border-radius:50%;"/>
+                  <span id="account-avatar-initials" class="text-white font-label-caps text-2xl font-bold">?</span>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity" style="border-radius:50%;">
+                  <span class="material-symbols-outlined text-white text-[20px]">photo_camera</span>
+                </div>
+                <input type="file" id="avatar-file-input" accept="image/*" class="hidden" onchange="uploadAvatar(this.files[0])"/>
+              </div>
+              <div id="account-name" class="font-label-caps text-label-caps text-white mb-1">USUARIO</div>
+              <div id="account-email-disp" class="text-white/60 mt-1" style="font-family:'JetBrains Mono',monospace;font-size:10px;"></div>
+              <div id="account-member-since" class="text-white/40 mt-1" style="font-family:'JetBrains Mono',monospace;font-size:9px;"></div>
             </div>
-            <div id="account-name" class="font-label-caps text-label-caps">USUARIO</div>
-            <div id="account-email-disp" class="text-white/60 text-xs mt-1" style="font-family:JetBrains Mono;font-size:10px;"></div>
           </div>
-          <nav>
-            <button class="tab-btn active w-full text-left border-b-[2px] border-primary" id="acc-tab-orders" onclick="showAccountTab('orders')">MIS PEDIDOS</button>
-            <button class="tab-btn w-full text-left border-b-[2px] border-primary" id="acc-tab-profile" onclick="showAccountTab('profile')">MI PERFIL</button>
-            <button class="tab-btn w-full text-left border-b-[2px] border-primary" id="acc-tab-addresses" onclick="showAccountTab('addresses')">DIRECCIONES</button>
-            <button class="tab-btn w-full text-left" id="acc-tab-favorites" onclick="showAccountTab('favorites')">FAVORITOS</button>
+          <!-- Nav tabs -->
+          <nav class="divide-y divide-outline-variant">
+            <button class="tab-btn active w-full text-left" id="acc-tab-orders" onclick="showAccountTab('orders')">
+              <span class="material-symbols-outlined text-[16px] mr-2">receipt_long</span>MIS PEDIDOS
+            </button>
+            <button class="tab-btn w-full text-left" id="acc-tab-profile" onclick="showAccountTab('profile')">
+              <span class="material-symbols-outlined text-[16px] mr-2">person</span>MI PERFIL
+            </button>
+            <button class="tab-btn w-full text-left" id="acc-tab-payment" onclick="showAccountTab('payment')">
+              <span class="material-symbols-outlined text-[16px] mr-2">payments</span>MÉTODOS DE PAGO
+            </button>
+            <button class="tab-btn w-full text-left" id="acc-tab-addresses" onclick="showAccountTab('addresses')">
+              <span class="material-symbols-outlined text-[16px] mr-2">location_on</span>DIRECCIONES
+            </button>
+            <button class="tab-btn w-full text-left" id="acc-tab-security" onclick="showAccountTab('security')">
+              <span class="material-symbols-outlined text-[16px] mr-2">lock</span>SEGURIDAD
+            </button>
           </nav>
+          <div class="p-3">
+            <button class="btn-outline w-full justify-center py-2 text-[11px]" onclick="doLogout()">
+              <span class="material-symbols-outlined text-[14px]">logout</span> CERRAR SESIÓN
+            </button>
+          </div>
         </div>
       </aside>
-      <!-- Content -->
-      <main class="flex-1">
-        <!-- Orders Tab -->
+
+      <!-- Main content -->
+      <main class="flex-1 min-w-0">
+
+        <!-- PEDIDOS -->
         <div id="acc-content-orders">
+          <div class="flex justify-between items-center mb-5">
+            <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase">MIS PEDIDOS</h2>
+            <span id="acc-orders-count" class="font-label-caps text-[10px] text-on-surface-variant"></span>
+          </div>
           <div id="account-orders-empty" class="text-center py-16 border-[3px] border-primary">
             <span class="material-symbols-outlined text-[64px] text-outline-variant">package_2</span>
             <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">NO TENÉS PEDIDOS AÚN</p>
@@ -1051,45 +1104,252 @@ tailwind.config = {
           </div>
           <div id="account-orders-list" class="hidden space-y-4"></div>
         </div>
-        <!-- Profile Tab -->
+
+        <!-- PERFIL -->
         <div id="acc-content-profile" class="hidden">
-          <div class="border-[3px] border-primary p-8">
-            <h2 class="font-label-caps text-label-caps text-primary mb-6">DATOS PERSONALES</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE</label><input id="acc-nombre" class="input-field" placeholder="Tu nombre"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO</label><input id="acc-apellido" class="input-field" placeholder="Tu apellido"/></div>
-              <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL</label><input id="acc-email" class="input-field" type="email" placeholder="email@ejemplo.com"/></div>
-              <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TELÉFONO</label><input id="acc-tel" class="input-field" placeholder="+54 9 11 0000-0000"/></div>
-            </div>
-            <button class="btn-primary mt-6" onclick="saveProfile()">GUARDAR CAMBIOS</button>
-          </div>
-        </div>
-        <!-- Addresses Tab -->
-        <div id="acc-content-addresses" class="hidden">
-          <div class="border-[3px] border-primary p-8">
-            <h2 class="font-label-caps text-label-caps text-primary mb-6">MIS DIRECCIONES</h2>
-            <div class="border-[2px] border-primary p-4 mb-4 flex justify-between items-start">
+          <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">DATOS PERSONALES</h2>
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <div id="profile-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-4 border-2 border-error"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <div class="font-label-caps text-label-caps text-primary mb-1">PRINCIPAL</div>
-                <p class="font-body-md text-on-surface-variant text-sm">Av. Corrientes 1234, CABA, 1000<br>Buenos Aires, Argentina</p>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label>
+                <input id="acc-nombre" class="input-field" placeholder="Tu nombre" oninput="validateProfileField('acc-nombre')"/>
+                <p id="acc-nombre-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
               </div>
-              <button class="btn-outline py-2 px-3 text-[10px]">EDITAR</button>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO *</label>
+                <input id="acc-apellido" class="input-field" placeholder="Tu apellido" oninput="validateProfileField('acc-apellido')"/>
+                <p id="acc-apellido-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div class="md:col-span-2">
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TELÉFONO</label>
+                <input id="acc-tel" class="input-field" placeholder="+54 9 11 0000-0000" oninput="validateProfileField('acc-tel')"/>
+                <p id="acc-tel-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div class="md:col-span-2">
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DNI</label>
+                <input id="acc-dni" class="input-field" placeholder="12.345.678" oninput="validateProfileField('acc-dni')"/>
+                <p id="acc-dni-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">FECHA DE NACIMIENTO</label>
+                <input id="acc-bday" class="input-field" type="date" oninput="validateProfileField('acc-bday')"/>
+                <p id="acc-bday-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">GÉNERO</label>
+                <select id="acc-genero" class="input-field">
+                  <option value="">Prefiero no decir</option>
+                  <option value="m">Masculino</option>
+                  <option value="f">Femenino</option>
+                  <option value="nb">No binario</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
             </div>
-            <button class="btn-outline" onclick="showToast('Función próximamente')"><span class="material-symbols-outlined text-[16px]">add</span> AGREGAR DIRECCIÓN</button>
+            <button class="btn-primary" onclick="saveProfile()">
+              <span class="material-symbols-outlined text-[16px]">save</span> GUARDAR CAMBIOS
+            </button>
           </div>
         </div>
-        <!-- Favorites Tab -->
-        <div id="acc-content-favorites" class="hidden">
-          <div class="text-center py-16 border-[3px] border-primary">
-            <span class="material-symbols-outlined text-[64px] text-outline-variant">favorite_border</span>
-            <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">NO TENÉS FAVORITOS AÚN</p>
-            <button class="btn-primary mt-6" onclick="nav('catalog')">EXPLORAR CATÁLOGO</button>
+
+        <!-- MÉTODOS DE PAGO -->
+        <div id="acc-content-payment" class="hidden">
+          <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">MÉTODOS DE PAGO</h2>
+
+          <!-- Mercado Pago -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 flex items-center justify-center shrink-0" style="background:#009ee3;">
+                <span class="material-symbols-outlined text-white text-[20px]">account_balance_wallet</span>
+              </div>
+              <div>
+                <h3 class="font-label-caps text-label-caps text-primary">MERCADO PAGO</h3>
+                <p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">VINCULÁ TU CUENTA PARA RECIBIR PAGOS</p>
+              </div>
+              <span id="user-mp-status" class="badge badge-outline ml-auto shrink-0">NO VINCULADO</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CBU / CVU</label>
+                <input id="user-mp-cbu" class="input-field" placeholder="0000000000000000000000" oninput="validatePaymentField('user-mp-cbu')"/>
+                <p id="user-mp-cbu-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ALIAS</label>
+                <input id="user-mp-alias" class="input-field" placeholder="MI.ALIAS.MP" oninput="validatePaymentField('user-mp-alias')"/>
+                <p id="user-mp-alias-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div class="md:col-span-2">
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL DE MERCADO PAGO</label>
+                <input id="user-mp-email" class="input-field" type="email" placeholder="tu@email.com" oninput="validatePaymentField('user-mp-email')"/>
+                <p id="user-mp-email-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+            </div>
+            <button class="btn-violet" onclick="saveUserPayment('mp')">
+              <span class="material-symbols-outlined text-[16px]">save</span> GUARDAR MERCADO PAGO
+            </button>
+          </div>
+
+          <!-- Tarjetas -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-white text-[20px]">credit_card</span>
+              </div>
+              <div>
+                <h3 class="font-label-caps text-label-caps text-primary">TARJETAS GUARDADAS</h3>
+                <p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">CRÉDITO Y DÉBITO</p>
+              </div>
+            </div>
+            <div id="user-cards-list" class="space-y-3 mb-4">
+              <div class="text-center py-6 border-[2px] border-dashed border-outline-variant">
+                <span class="material-symbols-outlined text-[32px] text-outline-variant">credit_card_off</span>
+                <p class="font-label-caps text-[10px] text-on-surface-variant mt-2">NO HAY TARJETAS GUARDADAS</p>
+              </div>
+            </div>
+            <button class="btn-outline text-[11px]" onclick="showAddCardForm()">
+              <span class="material-symbols-outlined text-[14px]">add</span> AGREGAR TARJETA
+            </button>
+            <!-- Add card form (hidden by default) -->
+            <div id="add-card-form" class="hidden mt-4 border-[2px] border-primary p-4">
+              <div class="grid grid-cols-1 gap-3 mb-3">
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NÚMERO DE TARJETA</label>
+                  <input id="card-num" class="input-field" placeholder="0000 0000 0000 0000" maxlength="19" oninput="this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim(); validateCardField()"/>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">VENCIMIENTO</label>
+                    <input id="card-exp" class="input-field" placeholder="MM/AA" maxlength="5" oninput="validateCardField()"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CVV</label>
+                    <input id="card-cvv" class="input-field" placeholder="000" maxlength="4" type="password"/>
+                  </div>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE EN LA TARJETA</label>
+                  <input id="card-name" class="input-field" placeholder="JUAN PEREZ"/>
+                </div>
+              </div>
+              <p id="card-err" class="font-label-caps text-[10px] text-error mb-3 hidden"></p>
+              <div class="flex gap-2">
+                <button class="btn-primary text-[11px]" onclick="saveCard()">GUARDAR TARJETA</button>
+                <button class="btn-outline text-[11px]" onclick="document.getElementById('add-card-form').classList.add('hidden')">CANCELAR</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transferencia -->
+          <div class="bg-white border-[3px] border-primary p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-white text-[20px]">swap_horiz</span>
+              </div>
+              <div>
+                <h3 class="font-label-caps text-label-caps text-primary">TRANSFERENCIA BANCARIA</h3>
+                <p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">DATOS PARA RECIBIR TRANSFERENCIAS</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BANCO</label>
+                <input id="user-bank-name" class="input-field" placeholder="Banco Galicia / Nación / etc"/>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TITULAR</label>
+                <input id="user-bank-titular" class="input-field" placeholder="Nombre completo"/>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CBU</label>
+                <input id="user-bank-cbu" class="input-field" placeholder="0000000000000000000000" oninput="validatePaymentField('user-bank-cbu')"/>
+                <p id="user-bank-cbu-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ALIAS</label>
+                <input id="user-bank-alias" class="input-field" placeholder="MI.ALIAS.BANCO"/>
+              </div>
+            </div>
+            <button class="btn-primary text-[11px]" onclick="saveUserPayment('bank')">
+              <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR DATOS BANCARIOS
+            </button>
           </div>
         </div>
+
+        <!-- DIRECCIONES -->
+        <div id="acc-content-addresses" class="hidden">
+          <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">MIS DIRECCIONES</h2>
+          <div class="bg-white border-[3px] border-primary p-6">
+            <div id="addresses-list" class="space-y-3 mb-4"></div>
+            <button class="btn-outline text-[11px]" onclick="showAddAddressForm()">
+              <span class="material-symbols-outlined text-[14px]">add</span> AGREGAR DIRECCIÓN
+            </button>
+            <div id="add-address-form" class="hidden mt-4 border-[2px] border-primary p-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CALLE Y NÚMERO *</label><input id="addr-street" class="input-field" placeholder="Av. Corrientes 1234"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CIUDAD *</label><input id="addr-city" class="input-field" placeholder="Mar del Plata"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CP *</label><input id="addr-cp" class="input-field" placeholder="7600"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PROVINCIA *</label><select id="addr-prov" class="input-field"><option>Buenos Aires</option><option>CABA</option><option>Córdoba</option><option>Santa Fe</option><option>Mendoza</option><option>Otro</option></select></div>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn-primary text-[11px]" onclick="saveAddress()">GUARDAR DIRECCIÓN</button>
+                <button class="btn-outline text-[11px]" onclick="document.getElementById('add-address-form').classList.add('hidden')">CANCELAR</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEGURIDAD -->
+        <div id="acc-content-security" class="hidden">
+          <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">SEGURIDAD DE LA CUENTA</h2>
+
+          <!-- Cambiar email -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">email</span> CAMBIAR EMAIL
+            </h3>
+            <p class="font-body-md text-sm text-on-surface-variant mb-4">Al cambiar el email recibirás una verificación en la nueva dirección antes de que el cambio se aplique.</p>
+            <div id="email-change-msg" class="hidden bg-surface-container-low border-[2px] border-secondary-container p-3 mb-4 font-label-caps text-[10px] text-primary"></div>
+            <div class="grid grid-cols-1 gap-3 mb-4">
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL ACTUAL</label>
+                <input id="acc-email-current" class="input-field" disabled style="opacity:0.6;"/>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NUEVO EMAIL *</label>
+                <div class="relative">
+                  <input id="acc-email-new" class="input-field pr-10" type="email" placeholder="nuevo@email.com" oninput="validateNewEmail()"/>
+                  <span id="new-email-icon" class="hidden absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px]"></span>
+                </div>
+                <p id="new-email-hint" class="font-label-caps text-[10px] mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONTRASEÑA ACTUAL (para confirmar)</label>
+                <div class="relative">
+                  <input id="acc-email-pass" class="input-field pr-10" type="password" placeholder="Tu contraseña actual"/>
+                  <button onclick="togglePass('acc-email-pass')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button>
+                </div>
+              </div>
+            </div>
+            <button class="btn-primary" onclick="changeUserEmail()">
+              <span class="material-symbols-outlined text-[16px]">send</span> ENVIAR VERIFICACIÓN AL NUEVO EMAIL
+            </button>
+          </div>
+
+          <!-- Cambiar contraseña -->
+          <div class="bg-white border-[3px] border-primary p-6">
+            <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">lock</span> CAMBIAR CONTRASEÑA
+            </h3>
+            <p class="font-body-md text-sm text-on-surface-variant mb-4">Te enviaremos un email para restablecer tu contraseña.</p>
+            <button class="btn-outline" onclick="sendPasswordReset()">
+              <span class="material-symbols-outlined text-[16px]">lock_reset</span> ENVIAR EMAIL DE RESTABLECIMIENTO
+            </button>
+          </div>
+        </div>
+
       </main>
-    </div>
-    <div class="mt-8 pt-6 border-t-[3px] border-primary text-right">
-      <button class="btn-outline" onclick="doLogout()"><span class="material-symbols-outlined text-[16px]">logout</span> CERRAR SESIÓN</button>
     </div>
   </div>
 </div>
@@ -1146,6 +1406,9 @@ tailwind.config = {
         </button>
         <button class="admin-nav-item w-full" id="admin-nav-banners" onclick="showAdminSection('banners')">
           <span class="material-symbols-outlined">campaign</span> BANNERS
+        </button>
+        <button class="admin-nav-item w-full" id="admin-nav-categorias" onclick="showAdminSection('categorias')">
+          <span class="material-symbols-outlined">category</span> CATEGORÍAS
         </button>
         <button class="admin-nav-item w-full" id="admin-nav-cobranzas" onclick="showAdminSection('cobranzas')">
           <span class="material-symbols-outlined">payments</span> COBRANZAS
@@ -1258,55 +1521,154 @@ tailwind.config = {
             <button class="btn-violet" onclick="showProductForm()"><span class="material-symbols-outlined text-[16px]">add</span> NUEVO PRODUCTO</button>
           </div>
           <!-- Product Form -->
-          <div id="product-form-container" class="hidden bg-surface-container-lowest border-[3px] border-primary p-6 mb-6">
-            <h3 class="font-label-caps text-label-caps text-primary mb-4" id="product-form-title">NUEVO PRODUCTO</h3>
+          <div id="product-form-container" class="hidden bg-white border-[3px] border-primary p-6 mb-6">
+            <h3 class="font-label-caps text-label-caps text-primary mb-5" id="product-form-title">NUEVO PRODUCTO</h3>
             <input type="hidden" id="pf-id"/>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+            <!-- Datos básicos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
               <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label><input id="pf-name" class="input-field" placeholder="Nombre del producto"/></div>
               <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PRECIO *</label><input id="pf-price" class="input-field" type="number" placeholder="15000"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CATEGORÍA</label>
-                <select id="pf-cat" class="input-field"><option value="remeras">Remeras</option><option value="pantalones">Pantalones</option><option value="buzos">Buzos</option><option value="accesorios">Accesorios</option></select>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CATEGORÍA</label>
+                <select id="pf-cat" class="input-field">
+                  <option value="remeras">Remeras</option>
+                  <option value="pantalones">Pantalones</option>
+                  <option value="buzos">Buzos</option>
+                  <option value="accesorios">Accesorios</option>
+                </select>
               </div>
               <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">STOCK</label><input id="pf-stock" class="input-field" type="number" placeholder="50"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PRECIO TACHADO (opcional)</label><input id="pf-old-price" class="input-field" type="number" placeholder="20000"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BADGE (opcional)</label><input id="pf-badge" class="input-field" placeholder="NUEVO / SALE / DROP EXCLUSIVO"/></div>
               <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCRIPCIÓN</label><textarea id="pf-desc" class="input-field" rows="3" placeholder="Descripción del producto..."></textarea></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BADGE (opcional)</label><input id="pf-badge" class="input-field" placeholder="NUEVO / SALE / etc"/></div>
             </div>
-            <!-- Multi-image uploader (hasta 4 imágenes) -->
-            <div class="border-[3px] border-primary p-5 mb-4 bg-surface-container-low">
+
+            <!-- Colores disponibles -->
+            <div class="border-[3px] border-primary p-5 mb-5 bg-surface-container-low">
+              <div class="flex justify-between items-center mb-4">
+                <label class="font-label-caps text-label-caps text-primary flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px]">palette</span> COLORES DISPONIBLES
+                </label>
+                <button class="btn-outline py-1 px-3 text-[10px]" onclick="addCustomColor()">
+                  <span class="material-symbols-outlined text-[12px]">add</span> AGREGAR COLOR
+                </button>
+              </div>
+              <p class="font-label-caps text-[10px] text-on-surface-variant mb-4">MARCÁ LOS COLORES DISPONIBLES. HACÉ CLIC EN EL NOMBRE PARA EDITARLO.</p>
+              <div id="pf-colors-grid" class="flex flex-wrap gap-4"></div>
+            </div>
+
+            <!-- 4 Imágenes del producto -->
+            <div class="border-[3px] border-primary p-5 mb-5 bg-surface-container-low">
               <div class="flex justify-between items-center mb-3">
                 <label class="font-label-caps text-label-caps text-primary flex items-center gap-2">
                   <span class="material-symbols-outlined text-[16px]">photo_library</span> IMÁGENES DEL PRODUCTO (HASTA 4)
                 </label>
                 <span class="font-label-caps text-[10px] text-on-surface-variant">LA PRIMERA ES LA IMAGEN PRINCIPAL</span>
               </div>
-              <!-- 4 image slots -->
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3" id="pf-image-slots">
-                <!-- slots rendered by JS -->
-              </div>
-              <!-- URL input -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3" id="pf-image-slots"></div>
               <div class="flex gap-2 mt-3">
                 <input id="pf-img-url" class="input-field flex-1 py-2" placeholder="O pegá una URL de imagen y presioná AGREGAR"/>
                 <button class="btn-outline py-2 px-3 text-[10px]" onclick="addProductImageUrl()">AGREGAR URL</button>
               </div>
               <input type="hidden" id="pf-img"/>
             </div>
+
             <div class="flex gap-3">
               <button class="btn-primary" onclick="saveProduct()">GUARDAR PRODUCTO</button>
               <button class="btn-outline" onclick="hideProductForm()">CANCELAR</button>
             </div>
           </div>
           <!-- Products Table -->
-          <div id="admin-products-table" class="bg-surface-container-lowest border-[3px] border-primary overflow-x-auto"></div>
+          <div id="admin-products-table" class="bg-white border-[3px] border-primary overflow-x-auto"></div>
         </div>
+
         <!-- Inventory Section -->
         <div id="admin-section-inventory" class="hidden">
           <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-6">GESTIÓN DE INVENTARIO</h2>
-          <div id="admin-inventory-table" class="bg-surface-container-lowest border-[3px] border-primary overflow-x-auto"></div>
+          <div id="admin-inventory-table" class="bg-white border-[3px] border-primary overflow-x-auto"></div>
         </div>
+
         <!-- Customers Section -->
         <div id="admin-section-customers" class="hidden">
           <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-6">DIRECTORIO DE CLIENTES</h2>
-          <div id="admin-customers-table" class="bg-surface-container-lowest border-[3px] border-primary overflow-x-auto"></div>
+          <div id="admin-customers-table" class="bg-white border-[3px] border-primary overflow-x-auto"></div>
+        </div>
+
+        <!-- Categories Section (moved from home to admin) -->
+        <div id="admin-section-categorias" class="hidden">
+          <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">EDITOR DE CATEGORÍAS</h2>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-6">EDITÁ LAS IMÁGENES Y NOMBRES DE LAS CATEGORÍAS DE LA HOME</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Remeras -->
+            <div class="bg-white border-[3px] border-primary p-5">
+              <div class="aspect-[4/3] overflow-hidden border-[2px] border-primary mb-3 relative">
+                <img id="admin-cat-img-remeras" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80" class="w-full h-full object-cover"/>
+              </div>
+              <div class="font-label-caps text-label-caps text-primary mb-3">REMERAS</div>
+              <div class="flex gap-2 mb-2">
+                <input id="admin-cat-url-remeras" class="input-field flex-1 py-2" placeholder="URL de imagen..."/>
+                <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('admin-cat-file-remeras').click()">
+                  <span class="material-symbols-outlined text-[14px]">upload</span>
+                </button>
+                <input type="file" id="admin-cat-file-remeras" accept="image/*" class="hidden" onchange="uploadAdminCatImg('remeras',this.files[0])"/>
+              </div>
+              <button class="btn-primary w-full py-2 text-[10px]" onclick="saveAdminCatImg('remeras')">
+                <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR
+              </button>
+            </div>
+            <!-- Pantalones -->
+            <div class="bg-white border-[3px] border-primary p-5">
+              <div class="aspect-[4/3] overflow-hidden border-[2px] border-primary mb-3 relative">
+                <img id="admin-cat-img-pantalones" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80" class="w-full h-full object-cover"/>
+              </div>
+              <div class="font-label-caps text-label-caps text-primary mb-3">PANTALONES</div>
+              <div class="flex gap-2 mb-2">
+                <input id="admin-cat-url-pantalones" class="input-field flex-1 py-2" placeholder="URL de imagen..."/>
+                <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('admin-cat-file-pantalones').click()">
+                  <span class="material-symbols-outlined text-[14px]">upload</span>
+                </button>
+                <input type="file" id="admin-cat-file-pantalones" accept="image/*" class="hidden" onchange="uploadAdminCatImg('pantalones',this.files[0])"/>
+              </div>
+              <button class="btn-primary w-full py-2 text-[10px]" onclick="saveAdminCatImg('pantalones')">
+                <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR
+              </button>
+            </div>
+            <!-- Buzos -->
+            <div class="bg-white border-[3px] border-primary p-5">
+              <div class="aspect-[4/3] overflow-hidden border-[2px] border-primary mb-3 relative">
+                <img id="admin-cat-img-buzos" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80" class="w-full h-full object-cover"/>
+              </div>
+              <div class="font-label-caps text-label-caps text-primary mb-3">BUZOS</div>
+              <div class="flex gap-2 mb-2">
+                <input id="admin-cat-url-buzos" class="input-field flex-1 py-2" placeholder="URL de imagen..."/>
+                <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('admin-cat-file-buzos').click()">
+                  <span class="material-symbols-outlined text-[14px]">upload</span>
+                </button>
+                <input type="file" id="admin-cat-file-buzos" accept="image/*" class="hidden" onchange="uploadAdminCatImg('buzos',this.files[0])"/>
+              </div>
+              <button class="btn-primary w-full py-2 text-[10px]" onclick="saveAdminCatImg('buzos')">
+                <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR
+              </button>
+            </div>
+            <!-- Accesorios -->
+            <div class="bg-white border-[3px] border-primary p-5">
+              <div class="aspect-[4/3] overflow-hidden border-[2px] border-primary mb-3 relative">
+                <img id="admin-cat-img-accesorios" src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80" class="w-full h-full object-cover"/>
+              </div>
+              <div class="font-label-caps text-label-caps text-primary mb-3">ACCESORIOS</div>
+              <div class="flex gap-2 mb-2">
+                <input id="admin-cat-url-accesorios" class="input-field flex-1 py-2" placeholder="URL de imagen..."/>
+                <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('admin-cat-file-accesorios').click()">
+                  <span class="material-symbols-outlined text-[14px]">upload</span>
+                </button>
+                <input type="file" id="admin-cat-file-accesorios" accept="image/*" class="hidden" onchange="uploadAdminCatImg('accesorios',this.files[0])"/>
+              </div>
+              <button class="btn-primary w-full py-2 text-[10px]" onclick="saveAdminCatImg('accesorios')">
+                <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR
+              </button>
+            </div>
+          </div>
         </div>
         <!-- Banners Section -->
         <div id="admin-section-banners" class="hidden">
@@ -2049,21 +2411,34 @@ function closeMobileMenu() {
 
 // =================== PRODUCTS ===================
 function renderProductCard(p, small=false) {
+  const img = p.img || (p.images && p.images[0]) || '';
+  const colors = p.colors || [];
+  // Get color hex from AVAILABLE_COLORS
+  const colorDots = colors.slice(0,5).map(cid => {
+    const c = AVAILABLE_COLORS.find(ac=>ac.id===cid);
+    const hex = c ? c.hex : '#888';
+    const border = cid==='blanco'||cid==='beige'||cid==='amarillo' ? 'border:1px solid #ccc;' : '';
+    return `<div style="width:12px;height:12px;border-radius:50%;background:${hex};${border}" title="${c?c.label:cid}"></div>`;
+  }).join('');
+
   return `
-    <div class="group relative flex flex-col bg-surface border-[3px] border-primary product-card card-hover" onclick="openProduct(${p.id})">
-      <div class="relative ${small?'aspect-[3/4]':'aspect-[3/4]'} overflow-hidden border-b-[3px] border-primary bg-surface-container">
-        ${p.badge ? `<div class="absolute top-4 left-4 z-10 flex flex-col gap-2"><span class="badge badge-violet">${p.badge}</span></div>` : ''}
+    <div class="group relative flex flex-col bg-surface border-[3px] border-primary product-card card-hover" onclick="openProduct('${p.id}')">
+      <div class="relative aspect-[3/4] overflow-hidden border-b-[3px] border-primary bg-surface-container">
+        ${p.badge ? `<div class="absolute top-4 left-4 z-10"><span class="badge badge-violet">${p.badge}</span></div>` : ''}
         ${p.oldPrice ? `<div class="absolute top-4 right-4 z-10"><span class="badge badge-black">SALE</span></div>` : ''}
-        <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover grayscale-hover transition-all duration-500"/>
+        <img src="${img}" alt="${p.name}" class="w-full h-full object-cover grayscale-hover transition-all duration-500"/>
         <div class="absolute bottom-0 left-0 w-full bg-primary/90 border-t-[3px] border-primary size-overlay flex">
-          ${p.sizes.slice(0,4).map(s=>`<button class="flex-1 py-3 font-label-caps text-on-primary hover:bg-secondary-container text-[10px] border-r border-white/20 last:border-0" onclick="event.stopPropagation();quickAddToCart(${p.id},'${s}','${p.colors[0]}')">${s}</button>`).join('')}
+          ${(p.sizes||['S','M','L','XL']).slice(0,4).map(s=>`<button class="flex-1 py-3 font-label-caps text-on-primary hover:bg-secondary-container text-[10px] border-r border-white/20 last:border-0" onclick="event.stopPropagation();quickAddToCart('${p.id}','${s}','${colors[0]||'negro'}')">${s}</button>`).join('')}
         </div>
       </div>
       <div class="p-4">
         <div class="font-label-caps text-label-caps text-primary truncate mb-1">${p.name}</div>
-        <div class="flex items-center gap-2">
-          <span class="font-label-caps text-[13px] text-primary">${fmtPrice(p.price)}</span>
-          ${p.oldPrice ? `<span class="font-label-caps text-[11px] text-outline line-through">${fmtPrice(p.oldPrice)}</span>` : ''}
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="font-label-caps text-[13px] text-primary">${fmtPrice(p.price)}</span>
+            ${p.oldPrice ? `<span class="font-label-caps text-[11px] text-outline line-through">${fmtPrice(p.oldPrice)}</span>` : ''}
+          </div>
+          ${colorDots ? `<div class="flex gap-1 items-center">${colorDots}</div>` : ''}
         </div>
       </div>
     </div>`;
@@ -2156,51 +2531,62 @@ document.querySelectorAll('.filter-color').forEach(btn => btn.addEventListener('
 
 // =================== PRODUCT DETAIL ===================
 function openProduct(id) {
-  const p = state.products.find(pr => pr.id === id);
+  const p = state.products.find(pr => String(pr.id) === String(id));
   if (!p) return;
   state.currentProduct = p;
   state.selectedSize = null;
-  state.selectedColor = p.colors[0] || 'negro';
-  // Populate
+  state.selectedColor = (p.colors && p.colors[0]) || 'negro';
+
+  const img = p.img || (p.images && p.images[0]) || '';
+  const images = p.images && p.images.length > 0 ? p.images : [img];
+
   document.getElementById('product-breadcrumb').textContent = p.name;
-  document.getElementById('product-main-img').src = p.img;
+  document.getElementById('product-main-img').src = img;
   document.getElementById('product-main-img').alt = p.name;
-  document.getElementById('product-badge').textContent = p.badge || '';
-  document.getElementById('product-badge').style.display = p.badge ? '' : 'none';
+  const badge = document.getElementById('product-badge');
+  if (badge) { badge.textContent = p.badge||''; badge.style.display = p.badge?'':'none'; }
   document.getElementById('product-name').textContent = p.name;
   document.getElementById('product-price').textContent = fmtPrice(p.price);
   document.getElementById('product-old-price').textContent = p.oldPrice ? fmtPrice(p.oldPrice) : '';
-  document.getElementById('product-desc').textContent = p.desc;
-  document.getElementById('product-sku').textContent = p.sku;
-  document.getElementById('product-cat').textContent = p.cat;
+  document.getElementById('product-desc').textContent = p.desc||'';
+  document.getElementById('product-sku').textContent = p.sku||'';
+  document.getElementById('product-cat').textContent = p.cat||'';
   document.getElementById('product-stock').textContent = p.stock > 20 ? 'DISPONIBLE' : p.stock > 0 ? `ÚLTIMAS ${p.stock} UNIDADES` : 'SIN STOCK';
-  document.getElementById('product-reviews').textContent = `(${p.reviews} reseñas)`;
+  document.getElementById('product-reviews').textContent = `(${p.reviews||0} reseñas)`;
+
   // Stars
   const starsEl = document.getElementById('product-stars');
-  starsEl.innerHTML = '';
-  for (let i = 0; i < 5; i++) {
-    const s = document.createElement('span');
-    s.textContent = '★';
-    s.className = i < Math.round(p.rating) ? 'star' : 'star empty';
-    starsEl.appendChild(s);
-  }
-  // Thumbs
-  const thumbUrls = [p.img, p.img.replace('w=600', 'w=400&sat=-100'), p.img.replace('w=600', 'w=400&flip=h')];
-  document.getElementById('product-thumbs').innerHTML = thumbUrls.map((u,i) => `
-    <div class="aspect-square bg-surface-container border-2 border-primary overflow-hidden cursor-pointer hover:border-secondary" onclick="document.getElementById('product-main-img').src='${u}'">
+  if (starsEl) starsEl.innerHTML = Array.from({length:5},(_,i)=>`<span class="${i<Math.round(p.rating||0)?'star':'star empty'}">★</span>`).join('');
+
+  // Multiple images thumbnails
+  document.getElementById('product-thumbs').innerHTML = images.slice(0,4).map((u,i) => `
+    <div class="aspect-square bg-surface-container border-2 border-primary overflow-hidden cursor-pointer hover:border-secondary-container" onclick="document.getElementById('product-main-img').src='${u}';this.parentNode.querySelectorAll('div').forEach(d=>d.classList.remove('ring-2'));this.classList.add('ring-2','ring-secondary-container')">
       <img src="${u}" class="w-full h-full object-cover grayscale-hover"/>
     </div>`).join('');
-  // Colors
-  document.getElementById('color-selector').innerHTML = p.colors.map(c => {
-    const bg = c === 'negro' ? '#000' : c === 'blanco' ? '#fff' : c === 'gris' ? '#9ca3af' : c === 'violeta' ? '#5d22ff' : '#888';
-    return `<button class="w-12 h-12 border-2 ${state.selectedColor===c ? 'ring-2 ring-secondary-container ring-offset-2' : ''} border-primary" style="background:${bg};" onclick="selectColor('${c}')"></button>`;
+
+  // Color swatches using AVAILABLE_COLORS for hex
+  const colors = p.colors || [];
+  document.getElementById('color-selector').innerHTML = colors.map(cid => {
+    const colorObj = AVAILABLE_COLORS.find(ac => ac.id === cid);
+    const hex = colorObj ? colorObj.hex : '#888';
+    const label = colorObj ? colorObj.label : cid.toUpperCase();
+    const border = cid==='blanco'||cid==='beige'||cid==='amarillo' ? 'border-color:#ccc;' : '';
+    const selected = state.selectedColor === cid;
+    return `<div class="flex flex-col items-center gap-1">
+      <button class="color-swatch ${selected?'selected':''}" style="background:${hex};${border}" onclick="selectColor('${cid}')" title="${label}">
+        ${selected?`<span style="color:${['blanco','beige','amarillo'].includes(cid)?'#000':'#fff'};font-size:14px;">✓</span>`:''}
+      </button>
+      <span class="font-label-caps text-[9px] text-on-surface-variant">${label}</span>
+    </div>`;
   }).join('');
-  document.getElementById('selected-color-label').textContent = state.selectedColor.toUpperCase();
+  document.getElementById('selected-color-label').textContent = (AVAILABLE_COLORS.find(c=>c.id===state.selectedColor)?.label || state.selectedColor).toUpperCase();
+
   // Sizes
-  document.getElementById('size-selector').innerHTML = p.sizes.map(s => `
+  document.getElementById('size-selector').innerHTML = (p.sizes||['S','M','L','XL']).map(s => `
     <button class="size-btn" onclick="selectSize('${s}')">${s}</button>`).join('');
+
   // Related
-  const related = state.products.filter(pr => pr.id !== p.id && pr.cat === p.cat).slice(0, 4);
+  const related = state.products.filter(pr => String(pr.id) !== String(p.id) && pr.cat === p.cat).slice(0,4);
   document.getElementById('related-products').innerHTML = related.map(r => renderProductCard(r)).join('');
   nav('product');
 }
@@ -2216,31 +2602,38 @@ function selectSize(s) {
 
 function selectColor(c) {
   state.selectedColor = c;
-  document.getElementById('selected-color-label').textContent = c.toUpperCase();
-  document.querySelectorAll('#color-selector button').forEach(b => {
-    b.style.outline = b.onclick.toString().includes("'"+c+"'") ? '3px solid #5d22ff' : '';
-    b.style.outlineOffset = '2px';
-  });
-  // Re-render color selector
-  const p = state.currentProduct;
-  document.getElementById('color-selector').innerHTML = p.colors.map(col => {
-    const bg = col === 'negro' ? '#000' : col === 'blanco' ? '#fff' : col === 'gris' ? '#9ca3af' : col === 'violeta' ? '#5d22ff' : '#888';
-    const sel = col === c;
-    return `<button class="w-12 h-12 border-2 border-primary ${sel ? 'ring-2 ring-[#5d22ff] ring-offset-2' : ''}" style="background:${bg};" onclick="selectColor('${col}')"></button>`;
+  const colorObj = AVAILABLE_COLORS.find(ac => ac.id === c);
+  const label = colorObj ? colorObj.label : c.toUpperCase();
+  const el = document.getElementById('selected-color-label');
+  if (el) el.textContent = label;
+  if (!state.currentProduct) return;
+  const colors = state.currentProduct.colors || [];
+  document.getElementById('color-selector').innerHTML = colors.map(cid => {
+    const obj = AVAILABLE_COLORS.find(ac => ac.id === cid);
+    const hex = obj ? obj.hex : '#888';
+    const lbl = obj ? obj.label : cid.toUpperCase();
+    const border = ['blanco','beige','amarillo'].includes(cid) ? 'border-color:#ccc;' : '';
+    const selected = cid === c;
+    return `<div class="flex flex-col items-center gap-1">
+      <button class="color-swatch ${selected?'selected':''}" style="background:${hex};${border}" onclick="selectColor('${cid}')" title="${lbl}">
+        ${selected?`<span style="color:${['blanco','beige','amarillo'].includes(cid)?'#000':'#fff'};font-size:14px;">✓</span>`:''}
+      </button>
+      <span class="font-label-caps text-[9px] text-on-surface-variant">${lbl}</span>
+    </div>`;
   }).join('');
-  document.getElementById('selected-color-label').textContent = c.toUpperCase();
 }
 
 function addSelectedToCart() {
   const p = state.currentProduct;
   if (!p) return;
   if (!state.selectedSize) { showToast('¡Seleccioná un talle primero! 📏'); return; }
-  addToCart(p.id, state.selectedSize, state.selectedColor || p.colors[0]);
+  addToCart(p.id, state.selectedSize, state.selectedColor || (p.colors && p.colors[0]) || 'negro');
 }
 
 function quickAddToCart(id, size, color) {
   addToCart(id, size, color);
 }
+
 
 // =================== AUTH ===================
 async function doLogin() {
@@ -2685,22 +3078,75 @@ function placeOrder() {
 }
 
 // =================== ACCOUNT PAGE ===================
+// =================== ACCOUNT PAGE ===================
+const AVAILABLE_COLORS = [
+  { id:'blanco',   hex:'#ffffff', label:'BLANCO' },
+  { id:'negro',    hex:'#000000', label:'NEGRO' },
+  { id:'gris',     hex:'#9ca3af', label:'GRIS' },
+  { id:'violeta',  hex:'#5d22ff', label:'VIOLETA' },
+  { id:'rojo',     hex:'#ef4444', label:'ROJO' },
+  { id:'azul',     hex:'#3b82f6', label:'AZUL' },
+  { id:'verde',    hex:'#22c55e', label:'VERDE' },
+  { id:'rosa',     hex:'#ec4899', label:'ROSA' },
+  { id:'marron',   hex:'#92400e', label:'MARRÓN' },
+  { id:'naranja',  hex:'#f97316', label:'NARANJA' },
+  { id:'amarillo', hex:'#eab308', label:'AMARILLO' },
+  { id:'beige',    hex:'#d4b896', label:'BEIGE' },
+];
+
 function renderAccountPage() {
   if (!state.user) { nav('login'); return; }
-  document.getElementById('account-name').textContent = state.user.name.toUpperCase();
-  document.getElementById('account-email-disp').textContent = state.user.email;
-  document.getElementById('acc-nombre').value = state.user.name.split(' ')[0] || '';
-  document.getElementById('acc-apellido').value = state.user.name.split(' ')[1] || '';
-  document.getElementById('acc-email').value = state.user.email;
-  const userOrders = state.orders.filter(o => o.email === state.user.email);
-  const ordersEl = document.getElementById('account-orders-list');
-  const emptyEl = document.getElementById('account-orders-empty');
-  if (userOrders.length === 0) { emptyEl.classList.remove('hidden'); ordersEl.classList.add('hidden'); }
-  else {
+
+  const name = state.user.displayName || state.user.name || state.user.email.split('@')[0];
+  const email = state.user.email;
+  const initials = name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+
+  // Avatar
+  const avatarImg = document.getElementById('account-avatar-img');
+  const avatarInitials = document.getElementById('account-avatar-initials');
+  if (state.user.photoURL) {
+    avatarImg.src = state.user.photoURL;
+    avatarImg.classList.remove('hidden');
+    avatarInitials.classList.add('hidden');
+  } else {
+    avatarInitials.textContent = initials;
+    avatarImg.classList.add('hidden');
+    avatarInitials.classList.remove('hidden');
+  }
+
+  document.getElementById('account-name').textContent = name.toUpperCase();
+  document.getElementById('account-email-disp').textContent = email;
+
+  // Member since
+  const since = state.user.metadata?.creationTime
+    ? new Date(state.user.metadata.creationTime).toLocaleDateString('es-AR',{month:'long',year:'numeric'})
+    : '';
+  const sinceEl = document.getElementById('account-member-since');
+  if (sinceEl && since) sinceEl.textContent = 'MIEMBRO DESDE ' + since.toUpperCase();
+
+  // Profile fields
+  const parts = name.split(' ');
+  const inp = (id, val) => { const el = document.getElementById(id); if(el) el.value = val || ''; };
+  inp('acc-nombre', parts[0]);
+  inp('acc-apellido', parts.slice(1).join(' '));
+  inp('acc-tel', state.user.phoneNumber || '');
+  inp('acc-email-current', email);
+
+  // Orders
+  const userOrders = state.orders.filter(o => o.email === email);
+  const ordersEl  = document.getElementById('account-orders-list');
+  const emptyEl   = document.getElementById('account-orders-empty');
+  const countEl   = document.getElementById('acc-orders-count');
+  if (countEl) countEl.textContent = userOrders.length + ' PEDIDO' + (userOrders.length !== 1 ? 'S' : '');
+
+  if (userOrders.length === 0) {
+    emptyEl.classList.remove('hidden');
+    ordersEl.classList.add('hidden');
+  } else {
     emptyEl.classList.add('hidden');
     ordersEl.classList.remove('hidden');
     ordersEl.innerHTML = userOrders.map(o => `
-      <div class="border-[3px] border-primary p-4">
+      <div class="border-[3px] border-primary p-4 card-hover">
         <div class="flex justify-between items-start mb-3">
           <div>
             <span class="font-label-caps text-label-caps text-primary">#${o.id}</span>
@@ -2708,26 +3154,336 @@ function renderAccountPage() {
           </div>
           <span class="badge ${o.status==='pending'?'badge-black':o.status==='shipped'?'badge-outline':'badge-violet'}">${o.status.toUpperCase()}</span>
         </div>
-        <div class="font-body-md text-on-surface-variant text-sm">${o.items.map(i=>i.name).join(', ')}</div>
-        <div class="font-label-caps text-label-caps text-primary mt-2">${fmtPrice(o.total)}</div>
+        <div class="font-body-md text-on-surface-variant text-sm mb-2">${(o.items||[]).map(i=>i.name).join(', ')}</div>
+        <div class="flex justify-between items-center">
+          <span class="font-label-caps text-label-caps text-primary">${fmtPrice(o.total)}</span>
+          <span class="font-label-caps text-[10px] text-on-surface-variant">${o.payMethod ? o.payMethod.toUpperCase() : ''}</span>
+        </div>
       </div>`).join('');
   }
+
+  // Addresses
+  renderAddresses();
 }
 
 function showAccountTab(tab) {
-  ['orders','profile','addresses','favorites'].forEach(t => {
-    document.getElementById('acc-content-'+t).classList.toggle('hidden', t !== tab);
-    document.getElementById('acc-tab-'+t).classList.toggle('active', t === tab);
+  ['orders','profile','payment','addresses','security'].forEach(t => {
+    const content = document.getElementById('acc-content-'+t);
+    const btn = document.getElementById('acc-tab-'+t);
+    if (content) content.classList.toggle('hidden', t !== tab);
+    if (btn) btn.classList.toggle('active', t === tab);
   });
 }
 
-function saveProfile() {
-  if (state.user) {
-    state.user.name = (document.getElementById('acc-nombre').value + ' ' + document.getElementById('acc-apellido').value).trim();
-    document.getElementById('account-name').textContent = state.user.name.toUpperCase();
+// ---- Profile validation ----
+function validateProfileField(id) {
+  const el = document.getElementById(id);
+  const errEl = document.getElementById(id+'-err');
+  if (!el || !errEl) return true;
+  const val = el.value.trim();
+  let msg = '';
+  if (id === 'acc-nombre' && val.length < 2) msg = 'INGRESÁ UN NOMBRE VÁLIDO (MÍN. 2 CARACTERES)';
+  if (id === 'acc-apellido' && val.length < 2) msg = 'INGRESÁ UN APELLIDO VÁLIDO';
+  if (id === 'acc-tel' && val && !/^[\+\d\s\-\(\)]{7,20}$/.test(val)) msg = 'TELÉFONO INVÁLIDO';
+  if (id === 'acc-dni' && val && !/^\d{7,8}$/.test(val.replace(/\./g,''))) msg = 'DNI DEBE TENER 7 U 8 DÍGITOS';
+  if (id === 'acc-bday' && val) {
+    const age = (new Date() - new Date(val)) / (1000*60*60*24*365);
+    if (age < 13) msg = 'DEBÉS TENER AL MENOS 13 AÑOS';
+    if (age > 120) msg = 'FECHA DE NACIMIENTO INVÁLIDA';
+  }
+  if (msg) { errEl.textContent = msg; errEl.classList.remove('hidden'); el.style.borderColor='#ba1a1a'; return false; }
+  else { errEl.classList.add('hidden'); el.style.borderColor=''; return true; }
+}
+
+async function saveProfile() {
+  const fields = ['acc-nombre','acc-apellido','acc-tel','acc-dni','acc-bday'];
+  let valid = true;
+  fields.forEach(f => { if (!validateProfileField(f)) valid = false; });
+
+  const nombre   = document.getElementById('acc-nombre')?.value.trim();
+  const apellido = document.getElementById('acc-apellido')?.value.trim();
+  if (!nombre || !apellido) { showToast('NOMBRE Y APELLIDO SON OBLIGATORIOS ❌'); return; }
+  if (!valid) { showToast('CORREGÍ LOS CAMPOS MARCADOS EN ROJO ❌'); return; }
+
+  const btn = document.querySelector('#acc-content-profile .btn-primary');
+  if (btn) { btn.textContent = 'GUARDANDO...'; btn.disabled = true; }
+
+  try {
+    const fullName = nombre + ' ' + apellido;
+    // Update Firebase Auth display name
+    if (fbAuth?.currentUser) {
+      const { updateProfile } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+      await updateProfile(fbAuth.currentUser, { displayName: fullName });
+    }
+    // Save extra data to Firestore
+    if (fbDb && window._fb && state.user) {
+      const { doc, setDoc } = window._fb;
+      await setDoc(doc(fbDb, 'users', state.user.uid), {
+        displayName: fullName,
+        phone: document.getElementById('acc-tel')?.value.trim() || '',
+        dni: document.getElementById('acc-dni')?.value.trim() || '',
+        birthday: document.getElementById('acc-bday')?.value || '',
+        gender: document.getElementById('acc-genero')?.value || '',
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    }
+    if (state.user) state.user.displayName = fullName;
+    document.getElementById('account-name').textContent = fullName.toUpperCase();
     updateAuthUI();
     showToast('¡Perfil actualizado! ✅');
+  } catch(e) {
+    showToast('Error al guardar: ' + e.message + ' ❌');
+  } finally {
+    if (btn) { btn.textContent = 'GUARDAR CAMBIOS'; btn.disabled = false; }
   }
+}
+
+// ---- Avatar upload ----
+async function uploadAvatar(file) {
+  if (!file) return;
+  showToast('Subiendo foto de perfil...');
+  const CLOUD = 'damwe7juy', PRESET = 'XINCO TIENDA';
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', PRESET);
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`, {method:'POST',body:formData});
+    const data = await res.json();
+    if (data.secure_url) {
+      const url = data.secure_url;
+      if (fbAuth?.currentUser) {
+        const { updateProfile } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+        await updateProfile(fbAuth.currentUser, { photoURL: url });
+        if (state.user) state.user.photoURL = url;
+      }
+      const avatarImg = document.getElementById('account-avatar-img');
+      const avatarInitials = document.getElementById('account-avatar-initials');
+      if (avatarImg) { avatarImg.src = url; avatarImg.classList.remove('hidden'); }
+      if (avatarInitials) avatarInitials.classList.add('hidden');
+      showToast('¡Foto de perfil actualizada! ✅');
+    }
+  } catch(e) { showToast('Error al subir la foto ❌'); }
+}
+
+// ---- Payment validation ----
+function validatePaymentField(id) {
+  const el = document.getElementById(id);
+  const errEl = document.getElementById(id+'-err');
+  if (!el || !errEl) return true;
+  const val = el.value.trim();
+  let msg = '';
+  if ((id === 'user-mp-cbu' || id === 'user-bank-cbu') && val && !/^\d{22}$/.test(val)) msg = 'EL CBU/CVU DEBE TENER 22 DÍGITOS';
+  if ((id === 'user-mp-alias' || id === 'user-bank-alias') && val && !/^[A-Za-z0-9\.\-]{6,20}$/.test(val)) msg = 'ALIAS INVÁLIDO (6-20 CARACTERES, SOLO LETRAS, NÚMEROS Y PUNTOS)';
+  if (id === 'user-mp-email' && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) msg = 'EMAIL INVÁLIDO';
+  if (msg) { errEl.textContent = msg; errEl.classList.remove('hidden'); el.style.borderColor='#ba1a1a'; return false; }
+  else { errEl.classList.add('hidden'); el.style.borderColor=''; return true; }
+}
+
+async function saveUserPayment(type) {
+  if (type === 'mp') {
+    const valid = ['user-mp-cbu','user-mp-alias','user-mp-email'].map(validatePaymentField).every(Boolean);
+    if (!valid) { showToast('CORREGÍ LOS CAMPOS MARCADOS ❌'); return; }
+    const data = {
+      mp_cbu:   document.getElementById('user-mp-cbu')?.value.trim(),
+      mp_alias: document.getElementById('user-mp-alias')?.value.trim(),
+      mp_email: document.getElementById('user-mp-email')?.value.trim(),
+    };
+    if (!data.mp_cbu && !data.mp_alias) { showToast('INGRESÁ AL MENOS EL CBU O EL ALIAS ❌'); return; }
+    if (fbDb && window._fb && state.user) {
+      const { doc, setDoc } = window._fb;
+      await setDoc(doc(fbDb,'users',state.user.uid), { payment: data }, { merge: true });
+    }
+    const badge = document.getElementById('user-mp-status');
+    if (badge) { badge.textContent = 'VINCULADO ✓'; badge.className = 'badge badge-violet ml-auto shrink-0'; }
+    showToast('Mercado Pago guardado en Firebase ✅');
+  }
+  if (type === 'bank') {
+    const cbuValid = validatePaymentField('user-bank-cbu');
+    if (!cbuValid) { showToast('CBU INVÁLIDO ❌'); return; }
+    const data = {
+      bank_name:    document.getElementById('user-bank-name')?.value.trim(),
+      bank_titular: document.getElementById('user-bank-titular')?.value.trim(),
+      bank_cbu:     document.getElementById('user-bank-cbu')?.value.trim(),
+      bank_alias:   document.getElementById('user-bank-alias')?.value.trim(),
+    };
+    if (!data.bank_name || !data.bank_cbu) { showToast('BANCO Y CBU SON OBLIGATORIOS ❌'); return; }
+    if (fbDb && window._fb && state.user) {
+      const { doc, setDoc } = window._fb;
+      await setDoc(doc(fbDb,'users',state.user.uid), { bank: data }, { merge: true });
+    }
+    showToast('Datos bancarios guardados ✅');
+  }
+}
+
+// ---- Card management ----
+function showAddCardForm() { document.getElementById('add-card-form').classList.remove('hidden'); }
+function validateCardField() {
+  const num = document.getElementById('card-num')?.value.replace(/\s/g,'');
+  const exp = document.getElementById('card-exp')?.value;
+  const err = document.getElementById('card-err');
+  if (num && num.length > 0 && num.length < 15) { if(err){err.textContent='NÚMERO DE TARJETA INCOMPLETO';err.classList.remove('hidden');} return false; }
+  if (exp && !/^\d{2}\/\d{2}$/.test(exp)) { if(err){err.textContent='FORMATO DE VENCIMIENTO: MM/AA';err.classList.remove('hidden');} return false; }
+  if (err) err.classList.add('hidden');
+  return true;
+}
+async function saveCard() {
+  const num  = document.getElementById('card-num')?.value.replace(/\s/g,'');
+  const exp  = document.getElementById('card-exp')?.value.trim();
+  const name = document.getElementById('card-name')?.value.trim();
+  const err  = document.getElementById('card-err');
+  if (!num || num.length < 15) { if(err){err.textContent='INGRESÁ UN NÚMERO DE TARJETA VÁLIDO';err.classList.remove('hidden');} return; }
+  if (!exp || !/^\d{2}\/\d{2}$/.test(exp)) { if(err){err.textContent='INGRESÁ LA FECHA MM/AA';err.classList.remove('hidden');} return; }
+  const [mm,yy] = exp.split('/');
+  if (new Date(2000+parseInt(yy), parseInt(mm)-1) < new Date()) { if(err){err.textContent='LA TARJETA ESTÁ VENCIDA';err.classList.remove('hidden');} return; }
+  if (!name) { if(err){err.textContent='INGRESÁ EL NOMBRE DE LA TARJETA';err.classList.remove('hidden');} return; }
+  if (err) err.classList.add('hidden');
+  // Save masked card (never store full number)
+  const masked = '**** **** **** ' + num.slice(-4);
+  const brand  = num[0]==='4'?'VISA':num[0]==='5'?'MASTERCARD':num.startsWith('34')||num.startsWith('37')?'AMEX':'TARJETA';
+  const card   = { masked, brand, exp, name, last4: num.slice(-4), addedAt: new Date().toISOString() };
+  if (!state.user) return;
+  if (!state.user.cards) state.user.cards = [];
+  state.user.cards.push(card);
+  if (fbDb && window._fb) {
+    const { doc, setDoc } = window._fb;
+    await setDoc(doc(fbDb,'users',state.user.uid), { cards: state.user.cards }, { merge: true });
+  }
+  document.getElementById('add-card-form').classList.add('hidden');
+  renderUserCards();
+  showToast(`Tarjeta ${brand} ****${num.slice(-4)} guardada ✅`);
+}
+
+function renderUserCards() {
+  const el = document.getElementById('user-cards-list');
+  if (!el) return;
+  const cards = state.user?.cards || [];
+  if (!cards.length) {
+    el.innerHTML = '<div class="text-center py-6 border-[2px] border-dashed border-outline-variant"><span class="material-symbols-outlined text-[32px] text-outline-variant">credit_card_off</span><p class="font-label-caps text-[10px] text-on-surface-variant mt-2">NO HAY TARJETAS GUARDADAS</p></div>';
+    return;
+  }
+  el.innerHTML = cards.map((c,i) => `
+    <div class="flex items-center gap-4 p-3 border-[2px] border-primary">
+      <div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-white text-[18px]">credit_card</span>
+      </div>
+      <div class="flex-1">
+        <div class="font-label-caps text-label-caps text-primary">${c.brand} ${c.masked}</div>
+        <div class="font-label-caps text-[10px] text-on-surface-variant">${c.name} · VENCE ${c.exp}</div>
+      </div>
+      <button onclick="removeCard(${i})" class="p-1 border-2 border-error text-error hover:bg-error hover:text-white transition-colors">
+        <span class="material-symbols-outlined text-[16px]">delete</span>
+      </button>
+    </div>`).join('');
+}
+
+async function removeCard(i) {
+  if (!state.user?.cards) return;
+  state.user.cards.splice(i, 1);
+  if (fbDb && window._fb) {
+    const { doc, setDoc } = window._fb;
+    await setDoc(doc(fbDb,'users',state.user.uid), { cards: state.user.cards }, { merge: true });
+  }
+  renderUserCards();
+  showToast('Tarjeta eliminada');
+}
+
+// ---- Addresses ----
+function showAddAddressForm() { document.getElementById('add-address-form').classList.remove('hidden'); }
+async function saveAddress() {
+  const street = document.getElementById('addr-street')?.value.trim();
+  const city   = document.getElementById('addr-city')?.value.trim();
+  const cp     = document.getElementById('addr-cp')?.value.trim();
+  const prov   = document.getElementById('addr-prov')?.value;
+  if (!street || !city || !cp) { showToast('CALLE, CIUDAD Y CP SON OBLIGATORIOS ❌'); return; }
+  if (!/^\d{4,8}$/.test(cp)) { showToast('CÓDIGO POSTAL INVÁLIDO ❌'); return; }
+  const addr = { street, city, cp, prov, addedAt: new Date().toISOString() };
+  if (!state.user.addresses) state.user.addresses = [];
+  state.user.addresses.push(addr);
+  if (fbDb && window._fb) {
+    const { doc, setDoc } = window._fb;
+    await setDoc(doc(fbDb,'users',state.user.uid), { addresses: state.user.addresses }, { merge: true });
+  }
+  document.getElementById('add-address-form').classList.add('hidden');
+  renderAddresses();
+  showToast('Dirección guardada ✅');
+}
+
+function renderAddresses() {
+  const el = document.getElementById('addresses-list');
+  if (!el) return;
+  const addrs = state.user?.addresses || [];
+  if (!addrs.length) { el.innerHTML = '<p class="font-label-caps text-[10px] text-on-surface-variant">NO HAY DIRECCIONES GUARDADAS</p>'; return; }
+  el.innerHTML = addrs.map((a,i) => `
+    <div class="flex justify-between items-start p-3 border-[2px] border-primary">
+      <div>
+        <div class="font-label-caps text-label-caps text-primary">${a.street}</div>
+        <div class="font-label-caps text-[10px] text-on-surface-variant">${a.city}, ${a.prov} (${a.cp})</div>
+      </div>
+      <button onclick="removeAddress(${i})" class="p-1 border-2 border-error text-error hover:bg-error hover:text-white transition-colors ml-3">
+        <span class="material-symbols-outlined text-[16px]">delete</span>
+      </button>
+    </div>`).join('');
+}
+
+async function removeAddress(i) {
+  if (!state.user?.addresses) return;
+  state.user.addresses.splice(i,1);
+  if (fbDb && window._fb) {
+    const { doc, setDoc } = window._fb;
+    await setDoc(doc(fbDb,'users',state.user.uid), { addresses: state.user.addresses }, { merge: true });
+  }
+  renderAddresses();
+  showToast('Dirección eliminada');
+}
+
+// ---- Email change ----
+function validateNewEmail() {
+  const email = document.getElementById('acc-email-new')?.value.trim();
+  const icon  = document.getElementById('new-email-icon');
+  const hint  = document.getElementById('new-email-hint');
+  if (!email || !icon || !hint) return;
+  const valid = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email);
+  icon.classList.remove('hidden'); hint.classList.remove('hidden');
+  if (valid) { icon.textContent='check_circle'; icon.style.color='#2e7d32'; hint.textContent='EMAIL VÁLIDO'; hint.style.color='#2e7d32'; }
+  else       { icon.textContent='cancel'; icon.style.color='#ba1a1a'; hint.textContent='FORMATO INVÁLIDO'; hint.style.color='#ba1a1a'; }
+}
+
+async function changeUserEmail() {
+  const newEmail = document.getElementById('acc-email-new')?.value.trim();
+  const pass     = document.getElementById('acc-email-pass')?.value;
+  const msgEl    = document.getElementById('email-change-msg');
+  if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) { showToast('INGRESÁ UN EMAIL VÁLIDO ❌'); return; }
+  if (!pass) { showToast('INGRESÁ TU CONTRASEÑA ACTUAL ❌'); return; }
+  if (newEmail === state.user?.email) { showToast('ESE ES TU EMAIL ACTUAL ❌'); return; }
+  const btn = document.querySelector('#acc-content-security .btn-primary');
+  if (btn) { btn.textContent = 'ENVIANDO...'; btn.disabled = true; }
+  try {
+    const { reauthenticateWithCredential, EmailAuthProvider, verifyBeforeUpdateEmail } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+    const cred = EmailAuthProvider.credential(state.user.email, pass);
+    await reauthenticateWithCredential(fbAuth.currentUser, cred);
+    await verifyBeforeUpdateEmail(fbAuth.currentUser, newEmail);
+    if (msgEl) { msgEl.textContent = `✅ EMAIL DE VERIFICACIÓN ENVIADO A ${newEmail.toUpperCase()} — VERIFICÁ PARA APLICAR EL CAMBIO`; msgEl.classList.remove('hidden'); }
+    document.getElementById('acc-email-new').value = '';
+    document.getElementById('acc-email-pass').value = '';
+    showToast('Email de verificación enviado ✅');
+  } catch(e) {
+    let msg = 'ERROR AL CAMBIAR EMAIL';
+    if (e.code === 'auth/wrong-password')     msg = 'CONTRASEÑA INCORRECTA ❌';
+    if (e.code === 'auth/email-already-in-use') msg = 'ESE EMAIL YA ESTÁ EN USO ❌';
+    if (e.code === 'auth/requires-recent-login') msg = 'SESIÓN EXPIRADA — CERRÁ SESIÓN Y VOLVÉ A ENTRAR ❌';
+    showToast(msg);
+  } finally {
+    if (btn) { btn.textContent = 'ENVIAR VERIFICACIÓN AL NUEVO EMAIL'; btn.disabled = false; }
+  }
+}
+
+async function sendPasswordReset() {
+  if (!state.user?.email) return;
+  try {
+    const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+    await sendPasswordResetEmail(fbAuth, state.user.email);
+    showToast('Email de restablecimiento enviado a ' + state.user.email + ' ✅');
+  } catch(e) { showToast('Error al enviar: ' + e.message + ' ❌'); }
 }
 
 // =================== ADMIN ===================
@@ -2745,7 +3501,7 @@ function checkAdminAccess() {
 }
 
 function showAdminSection(section) {
-  ['dashboard','orders','products','inventory','customers','banners','cobranzas','tracking','reportes'].forEach(s => {
+  ['dashboard','orders','products','inventory','customers','banners','categorias','cobranzas','tracking','reportes'].forEach(s => {
     const el = document.getElementById('admin-section-'+s);
     if (el) el.classList.toggle('hidden', s !== section);
     const navEl = document.getElementById('admin-nav-'+s);
@@ -2754,15 +3510,15 @@ function showAdminSection(section) {
   const titles = {
     dashboard:'TABLERO', orders:'GESTIÓN DE PEDIDOS', products:'PRODUCTOS',
     inventory:'INVENTARIO', customers:'CLIENTES', banners:'EDITOR DE BANNERS',
-    cobranzas:'GESTIÓN DE COBRANZAS', tracking:'SEGUIMIENTO DE ENVÍOS',
-    reportes:'REPORTES Y PDF'
+    categorias:'EDITOR DE CATEGORÍAS', cobranzas:'GESTIÓN DE COBRANZAS',
+    tracking:'SEGUIMIENTO DE ENVÍOS', reportes:'REPORTES Y PDF'
   };
   document.getElementById('admin-section-title').textContent = titles[section] || section.toUpperCase();
   const subs = {
     dashboard:'VISTA GENERAL', orders:'TODOS LOS PEDIDOS', products:'CATÁLOGO DE PRODUCTOS',
     inventory:'STOCK Y UNIDADES', customers:'BASE DE CLIENTES', banners:'PERSONALIZACIÓN DE LA TIENDA',
-    cobranzas:'MÉTODOS DE PAGO Y COBRANZA', tracking:'CORREO ARGENTINO Y OTROS TRANSPORTES',
-    reportes:'DOCUMENTOS IMPRIMIBLES Y EXPORTACIÓN'
+    categorias:'IMÁGENES DE LAS CATEGORÍAS EN LA HOME', cobranzas:'MÉTODOS DE PAGO Y COBRANZA',
+    tracking:'CORREO ARGENTINO Y OTROS TRANSPORTES', reportes:'DOCUMENTOS IMPRIMIBLES Y EXPORTACIÓN'
   };
   const subEl = document.getElementById('admin-section-sub');
   if (subEl) subEl.textContent = subs[section] || '';
@@ -2771,6 +3527,7 @@ function showAdminSection(section) {
   if (section === 'tracking') initTrackingSection();
   if (section === 'cobranzas') initCobranzasSection();
   if (section === 'reportes') initReportesSection();
+  if (section === 'categorias') initCatEditor();
 }
 
 function renderAdminDashboard() {
@@ -2896,27 +3653,65 @@ function adjustStock(id, delta) {
 
 function renderAdminCustomers() {
   const el = document.getElementById('admin-customers-table');
+  if (!el) return;
+  // Build customers from orders
+  const customerMap = {};
+  state.orders.forEach(o => {
+    if (!o.email) return;
+    if (!customerMap[o.email]) {
+      customerMap[o.email] = { name: o.customer || o.email, email: o.email, orders: 0, total: 0, lastDate: o.date };
+    }
+    customerMap[o.email].orders++;
+    customerMap[o.email].total += o.total;
+  });
+  const customers = Object.values(customerMap);
+
+  function getAvatar(email) {
+    // Check if user has photoURL in Firestore (cached in state)
+    const u = state.firebaseUsers && state.firebaseUsers[email];
+    return u && u.photoURL ? u.photoURL : null;
+  }
+
+  function getInitials(name) {
+    return name.split(' ').map(n=>n[0]||'').join('').toUpperCase().slice(0,2) || '?';
+  }
+
   el.innerHTML = `<table class="w-full text-left border-collapse">
     <thead><tr class="border-b-2 border-primary bg-surface font-label-caps text-label-caps text-on-surface-variant">
-      <th class="p-4">CLIENTE</th><th class="p-4">EMAIL</th>
+      <th class="p-4">CLIENTE</th>
+      <th class="p-4">EMAIL</th>
       <th class="p-4 text-center hidden md:table-cell">PEDIDOS</th>
       <th class="p-4 text-right hidden md:table-cell">TOTAL GASTADO</th>
-      <th class="p-4 hidden md:table-cell">DESDE</th>
+      <th class="p-4 text-right hidden md:table-cell">ÚLTIMO PEDIDO</th>
     </tr></thead>
     <tbody>
-      ${CUSTOMERS.map(c => `
-      <tr class="border-b border-outline-variant hover:bg-surface-variant font-body-md">
-        <td class="p-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-primary flex items-center justify-center text-on-primary font-label-caps text-[11px]">${c.name.charAt(0)}</div>
-            <span class="font-label-caps text-[11px] text-primary">${c.name}</span>
-          </div>
-        </td>
-        <td class="p-4 text-on-surface-variant text-sm">${c.email}</td>
-        <td class="p-4 text-center font-label-caps text-label-caps hidden md:table-cell">${c.orders}</td>
-        <td class="p-4 text-right font-label-caps text-label-caps hidden md:table-cell">${fmtPrice(c.total)}</td>
-        <td class="p-4 font-label-caps text-[10px] text-on-surface-variant hidden md:table-cell">${c.date}</td>
-      </tr>`).join('')}
+      ${customers.length === 0 ? '<tr><td colspan="5" class="p-8 text-center font-label-caps text-label-caps text-on-surface-variant">NO HAY CLIENTES AÚN</td></tr>' :
+      customers.map(c => {
+        const avatar = getAvatar(c.email);
+        const initials = getInitials(c.name);
+        const avatarHtml = avatar
+          ? `<img src="${avatar}" class="user-avatar" alt="${c.name}"/>`
+          : `<div class="user-avatar-placeholder">${initials}</div>`;
+        return `
+        <tr class="border-b border-outline-variant hover:bg-surface-variant font-body-md">
+          <td class="p-4">
+            <div class="flex items-center gap-3">
+              <div class="has-tooltip shrink-0">
+                ${avatarHtml}
+                <div class="tooltip">${c.name}<br><span style="color:#aaa;font-size:9px;">${c.email}</span></div>
+              </div>
+              <div>
+                <div class="font-label-caps text-[11px] text-primary">${c.name}</div>
+                <div class="font-label-caps text-[9px] text-on-surface-variant">${c.email}</div>
+              </div>
+            </div>
+          </td>
+          <td class="p-4 text-on-surface-variant text-sm hidden md:table-cell">${c.email}</td>
+          <td class="p-4 text-center font-label-caps text-label-caps hidden md:table-cell">${c.orders}</td>
+          <td class="p-4 text-right font-label-caps text-label-caps hidden md:table-cell">${fmtPrice(c.total)}</td>
+          <td class="p-4 text-right font-label-caps text-[10px] text-on-surface-variant hidden md:table-cell">${c.lastDate||'—'}</td>
+        </tr>`;
+      }).join('')}
     </tbody></table>`;
 }
 
@@ -2964,8 +3759,6 @@ async function uploadToCloudinary(file, onProgress, onSuccess, onError) {
   });
 }
 
-// =================== MULTI-IMAGE PRODUCT UPLOADER ===================
-let pfImages = []; // array of up to 4 URLs
 
 function renderProductImageSlots() {
   const el = document.getElementById('pf-image-slots');
@@ -3318,27 +4111,52 @@ function applyHeroImg(url) {
 }
 
 // =================== PRODUCT CRUD ===================
+let pfImages = []; // up to 4 URLs
+let pfSelectedColors = [];
+
+function renderColorSwatches(selectedColors) {
+  const el = document.getElementById('pf-colors-grid');
+  if (!el) return;
+  el.innerHTML = AVAILABLE_COLORS.map(c => `
+    <div class="flex flex-col items-center gap-1 text-center">
+      <div class="color-swatch ${selectedColors.includes(c.id)?'selected':''}"
+           style="background:${c.hex};${c.id==='blanco'||c.id==='beige'||c.id==='amarillo'?'border-color:#ccc;':''}"
+           onclick="toggleProductColor('${c.id}')">
+        ${selectedColors.includes(c.id)?`<span style="color:${['blanco','beige','amarillo'].includes(c.id)?'#000':'#fff'};font-size:14px;line-height:1;">✓</span>`:''}
+      </div>
+      <span class="font-label-caps text-[9px] text-on-surface-variant cursor-pointer hover:text-primary"
+            contenteditable="true" spellcheck="false"
+            onblur="renameColor('${c.id}',this.textContent)">${c.label}</span>
+    </div>`).join('');
+}
+
+function toggleProductColor(colorId) {
+  if (pfSelectedColors.includes(colorId)) pfSelectedColors = pfSelectedColors.filter(c=>c!==colorId);
+  else pfSelectedColors.push(colorId);
+  renderColorSwatches(pfSelectedColors);
+}
+
+function renameColor(colorId, newLabel) {
+  const color = AVAILABLE_COLORS.find(c => c.id === colorId);
+  if (color && newLabel.trim()) color.label = newLabel.trim().toUpperCase();
+}
+
+function addCustomColor() {
+  const hex = prompt('Color HEX (ej: #ff6600):', '#000000');
+  if (!hex || !/^#[0-9a-fA-F]{6}$/.test(hex)) { showToast('Color inválido'); return; }
+  const label = (prompt('Nombre del color:', 'CUSTOM') || 'CUSTOM').toUpperCase();
+  AVAILABLE_COLORS.push({ id: 'custom_'+Date.now(), hex, label });
+  renderColorSwatches(pfSelectedColors);
+}
+
 function showProductForm() {
+  pfImages = []; pfSelectedColors = [];
   document.getElementById('product-form-container').classList.remove('hidden');
   document.getElementById('product-form-title').textContent = 'NUEVO PRODUCTO';
-  document.getElementById('pf-id').value = '';
-  document.getElementById('pf-name').value = '';
-  document.getElementById('pf-price').value = '';
-  document.getElementById('pf-stock').value = '';
-  document.getElementById('pf-desc').value = '';
-  document.getElementById('pf-img').value = '';
-  document.getElementById('pf-img-url').value = '';
-  document.getElementById('pf-badge').value = '';
-  // Reset image UI
-  document.getElementById('pf-img-preview').src = '';
-  document.getElementById('pf-img-preview').classList.add('hidden');
-  document.getElementById('pf-img-placeholder').classList.remove('hidden');
-  document.getElementById('pf-upload-progress').classList.add('hidden');
-  document.getElementById('pf-upload-result').classList.add('hidden');
-  document.getElementById('pf-upload-bar').style.width = '0%';
-  document.getElementById('pf-upload-bar').style.background = '#5d22ff';
-  document.getElementById('pf-file-input').value = '';
-  document.getElementById('product-form-container').scrollIntoView({behavior:'smooth', block:'start'});
+  ['pf-id','pf-name','pf-price','pf-stock','pf-desc','pf-img','pf-img-url','pf-badge','pf-old-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  renderProductImageSlots();
+  renderColorSwatches([]);
+  document.getElementById('product-form-container').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function hideProductForm() {
@@ -3346,64 +4164,109 @@ function hideProductForm() {
 }
 
 function editProduct(id) {
-  const p = state.products.find(pr => pr.id === id);
+  const p = state.products.find(pr => String(pr.id) === String(id));
   if (!p) return;
+  pfImages = p.images ? [...p.images] : (p.img ? [p.img] : []);
+  pfSelectedColors = p.colors ? [...p.colors] : [];
   document.getElementById('product-form-container').classList.remove('hidden');
-  document.getElementById('product-form-title').textContent = 'EDITAR PRODUCTO — ' + p.name;
-  document.getElementById('pf-id').value = p.id;
-  document.getElementById('pf-name').value = p.name;
-  document.getElementById('pf-price').value = p.price;
-  document.getElementById('pf-cat').value = p.cat;
-  document.getElementById('pf-stock').value = p.stock;
-  document.getElementById('pf-desc').value = p.desc;
-  document.getElementById('pf-img').value = p.img;
-  document.getElementById('pf-img-url').value = p.img;
-  document.getElementById('pf-badge').value = p.badge || '';
-  // Load existing image into preview
-  const preview = document.getElementById('pf-img-preview');
-  const placeholder = document.getElementById('pf-img-placeholder');
-  if (p.img) {
-    preview.src = p.img;
-    preview.classList.remove('hidden');
-    placeholder.classList.add('hidden');
-  } else {
-    preview.classList.add('hidden');
-    placeholder.classList.remove('hidden');
-  }
-  document.getElementById('pf-upload-progress').classList.add('hidden');
-  document.getElementById('pf-upload-result').classList.add('hidden');
+  document.getElementById('product-form-title').textContent = 'EDITAR: ' + p.name;
+  const set = (id, val) => { const el=document.getElementById(id); if(el) el.value = val||''; };
+  set('pf-id', p.id); set('pf-name', p.name); set('pf-price', p.price);
+  set('pf-stock', p.stock); set('pf-desc', p.desc); set('pf-img', p.img);
+  set('pf-badge', p.badge||''); set('pf-old-price', p.oldPrice||'');
+  if (document.getElementById('pf-cat')) document.getElementById('pf-cat').value = p.cat;
+  renderProductImageSlots();
+  renderColorSwatches(pfSelectedColors);
   showAdminSection('products');
-  document.getElementById('product-form-container').scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('product-form-container').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function saveProduct() {
-  const name = document.getElementById('pf-name').value.trim();
-  const price = parseInt(document.getElementById('pf-price').value);
-  const cat = document.getElementById('pf-cat').value;
-  const stock = parseInt(document.getElementById('pf-stock').value) || 0;
-  const desc = document.getElementById('pf-desc').value.trim();
-  const img = document.getElementById('pf-img').value.trim() || 'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=600&q=80';
-  const badge = document.getElementById('pf-badge').value.trim() || null;
-  const editId = parseInt(document.getElementById('pf-id').value);
-  if (!name || !price) { showToast('Nombre y precio son obligatorios'); return; }
+async function saveProduct() {
+  const name  = document.getElementById('pf-name')?.value.trim();
+  const price = parseInt(document.getElementById('pf-price')?.value);
+  const cat   = document.getElementById('pf-cat')?.value || 'remeras';
+  const stock = parseInt(document.getElementById('pf-stock')?.value) || 0;
+  const desc  = document.getElementById('pf-desc')?.value.trim() || '';
+  const badge = document.getElementById('pf-badge')?.value.trim() || null;
+  const oldPriceVal = document.getElementById('pf-old-price')?.value;
+  const oldPrice = oldPriceVal ? parseInt(oldPriceVal) : null;
+  const editId = document.getElementById('pf-id')?.value;
+
+  if (!name)  { showToast('EL NOMBRE ES OBLIGATORIO ❌'); return; }
+  if (!price) { showToast('EL PRECIO ES OBLIGATORIO ❌'); return; }
+  if (pfImages.length === 0) { showToast('AGREGÁ AL MENOS UNA IMAGEN ❌'); return; }
+  if (pfSelectedColors.length === 0) { showToast('SELECCIONÁ AL MENOS UN COLOR ❌'); return; }
+
+  const productData = {
+    name: name.toUpperCase(), price, oldPrice, cat, badge, desc,
+    sizes: ['XS','S','M','L','XL','XXL'], colors: [...pfSelectedColors],
+    images: [...pfImages], img: pfImages[0], stock,
+    tags: [], updatedAt: new Date().toISOString()
+  };
+
+  const btn = document.querySelector('#product-form-container .btn-primary');
+  if (btn) { btn.textContent = 'GUARDANDO...'; btn.disabled = true; }
+
   if (editId) {
-    const idx = state.products.findIndex(p => p.id === editId);
-    if (idx > -1) {
-      state.products[idx] = {...state.products[idx], name: name.toUpperCase(), price, cat, stock, desc, img, badge};
-      showToast('Producto actualizado ✅');
-    }
+    productData.id = editId;
+    const idx = state.products.findIndex(p => String(p.id) === String(editId));
+    if (idx > -1) state.products[idx] = { ...state.products[idx], ...productData };
   } else {
-    const newId = Math.max(...state.products.map(p=>p.id)) + 1;
-    const sku = `XNC-${cat.substring(0,3).toUpperCase()}-${String(newId).padStart(3,'0')}`;
-    state.products.push({id:newId, name:name.toUpperCase(), price, oldPrice:null, cat, badge, desc, sizes:['S','M','L','XL'], colors:['negro'], stock, sku, rating:0, reviews:0, img, tags:[]});
-    showToast('Producto creado ✅');
+    productData.id = 'prod-' + Date.now();
+    productData.sku = 'XNC-' + cat.substring(0,3).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+    productData.rating = 0; productData.reviews = 0;
+    productData.createdAt = new Date().toISOString();
+    state.products.push(productData);
   }
+
   hideProductForm();
-  renderAdminProducts();
-  renderAdminInventory();
-  persistAll();
-  fbSaveProductRemote(saved).catch(e => console.warn('Firebase sync error:', e));
+  renderAdminProducts(); renderAdminInventory(); renderHomeProducts(); renderCatalog();
+
+  try {
+    const saved = editId ? state.products.find(p=>String(p.id)===String(editId)) : productData;
+    await fbSaveProductRemote(saved);
+    showToast(editId ? 'Producto actualizado en Firebase ✅' : 'Producto creado en Firebase ✅');
+  } catch(e) { showToast('Guardado localmente ⚠️'); }
+  if (btn) { btn.textContent = 'GUARDAR PRODUCTO'; btn.disabled = false; }
 }
+
+// =================== ADMIN CATEGORIES EDITOR ===================
+function initCatEditor() {
+  const cats = bannerState.categories || {};
+  ['remeras','pantalones','buzos','accesorios'].forEach(cat => {
+    const urlEl = document.getElementById('admin-cat-url-' + cat);
+    const imgEl = document.getElementById('admin-cat-img-' + cat);
+    if (cats[cat]) { if(urlEl) urlEl.value=cats[cat]; if(imgEl) imgEl.src=cats[cat]; }
+  });
+}
+
+async function uploadAdminCatImg(cat, file) {
+  if (!file) return;
+  showToast('Subiendo imagen...');
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'XINCO TIENDA');
+  try {
+    const res = await fetch('https://api.cloudinary.com/v1_1/damwe7juy/image/upload',{method:'POST',body:formData});
+    const data = await res.json();
+    if (data.secure_url) { document.getElementById('admin-cat-url-'+cat).value=data.secure_url; saveAdminCatImg(cat); }
+    else showToast('Error al subir ❌');
+  } catch(e) { showToast('Error de conexión ❌'); }
+}
+
+async function saveAdminCatImg(cat) {
+  const url = document.getElementById('admin-cat-url-'+cat)?.value.trim();
+  if (!url) { showToast('Ingresá una URL ❌'); return; }
+  if (!bannerState.categories) bannerState.categories = {};
+  bannerState.categories[cat] = url;
+  const adminImg = document.getElementById('admin-cat-img-'+cat);
+  if (adminImg) adminImg.src = url;
+  const homeImg = document.getElementById('cat-img-'+cat+'-display');
+  if (homeImg) homeImg.src = url;
+  try { await fbSaveBannersRemote(bannerState); showToast('Categoría '+cat.toUpperCase()+' guardada ✅'); }
+  catch(e) { showToast('Guardado localmente ⚠️'); }
+}
+
 
 function deleteProduct(id) {
   if (!confirm('¿Eliminar este producto?')) return;
