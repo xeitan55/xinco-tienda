@@ -224,24 +224,8 @@ tailwind.config = {
   .img-slot img { width:100%; height:100%; object-fit:cover; }
   .img-slot .slot-badge { position:absolute; top:4px; left:4px; background:#5d22ff; color:#fff; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; padding:2px 6px; }
   .img-slot .slot-remove { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.7); color:#fff; border:none; width:22px; height:22px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-</style>
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    font-weight: 700;
-    padding: 5px 12px;
-    background: rgba(0,0,0,0.06);
-    border: 1.5px solid rgba(0,0,0,0.2);
-    color: rgba(0,0,0,0.6);
-    cursor: pointer;
-    transition: all 0.15s;
-    text-transform: uppercase;
-  }
-  .suggestion-chip:hover {
-    background: #000;
-    color: #fff;
-    border-color: #000;
-  }
+  .suggestion-chip { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; font-weight:700; padding:5px 12px; background:rgba(0,0,0,0.06); border:1.5px solid rgba(0,0,0,0.2); color:rgba(0,0,0,0.6); cursor:pointer; transition:all 0.15s; text-transform:uppercase; }
+  .suggestion-chip:hover { background:#000; color:#fff; border-color:#000; }
 </style>
 </head>
 <body>
@@ -368,9 +352,8 @@ tailwind.config = {
   <!-- Nav Links Desktop -->
   <nav class="hidden md:flex border-t border-outline-variant/30 justify-center gap-12 py-3">
     <a class="nav-link" id="nav-home" onclick="nav('home')">INICIO</a>
-    <a class="nav-link" id="nav-stylo" onclick="filterCatalog('stylo')">STYLO</a>
-    <a class="nav-link" id="nav-esenciales" onclick="filterCatalog('esenciales')">ESENCIALES</a>
     <a class="nav-link" id="nav-catalog" onclick="nav('catalog')">CATÁLOGO</a>
+    <a class="nav-link" id="nav-accesorios" onclick="filterCatalog('accesorios')">ACCESORIOS</a>
     <a class="nav-link" style="color:#5d22ff;" id="nav-newdrops" onclick="filterCatalog('newdrops')">NEW DROPS</a>
   </nav>
 </header>
@@ -2990,16 +2973,35 @@ function togglePass(id) {
 // =================== CHECKOUT ===================
 let currentStep = 1;
 function checkoutStep(n) {
+  // Validate before advancing
+  if (n > 1) {
+    const nombre = document.getElementById('co-nombre')?.value.trim();
+    const email  = document.getElementById('co-email')?.value.trim();
+    const dir    = document.getElementById('co-dir')?.value.trim();
+    const ciudad = document.getElementById('co-ciudad')?.value.trim();
+    if (!nombre) { showToast('INGRESÁ TU NOMBRE ❌'); goToStep(1); return; }
+    if (!email || !email.includes('@')) { showToast('INGRESÁ UN EMAIL VÁLIDO ❌'); goToStep(1); return; }
+    if (!dir)    { showToast('INGRESÁ TU DIRECCIÓN ❌'); goToStep(1); return; }
+    if (!ciudad) { showToast('INGRESÁ TU CIUDAD ❌'); goToStep(1); return; }
+  }
+  if (n > 2) {
+    const shipping = document.querySelector('input[name="shipping"]:checked');
+    if (!shipping) { showToast('SELECCIONÁ UN MÉTODO DE ENVÍO ❌'); goToStep(2); return; }
+  }
+  goToStep(n);
+}
+
+function goToStep(n) {
   document.getElementById('checkout-step-1').style.display = n === 1 ? '' : 'none';
   document.getElementById('checkout-step-2').style.display = n === 2 ? '' : 'none';
   document.getElementById('checkout-step-3').style.display = n === 3 ? '' : 'none';
   currentStep = n;
-  ['step-1-tab','step-2-tab','step-3-tab'].forEach((id,i) => {
-    const el = document.getElementById(id);
-    el.classList.toggle('bg-primary', i < n);
-    el.classList.toggle('text-on-primary', i < n);
-    el.classList.toggle('bg-surface', i >= n);
-    el.classList.toggle('text-on-surface', i >= n);
+  [1,2,3].forEach(i => {
+    const tab = document.getElementById(`step-${i}-tab`);
+    if (!tab) return;
+    const active = i <= n;
+    tab.className = `flex-1 flex items-center justify-center gap-2 py-3 font-label-caps text-label-caps border-l-[3px] border-primary ${active ? 'bg-primary text-on-primary' : 'bg-surface text-on-surface'}`;
+    if (i === 1) tab.style.borderLeft = 'none';
   });
 }
 
@@ -4393,65 +4395,84 @@ function moveAnnouncement(i, dir) {
   renderAnnouncementEditorList();
 }
 
-function saveAnnouncementBar() {
+async function saveAnnouncementBar() {
   document.querySelectorAll('.ann-input').forEach(inp => {
     const idx = parseInt(inp.dataset.index);
     bannerState.announcements[idx] = inp.value.trim() || bannerState.announcements[idx];
   });
   renderAnnouncementBar();
-  persistAll();
-  fbSaveBannersRemote(bannerState).catch(e => console.warn('Firebase banner sync:', e));
-  showToast('¡Barra de anuncios actualizada! ✅');
+  try {
+    await fbSaveBannersRemote(bannerState);
+    showToast('✅ Barra de anuncios guardada en Firebase — visible para todos');
+  } catch(e) {
+    showToast('⚠️ Error al guardar en Firebase: ' + e.message);
+  }
 }
 
 function previewHero() {
-  const badge = document.getElementById('hero-edit-badge').value;
-  const title = document.getElementById('hero-edit-title').value;
-  const subtitle = document.getElementById('hero-edit-subtitle').value;
-  document.getElementById('hero-preview-badge').textContent = badge;
-  document.getElementById('hero-preview-badge').style.display = badge ? '' : 'none';
-  document.getElementById('hero-preview-title').innerHTML = title.replace(/\n/g, '<br>') || 'XINCO';
-  document.getElementById('hero-preview-subtitle').textContent = subtitle;
+  const badge    = document.getElementById('hero-edit-badge')?.value || '';
+  const title    = document.getElementById('hero-edit-title')?.value || '';
+  const subtitle = document.getElementById('hero-edit-subtitle')?.value || '';
+  const prevBadge = document.getElementById('hero-preview-badge');
+  const prevTitle = document.getElementById('hero-preview-title');
+  const prevSub   = document.getElementById('hero-preview-subtitle');
+  if (prevBadge) { prevBadge.textContent = badge; prevBadge.style.display = badge ? '' : 'none'; }
+  if (prevTitle) prevTitle.innerHTML = title.replace(/\n/g,'<br>') || 'XINCO';
+  if (prevSub)   prevSub.textContent = subtitle;
 }
 
 function previewHeroImg() {
-  const url = document.getElementById('hero-edit-img').value.trim();
-  if (url) document.getElementById('hero-preview-img').src = url;
+  const url = document.getElementById('hero-edit-img')?.value.trim();
+  if (url) { const img = document.getElementById('hero-preview-img'); if(img) img.src = url; }
 }
 
-function saveHeroBanner() {
-  bannerState.hero.badge = document.getElementById('hero-edit-badge').value.trim();
-  bannerState.hero.title = document.getElementById('hero-edit-title').value.trim() || 'XINCO';
+function previewPromo() {
+  const label = document.getElementById('promo-edit-label')?.value || '';
+  const title = document.getElementById('promo-edit-title')?.value || '';
+  const code  = document.getElementById('promo-edit-code')?.value  || '';
+  const pl = document.getElementById('promo-preview-label');
+  const pt = document.getElementById('promo-preview-title');
+  const pc = document.getElementById('promo-preview-code');
+  if (pl) pl.textContent = label;
+  if (pt) pt.innerHTML  = title.replace(/\n/g,'<br>') || '30% OFF';
+  if (pc) pc.textContent = code;
+}
+
+async function saveHeroBanner() {
+  bannerState.hero.badge    = document.getElementById('hero-edit-badge').value.trim();
+  bannerState.hero.title    = document.getElementById('hero-edit-title').value.trim() || 'XINCO';
   bannerState.hero.subtitle = document.getElementById('hero-edit-subtitle').value.trim();
   const imgUrl = document.getElementById('hero-edit-img').value.trim();
   if (imgUrl) bannerState.hero.img = imgUrl;
   renderHeroBanner();
-  persistAll();
-  fbSaveBannersRemote(bannerState).catch(e => console.warn('Firebase banner sync:', e));
-  showToast('¡Hero banner actualizado! ✅');
+  try {
+    await fbSaveBannersRemote(bannerState);
+    showToast('✅ Hero banner guardado en Firebase — visible para todos');
+  } catch(e) {
+    showToast('⚠️ Error al guardar en Firebase: ' + e.message);
+  }
 }
 
-function previewPromo() {
-  const label = document.getElementById('promo-edit-label').value;
-  const title = document.getElementById('promo-edit-title').value;
-  const code = document.getElementById('promo-edit-code').value;
-  document.getElementById('promo-preview-label').textContent = label;
-  document.getElementById('promo-preview-title').innerHTML = title.replace(/\n/g, '<br>') || '30% OFF';
-  document.getElementById('promo-preview-code').textContent = code;
-}
-
-function savePromoBanner() {
+async function savePromoBanner() {
   bannerState.promo.label = document.getElementById('promo-edit-label').value.trim();
   bannerState.promo.title = document.getElementById('promo-edit-title').value.trim();
-  bannerState.promo.code = document.getElementById('promo-edit-code').value.trim().toUpperCase();
+  bannerState.promo.code  = document.getElementById('promo-edit-code').value.trim().toUpperCase();
+  // Update home section immediately
   const promoBannerEl = document.getElementById('promo-banner-section');
   if (promoBannerEl) {
-    promoBannerEl.querySelector('.promo-label').textContent = bannerState.promo.label;
-    promoBannerEl.querySelector('.promo-title').innerHTML = bannerState.promo.title.replace(/\n/g, '<br>');
-    promoBannerEl.querySelector('.promo-code').textContent = bannerState.promo.code;
+    const lbl = promoBannerEl.querySelector('.promo-label');
+    const ttl = promoBannerEl.querySelector('.promo-title');
+    const cod = promoBannerEl.querySelector('.promo-code');
+    if (lbl) lbl.textContent = bannerState.promo.label;
+    if (ttl) ttl.innerHTML = bannerState.promo.title.replace(/\n/g,'<br>');
+    if (cod) cod.textContent = bannerState.promo.code;
   }
-  persistAll();
-  showToast('¡Banner promocional actualizado! ✅');
+  try {
+    await fbSaveBannersRemote(bannerState);
+    showToast('✅ Banner promo guardado en Firebase — visible para todos');
+  } catch(e) {
+    showToast('⚠️ Error al guardar en Firebase: ' + e.message);
+  }
 }
 
 // =================== FIREBASE CONFIG ===================
@@ -4618,15 +4639,9 @@ async function fbUpdateOrderStatusRemote(id, status) {
 
 async function fbSaveBannersRemote(data) {
   const ready = await waitForFirebase();
-  if (!ready) { showToast('⚠️ Sin conexión a Firebase — banner guardado solo localmente'); return; }
+  if (!ready) throw new Error('Firebase no disponible');
   const { doc, setDoc } = window._fb;
-  try {
-    await setDoc(doc(fbDb, 'config', 'banners'), data);
-    showToast('✅ Banner guardado en Firebase');
-  } catch(e) {
-    showToast('❌ Error guardando banner: ' + e.message);
-    console.error('fbSaveBannersRemote error:', e);
-  }
+  await setDoc(doc(fbDb, 'config', 'banners'), data);
 }
 
 async function fbLoginUser(email, password) {
