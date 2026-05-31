@@ -2517,52 +2517,70 @@ function openProduct(id) {
   const p = state.products.find(pr => String(pr.id) === String(id));
   if (!p) return;
   state.currentProduct = p;
-  state.selectedSize = null;
+  state.selectedSize  = null;
   state.selectedColor = (p.colors && p.colors[0]) || 'negro';
 
-  const img = p.img || (p.images && p.images[0]) || '';
-  const images = p.images && p.images.length > 0 ? p.images : [img];
+  // Normalize images to always be [{url, colorId}]
+  const rawImages = p.images && p.images.length > 0 ? p.images : (p.img ? [p.img] : []);
+  const images = rawImages.map(img =>
+    typeof img === 'string' ? { url: img, colorId: '' } : img
+  );
+
+  // Find image for the default selected color
+  const defaultImg = images.find(im => im.colorId === state.selectedColor)?.url
+    || images[0]?.url || p.img || '';
 
   document.getElementById('product-breadcrumb').textContent = p.name;
-  document.getElementById('product-main-img').src = img;
+  document.getElementById('product-main-img').src = defaultImg;
   document.getElementById('product-main-img').alt = p.name;
   const badge = document.getElementById('product-badge');
-  if (badge) { badge.textContent = p.badge||''; badge.style.display = p.badge?'':'none'; }
+  if (badge) { badge.textContent = p.badge||''; badge.style.display = p.badge ? '' : 'none'; }
   document.getElementById('product-name').textContent = p.name;
   document.getElementById('product-price').textContent = fmtPrice(p.price);
   document.getElementById('product-old-price').textContent = p.oldPrice ? fmtPrice(p.oldPrice) : '';
   document.getElementById('product-desc').textContent = p.desc||'';
   document.getElementById('product-sku').textContent = p.sku||'';
   document.getElementById('product-cat').textContent = p.cat||'';
-  document.getElementById('product-stock').textContent = p.stock > 20 ? 'DISPONIBLE' : p.stock > 0 ? `ÚLTIMAS ${p.stock} UNIDADES` : 'SIN STOCK';
+  document.getElementById('product-stock').textContent =
+    p.stock > 20 ? 'DISPONIBLE' : p.stock > 0 ? `ÚLTIMAS ${p.stock} UNIDADES` : 'SIN STOCK';
   document.getElementById('product-reviews').textContent = `(${p.reviews||0} reseñas)`;
 
   // Stars
   const starsEl = document.getElementById('product-stars');
-  if (starsEl) starsEl.innerHTML = Array.from({length:5},(_,i)=>`<span class="${i<Math.round(p.rating||0)?'star':'star empty'}">★</span>`).join('');
+  if (starsEl) starsEl.innerHTML = Array.from({length:5},(_,i) =>
+    `<span class="${i < Math.round(p.rating||0) ? 'star' : 'star empty'}">★</span>`).join('');
 
-  // Multiple images thumbnails
-  document.getElementById('product-thumbs').innerHTML = images.slice(0,4).map((u,i) => `
-    <div class="aspect-square bg-surface-container border-2 border-primary overflow-hidden cursor-pointer hover:border-secondary-container" onclick="document.getElementById('product-main-img').src='${u}';this.parentNode.querySelectorAll('div').forEach(d=>d.classList.remove('ring-2'));this.classList.add('ring-2','ring-secondary-container')">
-      <img src="${u}" class="w-full h-full object-cover grayscale-hover"/>
-    </div>`).join('');
-
-  // Color swatches using AVAILABLE_COLORS for hex
-  const colors = p.colors || [];
-  document.getElementById('color-selector').innerHTML = colors.map(cid => {
-    const colorObj = AVAILABLE_COLORS.find(ac => ac.id === cid);
-    const hex = colorObj ? colorObj.hex : '#888';
-    const label = colorObj ? colorObj.label : cid.toUpperCase();
-    const border = cid==='blanco'||cid==='beige'||cid==='amarillo' ? 'border-color:#ccc;' : '';
-    const selected = state.selectedColor === cid;
-    return `<div class="flex flex-col items-center gap-1">
-      <button class="color-swatch ${selected?'selected':''}" style="background:${hex};${border}" onclick="selectColor('${cid}')" title="${label}">
-        ${selected?`<span style="color:${['blanco','beige','amarillo'].includes(cid)?'#000':'#fff'};font-size:14px;">✓</span>`:''}
-      </button>
-      <span class="font-label-caps text-[9px] text-on-surface-variant">${label}</span>
+  // Thumbnails — clicking swaps main image
+  document.getElementById('product-thumbs').innerHTML = images.slice(0,4).map((img, i) => {
+    const colorObj = AVAILABLE_COLORS.find(c => c.id === img.colorId);
+    const colorLabel = colorObj ? colorObj.label : '';
+    const isActive = img.url === defaultImg;
+    return `<div class="aspect-square bg-surface-container border-2 ${isActive ? 'border-secondary-container ring-2 ring-secondary-container' : 'border-primary'} overflow-hidden cursor-pointer hover:border-secondary-container relative transition-all"
+      onclick="swapProductImage('${img.url}', this)">
+      <img src="${img.url}" class="w-full h-full object-cover grayscale-hover"/>
+      ${colorLabel ? `<div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white font-label-caps text-[8px] text-center py-0.5">${colorLabel}</div>` : ''}
     </div>`;
   }).join('');
-  document.getElementById('selected-color-label').textContent = (AVAILABLE_COLORS.find(c=>c.id===state.selectedColor)?.label || state.selectedColor).toUpperCase();
+
+  // Color swatches — with dot indicator if image linked
+  const colors = p.colors || [];
+  document.getElementById('color-selector').innerHTML = colors.map(cid => {
+    const obj = AVAILABLE_COLORS.find(ac => ac.id === cid);
+    const hex = obj ? obj.hex : '#888';
+    const lbl = obj ? obj.label : cid.toUpperCase();
+    const border = ['blanco','beige','amarillo'].includes(cid) ? 'border-color:#ccc;' : '';
+    const selected = state.selectedColor === cid;
+    const hasImg = images.some(im => im.colorId === cid);
+    return `<div class="flex flex-col items-center gap-1 relative">
+      <button class="color-swatch ${selected?'selected':''}" style="background:${hex};${border}" onclick="selectColor('${cid}')" title="${lbl}">
+        ${selected ? `<span style="color:${['blanco','beige','amarillo'].includes(cid)?'#000':'#fff'};font-size:14px;">✓</span>` : ''}
+      </button>
+      ${hasImg ? `<span style="position:absolute;top:-3px;right:-3px;width:9px;height:9px;background:#5d22ff;border-radius:50%;border:1px solid #fff;" title="Tiene foto"></span>` : ''}
+      <span class="font-label-caps text-[9px] text-on-surface-variant">${lbl}</span>
+    </div>`;
+  }).join('');
+  const labelEl = document.getElementById('selected-color-label');
+  if (labelEl) labelEl.textContent = (AVAILABLE_COLORS.find(c=>c.id===state.selectedColor)?.label || state.selectedColor).toUpperCase();
 
   // Sizes
   document.getElementById('size-selector').innerHTML = (p.sizes||['S','M','L','XL']).map(s => `
@@ -2572,6 +2590,21 @@ function openProduct(id) {
   const related = state.products.filter(pr => String(pr.id) !== String(p.id) && pr.cat === p.cat).slice(0,4);
   document.getElementById('related-products').innerHTML = related.map(r => renderProductCard(r)).join('');
   nav('product');
+}
+
+// Swap main image when clicking a thumbnail
+function swapProductImage(url, thumbEl) {
+  const mainImg = document.getElementById('product-main-img');
+  if (mainImg) mainImg.src = url;
+  // Highlight active thumb
+  if (thumbEl && thumbEl.parentNode) {
+    thumbEl.parentNode.querySelectorAll('div').forEach(d => {
+      d.classList.remove('border-secondary-container','ring-2','ring-secondary-container');
+      d.classList.add('border-primary');
+    });
+    thumbEl.classList.remove('border-primary');
+    thumbEl.classList.add('border-secondary-container','ring-2','ring-secondary-container');
+  }
 }
 
 function selectSize(s) {
@@ -2589,21 +2622,50 @@ function selectColor(c) {
   const label = colorObj ? colorObj.label : c.toUpperCase();
   const el = document.getElementById('selected-color-label');
   if (el) el.textContent = label;
-  if (!state.currentProduct) return;
-  const colors = state.currentProduct.colors || [];
-  document.getElementById('color-selector').innerHTML = colors.map(cid => {
-    const obj = AVAILABLE_COLORS.find(ac => ac.id === cid);
-    const hex = obj ? obj.hex : '#888';
-    const lbl = obj ? obj.label : cid.toUpperCase();
-    const border = ['blanco','beige','amarillo'].includes(cid) ? 'border-color:#ccc;' : '';
-    const selected = cid === c;
-    return `<div class="flex flex-col items-center gap-1">
-      <button class="color-swatch ${selected?'selected':''}" style="background:${hex};${border}" onclick="selectColor('${cid}')" title="${lbl}">
-        ${selected?`<span style="color:${['blanco','beige','amarillo'].includes(cid)?'#000':'#fff'};font-size:14px;">✓</span>`:''}
-      </button>
-      <span class="font-label-caps text-[9px] text-on-surface-variant">${lbl}</span>
-    </div>`;
-  }).join('');
+
+  // ── Swap main image to the one linked to this color ──────────
+  const p = state.currentProduct;
+  if (p) {
+    const images = p.images || (p.img ? [{ url: p.img, colorId: '' }] : []);
+    // Find image linked to this color
+    const colorImg = images.find(img => {
+      const entry = typeof img === 'string' ? { url: img, colorId: '' } : img;
+      return entry.colorId === c;
+    });
+    const mainImg = document.getElementById('product-main-img');
+    if (colorImg && mainImg) {
+      const url = typeof colorImg === 'string' ? colorImg : colorImg.url;
+      mainImg.src = url;
+      // Highlight matching thumb
+      document.querySelectorAll('#product-thumbs > div').forEach((div, i) => {
+        const thumbImg = images[i];
+        const thumbUrl = thumbImg ? (typeof thumbImg === 'string' ? thumbImg : thumbImg.url) : '';
+        div.classList.toggle('ring-2', thumbUrl === url);
+        div.classList.toggle('ring-secondary-container', thumbUrl === url);
+      });
+    }
+    // Render color selector
+    const colors = p.colors || [];
+    document.getElementById('color-selector').innerHTML = colors.map(cid => {
+      const obj = AVAILABLE_COLORS.find(ac => ac.id === cid);
+      const hex = obj ? obj.hex : '#888';
+      const lbl = obj ? obj.label : cid.toUpperCase();
+      const border = ['blanco','beige','amarillo'].includes(cid) ? 'border-color:#ccc;' : '';
+      const selected = cid === c;
+      // Check if this color has a linked image
+      const hasImg = images.some(img => {
+        const e = typeof img === 'string' ? { colorId: '' } : img;
+        return e.colorId === cid;
+      });
+      return `<div class="flex flex-col items-center gap-1 relative">
+        <button class="color-swatch ${selected?'selected':''}" style="background:${hex};${border}" onclick="selectColor('${cid}')" title="${lbl}">
+          ${selected?`<span style="color:${['blanco','beige','amarillo'].includes(cid)?'#000':'#fff'};font-size:14px;">✓</span>`:''}
+        </button>
+        ${hasImg ? '<span style="position:absolute;bottom:-4px;right:-2px;width:8px;height:8px;background:#5d22ff;border-radius:50%;border:1px solid #fff;" title="Tiene foto"></span>' : ''}
+        <span class="font-label-caps text-[9px] text-on-surface-variant">${lbl}</span>
+      </div>`;
+    }).join('');
+  }
 }
 
 function addSelectedToCart() {
@@ -3767,29 +3829,39 @@ function renderProductImageSlots() {
   if (!el) return;
   const slots = [];
   for (let i = 0; i < 4; i++) {
-    const url = pfImages[i] || null;
+    const entry   = pfImages[i] || null;
+    const url     = entry ? (typeof entry === 'string' ? entry : entry.url) : null;
+    const colorId = entry ? (entry.colorId || '') : '';
+    const colorOpts = AVAILABLE_COLORS.map(c =>
+      `<option value="${c.id}" ${colorId===c.id?'selected':''}>${c.label}</option>`
+    ).join('');
     slots.push(`
-      <div class="relative border-[3px] ${i===0?'border-secondary-container':'border-primary'} bg-surface-container aspect-square overflow-hidden flex items-center justify-center group"
-           id="pf-slot-${i}">
+      <div class="relative border-[3px] ${i===0?'border-secondary-container':'border-primary'} bg-surface-container overflow-hidden flex flex-col" id="pf-slot-${i}" style="min-height:140px;">
         ${url ? `
-          <img src="${url}" class="w-full h-full object-cover"/>
-          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
-            <button class="p-1 bg-white text-black text-[10px] font-label-caps" onclick="removeProductImage(${i})">
-              <span class="material-symbols-outlined text-[16px]">delete</span>
-            </button>
-            ${i>0?`<button class="p-1 bg-white text-black text-[10px] font-label-caps" onclick="moveProductImageFirst(${i})" title="Hacer principal">
-              <span class="material-symbols-outlined text-[16px]">star</span>
-            </button>`:''}
+          <div class="relative flex-1 min-h-0" style="height:100px;overflow:hidden;">
+            <img src="${url}" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
+              <button class="p-1 bg-white text-black" onclick="removeProductImage(${i})"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+              ${i>0?`<button class="p-1 bg-white text-black" onclick="moveProductImageFirst(${i})"><span class="material-symbols-outlined text-[16px]">star</span></button>`:''}
+            </div>
+            ${i===0?'<span class="absolute top-1 left-1 badge badge-violet text-[9px] pointer-events-none">PRINCIPAL</span>':''}
           </div>
-          ${i===0?'<span class="absolute top-1 left-1 badge badge-violet text-[9px] pointer-events-none">PRINCIPAL</span>':''}
+          <div class="p-1 bg-surface-container-low border-t border-outline-variant">
+            <label class="font-label-caps text-[8px] text-on-surface-variant block mb-0.5">COLOR DE ESTA FOTO:</label>
+            <select class="w-full font-label-caps text-[9px] border border-primary bg-white py-0.5 px-1 outline-none cursor-pointer"
+              onchange="linkImageColor(${i}, this.value)">
+              <option value="">— SIN COLOR ESPECÍFICO —</option>
+              ${colorOpts}
+            </select>
+          </div>
         ` : `
-          <div class="flex flex-col items-center gap-1 text-on-surface-variant cursor-pointer w-full h-full items-center justify-center"
+          <div class="flex flex-col items-center justify-center gap-1 text-on-surface-variant cursor-pointer flex-1 p-2"
                onclick="document.getElementById('pf-file-${i}').click()"
-               ondragover="event.preventDefault();this.closest('[id]').classList.add('bg-surface-container-high')"
-               ondragleave="this.closest('[id]').classList.remove('bg-surface-container-high')"
+               ondragover="event.preventDefault()"
                ondrop="handleSlotDrop(event,${i})">
-            <span class="material-symbols-outlined text-[32px]">${i===0?'add_photo_alternate':'add_circle'}</span>
+            <span class="material-symbols-outlined text-[28px]">${i===0?'add_photo_alternate':'add_circle'}</span>
             <span class="font-label-caps text-[9px]">${i===0?'FOTO PRINCIPAL':'FOTO '+(i+1)}</span>
+            <span class="font-label-caps text-[8px] text-on-surface-variant">ARRASTRÁ O HACÉ CLIC</span>
             <input type="file" id="pf-file-${i}" accept="image/*" class="hidden" onchange="uploadSlotImage(this.files[0],${i})"/>
           </div>
           <div id="pf-slot-progress-${i}" class="hidden absolute bottom-0 left-0 right-0 bg-black/70 p-1">
@@ -3801,6 +3873,15 @@ function renderProductImageSlots() {
   el.innerHTML = slots.join('');
 }
 
+function linkImageColor(slotIndex, colorId) {
+  if (!pfImages[slotIndex]) return;
+  if (typeof pfImages[slotIndex] === 'string') {
+    pfImages[slotIndex] = { url: pfImages[slotIndex], colorId };
+  } else {
+    pfImages[slotIndex].colorId = colorId;
+  }
+}
+
 function handleSlotDrop(e, slotIndex) {
   e.preventDefault();
   const file = e.dataTransfer.files[0];
@@ -3808,7 +3889,7 @@ function handleSlotDrop(e, slotIndex) {
 }
 
 async function uploadSlotImage(file, slotIndex) {
-  if (!file || pfImages.length >= 4) { showToast('Máximo 4 imágenes por producto'); return; }
+  if (!file || pfImages.filter(Boolean).length >= 4) { showToast('Máximo 4 imágenes por producto'); return; }
   const progressEl = document.getElementById('pf-slot-progress-'+slotIndex);
   const barEl = document.getElementById('pf-slot-bar-'+slotIndex);
   if (progressEl) progressEl.classList.remove('hidden');
@@ -3816,10 +3897,9 @@ async function uploadSlotImage(file, slotIndex) {
     await uploadToCloudinary(file,
       (pct) => { if(barEl) barEl.style.width = pct+'%'; },
       (url) => {
-        pfImages[slotIndex] = url;
-        // fill gaps
+        pfImages[slotIndex] = { url, colorId: '' };
         pfImages = pfImages.filter(Boolean);
-        document.getElementById('pf-img').value = pfImages[0] || '';
+        document.getElementById('pf-img').value = getFirstImageUrl();
         renderProductImageSlots();
         showToast('Imagen '+(slotIndex+1)+' subida ☁️✅');
       },
@@ -3828,12 +3908,17 @@ async function uploadSlotImage(file, slotIndex) {
   } catch(e) { console.error(e); }
 }
 
+function getFirstImageUrl() {
+  if (!pfImages[0]) return '';
+  return typeof pfImages[0] === 'string' ? pfImages[0] : pfImages[0].url;
+}
+
 function addProductImageUrl() {
-  if (pfImages.length >= 4) { showToast('Máximo 4 imágenes por producto'); return; }
+  if (pfImages.filter(Boolean).length >= 4) { showToast('Máximo 4 imágenes por producto'); return; }
   const url = document.getElementById('pf-img-url').value.trim();
   if (!url || !url.startsWith('http')) { showToast('URL no válida'); return; }
-  pfImages.push(url);
-  document.getElementById('pf-img').value = pfImages[0] || '';
+  pfImages.push({ url, colorId: '' });
+  document.getElementById('pf-img').value = getFirstImageUrl();
   document.getElementById('pf-img-url').value = '';
   renderProductImageSlots();
   showToast('Imagen agregada ✅');
@@ -3841,17 +3926,18 @@ function addProductImageUrl() {
 
 function removeProductImage(i) {
   pfImages.splice(i, 1);
-  document.getElementById('pf-img').value = pfImages[0] || '';
+  document.getElementById('pf-img').value = getFirstImageUrl();
   renderProductImageSlots();
 }
 
 function moveProductImageFirst(i) {
   const img = pfImages.splice(i, 1)[0];
   pfImages.unshift(img);
-  document.getElementById('pf-img').value = pfImages[0] || '';
+  document.getElementById('pf-img').value = getFirstImageUrl();
   renderProductImageSlots();
   showToast('Imagen principal actualizada ✅');
 }
+
 
 // =================== TRACKING SECTION ===================
 let trackingData = {}; // {orderId: {number, service, events}}
