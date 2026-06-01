@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>XINCO — Urban Streetwear</title>
+<title>XINCO</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='85' font-size='90' font-weight='900' font-family='Montserrat,sans-serif' fill='%23000'%3EX%3C/text%3E%3C/svg%3E">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -34,7 +35,7 @@ tailwind.config = {
         "on-tertiary-fixed": "#1b1b1b", "on-tertiary-fixed-variant": "#474747",
         background: "#f9f9f9", "on-background": "#1a1c1c", "surface-variant": "#e2e2e2"
       },
-      borderRadius: { DEFAULT: "0px", lg: "0px", xl: "0px", full: "9999px" },
+      borderRadius: { DEFAULT: "12px", lg: "16px", xl: "24px", full: "9999px" },
       spacing: {
         unit: "4px", gutter: "24px", margin: "48px", "container-max": "1440px",
         "stack-lg": "64px", "stack-md": "32px", "stack-sm": "16px"
@@ -78,16 +79,17 @@ tailwind.config = {
   ::-webkit-scrollbar-track { background: #f9f9f9; }
   ::-webkit-scrollbar-thumb { background: #000; }
   .product-card:hover .size-overlay { transform: translateY(0); }
+  .product-card { border-radius: 20px; overflow: hidden; }
   .size-overlay { transform: translateY(100%); transition: transform 0.25s ease; }
   .grayscale-hover { filter: grayscale(100%); transition: filter 0.4s ease; }
   .grayscale-hover:hover { filter: grayscale(0%); }
   input[type=range] { -webkit-appearance: none; height: 2px; background: #000; outline: none; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: #000; cursor: pointer; }
-  .toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: #000; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; padding: 12px 20px; border: 2px solid #000; transform: translateY(100px); opacity: 0; transition: all 0.3s ease; }
+  .toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: #000; color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; padding: 12px 20px; border: 2px solid #000; transform: translateY(100px); opacity: 0; transition: all 0.3s ease; border-radius: 14px; }
   .toast.show { transform: translateY(0); opacity: 1; }
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
   .modal-overlay.open { display: flex; align-items: center; justify-content: center; }
-  .cart-drawer { position: fixed; right: 0; top: 0; bottom: 0; width: 420px; max-width: 100vw; background: #f9f9f9; border-left: 3px solid #000; z-index: 900; transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; }
+  .cart-drawer { position: fixed; right: 0; top: 0; bottom: 0; width: 420px; max-width: 100vw; background: #f9f9f9; border-left: 0; z-index: 900; transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; border-radius: 24px 0 0 24px; box-shadow: -8px 0 30px rgba(0,0,0,0.1); }
   .cart-drawer.open { transform: translateX(0); }
   .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 899; }
   .cart-overlay.open { display: block; }
@@ -97,15 +99,15 @@ tailwind.config = {
     .hide-mobile { display: none !important; }
     .show-mobile { display: flex !important; }
   }
-  .btn-primary { background: #000; color: #fff; border: 3px solid #000; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 14px 28px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary { background: #000; color: #fff; border: 3px solid #000; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 14px 28px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; border-radius: 14px; }
   .btn-primary:hover { background: #fff; color: #000; }
-  .btn-violet { background: #5d22ff; color: #fff; border: 3px solid #5d22ff; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 14px 28px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-violet { background: #5d22ff; color: #fff; border: 3px solid #5d22ff; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 14px 28px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; border-radius: 14px; }
   .btn-violet:hover { background: #4500d1; border-color: #4500d1; }
-  .btn-outline { background: #fff; color: #000; border: 3px solid #000; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 14px 28px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-outline { background: transparent; color: #000; border: 3px solid #000; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 14px 28px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; border-radius: 14px; }
   .btn-outline:hover { background: #000; color: #fff; }
-  .input-field { width: 100%; background: #fff; border: 2px solid #000; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: all 0.2s; }
+  .input-field { width: 100%; background: #fff; border: 2px solid #000; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: all 0.2s; border-radius: 12px; }
   .input-field:focus { border-color: #5d22ff; box-shadow: 3px 3px 0 #5d22ff; }
-  .badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 4px 8px; }
+  .badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 5px 10px; border-radius: 8px; }
   .badge-violet { background: #5d22ff; color: #fff; }
   .badge-black { background: #000; color: #fff; }
   .badge-outline { background: #fff; border: 2px solid #000; color: #000; }
@@ -113,15 +115,34 @@ tailwind.config = {
   .nav-link:hover, .nav-link.active { color: #000; border-bottom: 3px solid #000; }
   .card-hover { transition: all 0.2s; cursor: pointer; }
   .card-hover:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 #000; }
-  .size-btn { width: 44px; height: 44px; border: 2px solid #000; background: #fff; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; font-weight: 700; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
+  .size-btn { width: 44px; height: 44px; border: 2px solid #000; background: #fff; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; font-weight: 700; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
   .size-btn:hover, .size-btn.selected { background: #000; color: #fff; }
   .size-btn.out-stock { opacity: 0.3; text-decoration: line-through; cursor: not-allowed; }
-  .tab-btn { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 10px 20px; border: 2px solid #000; background: #fff; cursor: pointer; transition: all 0.2s; }
+  .tab-btn { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 10px 20px; border: 2px solid #000; background: #fff; cursor: pointer; transition: all 0.2s; border-radius: 12px; }
   .tab-btn.active, .tab-btn:hover { background: #000; color: #fff; }
-  .admin-sidebar { width: 260px; min-height: 100vh; background: #000; color: #fff; padding: 0; flex-shrink: 0; }
-  .admin-nav-item { display: flex; align-items: center; gap: 12px; padding: 14px 24px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: all 0.15s; color: #848484; }
-  .admin-nav-item:hover, .admin-nav-item.active { background: #1b1b1b; color: #fff; border-left: 3px solid #5d22ff; }
-  .admin-nav-item.active { color: #fff; }
+  .tab-btn-sm { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 5px 12px; border: none; background: transparent; cursor: pointer; transition: all 0.2s; border-radius: 7px; color: #888; }
+  .tab-btn-sm.active, .tab-btn-sm:hover { background: #fff; color: #000; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .admin-sidebar { width: 260px; min-height: 100vh; background: #000; color: #fff; padding: 0; flex-shrink: 0; border-radius: 0 24px 24px 0; display:flex; flex-direction:column; }
+  .admin-nav-group-label { padding: 20px 24px 6px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; font-weight: 700; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+  .admin-nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 24px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: all 0.15s; color: rgba(255,255,255,0.45); border-left: 2px solid transparent; }
+  .admin-nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .admin-nav-item.active { background: rgba(93,34,255,0.12); color: #fff; border-left-color: #5d22ff; }
+  .admin-nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+  .admin-nav-item .nav-badge { margin-left: auto; background: #5d22ff; color: #fff; font-size: 9px; padding: 1px 7px; border-radius: 10px; font-weight: 700; }
+  .admin-sidebar-footer { border-top: 1px solid rgba(255,255,255,0.08); padding: 8px 12px; }
+  .admin-header { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+  .admin-card { background: #fff; border-radius: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02); border: 1px solid #e8e8e8; overflow: hidden; }
+  .admin-card-header { padding: 20px 24px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+  .admin-card-body { padding: 24px; }
+  .admin-stat { padding: 24px; }
+  .admin-stat-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .admin-table { width: 100%; border-collapse: collapse; }
+  .admin-table th { padding: 14px 20px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; color: #888; text-align: left; background: #fafafa; border-bottom: 1px solid #eee; }
+  .admin-table td { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+  .admin-table tr:last-child td { border-bottom: none; }
+  .admin-table tr:hover td { background: #f8f5ff; }
+  .hero-media-tab { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 10px 20px; background: #fff; cursor: pointer; transition: all 0.2s; color: #888; }
+  .hero-media-tab.active, .hero-media-tab:hover { background: #f0edff; color: #5d22ff; }
   .star { color: #5d22ff; font-size: 16px; }
   .star.empty { color: #e2e2e2; }
   #search-overlay {
@@ -218,72 +239,93 @@ tailwind.config = {
   .has-tooltip .tooltip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:#000; }
   .has-tooltip:hover .tooltip { display:block; }
   /* ---- Image slots producto ---- */
-  .img-slot { aspect-ratio:3/4; border:2px dashed #cfc4c5; background:#f4f3f3; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:all 0.15s; position:relative; overflow:hidden; }
+  .img-slot { aspect-ratio:3/4; border:2px dashed #cfc4c5; background:#f4f3f3; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:all 0.15s; position:relative; overflow:hidden; border-radius:16px; }
   .img-slot:hover { border-color:#000; background:#e8e8e8; }
   .img-slot.has-image { border-style:solid; border-color:#000; }
   .img-slot.is-main { border-color:#5d22ff; border-width:3px; }
   .img-slot img { width:100%; height:100%; object-fit:cover; }
   .img-slot .slot-badge { position:absolute; top:4px; left:4px; background:#5d22ff; color:#fff; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; padding:2px 6px; }
   .img-slot .slot-remove { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.7); color:#fff; border:none; width:22px; height:22px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-  .suggestion-chip { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; font-weight:700; padding:5px 12px; background:rgba(0,0,0,0.06); border:1.5px solid rgba(0,0,0,0.2); color:rgba(0,0,0,0.6); cursor:pointer; transition:all 0.15s; text-transform:uppercase; }
+  .suggestion-chip { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; font-weight:700; padding:5px 12px; background:rgba(0,0,0,0.06); border:1.5px solid rgba(0,0,0,0.2); color:rgba(0,0,0,0.6); cursor:pointer; transition:all 0.15s; text-transform:uppercase; border-radius:10px; }
   .suggestion-chip:hover { background:#000; color:#fff; border-color:#000; }
 
-  /* ===== HERO ANIMATIONS ===== */
-  @keyframes heroBadgeIn { from{opacity:0;transform:translateX(-24px);} to{opacity:1;transform:translateX(0);} }
-  @keyframes heroTitleIn { from{opacity:0;transform:translateY(40px) skewY(2deg);} to{opacity:1;transform:translateY(0) skewY(0);} }
-  @keyframes heroSubtitleIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
-  @keyframes heroBtnsIn { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
-  @keyframes heroCornerPulse { 0%,100%{opacity:0.15;} 50%{opacity:0.35;} }
-  @keyframes heroCornerBlPulse { 0%,100%{opacity:0.08;} 50%{opacity:0.2;} }
-  @keyframes particleDrift {
-    0%   { transform: translateY(0px) translateX(0px) scale(1); opacity: var(--p-opacity); }
-    33%  { transform: translateY(-40px) translateX(12px) scale(1.1); opacity: calc(var(--p-opacity) * 0.7); }
-    66%  { transform: translateY(-20px) translateX(-8px) scale(0.9); opacity: calc(var(--p-opacity) * 1.2); }
-    100% { transform: translateY(0px) translateX(0px) scale(1); opacity: var(--p-opacity); }
-  }
-  @keyframes glitchSlice {
-    0%,95%,100% { clip-path: none; transform: none; }
-    96% { clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); transform: translateX(-4px); }
-    97% { clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); transform: translateX(4px); }
-    98% { clip-path: polygon(0 10%, 100% 10%, 100% 30%, 0 30%); transform: translateX(-2px); }
-    99% { clip-path: none; transform: translateX(2px); }
-  }
-  @keyframes vignetteAnim { 0%,100%{opacity:1;} 50%{opacity:0.85;} }
-  @keyframes scanlineMove { from{background-position:0 0;} to{background-position:0 8px;} }
-
-  .hero-anim-badge { animation: heroBadgeIn 0.7s 0.3s both ease-out; }
-  .hero-anim-title { animation: heroTitleIn 0.9s 0.5s both cubic-bezier(0.22,1,0.36,1); }
-  .hero-anim-subtitle { animation: heroSubtitleIn 0.7s 0.9s both ease-out; }
-  .hero-anim-btns { animation: heroBtnsIn 0.7s 1.1s both ease-out; }
-  .hero-corner-accent { animation: heroCornerPulse 4s ease-in-out infinite; }
-  .hero-corner-accent-bl { animation: heroCornerBlPulse 5s ease-in-out infinite 1s; }
-
-  /* Glitch effect on title (optional, triggered by JS) */
-  .hero-glitch { animation: glitchSlice 8s ease-in-out infinite; }
-
-  /* Particle dot */
-  .hero-particle {
-    position: absolute;
-    border-radius: 50%;
-    animation: particleDrift var(--p-dur) ease-in-out infinite var(--p-delay);
-    opacity: var(--p-opacity);
-    pointer-events: none;
-  }
-
-  /* Hero video admin uploader */
-  #hero-video-dropzone { border:3px dashed #5d22ff; padding:24px; text-align:center; cursor:pointer; transition:all 0.2s; }
-  #hero-video-dropzone:hover, #hero-video-dropzone.drag-over { background:rgba(93,34,255,0.08); border-color:#4500d1; }
-  .hero-media-tab { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; font-weight:700; text-transform:uppercase; padding:10px 20px; border:2px solid #000; background:#fff; cursor:pointer; transition:all 0.15s; }
-  .hero-media-tab.active { background:#000; color:#fff; }
-
-  /* Video badge in hero */
-  #hero-video-badge { position:absolute; top:20px; left:20px; z-index:20; display:none; align-items:center; gap:6px; background:rgba(93,34,255,0.85); color:#fff; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; font-weight:700; padding:5px 10px; backdrop-filter:blur(8px); }
-  #hero-video-badge .rec-dot { width:8px; height:8px; border-radius:50%; background:#fff; animation:heroBadgeIn 1s ease infinite alternate; }
 
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== HERO ANIMATIONS ===== */
+  @keyframes heroBadgeIn {
+    0%   { opacity:0; transform:translateX(-32px) scale(0.9); }
+    60%  { opacity:1; transform:translateX(4px) scale(1); }
+    100% { opacity:1; transform:translateX(0) scale(1); }
+  }
+  @keyframes heroTitleIn {
+    0%   { opacity:0; transform:translateY(60px) scale(0.92); filter:blur(6px); letter-spacing:-0.1em; }
+    50%  { opacity:0.8; transform:translateY(-4px) scale(1.01); filter:blur(0); letter-spacing:-0.02em; }
+    75%  { opacity:1; transform:translateY(2px) scale(0.99); }
+    100% { opacity:1; transform:translateY(0) scale(1); filter:blur(0); letter-spacing:-0.04em; }
+  }
+  @keyframes heroSubtitleIn {
+    0%   { opacity:0; transform:translateY(24px); }
+    60%  { opacity:0.6; }
+    100% { opacity:1; transform:translateY(0); }
+  }
+  @keyframes heroBtnsIn {
+    0%   { opacity:0; transform:translateY(20px); }
+    100% { opacity:1; transform:translateY(0); }
+  }
+  @keyframes heroCornerPulse {
+    0%,100% { opacity:0.12; }
+    50%     { opacity:0.35; }
+  }
+  @keyframes heroCornerBlPulse {
+    0%,100% { opacity:0.06; }
+    50%     { opacity:0.2; }
+  }
+  @keyframes glitchSlice {
+    0%,94%,100% { clip-path: none; transform: none; filter: none; }
+    95%  { clip-path: polygon(0 15%, 100% 15%, 100% 35%, 0 35%); transform: translateX(-3px) skewX(-1deg); filter: hue-rotate(30deg); }
+    96%  { clip-path: polygon(0 55%, 100% 55%, 100% 75%, 0 75%); transform: translateX(3px) skewX(1deg); filter: hue-rotate(-30deg); }
+    97%  { clip-path: polygon(0 35%, 100% 35%, 100% 55%, 0 55%); transform: translateX(-1px); filter: brightness(1.3); }
+    98%  { clip-path: polygon(0 5%, 100% 5%, 100% 20%, 0 20%); transform: translateX(2px); filter: contrast(1.5); }
+    99%  { clip-path: none; transform: translateX(-1px); filter: none; }
+  }
+  @keyframes vignetteAnim { 0%,100%{opacity:1;} 50%{opacity:0.8;} }
+  @keyframes scanlineMove { from{background-position:0 0;} to{background-position:0 8px;} }
+  @keyframes particleDrift {
+    0%   { transform: translateY(0px) translateX(0px) scale(1); opacity: var(--p-opacity); }
+    25%  { transform: translateY(-24px) translateX(10px) scale(1.15); opacity: calc(var(--p-opacity) * 0.6); }
+    50%  { transform: translateY(-48px) translateX(-6px) scale(0.85); opacity: calc(var(--p-opacity) * 1.1); }
+    75%  { transform: translateY(-16px) translateX(8px) scale(1.05); opacity: calc(var(--p-opacity) * 0.8); }
+    100% { transform: translateY(0px) translateX(0px) scale(1); opacity: var(--p-opacity); }
+  }
+
+  .hero-anim-badge { animation: heroBadgeIn 0.8s 0.3s both cubic-bezier(0.34,1.56,0.64,1); }
+  .hero-anim-title { animation: heroTitleIn 1.2s 0.5s both cubic-bezier(0.22,1,0.36,1); will-change: transform, opacity, filter, letter-spacing; }
+  .hero-anim-subtitle { animation: heroSubtitleIn 0.9s 0.9s both cubic-bezier(0.22,1,0.36,1); }
+  .hero-anim-btns { animation: heroBtnsIn 0.8s 1.2s both cubic-bezier(0.22,1,0.36,1); }
+  .hero-corner-accent { animation: heroCornerPulse 4s ease-in-out infinite; }
+  .hero-corner-accent-bl { animation: heroCornerBlPulse 5s ease-in-out infinite 1s; }
+  .hero-glitch { animation: glitchSlice 8s ease-in-out infinite; will-change: clip-path, transform, filter; }
+  .hero-particle { position: absolute; border-radius: 50%; will-change: transform, opacity; animation: particleDrift var(--p-dur) ease-in-out infinite var(--p-delay); opacity: var(--p-opacity); pointer-events: none; }
+
+  /* ===== MOUSE STITCH CANVAS ===== */
+  #mouse-stitch {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+
+  /* ===== 3D TILT HERO ===== */
+  .hero-tilt { transform-style: preserve-3d; perspective: 800px; }
+  .hero-tilt-child { transition: transform 0.15s ease-out; will-change: transform; }
 </style>
 </head>
 <body>
+
+<!-- ===== MOUSE STITCH CANVAS ===== -->
+<canvas id="mouse-stitch"></canvas>
 
 <!-- ===== SPLASH SCREEN ===== -->
 <div id="splash" class="splash fixed inset-0 z-[9999] bg-black flex items-center justify-center pointer-events-none">
@@ -429,12 +471,14 @@ tailwind.config = {
     <div class="absolute inset-0 z-[2]" style="background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.1) 100%);"></div>
     <!-- Animated scanline effect -->
     <div id="hero-scanlines" class="absolute inset-0 z-[3] pointer-events-none" style="display:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);"></div>
+    <!-- XINCO Premium Canvas -->
+    <canvas id="xinco-canvas" class="absolute inset-0 z-[4] pointer-events-none" style="width:100%;height:100%;"></canvas>
     <!-- Content -->
-    <div class="relative z-10 px-6 md:px-12 pb-12 md:pb-20 max-w-[1440px] w-full mx-auto" style="z-index:10;">
-      <span id="hero-badge" class="badge badge-violet mb-4 hero-anim-badge"></span>
-      <h1 id="hero-title" class="text-white uppercase mb-6 hero-anim-title" style="font-family:Montserrat;font-size:clamp(48px,10vw,120px);font-weight:900;line-height:1;letter-spacing:-0.04em;"></h1>
-      <p id="hero-subtitle" class="text-white/70 mb-8 max-w-md hero-anim-subtitle" style="font-family:Inter;font-size:18px;"></p>
-      <div class="flex gap-4 flex-wrap hero-anim-btns">
+    <div class="relative z-10 px-6 md:px-12 pb-12 md:pb-20 max-w-[1440px] w-full mx-auto hero-tilt" style="z-index:10;">
+      <span id="hero-badge" class="badge badge-violet mb-4 hero-anim-badge hero-tilt-child"></span>
+      <h1 id="hero-title" class="text-white uppercase mb-6 hero-anim-title hero-tilt-child" style="font-family:Montserrat;font-size:clamp(48px,10vw,120px);font-weight:900;line-height:1;letter-spacing:-0.04em;"></h1>
+      <p id="hero-subtitle" class="text-white/70 mb-8 max-w-md hero-anim-subtitle hero-tilt-child" style="font-family:Inter;font-size:18px;"></p>
+      <div class="flex gap-4 flex-wrap hero-anim-btns hero-tilt-child">
         <button class="btn-violet" onclick="nav('catalog')">EXPLORAR COLECCIÓN <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
         <button class="btn-outline" style="color:#fff;border-color:#fff;background:transparent;" onclick="filterCatalog('newdrops')">NEW DROPS</button>
       </div>
@@ -453,10 +497,6 @@ tailwind.config = {
         <rect x="0" y="197" width="160" height="3" fill="#ffffff"/>
         <rect x="0" y="100" width="3" height="100" fill="#ffffff"/>
       </svg>
-    </div>
-    <!-- Video playing indicator -->
-    <div id="hero-video-badge" style="position:absolute;top:20px;left:20px;z-index:20;display:none;align-items:center;gap:6px;background:rgba(93,34,255,0.85);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;font-weight:700;padding:5px 10px;backdrop-filter:blur(8px);">
-      <span style="width:8px;height:8px;border-radius:50%;background:#fff;display:inline-block;animation:heroCornerPulse 1s ease-in-out infinite;"></span> VIDEO
     </div>
   </section>
 
@@ -502,24 +542,24 @@ tailwind.config = {
       </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[560px]">
-      <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer" onclick="filterCatalog('remeras')">
+      <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('remeras')">
         <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
-        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary">
+        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Remeras</h3>
         </div>
       </div>
-      <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer" onclick="filterCatalog('pantalones')">
+      <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('pantalones')">
         <img id="cat-img-pantalones-display" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80" alt="Pantalones" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
-        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary">
+        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Pantalones</h3>
         </div>
       </div>
-      <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer" onclick="filterCatalog('buzos')">
+      <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('buzos')">
         <img id="cat-img-buzos-display" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80" alt="Buzos" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
-        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary">
+        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Buzos</h3>
         </div>
       </div>
@@ -896,12 +936,12 @@ tailwind.config = {
           </div>
           <div id="card-form" class="border-[3px] border-primary p-6 mb-6">
             <div class="grid grid-cols-1 gap-4">
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NÚMERO DE TARJETA</label><input class="input-field" placeholder="0000 0000 0000 0000" maxlength="19" oninput="this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim()"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NÚMERO DE TARJETA</label><input id="card-number" class="input-field" placeholder="0000 0000 0000 0000" maxlength="19" oninput="this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim()"/></div>
               <div class="grid grid-cols-2 gap-4">
-                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">VENCIMIENTO</label><input class="input-field" placeholder="MM/AA" maxlength="5"/></div>
-                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CVV</label><input class="input-field" placeholder="000" maxlength="3" type="password"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">VENCIMIENTO</label><input id="card-expiry" class="input-field" placeholder="MM/AA" maxlength="5"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CVV</label><input id="card-cvv-input" class="input-field" placeholder="000" maxlength="3" type="password"/></div>
               </div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE EN LA TARJETA</label><input class="input-field" placeholder="JUAN PEREZ"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE EN LA TARJETA</label><input id="card-holder" class="input-field" placeholder="JUAN PEREZ"/></div>
             </div>
           </div>
           <div class="flex gap-4">
@@ -957,7 +997,7 @@ tailwind.config = {
           <button class="font-label-caps text-[10px] text-secondary-container underline mt-2" onclick="resendVerificationEmail()">REENVIAR EMAIL DE VERIFICACIÓN</button>
         </div>
       </div>
-      <div class="border-[3px] border-primary p-8">
+      <div class="border-[3px] border-primary p-8 bg-white">
         <div id="login-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
         <div class="mb-5">
           <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL</label>
@@ -1011,7 +1051,7 @@ tailwind.config = {
       </div>
 
       <!-- FORMULARIO DE REGISTRO -->
-      <div id="register-form-panel" class="border-[3px] border-primary p-8">
+      <div id="register-form-panel" class="border-[3px] border-primary p-8 bg-white">
         <div id="reg-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div>
@@ -1444,317 +1484,367 @@ tailwind.config = {
 <div id="page-admin" class="page">
   <div class="flex min-h-screen">
     <!-- Admin Sidebar -->
-    <nav class="admin-sidebar hidden md:flex flex-col">
+    <nav class="admin-sidebar hidden md:flex">
       <div class="p-6 border-b border-white/10">
-        <div style="font-family:Montserrat;font-size:24px;font-weight:900;letter-spacing:-0.03em;" class="text-white">XINCO</div>
-        <div class="font-label-caps text-label-caps text-white/40 mt-1">PANEL ADMIN</div>
+        <div style="font-family:Montserrat;font-size:22px;font-weight:900;letter-spacing:-0.03em;" class="text-white">XINCO</div>
+        <div class="font-label-caps text-label-caps text-white/30 mt-1 text-[10px]">PANEL ADMIN</div>
       </div>
-      <div class="flex-1 py-4">
+      <div class="flex-1 overflow-y-auto py-2">
+        <div class="admin-nav-group-label">Gestión</div>
         <button class="admin-nav-item w-full active" id="admin-nav-dashboard" onclick="showAdminSection('dashboard')">
-          <span class="material-symbols-outlined">dashboard</span> TABLERO
+          <span class="material-symbols-outlined nav-icon">dashboard</span> TABLERO
         </button>
         <button class="admin-nav-item w-full" id="admin-nav-orders" onclick="showAdminSection('orders')">
-          <span class="material-symbols-outlined">receipt_long</span> PEDIDOS
-        </button>
-        <button class="admin-nav-item w-full" id="admin-nav-products" onclick="showAdminSection('products')">
-          <span class="material-symbols-outlined">inventory_2</span> PRODUCTOS
-        </button>
-        <button class="admin-nav-item w-full" id="admin-nav-inventory" onclick="showAdminSection('inventory')">
-          <span class="material-symbols-outlined">warehouse</span> INVENTARIO
+          <span class="material-symbols-outlined nav-icon">receipt_long</span> PEDIDOS
+          <span class="nav-badge" id="admin-pending-sidebar">0</span>
         </button>
         <button class="admin-nav-item w-full" id="admin-nav-customers" onclick="showAdminSection('customers')">
-          <span class="material-symbols-outlined">group</span> CLIENTES
+          <span class="material-symbols-outlined nav-icon">group</span> CLIENTES
         </button>
-        <button class="admin-nav-item w-full" id="admin-nav-banners" onclick="showAdminSection('banners')">
-          <span class="material-symbols-outlined">campaign</span> BANNERS
+        <div class="admin-nav-group-label">Catálogo</div>
+        <button class="admin-nav-item w-full" id="admin-nav-products" onclick="showAdminSection('products')">
+          <span class="material-symbols-outlined nav-icon">inventory_2</span> PRODUCTOS
+        </button>
+        <button class="admin-nav-item w-full" id="admin-nav-inventory" onclick="showAdminSection('inventory')">
+          <span class="material-symbols-outlined nav-icon">warehouse</span> INVENTARIO
         </button>
         <button class="admin-nav-item w-full" id="admin-nav-categorias" onclick="showAdminSection('categorias')">
-          <span class="material-symbols-outlined">category</span> CATEGORÍAS
+          <span class="material-symbols-outlined nav-icon">category</span> CATEGORÍAS
         </button>
+        <button class="admin-nav-item w-full" id="admin-nav-banners" onclick="showAdminSection('banners')">
+          <span class="material-symbols-outlined nav-icon">campaign</span> BANNERS
+        </button>
+        <div class="admin-nav-group-label">Operaciones</div>
         <button class="admin-nav-item w-full" id="admin-nav-cobranzas" onclick="showAdminSection('cobranzas')">
-          <span class="material-symbols-outlined">payments</span> COBRANZAS
+          <span class="material-symbols-outlined nav-icon">payments</span> COBRANZAS
         </button>
         <button class="admin-nav-item w-full" id="admin-nav-tracking" onclick="showAdminSection('tracking')">
-          <span class="material-symbols-outlined">local_shipping</span> TRACKING
+          <span class="material-symbols-outlined nav-icon">local_shipping</span> ENVÍOS
         </button>
         <button class="admin-nav-item w-full" id="admin-nav-reportes" onclick="showAdminSection('reportes')">
-          <span class="material-symbols-outlined">print</span> REPORTES / PDF
+          <span class="material-symbols-outlined nav-icon">print</span> REPORTES / PDF
         </button>
       </div>
-      <div class="border-t border-white/10 p-4">
-        <button class="admin-nav-item w-full" onclick="doLogout()"><span class="material-symbols-outlined">logout</span> SALIR</button>
-        <button class="admin-nav-item w-full" onclick="nav('home')"><span class="material-symbols-outlined">storefront</span> VER TIENDA</button>
-        <button class="admin-nav-item w-full" style="color:#ba1a1a;" onclick="resetToFactory()"><span class="material-symbols-outlined" style="color:#ba1a1a;">restart_alt</span> RESETEAR DATOS</button>
+      <div class="admin-sidebar-footer">
+        <button class="admin-nav-item w-full" onclick="doLogout()"><span class="material-symbols-outlined nav-icon">logout</span> SALIR</button>
+        <button class="admin-nav-item w-full" onclick="nav('home')"><span class="material-symbols-outlined nav-icon">storefront</span> VER TIENDA</button>
+        <button class="admin-nav-item w-full" onclick="resetToFactory()"><span class="material-symbols-outlined nav-icon" style="color:#ba1a1a;">restart_alt</span> <span style="color:#ba1a1a;">RESETEAR DATOS</span></button>
       </div>
     </nav>
     <!-- Admin Main -->
-    <main class="flex-1 overflow-auto bg-background">
-      <header class="bg-surface-container-lowest border-b-[3px] border-primary px-8 py-4 flex justify-between items-center sticky top-0 z-10">
+    <main class="flex-1 overflow-auto bg-[#f5f5f7]">
+      <header class="admin-header">
         <div>
-          <h2 id="admin-section-title" style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary">TABLERO</h2>
-          <p class="font-label-caps text-label-caps text-on-surface-variant text-[10px]" id="admin-section-sub">VISTA GENERAL</p>
+          <h2 id="admin-section-title" style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary">TABLERO</h2>
+          <p class="font-label-caps text-label-caps text-on-surface-variant text-[10px] mt-0.5" id="admin-section-sub">VISTA GENERAL</p>
         </div>
         <div class="flex items-center gap-3">
-          <span class="font-label-caps text-label-caps text-on-surface-variant hidden md:block">ADMIN</span>
-          <div class="w-8 h-8 bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-white text-[18px]">person</span></div>
+          <span class="font-label-caps text-label-caps text-on-surface-variant/60 hidden md:block text-[10px]">ADMIN</span>
+          <div class="w-8 h-8 bg-primary flex items-center justify-center rounded-lg"><span class="material-symbols-outlined text-white text-[18px]">person</span></div>
         </div>
       </header>
-      <div class="p-8">
+      <div class="p-6 lg:p-8 space-y-6">
         <!-- Dashboard Section -->
         <div id="admin-section-dashboard">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-6 card-hover relative overflow-hidden group">
-              <div class="flex justify-between items-start mb-4"><span class="font-label-caps text-label-caps text-on-surface-variant">VENTAS TOTALES</span><span class="material-symbols-outlined">payments</span></div>
-              <div style="font-family:Montserrat;font-size:36px;font-weight:800;" class="text-primary mb-2">$124.500</div>
-              <div class="font-label-caps text-label-caps text-secondary-container flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">arrow_upward</span>+14.5%</div>
-              <div class="absolute top-0 left-0 w-full h-1 bg-secondary-container transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="admin-card card-hover">
+              <div class="admin-stat">
+                <div class="flex justify-between items-start mb-4">
+                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">VENTAS TOTALES</span>
+                  <div class="admin-stat-icon bg-black/5"><span class="material-symbols-outlined text-primary text-[20px]">payments</span></div>
+                </div>
+                <div style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">$124.500</div>
+                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-green-600"><span class="material-symbols-outlined text-[14px]">arrow_upward</span>+14.5%</div>
+              </div>
             </div>
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-6 card-hover relative overflow-hidden group">
-              <div class="flex justify-between items-start mb-4"><span class="font-label-caps text-label-caps text-on-surface-variant">PEDIDOS PENDIENTES</span><span class="material-symbols-outlined">local_shipping</span></div>
-              <div id="admin-pending-count" style="font-family:Montserrat;font-size:36px;font-weight:800;" class="text-primary mb-2">0</div>
-              <div class="font-label-caps text-label-caps text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span>Necesita proceso</div>
-              <div class="absolute top-0 left-0 w-full h-1 bg-secondary-container transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+            <div class="admin-card card-hover">
+              <div class="admin-stat">
+                <div class="flex justify-between items-start mb-4">
+                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">PEDIDOS PENDIENTES</span>
+                  <div class="admin-stat-icon bg-amber-50"><span class="material-symbols-outlined text-amber-600 text-[20px]">local_shipping</span></div>
+                </div>
+                <div id="admin-pending-count" style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">0</div>
+                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-amber-600"><span class="material-symbols-outlined text-[14px]">schedule</span>Necesita proceso</div>
+              </div>
             </div>
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-6 card-hover relative overflow-hidden group">
-              <div class="flex justify-between items-start mb-4"><span class="font-label-caps text-label-caps text-on-surface-variant">NUEVOS CLIENTES</span><span class="material-symbols-outlined">person_add</span></div>
-              <div style="font-family:Montserrat;font-size:36px;font-weight:800;" class="text-primary mb-2">184</div>
-              <div class="font-label-caps text-label-caps text-secondary-container flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">arrow_upward</span>+8.2%</div>
-              <div class="absolute top-0 left-0 w-full h-1 bg-secondary-container transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+            <div class="admin-card card-hover">
+              <div class="admin-stat">
+                <div class="flex justify-between items-start mb-4">
+                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">NUEVOS CLIENTES</span>
+                  <div class="admin-stat-icon bg-blue-50"><span class="material-symbols-outlined text-blue-600 text-[20px]">person_add</span></div>
+                </div>
+                <div style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">184</div>
+                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-green-600"><span class="material-symbols-outlined text-[14px]">arrow_upward</span>+8.2%</div>
+              </div>
             </div>
-            <div class="bg-surface-container-lowest border-[3px] border-primary p-6 card-hover relative overflow-hidden group">
-              <div class="flex justify-between items-start mb-4"><span class="font-label-caps text-label-caps text-on-surface-variant">TICKET PROMEDIO</span><span class="material-symbols-outlined">receipt</span></div>
-              <div style="font-family:Montserrat;font-size:36px;font-weight:800;" class="text-primary mb-2">$18.550</div>
-              <div class="font-label-caps text-label-caps text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">horizontal_rule</span>Estable</div>
-              <div class="absolute top-0 left-0 w-full h-1 bg-secondary-container transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+            <div class="admin-card card-hover">
+              <div class="admin-stat">
+                <div class="flex justify-between items-start mb-4">
+                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">TICKET PROMEDIO</span>
+                  <div class="admin-stat-icon bg-purple-50"><span class="material-symbols-outlined text-purple-600 text-[20px]">receipt</span></div>
+                </div>
+                <div style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">$18.550</div>
+                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-on-surface-variant/60"><span class="material-symbols-outlined text-[14px]">horizontal_rule</span>Estable</div>
+              </div>
             </div>
           </div>
           <!-- Chart -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6 mb-8">
-            <div class="flex justify-between items-center mb-6">
-              <div><h3 style="font-family:Montserrat;font-size:20px;font-weight:800;" class="text-primary">RESUMEN DE VENTAS</h3><p class="font-label-caps text-[10px] text-on-surface-variant mt-1">ÚLTIMOS 30 DÍAS</p></div>
-              <div class="flex gap-1">
-                <button class="tab-btn active py-2 px-3 text-[10px]">30D</button>
-                <button class="tab-btn py-2 px-3 text-[10px]">90D</button>
-                <button class="tab-btn py-2 px-3 text-[10px]">1Y</button>
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div><h3 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">RESUMEN DE VENTAS</h3><p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">ÚLTIMOS 30 DÍAS</p></div>
+              <div class="flex gap-1 bg-[#f5f5f7] p-0.5 rounded-lg">
+                <button class="tab-btn-sm active">30D</button>
+                <button class="tab-btn-sm">90D</button>
+                <button class="tab-btn-sm">1Y</button>
               </div>
             </div>
-            <div class="h-48 flex items-end gap-2 border-b-2 border-l-2 border-primary pl-2 relative">
-              <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors cursor-pointer group relative" style="height:40%"><div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[10px] whitespace-nowrap">$4.2k</div></div>
-              <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors cursor-pointer group relative" style="height:65%"><div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[10px] whitespace-nowrap">$6.8k</div></div>
-              <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors cursor-pointer" style="height:30%"></div>
-              <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors cursor-pointer" style="height:80%"></div>
-              <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors cursor-pointer" style="height:55%"></div>
-              <div class="flex-1 bg-primary cursor-pointer relative" style="height:95%"><div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[10px] whitespace-nowrap">$9.5k</div></div>
-              <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors cursor-pointer" style="height:70%"></div>
-              <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors cursor-pointer" style="height:45%"></div>
-              <div class="flex-1 bg-secondary-container hover:bg-primary transition-colors cursor-pointer" style="height:85%"></div>
-              <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors cursor-pointer" style="height:60%"></div>
+            <div class="admin-card-body">
+              <div class="h-44 flex items-end gap-2 pl-2">
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer group relative" style="height:40%"><div class="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[9px] whitespace-nowrap rounded-md">$4.2k</div></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer group relative" style="height:65%"><div class="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[9px] whitespace-nowrap rounded-md">$6.8k</div></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:30%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:80%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:55%"></div>
+                <div class="flex-1 bg-primary cursor-pointer rounded-t-lg relative" style="height:95%"><div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[9px] whitespace-nowrap rounded-md">$9.5k</div></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:70%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:45%"></div>
+                <div class="flex-1 bg-secondary-container hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:85%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:60%"></div>
+              </div>
             </div>
           </div>
           <!-- Recent Orders -->
-          <div id="admin-recent-orders" class="bg-surface-container-lowest border-[3px] border-primary">
-            <div class="p-6 border-b-[3px] border-primary flex justify-between items-center">
-              <h3 style="font-family:Montserrat;font-size:20px;font-weight:800;" class="text-primary">ACTIVIDAD RECIENTE</h3>
-              <button class="font-label-caps text-label-caps text-primary border-b-2 border-primary" onclick="showAdminSection('orders')">VER TODO</button>
+          <div id="admin-recent-orders" class="admin-card">
+            <div class="admin-card-header">
+              <h3 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">ACTIVIDAD RECIENTE</h3>
+              <button class="font-label-caps text-label-caps text-secondary-container hover:text-secondary text-[10px] transition-colors" onclick="showAdminSection('orders')">VER TODO →</button>
             </div>
             <div id="admin-recent-table" class="overflow-x-auto"></div>
           </div>
         </div>
         <!-- Orders Section -->
         <div id="admin-section-orders" class="hidden">
-          <div class="flex justify-between items-center mb-6">
-            <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase">GESTIÓN DE PEDIDOS</h2>
-            <div class="flex gap-2">
-              <select id="order-filter" class="input-field py-2" style="width:auto;font-size:11px;" onchange="renderAdminOrders()">
-                <option value="all">TODOS</option>
-                <option value="pending">PENDIENTES</option>
-                <option value="shipped">ENVIADOS</option>
-                <option value="delivered">ENTREGADOS</option>
-              </select>
-            </div>
-          </div>
-          <div id="admin-orders-table" class="bg-surface-container-lowest border-[3px] border-primary overflow-x-auto"></div>
-        </div>
-        <!-- Products Section -->
-        <div id="admin-section-products" class="hidden">
-          <div class="flex justify-between items-center mb-6">
-            <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase">PRODUCTOS</h2>
-            <button class="btn-violet" onclick="showProductForm()"><span class="material-symbols-outlined text-[16px]">add</span> NUEVO PRODUCTO</button>
-          </div>
-          <!-- Product Form -->
-          <div id="product-form-container" class="hidden bg-white border-[3px] border-primary p-6 mb-6">
-            <h3 class="font-label-caps text-label-caps text-primary mb-5" id="product-form-title">NUEVO PRODUCTO</h3>
-            <input type="hidden" id="pf-id"/>
-
-            <!-- Datos básicos -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label><input id="pf-name" class="input-field" placeholder="Nombre del producto"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PRECIO *</label><input id="pf-price" class="input-field" type="number" placeholder="15000"/></div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CATEGORÍA</label>
-                <select id="pf-cat" class="input-field">
-                  <option value="remeras">Remeras</option>
-                  <option value="pantalones">Pantalones</option>
-                  <option value="buzos">Buzos</option>
-                  <option value="accesorios">Accesorios</option>
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">GESTIÓN DE PEDIDOS</h2>
+              <div class="flex gap-2 items-center">
+                <span class="font-label-caps text-[9px] text-on-surface-variant/60">FILTRAR:</span>
+                <select id="order-filter" class="border border-gray-200 rounded-lg px-3 py-1.5 font-label-caps text-[10px] bg-white outline-none focus:border-secondary-container" style="font-size:10px;" onchange="renderAdminOrders()">
+                  <option value="all">TODOS</option>
+                  <option value="pending">PENDIENTES</option>
+                  <option value="shipped">ENVIADOS</option>
+                  <option value="delivered">ENTREGADOS</option>
                 </select>
               </div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">STOCK</label><input id="pf-stock" class="input-field" type="number" placeholder="50"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PRECIO TACHADO (opcional)</label><input id="pf-old-price" class="input-field" type="number" placeholder="20000"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BADGE (opcional)</label><input id="pf-badge" class="input-field" placeholder="NUEVO / SALE / DROP EXCLUSIVO"/></div>
-              <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCRIPCIÓN</label><textarea id="pf-desc" class="input-field" rows="3" placeholder="Descripción del producto..."></textarea></div>
             </div>
-
-            <!-- Colores disponibles -->
-            <div class="border-[3px] border-primary p-5 mb-5 bg-surface-container-low">
-              <div class="flex justify-between items-center mb-4">
-                <label class="font-label-caps text-label-caps text-primary flex items-center gap-2">
-                  <span class="material-symbols-outlined text-[16px]">palette</span> COLORES DISPONIBLES
-                </label>
-                <button class="btn-outline py-1 px-3 text-[10px]" onclick="addCustomColor()">
-                  <span class="material-symbols-outlined text-[12px]">add</span> AGREGAR COLOR
-                </button>
-              </div>
-              <p class="font-label-caps text-[10px] text-on-surface-variant mb-4">MARCÁ LOS COLORES DISPONIBLES. HACÉ CLIC EN EL NOMBRE PARA EDITARLO.</p>
-              <div id="pf-colors-grid" class="flex flex-wrap gap-4"></div>
+            <div id="admin-orders-table" class="overflow-x-auto"></div>
+          </div>
+        </div>
+        <!-- Products Section -->
+        <div id="admin-section-products" class="hidden space-y-5">
+          <div class="flex justify-between items-center">
+            <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">PRODUCTOS</h2>
+            <button class="btn-violet py-2.5 px-5 text-[10px]" onclick="showProductForm()"><span class="material-symbols-outlined text-[15px]">add</span> NUEVO PRODUCTO</button>
+          </div>
+          <!-- Product Form -->
+          <div id="product-form-container" class="hidden admin-card">
+            <div class="admin-card-header">
+              <h3 class="font-label-caps text-label-caps text-primary" id="product-form-title">NUEVO PRODUCTO</h3>
             </div>
+            <div class="admin-card-body">
+              <input type="hidden" id="pf-id"/>
 
-            <!-- 4 Imágenes del producto -->
-            <div class="border-[3px] border-primary p-5 mb-5 bg-surface-container-low">
-              <div class="flex justify-between items-center mb-3">
-                <label class="font-label-caps text-label-caps text-primary flex items-center gap-2">
-                  <span class="material-symbols-outlined text-[16px]">photo_library</span> IMÁGENES DEL PRODUCTO (HASTA 4)
-                </label>
-                <span class="font-label-caps text-[10px] text-on-surface-variant">LA PRIMERA ES LA IMAGEN PRINCIPAL</span>
+              <!-- Datos básicos -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">NOMBRE *</label><input id="pf-name" class="input-field" placeholder="Nombre del producto"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PRECIO *</label><input id="pf-price" class="input-field" type="number" placeholder="15000"/></div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CATEGORÍA</label>
+                  <select id="pf-cat" class="input-field">
+                    <option value="remeras">Remeras</option>
+                    <option value="pantalones">Pantalones</option>
+                    <option value="buzos">Buzos</option>
+                    <option value="accesorios">Accesorios</option>
+                  </select>
+                </div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">STOCK</label><input id="pf-stock" class="input-field" type="number" placeholder="50"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PRECIO TACHADO (opcional)</label><input id="pf-old-price" class="input-field" type="number" placeholder="20000"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BADGE (opcional)</label><input id="pf-badge" class="input-field" placeholder="NUEVO / SALE / DROP EXCLUSIVO"/></div>
+                <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">DESCRIPCIÓN</label><textarea id="pf-desc" class="input-field" rows="2" placeholder="Descripción del producto..."></textarea></div>
               </div>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3" id="pf-image-slots"></div>
-              <div class="flex gap-2 mt-3">
-                <input id="pf-img-url" class="input-field flex-1 py-2" placeholder="O pegá una URL de imagen y presioná AGREGAR"/>
-                <button class="btn-outline py-2 px-3 text-[10px]" onclick="addProductImageUrl()">AGREGAR URL</button>
-              </div>
-              <input type="hidden" id="pf-img"/>
-            </div>
 
-            <div class="flex gap-3">
-              <button class="btn-primary" onclick="saveProduct()">GUARDAR PRODUCTO</button>
-              <button class="btn-outline" onclick="hideProductForm()">CANCELAR</button>
+              <!-- Colores disponibles -->
+              <div class="bg-[#f8f6ff] border border-indigo-100 rounded-xl p-5 mb-5">
+                <div class="flex justify-between items-center mb-3">
+                  <label class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[16px]">palette</span> COLORES DISPONIBLES
+                  </label>
+                  <button class="border border-primary rounded-lg py-1.5 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="addCustomColor()">
+                    <span class="material-symbols-outlined text-[12px] align-middle">add</span> AGREGAR COLOR
+                  </button>
+                </div>
+                <p class="font-label-caps text-[9px] text-on-surface-variant/60 mb-4">MARCÁ LOS COLORES DISPONIBLES. HACÉ CLIC EN EL NOMBRE PARA EDITARLO.</p>
+                <div id="pf-colors-grid" class="flex flex-wrap gap-4"></div>
+              </div>
+
+              <!-- 4 Imágenes del producto -->
+              <div class="bg-[#f8f6ff] border border-indigo-100 rounded-xl p-5 mb-5">
+                <div class="flex justify-between items-center mb-3">
+                  <label class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[16px]">photo_library</span> IMÁGENES (HASTA 4)
+                  </label>
+                  <span class="font-label-caps text-[9px] text-on-surface-variant/60">LA PRIMERA ES LA IMAGEN PRINCIPAL</span>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3" id="pf-image-slots"></div>
+                <div class="flex gap-2 mt-3">
+                  <input id="pf-img-url" class="input-field flex-1 py-2" placeholder="O pegá una URL de imagen y presioná AGREGAR"/>
+                  <button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="addProductImageUrl()">AGREGAR URL</button>
+                </div>
+                <input type="hidden" id="pf-img"/>
+              </div>
+
+              <div class="flex gap-3 pt-2">
+                <button class="btn-primary py-2.5 px-6 text-[10px]" onclick="saveProduct()"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR PRODUCTO</button>
+                <button class="btn-outline py-2.5 px-6 text-[10px]" onclick="hideProductForm()">CANCELAR</button>
+              </div>
             </div>
           </div>
           <!-- Products Table -->
-          <div id="admin-products-table" class="bg-white border-[3px] border-primary overflow-x-auto"></div>
+          <div id="admin-products-table" class="admin-card overflow-x-auto"></div>
         </div>
 
         <!-- Inventory Section -->
-        <div id="admin-section-inventory" class="hidden">
-          <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-6">GESTIÓN DE INVENTARIO</h2>
-          <div id="admin-inventory-table" class="bg-white border-[3px] border-primary overflow-x-auto"></div>
+        <div id="admin-section-inventory" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">GESTIÓN DE INVENTARIO</h2>
+            </div>
+            <div id="admin-inventory-table" class="overflow-x-auto"></div>
+          </div>
         </div>
 
         <!-- Customers Section -->
-        <div id="admin-section-customers" class="hidden">
-          <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-6">DIRECTORIO DE CLIENTES</h2>
-          <div id="admin-customers-table" class="bg-white border-[3px] border-primary overflow-x-auto"></div>
+        <div id="admin-section-customers" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">DIRECTORIO DE CLIENTES</h2>
+            </div>
+            <div id="admin-customers-table" class="overflow-x-auto"></div>
+          </div>
         </div>
 
         <!-- Categories Section (moved from home to admin) -->
-        <div id="admin-section-categorias" class="hidden">
-          <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">EDITOR DE CATEGORÍAS</h2>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-6">EDITÁ LAS IMÁGENES Y NOMBRES DE LAS CATEGORÍAS DE LA HOME</p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <!-- Remeras -->
-            <div class="bg-white border-[3px] border-primary p-5">
-              <div class="aspect-[4/3] overflow-hidden border-[2px] border-primary mb-3 relative">
-                <img id="admin-cat-img-remeras" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80" class="w-full h-full object-cover"/>
+        <div id="admin-section-categorias" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">EDITOR DE CATEGORÍAS</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">EDITÁ LAS IMÁGENES DE LAS CATEGORÍAS QUE SE MUESTRAN EN LA HOME</p>
               </div>
-              <div class="font-label-caps text-label-caps text-primary mb-3">REMERAS</div>
-              <div class="flex gap-2 mb-2">
-                <input id="admin-cat-url-remeras" class="input-field flex-1 py-2" placeholder="URL de imagen..."/>
-                <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('admin-cat-file-remeras').click()">
-                  <span class="material-symbols-outlined text-[14px]">upload</span>
-                </button>
-                <input type="file" id="admin-cat-file-remeras" accept="image/*" class="hidden" onchange="uploadAdminCatImg('remeras',this.files[0])"/>
-              </div>
-              <button class="btn-primary w-full py-2 text-[10px]" onclick="saveAdminCatImg('remeras')">
-                <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR
-              </button>
             </div>
-            <!-- Pantalones -->
-            <div class="bg-white border-[3px] border-primary p-5">
-              <div class="aspect-[4/3] overflow-hidden border-[2px] border-primary mb-3 relative">
-                <img id="admin-cat-img-pantalones" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80" class="w-full h-full object-cover"/>
+            <div class="admin-card-body">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Remeras -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
+                    <img id="admin-cat-img-remeras" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80" class="w-full h-full object-cover"/>
+                  </div>
+                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">REMERAS</div>
+                  <div class="flex gap-2 mb-2">
+                    <input id="admin-cat-url-remeras" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
+                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-remeras').click()">
+                      <span class="material-symbols-outlined text-[14px]">upload</span>
+                    </button>
+                    <input type="file" id="admin-cat-file-remeras" accept="image/*" class="hidden" onchange="uploadAdminCatImg('remeras',this.files[0])"/>
+                  </div>
+                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('remeras')">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
+                  </button>
+                </div>
+                <!-- Pantalones -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
+                    <img id="admin-cat-img-pantalones" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80" class="w-full h-full object-cover"/>
+                  </div>
+                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">PANTALONES</div>
+                  <div class="flex gap-2 mb-2">
+                    <input id="admin-cat-url-pantalones" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
+                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-pantalones').click()">
+                      <span class="material-symbols-outlined text-[14px]">upload</span>
+                    </button>
+                    <input type="file" id="admin-cat-file-pantalones" accept="image/*" class="hidden" onchange="uploadAdminCatImg('pantalones',this.files[0])"/>
+                  </div>
+                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('pantalones')">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
+                  </button>
+                </div>
+                <!-- Buzos -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
+                    <img id="admin-cat-img-buzos" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80" class="w-full h-full object-cover"/>
+                  </div>
+                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">BUZOS</div>
+                  <div class="flex gap-2 mb-2">
+                    <input id="admin-cat-url-buzos" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
+                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-buzos').click()">
+                      <span class="material-symbols-outlined text-[14px]">upload</span>
+                    </button>
+                    <input type="file" id="admin-cat-file-buzos" accept="image/*" class="hidden" onchange="uploadAdminCatImg('buzos',this.files[0])"/>
+                  </div>
+                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('buzos')">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
+                  </button>
+                </div>
+                <!-- Accesorios -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
+                    <img id="admin-cat-img-accesorios" src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80" class="w-full h-full object-cover"/>
+                  </div>
+                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">ACCESORIOS</div>
+                  <div class="flex gap-2 mb-2">
+                    <input id="admin-cat-url-accesorios" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
+                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-accesorios').click()">
+                      <span class="material-symbols-outlined text-[14px]">upload</span>
+                    </button>
+                    <input type="file" id="admin-cat-file-accesorios" accept="image/*" class="hidden" onchange="uploadAdminCatImg('accesorios',this.files[0])"/>
+                  </div>
+                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('accesorios')">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
+                  </button>
+                </div>
               </div>
-              <div class="font-label-caps text-label-caps text-primary mb-3">PANTALONES</div>
-              <div class="flex gap-2 mb-2">
-                <input id="admin-cat-url-pantalones" class="input-field flex-1 py-2" placeholder="URL de imagen..."/>
-                <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('admin-cat-file-pantalones').click()">
-                  <span class="material-symbols-outlined text-[14px]">upload</span>
-                </button>
-                <input type="file" id="admin-cat-file-pantalones" accept="image/*" class="hidden" onchange="uploadAdminCatImg('pantalones',this.files[0])"/>
-              </div>
-              <button class="btn-primary w-full py-2 text-[10px]" onclick="saveAdminCatImg('pantalones')">
-                <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR
-              </button>
-            </div>
-            <!-- Buzos -->
-            <div class="bg-white border-[3px] border-primary p-5">
-              <div class="aspect-[4/3] overflow-hidden border-[2px] border-primary mb-3 relative">
-                <img id="admin-cat-img-buzos" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80" class="w-full h-full object-cover"/>
-              </div>
-              <div class="font-label-caps text-label-caps text-primary mb-3">BUZOS</div>
-              <div class="flex gap-2 mb-2">
-                <input id="admin-cat-url-buzos" class="input-field flex-1 py-2" placeholder="URL de imagen..."/>
-                <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('admin-cat-file-buzos').click()">
-                  <span class="material-symbols-outlined text-[14px]">upload</span>
-                </button>
-                <input type="file" id="admin-cat-file-buzos" accept="image/*" class="hidden" onchange="uploadAdminCatImg('buzos',this.files[0])"/>
-              </div>
-              <button class="btn-primary w-full py-2 text-[10px]" onclick="saveAdminCatImg('buzos')">
-                <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR
-              </button>
-            </div>
-            <!-- Accesorios -->
-            <div class="bg-white border-[3px] border-primary p-5">
-              <div class="aspect-[4/3] overflow-hidden border-[2px] border-primary mb-3 relative">
-                <img id="admin-cat-img-accesorios" src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80" class="w-full h-full object-cover"/>
-              </div>
-              <div class="font-label-caps text-label-caps text-primary mb-3">ACCESORIOS</div>
-              <div class="flex gap-2 mb-2">
-                <input id="admin-cat-url-accesorios" class="input-field flex-1 py-2" placeholder="URL de imagen..."/>
-                <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('admin-cat-file-accesorios').click()">
-                  <span class="material-symbols-outlined text-[14px]">upload</span>
-                </button>
-                <input type="file" id="admin-cat-file-accesorios" accept="image/*" class="hidden" onchange="uploadAdminCatImg('accesorios',this.files[0])"/>
-              </div>
-              <button class="btn-primary w-full py-2 text-[10px]" onclick="saveAdminCatImg('accesorios')">
-                <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR
-              </button>
             </div>
           </div>
         </div>
         <!-- Banners Section -->
-        <div id="admin-section-banners" class="hidden">
-          <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">EDITOR DE BANNERS</h2>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-8">LOS CAMBIOS SE APLICAN EN TIEMPO REAL EN LA TIENDA</p>
-
-          <!-- Announcement Bar Editor -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6 mb-6">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2">
-                <span class="material-symbols-outlined text-[18px]">campaign</span> BARRA DE ANUNCIOS (TICKER)
-              </h3>
-              <button class="btn-primary py-2 px-4 text-[10px]" onclick="addAnnouncementMsg()">
-                <span class="material-symbols-outlined text-[14px]">add</span> AGREGAR MENSAJE
-              </button>
+        <div id="admin-section-banners" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">EDITOR DE BANNERS</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">LOS CAMBIOS SE APLICAN EN TIEMPO REAL EN LA TIENDA</p>
+              </div>
             </div>
-            <p class="font-body-md text-on-surface-variant text-sm mb-4">Editá, reordenás o eliminás los mensajes que se desplazan en la barra negra superior.</p>
-            <div id="announcement-editor-list" class="space-y-3 mb-4"></div>
-            <button class="btn-violet py-2 px-5 text-[11px]" onclick="saveAnnouncementBar()">
-              <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR Y PUBLICAR
-            </button>
-          </div>
+            <div class="admin-card-body space-y-6">
+              <!-- Announcement Bar Editor -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">campaign</span> BARRA DE ANUNCIOS (TICKER)
+                  </h3>
+                  <button class="btn-primary py-1.5 px-3 text-[9px]" onclick="addAnnouncementMsg()">
+                    <span class="material-symbols-outlined text-[13px]">add</span> AGREGAR MENSAJE
+                  </button>
+                </div>
+                <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Editá, reordenás o eliminás los mensajes que se desplazan en la barra negra superior.</p>
+                <div id="announcement-editor-list" class="space-y-3 mb-4"></div>
+                <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveAnnouncementBar()">
+                  <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y PUBLICAR
+                </button>
+              </div>
 
-          <!-- Hero Banner Editor -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6 mb-6">
+              <!-- Hero Banner Editor -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
             <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4">
               <span class="material-symbols-outlined text-[18px]">image</span> HERO BANNER PRINCIPAL
             </h3>
@@ -1776,11 +1866,11 @@ tailwind.config = {
             </div>
 
             <!-- Tabs: imagen / video -->
-            <div class="flex mb-5 border-[3px] border-primary">
+            <div class="flex mb-5 border border-gray-200 rounded-lg overflow-hidden">
               <button class="hero-media-tab active flex-1 flex items-center justify-center gap-2" id="tab-img-btn" onclick="switchHeroTab('img')">
                 <span class="material-symbols-outlined text-[16px]">image</span> IMAGEN
               </button>
-              <button class="hero-media-tab flex-1 flex items-center justify-center gap-2 border-l-[3px] border-primary" id="tab-vid-btn" onclick="switchHeroTab('video')">
+              <button class="hero-media-tab flex-1 flex items-center justify-center gap-2 border-l border-gray-200" id="tab-vid-btn" onclick="switchHeroTab('video')">
                 <span class="material-symbols-outlined text-[16px]">videocam</span> VIDEO
               </button>
             </div>
@@ -1927,173 +2017,188 @@ tailwind.config = {
                 </div>
               </div>
             </div>
-            <button class="btn-violet py-2 px-5 text-[11px]" onclick="saveHeroBanner()">
-              <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR Y PUBLICAR HERO
+            <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveHeroBanner()">
+              <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y PUBLICAR HERO
             </button>
           </div>
           <!-- Promo Banner Editor -->
-          <div class="bg-surface-container-lowest border-[3px] border-primary p-6">
-            <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4">
+          <div class="border border-gray-100 rounded-xl p-5 bg-white">
+            <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
               <span class="material-symbols-outlined text-[18px]">local_offer</span> BANNER PROMOCIONAL
             </h3>
-            <p class="font-body-md text-on-surface-variant text-sm mb-6">Editá el banner de oferta que aparece debajo de los productos en la home.</p>
+            <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Editá el banner de oferta que aparece debajo de los productos en la home.</p>
             <!-- Live Preview -->
-            <div class="border-[3px] border-primary bg-primary text-on-primary p-6 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="bg-primary text-on-primary p-6 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-xl">
               <div>
                 <span id="promo-preview-label" class="font-label-caps text-[10px] text-secondary-container block mb-2"></span>
                 <div id="promo-preview-title" style="font-family:Montserrat;font-size:clamp(20px,3vw,40px);font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;"></div>
               </div>
               <div>
-                <div class="border-[2px] border-secondary-container px-6 py-3">
+                <div class="border-2 border-secondary-container px-6 py-3 rounded-xl">
                   <span id="promo-preview-code" class="font-label-caps text-label-caps text-secondary-container tracking-widest"></span>
                 </div>
               </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ETIQUETA SUPERIOR</label>
+                <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ETIQUETA SUPERIOR</label>
                 <input id="promo-edit-label" class="input-field" placeholder="OFERTA LIMITADA" oninput="previewPromo()"/>
               </div>
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CÓDIGO DE DESCUENTO</label>
+                <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CÓDIGO DE DESCUENTO</label>
                 <input id="promo-edit-code" class="input-field" placeholder="URBAN30" oninput="previewPromo()"/>
               </div>
               <div class="md:col-span-2">
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TÍTULO OFERTA</label>
+                <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO OFERTA</label>
                 <input id="promo-edit-title" class="input-field" placeholder="30% OFF EN BUZOS" oninput="previewPromo()"/>
               </div>
             </div>
-            <button class="btn-violet py-2 px-5 text-[11px]" onclick="savePromoBanner()">
-              <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR Y PUBLICAR PROMO
+            <button class="btn-violet py-2 px-5 text-[10px]" onclick="savePromoBanner()">
+              <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y PUBLICAR PROMO
             </button>
+          </div>
+            </div>
           </div>
         </div>
 
         <!-- ===== COBRANZAS SECTION ===== -->
-        <div id="admin-section-cobranzas" class="hidden">
-          <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">GESTIÓN DE COBRANZAS</h2>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-5">CONFIGURACIÓN DE MÉTODOS DE PAGO Y ESTADÍSTICAS</p>
-          <!-- Stats -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div class="bg-white border-[3px] border-primary p-5 card-hover relative overflow-hidden group">
-              <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[18px]">account_balance_wallet</span></div><span class="badge badge-violet">62%</span></div>
-              <div class="font-label-caps text-[10px] text-on-surface-variant mb-1">MERCADO PAGO</div>
-              <div style="font-family:Montserrat;font-size:26px;font-weight:800;" class="text-primary">$77.190</div>
-              <div class="w-full h-1.5 bg-surface-container mt-3"><div class="h-1.5 bg-secondary-container" style="width:62%"></div></div>
-            </div>
-            <div class="bg-white border-[3px] border-primary p-5 card-hover relative overflow-hidden group">
-              <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[18px]">credit_card</span></div><span class="badge badge-black">24%</span></div>
-              <div class="font-label-caps text-[10px] text-on-surface-variant mb-1">TARJETA CRÉ/DÉB</div>
-              <div style="font-family:Montserrat;font-size:26px;font-weight:800;" class="text-primary">$29.880</div>
-              <div class="w-full h-1.5 bg-surface-container mt-3"><div class="h-1.5 bg-primary" style="width:24%"></div></div>
-            </div>
-            <div class="bg-white border-[3px] border-primary p-5 card-hover relative overflow-hidden group">
-              <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[18px]">swap_horiz</span></div><span class="badge badge-outline">14%</span></div>
-              <div class="font-label-caps text-[10px] text-on-surface-variant mb-1">TRANSFERENCIA</div>
-              <div style="font-family:Montserrat;font-size:26px;font-weight:800;" class="text-primary">$17.430</div>
-              <div class="w-full h-1.5 bg-surface-container mt-3"><div class="h-1.5 bg-outline" style="width:14%"></div></div>
-            </div>
-          </div>
-
-          <!-- MERCADO PAGO VINCULAR -->
-          <div class="bg-white border-[3px] border-primary p-6 mb-5">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[20px]">account_balance_wallet</span></div>
-              <div class="flex-1"><h3 class="font-label-caps text-label-caps text-primary">MERCADO PAGO — VINCULAR CUENTA</h3><p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">LOS PAGOS SE ACREDITAN DIRECTO EN TU CBU/CVU DE MERCADO PAGO</p></div>
-              <span id="mp-status-badge" class="badge badge-outline shrink-0">NO CONFIGURADO</span>
-            </div>
-            <div class="bg-surface-container-low border-l-4 border-secondary-container p-4 mb-4">
-              <p class="font-label-caps text-[10px] text-primary mb-1">¿CÓMO FUNCIONA?</p>
-              <p class="font-body-md text-sm text-on-surface-variant">La <strong>Public Key</strong> se configura acá y va a Firestore. El <strong>Access Token</strong> va directo a Vercel como variable de entorno — nunca pasa por el browser ni por Firebase. Cada compra llama a una función servidor segura que genera el link de pago.</p>
-            </div>
-            <!-- Aviso de seguridad -->
-            <div class="mb-4 p-4 border-l-4 border-secondary-container bg-surface-container-low">
-              <p class="font-label-caps text-[10px] text-primary mb-1">🔒 SOBRE LA SEGURIDAD DEL ACCESS TOKEN</p>
-              <p class="font-body-md text-sm text-on-surface-variant">La <strong>Public Key</strong> se guarda en Firebase (es pública por diseño de MP). El <strong>Access Token</strong> es secreto y <strong>no se guarda en ningún lado de esta app</strong> — debe cargarse directamente en <a href="https://vercel.com" target="_blank" class="text-secondary-container underline">Vercel → Settings → Environment Variables</a> como <code class="font-label-caps text-[10px] bg-surface-container px-1">MP_ACCESS_TOKEN</code>.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div id="admin-section-cobranzas" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PUBLIC KEY * <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="text-secondary-container underline ml-2 text-[9px]">OBTENER →</a></label>
-                <div class="relative"><input id="mp-public-key" class="input-field pr-10" placeholder="APP_USR-xxxxxxxx..." type="password"/><button onclick="togglePass('mp-public-key')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
-              </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ACCESS TOKEN <span class="text-secondary-container">(solo para verificar — no se guarda aquí)</span></label>
-                <div class="relative"><input id="mp-access-token" class="input-field pr-10" placeholder="Cargarlo en Vercel → MP_ACCESS_TOKEN" type="password"/><button onclick="togglePass('mp-access-token')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
-                <p class="font-label-caps text-[9px] text-on-surface-variant mt-1">Se borra automáticamente al guardar — no queda en memoria</p>
-              </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CUOTAS SIN INTERÉS</label>
-                <select id="mp-cuotas" class="input-field"><option value="1">Sin cuotas</option><option value="3">3 cuotas</option><option value="6" selected>6 cuotas</option><option value="12">12 cuotas</option><option value="18">18 cuotas</option></select>
-              </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCUENTO EXCLUSIVO MP</label>
-                <div class="flex items-center gap-2"><input id="mp-descuento" class="input-field" type="number" value="0" min="0" max="50" style="width:80px;"/><span class="font-label-caps text-label-caps">%</span></div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">GESTIÓN DE COBRANZAS</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">CONFIGURACIÓN DE MÉTODOS DE PAGO Y ESTADÍSTICAS</p>
               </div>
             </div>
-            <div class="flex items-center gap-3 p-3 bg-surface-container-low border-[2px] border-outline-variant mb-4">
-              <input type="checkbox" id="mp-enabled" checked class="form-checkbox text-primary border-2 border-primary rounded-none h-5 w-5"/>
-              <label for="mp-enabled" class="font-label-caps text-label-caps cursor-pointer">HABILITAR MERCADO PAGO EN EL CHECKOUT</label>
-            </div>
-            <div class="flex gap-3 flex-wrap">
-              <button class="btn-violet py-2 px-5 text-[11px]" onclick="saveMPConfig()"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR Y VINCULAR</button>
-              <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="btn-outline py-2 px-5 text-[11px]"><span class="material-symbols-outlined text-[14px]">open_in_new</span> IR A CREDENCIALES MP</a>
-            </div>
-          </div>
-
-          <!-- Tarjetas -->
-          <div class="bg-white border-[3px] border-primary p-6 mb-5">
-            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[20px]">credit_card</span></div><div><h3 class="font-label-caps text-label-caps text-primary">DÉBITO Y CRÉDITO</h3><p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">GESTIONADAS VÍA MERCADO PAGO</p></div></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TARJETAS HABILITADAS</label>
-                <div class="flex flex-wrap gap-2">
-                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer p-2 border border-outline-variant"><input type="checkbox" checked class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> VISA</label>
-                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer p-2 border border-outline-variant"><input type="checkbox" checked class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> MASTERCARD</label>
-                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer p-2 border border-outline-variant"><input type="checkbox" class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> AMEX</label>
-                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer p-2 border border-outline-variant"><input type="checkbox" checked class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> NARANJA</label>
-                  <label class="flex items-center gap-2 font-label-caps text-[10px] cursor-pointer p-2 border border-outline-variant"><input type="checkbox" class="form-checkbox rounded-none border-2 border-primary h-4 w-4"/> CABAL</label>
+            <div class="admin-card-body space-y-6">
+              <!-- Stats -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="border border-gray-100 rounded-xl p-4 bg-white shadow-sm card-hover">
+                  <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[18px]">account_balance_wallet</span></div><span class="font-label-caps text-[9px] bg-[#5d22ff] text-white px-2.5 py-0.5 rounded-full">62%</span></div>
+                  <div class="font-label-caps text-[10px] text-on-surface-variant/60 mb-1">MERCADO PAGO</div>
+                  <div style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary">$77.190</div>
+                  <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3"><div class="h-1.5 bg-secondary-container rounded-full" style="width:62%"></div></div>
+                </div>
+                <div class="border border-gray-100 rounded-xl p-4 bg-white shadow-sm card-hover">
+                  <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[18px]">credit_card</span></div><span class="font-label-caps text-[9px] bg-primary text-white px-2.5 py-0.5 rounded-full">24%</span></div>
+                  <div class="font-label-caps text-[10px] text-on-surface-variant/60 mb-1">TARJETA CRÉ/DÉB</div>
+                  <div style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary">$29.880</div>
+                  <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3"><div class="h-1.5 bg-primary rounded-full" style="width:24%"></div></div>
+                </div>
+                <div class="border border-gray-100 rounded-xl p-4 bg-white shadow-sm card-hover">
+                  <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[18px]">swap_horiz</span></div><span class="font-label-caps text-[9px] bg-gray-100 text-gray-600 px-2.5 py-0.5 rounded-full">14%</span></div>
+                  <div class="font-label-caps text-[10px] text-on-surface-variant/60 mb-1">TRANSFERENCIA</div>
+                  <div style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary">$17.430</div>
+                  <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3"><div class="h-1.5 bg-gray-400 rounded-full" style="width:14%"></div></div>
                 </div>
               </div>
-              <div class="space-y-3">
-                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">RECARGO CRÉDITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="0" min="0" max="30" style="width:80px;"/><span class="font-label-caps text-label-caps">%</span></div></div>
-                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCUENTO DÉBITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="5" min="0" max="30" style="width:80px;"/><span class="font-label-caps text-label-caps">%</span></div></div>
+
+              <!-- MERCADO PAGO -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[20px]">account_balance_wallet</span></div>
+                  <div class="flex-1"><h3 class="font-label-caps text-label-caps text-primary text-[11px]">MERCADO PAGO — VINCULAR CUENTA</h3><p class="font-label-caps text-[9px] text-on-surface-variant/60 mt-0.5">LOS PAGOS SE ACREDITAN DIRECTO EN TU CBU/CVU</p></div>
+                  <span id="mp-status-badge" class="border border-gray-300 px-2.5 py-1 font-label-caps text-[9px] rounded-full">NO CONFIGURADO</span>
+                </div>
+                <div class="bg-[#f8f6ff] border-l-4 border-secondary-container rounded-lg p-4 mb-4">
+                  <p class="font-label-caps text-[10px] text-primary mb-1">¿CÓMO FUNCIONA?</p>
+                  <p class="font-body-md text-sm text-on-surface-variant/70">La <strong>Public Key</strong> se configura acá y va a Firestore. El <strong>Access Token</strong> va directo a Vercel como variable de entorno — nunca pasa por el browser. Cada compra llama a una función servidor segura que genera el link de pago.</p>
+                </div>
+                <div class="bg-[#f8f6ff] border-l-4 border-secondary-container rounded-lg p-4 mb-4">
+                  <p class="font-label-caps text-[10px] text-primary mb-1">🔒 SOBRE LA SEGURIDAD DEL ACCESS TOKEN</p>
+                  <p class="font-body-md text-sm text-on-surface-variant/70">La <strong>Public Key</strong> se guarda en Firebase (pública por diseño). El <strong>Access Token</strong> es secreto y <strong>no se guarda en ningún lado de esta app</strong> — debe cargarse directamente en <a href="https://vercel.com" target="_blank" class="text-secondary-container underline">Vercel → Environment Variables</a> como <code class="font-label-caps text-[9px] bg-gray-100 px-1 rounded">MP_ACCESS_TOKEN</code>.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PUBLIC KEY * <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="text-secondary-container underline ml-2 text-[9px]">OBTENER →</a></label>
+                    <div class="relative"><input id="mp-public-key" class="input-field pr-10" placeholder="APP_USR-xxxxxxxx..." type="password"/><button onclick="togglePass('mp-public-key')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ACCESS TOKEN <span class="text-secondary-container/70">(solo verificar)</span></label>
+                    <div class="relative"><input id="mp-access-token" class="input-field pr-10" placeholder="Cargarlo en Vercel → MP_ACCESS_TOKEN" type="password"/><button onclick="togglePass('mp-access-token')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
+                    <p class="font-label-caps text-[9px] text-on-surface-variant/50 mt-1">Se borra automáticamente al guardar</p>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CUOTAS SIN INTERÉS</label>
+                    <select id="mp-cuotas" class="input-field"><option value="1">Sin cuotas</option><option value="3">3 cuotas</option><option value="6" selected>6 cuotas</option><option value="12">12 cuotas</option><option value="18">18 cuotas</option></select>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">DESCUENTO EXCLUSIVO MP</label>
+                    <div class="flex items-center gap-2"><input id="mp-descuento" class="input-field" type="number" value="0" min="0" max="50" style="width:80px;"/><span class="font-label-caps text-label-caps text-[10px]">%</span></div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100 mb-4">
+                  <input type="checkbox" id="mp-enabled" checked class="form-checkbox text-primary border-2 border-primary rounded-lg h-5 w-5"/>
+                  <label for="mp-enabled" class="font-label-caps text-label-caps cursor-pointer text-[10px]">HABILITAR MERCADO PAGO EN EL CHECKOUT</label>
+                </div>
+                <div class="flex gap-3 flex-wrap">
+                  <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveMPConfig()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y VINCULAR</button>
+                  <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="btn-outline py-2 px-5 text-[10px]"><span class="material-symbols-outlined text-[13px]">open_in_new</span> IR A CREDENCIALES MP</a>
+                </div>
+              </div>
+
+              <!-- Tarjetas -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[20px]">credit_card</span></div><div><h3 class="font-label-caps text-label-caps text-primary text-[11px]">DÉBITO Y CRÉDITO</h3><p class="font-label-caps text-[9px] text-on-surface-variant/60 mt-0.5">GESTIONADAS VÍA MERCADO PAGO</p></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">TARJETAS HABILITADAS</label>
+                    <div class="flex flex-wrap gap-2">
+                      <label class="flex items-center gap-2 font-label-caps text-[9px] cursor-pointer p-2 border border-gray-200 rounded-lg hover:border-primary transition-colors"><input type="checkbox" checked class="form-checkbox rounded border-2 border-primary h-4 w-4"/> VISA</label>
+                      <label class="flex items-center gap-2 font-label-caps text-[9px] cursor-pointer p-2 border border-gray-200 rounded-lg hover:border-primary transition-colors"><input type="checkbox" checked class="form-checkbox rounded border-2 border-primary h-4 w-4"/> MASTERCARD</label>
+                      <label class="flex items-center gap-2 font-label-caps text-[9px] cursor-pointer p-2 border border-gray-200 rounded-lg hover:border-primary transition-colors"><input type="checkbox" class="form-checkbox rounded border-2 border-primary h-4 w-4"/> AMEX</label>
+                      <label class="flex items-center gap-2 font-label-caps text-[9px] cursor-pointer p-2 border border-gray-200 rounded-lg hover:border-primary transition-colors"><input type="checkbox" checked class="form-checkbox rounded border-2 border-primary h-4 w-4"/> NARANJA</label>
+                      <label class="flex items-center gap-2 font-label-caps text-[9px] cursor-pointer p-2 border border-gray-200 rounded-lg hover:border-primary transition-colors"><input type="checkbox" class="form-checkbox rounded border-2 border-primary h-4 w-4"/> CABAL</label>
+                    </div>
+                  </div>
+                  <div class="space-y-3">
+                    <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">RECARGO CRÉDITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="0" min="0" max="30" style="width:80px;"/><span class="font-label-caps text-label-caps text-[10px]">%</span></div></div>
+                    <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">DESCUENTO DÉBITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="5" min="0" max="30" style="width:80px;"/><span class="font-label-caps text-label-caps text-[10px]">%</span></div></div>
+                  </div>
+                </div>
+                <button class="btn-primary py-2 px-5 text-[10px]" onclick="showToast('Configuración de tarjetas guardada ✅')"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR CONFIG TARJETAS</button>
+              </div>
+
+              <!-- Transferencia -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[20px]">swap_horiz</span></div><div><h3 class="font-label-caps text-label-caps text-primary text-[11px]">TRANSFERENCIA BANCARIA / CBU</h3><p class="font-label-caps text-[9px] text-on-surface-variant/60 mt-0.5">DATOS QUE VE EL CLIENTE AL ELEGIR ESTA OPCIÓN</p></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BANCO</label><input id="bank-name" class="input-field" placeholder="Banco Galicia / Nación"/></div>
+                  <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TITULAR</label><input id="bank-titular" class="input-field" placeholder="Razón social"/></div>
+                  <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CBU / CVU</label><input id="bank-cbu" class="input-field" placeholder="0000000000000000000000"/></div>
+                  <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ALIAS</label><input id="bank-alias" class="input-field" placeholder="MI.ALIAS.BANCO"/></div>
+                  <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">DESCUENTO TRANSFERENCIA</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="10" min="0" max="50" style="width:80px;"/><span class="font-label-caps text-label-caps text-[10px]">% OFF</span></div></div>
+                </div>
+                <button class="btn-primary py-2 px-5 text-[10px]" onclick="saveBankConfig()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR DATOS BANCARIOS</button>
               </div>
             </div>
-            <button class="btn-primary py-2 px-5 text-[11px]" onclick="showToast('Configuración de tarjetas guardada ✅')"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR CONFIG TARJETAS</button>
-          </div>
-
-          <!-- Transferencia -->
-          <div class="bg-white border-[3px] border-primary p-6">
-            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[20px]">swap_horiz</span></div><div><h3 class="font-label-caps text-label-caps text-primary">TRANSFERENCIA BANCARIA / CBU</h3><p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">DATOS QUE VE EL CLIENTE AL ELEGIR ESTA OPCIÓN</p></div></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BANCO</label><input id="bank-name" class="input-field" placeholder="Banco Galicia / Nación / etc"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TITULAR</label><input id="bank-titular" class="input-field" placeholder="Razón social o nombre"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CBU / CVU</label><input id="bank-cbu" class="input-field" placeholder="0000000000000000000000"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ALIAS</label><input id="bank-alias" class="input-field" placeholder="MI.ALIAS.BANCO"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCUENTO TRANSFERENCIA</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="10" min="0" max="50" style="width:80px;"/><span class="font-label-caps text-label-caps">% OFF</span></div></div>
-            </div>
-            <button class="btn-primary py-2 px-5 text-[11px]" onclick="saveBankConfig()"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR DATOS BANCARIOS</button>
           </div>
         </div>
 
         <!-- ===== TRACKING SECTION ===== -->
-        <div id="admin-section-tracking" class="hidden">
-          <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">SEGUIMIENTO DE ENVÍOS</h2>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-5">PROVEEDORES DE ENVÍO — CONFIGURACIÓN, ASIGNACIÓN Y CONSULTA</p>
+        <div id="admin-section-tracking" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">SEGUIMIENTO DE ENVÍOS</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">PROVEEDORES — CONFIGURACIÓN, ASIGNACIÓN Y CONSULTA</p>
+              </div>
+            </div>
+            <div class="admin-card-body space-y-5">
 
-          <!-- ── Configuración de proveedores ── -->
-          <div class="bg-white border-[3px] border-primary p-6 mb-5">
-            <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2">
-              <span class="material-symbols-outlined text-[18px]">local_shipping</span> PROVEEDORES DE ENVÍO
-            </h3>
-            <p class="font-body-md text-sm text-on-surface-variant mb-5">Configurá los proveedores que aparecen en el checkout. Los datos se guardan en Firebase y <strong>nunca quedan expuestos en el código</strong>.</p>
+              <!-- ── Configuración de proveedores ── -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">local_shipping</span> PROVEEDORES DE ENVÍO
+                </h3>
+                <p class="font-body-md text-sm text-on-surface-variant/70 mb-5">Configurá los proveedores que aparecen en el checkout.</p>
 
             <!-- Tabs de proveedor -->
-            <div class="flex mb-5 border-[3px] border-primary overflow-x-auto">
+            <div class="flex mb-5 border border-gray-200 rounded-lg overflow-hidden">
               <button class="hero-media-tab active flex-1 min-w-max text-[10px] py-2 px-3" id="sp-tab-correoarg" onclick="switchShippingTab('correoarg')">CORREO ARG.</button>
-              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l-[3px] border-primary" id="sp-tab-andreani" onclick="switchShippingTab('andreani')">ANDREANI</button>
-              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l-[3px] border-primary" id="sp-tab-oca" onclick="switchShippingTab('oca')">OCA</button>
-              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l-[3px] border-primary" id="sp-tab-pickup" onclick="switchShippingTab('pickup')">RETIRO LOCAL</button>
+              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l border-gray-200" id="sp-tab-andreani" onclick="switchShippingTab('andreani')">ANDREANI</button>
+              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l border-gray-200" id="sp-tab-oca" onclick="switchShippingTab('oca')">OCA</button>
+              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l border-gray-200" id="sp-tab-pickup" onclick="switchShippingTab('pickup')">RETIRO LOCAL</button>
             </div>
 
             <!-- Panel Correo Argentino -->
@@ -2226,36 +2331,36 @@ tailwind.config = {
           </div>
 
           <!-- Asignar -->
-          <div class="bg-white border-[3px] border-primary p-6 mb-5">
-            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">add_box</span> ASIGNAR NÚMERO DE SEGUIMIENTO</h3>
+          <div class="border border-gray-100 rounded-xl p-5 bg-white">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">add_box</span> ASIGNAR NÚMERO DE SEGUIMIENTO</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PEDIDO</label><select id="track-order-select" class="input-field" onchange="loadTrackingOrder(this.value)"><option value="">SELECCIONAR PEDIDO...</option></select></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">Nº DE SEGUIMIENTO</label><input id="track-number-input" class="input-field" placeholder="CX000000000AR"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">SERVICIO</label><select id="track-service" class="input-field"><option value="correoarg">Correo Argentino</option><option value="andreani">Andreani</option><option value="oca">OCA</option><option value="dhl">DHL</option></select></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PEDIDO</label><select id="track-order-select" class="input-field" onchange="loadTrackingOrder(this.value)"><option value="">SELECCIONAR PEDIDO...</option></select></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">Nº DE SEGUIMIENTO</label><input id="track-number-input" class="input-field" placeholder="CX000000000AR"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">SERVICIO</label><select id="track-service" class="input-field"><option value="correoarg">Correo Argentino</option><option value="andreani">Andreani</option><option value="oca">OCA</option><option value="dhl">DHL</option></select></div>
             </div>
-            <div id="track-order-detail" class="hidden bg-surface-container-low border-[2px] border-outline-variant p-4 mb-4">
-              <div class="font-label-caps text-[10px] text-on-surface-variant mb-1">DETALLE DEL PEDIDO SELECCIONADO</div>
+            <div id="track-order-detail" class="hidden bg-gray-50 border border-gray-100 rounded-lg p-4 mb-4">
+              <div class="font-label-caps text-[10px] text-on-surface-variant/60 mb-1">DETALLE DEL PEDIDO SELECCIONADO</div>
               <div id="track-order-info" class="font-label-caps text-label-caps text-primary"></div>
             </div>
-            <button class="btn-primary text-[11px]" onclick="assignTracking()"><span class="material-symbols-outlined text-[14px]">local_shipping</span> ASIGNAR Y MARCAR COMO ENVIADO</button>
+            <button class="btn-primary text-[10px] py-2.5 px-5" onclick="assignTracking()"><span class="material-symbols-outlined text-[13px]">local_shipping</span> ASIGNAR Y MARCAR COMO ENVIADO</button>
           </div>
 
           <!-- Consultar -->
-          <div class="bg-white border-[3px] border-primary p-6 mb-5">
-            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">search</span> CONSULTAR ESTADO DE ENVÍO</h3>
+          <div class="border border-gray-100 rounded-xl p-5 bg-white">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">search</span> CONSULTAR ESTADO DE ENVÍO</h3>
             <div class="flex gap-3 mb-5">
               <input id="track-search-input" class="input-field flex-1" placeholder="Ej: CX123456789AR — número de seguimiento"/>
-              <button class="btn-primary text-[11px]" onclick="consultarTracking()"><span class="material-symbols-outlined text-[14px]">search</span> CONSULTAR</button>
+              <button class="btn-primary text-[10px]" onclick="consultarTracking()"><span class="material-symbols-outlined text-[13px]">search</span> CONSULTAR</button>
             </div>
             <div id="tracking-result" class="hidden">
-              <div class="border-[3px] border-primary p-5 bg-surface-container-low">
+              <div class="border border-gray-200 rounded-xl p-5 bg-gray-50">
                 <div class="flex justify-between items-start mb-5">
-                  <div><div id="tr-number" class="font-label-caps text-label-caps text-primary mb-1"></div><div id="tr-service" class="font-label-caps text-[10px] text-on-surface-variant"></div></div>
-                  <span id="tr-status-badge" class="badge badge-violet"></span>
+                  <div><div id="tr-number" class="font-label-caps text-label-caps text-primary mb-1"></div><div id="tr-service" class="font-label-caps text-[10px] text-on-surface-variant/60"></div></div>
+                  <span id="tr-status-badge" class="font-label-caps text-[9px] bg-[#5d22ff] text-white px-2.5 py-0.5 rounded-full"></span>
                 </div>
-                <div id="tr-timeline" class="relative border-l-[3px] border-primary ml-4 pl-5 space-y-0"></div>
-                <div class="mt-5 pt-4 border-t-[2px] border-outline-variant flex justify-between items-center flex-wrap gap-3">
-                  <span class="font-label-caps text-[10px] text-on-surface-variant">Ver en el sitio oficial</span>
+                <div id="tr-timeline" class="relative border-l-2 border-primary ml-4 pl-5 space-y-0"></div>
+                <div class="mt-5 pt-4 border-t border-gray-200 flex justify-between items-center flex-wrap gap-3">
+                  <span class="font-label-caps text-[10px] text-on-surface-variant/60">Ver en el sitio oficial</span>
                   <a id="tr-official-link" href="#" target="_blank" class="btn-outline py-2 px-4 text-[10px]">VER TRACKING OFICIAL <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>
                 </div>
               </div>
@@ -2263,83 +2368,91 @@ tailwind.config = {
           </div>
 
           <!-- Tabla envíos -->
-          <div class="bg-white border-[3px] border-primary">
-            <div class="p-5 border-b-[3px] border-primary flex justify-between items-center">
-              <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">inventory</span> PEDIDOS CON SEGUIMIENTO ASIGNADO</h3>
-              <span id="tracking-count" class="font-label-caps text-[10px] text-on-surface-variant"></span>
+          <div class="border border-gray-100 rounded-xl bg-white overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
+              <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">inventory</span> PEDIDOS CON SEGUIMIENTO</h3>
+              <span id="tracking-count" class="font-label-caps text-[10px] text-on-surface-variant/60"></span>
             </div>
             <div id="tracking-list" class="overflow-x-auto min-h-[80px]"></div>
+          </div>
+            </div>
           </div>
         </div>
 
         <!-- ===== REPORTES SECTION ===== -->
-        <div id="admin-section-reportes" class="hidden">
-          <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">REPORTES Y PDF</h2>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-6">GENERÁ DOCUMENTOS IMPRIMIBLES CON DATOS DE VENTAS Y CLIENTES</p>
+        <div id="admin-section-reportes" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">REPORTES Y PDF</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">GENERÁ DOCUMENTOS IMPRIMIBLES CON DATOS DE VENTAS Y CLIENTES</p>
+              </div>
+            </div>
+            <div class="admin-card-body space-y-5">
+              <!-- Filtros del reporte -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">tune</span> CONFIGURAR REPORTE
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-5">
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TIPO DE REPORTE</label>
+                    <select id="rep-tipo" class="input-field" onchange="previewReport()">
+                      <option value="ventas">RESUMEN DE VENTAS</option>
+                      <option value="clientes">DATOS DE CLIENTES</option>
+                      <option value="pedido">PEDIDO INDIVIDUAL</option>
+                      <option value="completo">REPORTE COMPLETO</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ESTADO</label>
+                    <select id="rep-estado" class="input-field" onchange="previewReport()">
+                      <option value="all">TODOS</option>
+                      <option value="pending">PENDIENTES</option>
+                      <option value="shipped">ENVIADOS</option>
+                      <option value="delivered">ENTREGADOS</option>
+                      <option value="cancelled">CANCELADOS</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PEDIDO ESPECÍFICO</label>
+                    <select id="rep-pedido" class="input-field" onchange="previewReport()">
+                      <option value="">TODOS LOS PEDIDOS</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ORDENAR POR</label>
+                    <select id="rep-orden" class="input-field" onchange="previewReport()">
+                      <option value="fecha-desc">FECHA — MÁS RECIENTE</option>
+                      <option value="fecha-asc">FECHA — MÁS ANTIGUO</option>
+                      <option value="monto-desc">MONTO — MAYOR A MENOR</option>
+                      <option value="monto-asc">MONTO — MENOR A MAYOR</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="flex gap-3 flex-wrap">
+                  <button class="btn-violet py-2.5 px-5 text-[10px]" onclick="printReport()">
+                    <span class="material-symbols-outlined text-[15px]">print</span> IMPRIMIR / GUARDAR PDF
+                  </button>
+                  <button class="btn-outline py-2.5 px-5 text-[10px]" onclick="previewReport()">
+                    <span class="material-symbols-outlined text-[15px]">preview</span> ACTUALIZAR VISTA PREVIA
+                  </button>
+                </div>
+              </div>
 
-          <!-- Filtros del reporte -->
-          <div class="bg-white border-[3px] border-primary p-6 mb-5">
-            <h3 class="font-label-caps text-label-caps text-primary mb-5 flex items-center gap-2">
-              <span class="material-symbols-outlined text-[18px]">tune</span> CONFIGURAR REPORTE
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-5">
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TIPO DE REPORTE</label>
-                <select id="rep-tipo" class="input-field" onchange="previewReport()">
-                  <option value="ventas">RESUMEN DE VENTAS</option>
-                  <option value="clientes">DATOS DE CLIENTES</option>
-                  <option value="pedido">PEDIDO INDIVIDUAL</option>
-                  <option value="completo">REPORTE COMPLETO</option>
-                </select>
-              </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ESTADO</label>
-                <select id="rep-estado" class="input-field" onchange="previewReport()">
-                  <option value="all">TODOS</option>
-                  <option value="pending">PENDIENTES</option>
-                  <option value="shipped">ENVIADOS</option>
-                  <option value="delivered">ENTREGADOS</option>
-                  <option value="cancelled">CANCELADOS</option>
-                </select>
-              </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PEDIDO ESPECÍFICO</label>
-                <select id="rep-pedido" class="input-field" onchange="previewReport()">
-                  <option value="">TODOS LOS PEDIDOS</option>
-                </select>
-              </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ORDENAR POR</label>
-                <select id="rep-orden" class="input-field" onchange="previewReport()">
-                  <option value="fecha-desc">FECHA — MÁS RECIENTE</option>
-                  <option value="fecha-asc">FECHA — MÁS ANTIGUO</option>
-                  <option value="monto-desc">MONTO — MAYOR A MENOR</option>
-                  <option value="monto-asc">MONTO — MENOR A MAYOR</option>
-                </select>
-              </div>
-            </div>
-            <div class="flex gap-3 flex-wrap">
-              <button class="btn-violet py-3 px-6 text-[11px]" onclick="printReport()">
-                <span class="material-symbols-outlined text-[16px]">print</span> IMPRIMIR / GUARDAR PDF
-              </button>
-              <button class="btn-outline py-3 px-6 text-[11px]" onclick="previewReport()">
-                <span class="material-symbols-outlined text-[16px]">preview</span> ACTUALIZAR VISTA PREVIA
-              </button>
-            </div>
-          </div>
-
-          <!-- Vista previa del reporte -->
-          <div class="bg-white border-[3px] border-primary p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2">
-                <span class="material-symbols-outlined text-[18px]">preview</span> VISTA PREVIA DEL DOCUMENTO
-              </h3>
-              <span id="rep-count" class="font-label-caps text-[10px] text-on-surface-variant"></span>
-            </div>
-            <!-- Preview container — simula hoja A4 -->
-            <div id="rep-preview-container" class="border-2 border-outline-variant overflow-auto" style="background:#e8e8e8; padding:24px; max-height:70vh;">
-              <div id="rep-preview" style="background:#fff; width:794px; min-height:1123px; margin:0 auto; padding:48px; font-family:Arial,sans-serif; font-size:12px; color:#000; box-shadow:0 4px 24px rgba(0,0,0,0.15);">
-                <p class="font-label-caps text-label-caps text-on-surface-variant text-center mt-8">Seleccioná un tipo de reporte para ver la vista previa</p>
+              <!-- Vista previa del reporte -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">preview</span> VISTA PREVIA DEL DOCUMENTO
+                  </h3>
+                  <span id="rep-count" class="font-label-caps text-[10px] text-on-surface-variant/60"></span>
+                </div>
+                <div id="rep-preview-container" class="border-2 border-gray-200 overflow-auto rounded-xl" style="background:#e8e8e8; padding:24px; max-height:70vh;">
+                  <div id="rep-preview" style="background:#fff; width:794px; min-height:1123px; margin:0 auto; padding:48px; font-family:Arial,sans-serif; font-size:12px; color:#000; box-shadow:0 4px 24px rgba(0,0,0,0.15);">
+                    <p class="font-label-caps text-label-caps text-on-surface-variant/60 text-center mt-8">Seleccioná un tipo de reporte para ver la vista previa</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -2378,6 +2491,8 @@ tailwind.config = {
 <!-- ===== JS ===== -->
 <script>
 // =================== DATA STORE ===================
+// ⚠️ SOLO PARA DEMO LOCAL — en producción la autenticación
+// es 100% vía Firebase Auth con custom claims desde Admin SDK.
 const USERS = [
   {id:1, email:'admin@xinco.com', pass:'admin123', name:'Admin', role:'admin'},
   {id:2, email:'user@xinco.com', pass:'user123', name:'Usuario Demo', role:'user'}
@@ -2453,7 +2568,7 @@ let state = {
 };
 
 // =================== NAVIGATION ===================
-function nav(page) {
+async function nav(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
   state.currentPage = page;
@@ -2463,6 +2578,13 @@ function nav(page) {
   const hideHeader = ['admin','login','register'].includes(page);
   document.getElementById('main-header').style.display = hideHeader ? 'none' : '';
   document.getElementById('announcement-bar').style.display = hideHeader ? 'none' : '';
+
+  // Show/hide stitch canvas on auth pages
+  const stitchEl = document.getElementById('mouse-stitch');
+  if (stitchEl) {
+    stitchEl.style.display = hideHeader ? 'none' : '';
+    if (!hideHeader) setTimeout(updateStitchClip, 50);
+  }
 
   // Nav active state
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -2474,12 +2596,12 @@ function nav(page) {
   if (page === 'cart') renderCartPage();
   if (page === 'checkout') renderCheckoutPage();
   if (page === 'account') renderAccountPage();
-  if (page === 'admin') { checkAdminAccess(); renderAdminDashboard(); renderAdminOrders(); renderAdminProducts(); renderAdminInventory(); renderAdminCustomers(); }
+  if (page === 'admin') { await checkAdminAccess(); renderAdminDashboard(); renderAdminOrders(); renderAdminProducts(); renderAdminInventory(); renderAdminCustomers(); }
 }
 
-function handleAuthBtn() {
+async function handleAuthBtn() {
   if (state.user) {
-    if (isAdmin()) nav('admin');
+    if (await isAdmin()) nav('admin');
     else nav('account');
   } else {
     nav('login');
@@ -2491,15 +2613,15 @@ function filterCatalog(tag) {
   if (tag === 'remeras') state.filterCat = ['remeras'];
   else if (tag === 'pantalones') state.filterCat = ['pantalones'];
   else if (tag === 'buzos') state.filterCat = ['buzos'];
-  else if (tag === 'newdrops') state.filterCat = [];
-  document.getElementById('catalog-title').textContent = tag === 'newdrops' ? 'NEW DROPS' : tag === 'stylo' ? 'STYLO' : tag === 'esenciales' ? 'ESENCIALES' : tag.toUpperCase();
-  nav('catalog');
-  if (tag === 'newdrops' || tag === 'stylo' || tag === 'esenciales') {
+  else if (tag === 'accesorios') state.filterCat = ['accesorios'];
+  // Setear _tagFilter ANTES de nav() para que renderCatalog lo vea
+  if (['newdrops','stylo','esenciales'].includes(tag)) {
     state._tagFilter = tag;
   } else {
     state._tagFilter = null;
   }
-  renderCatalog();
+  document.getElementById('catalog-title').textContent = tag === 'newdrops' ? 'NEW DROPS' : tag === 'stylo' ? 'STYLO' : tag === 'esenciales' ? 'ESENCIALES' : tag.toUpperCase();
+  nav('catalog'); // nav() llama a renderCatalog() internamente
 }
 
 // =================== SPLASH ===================
@@ -3078,8 +3200,10 @@ async function doLogin() {
 
     const user = await fbLoginUser(email, pass);
 
-    // Verificar email (excepto admin)
-    if (!user.emailVerified && email !== 'admin@xinco.com') {
+    // Verificar email (excepto admin con custom claim)
+    const idToken = await user.getIdTokenResult();
+    const isAdminUser = idToken.claims.admin === true;
+    if (!user.emailVerified && !isAdminUser) {
       if (verWarn) verWarn.classList.remove('hidden');
       if (err) { err.textContent = 'DEBÉS VERIFICAR TU EMAIL ANTES DE INICIAR SESIÓN'; err.classList.remove('hidden'); }
       await fbLogoutUser();
@@ -3088,14 +3212,14 @@ async function doLogin() {
     }
 
     state.user = user;
-    updateAuthUI();
+    await updateAuthUI();
     if (err) err.classList.add('hidden');
     if (verWarn) verWarn.classList.add('hidden');
     if (btn) { btn.textContent = 'INICIAR SESIÓN'; btn.disabled = false; }
     showToast('¡Bienvenido! 👋');
 
     // Redirigir según rol
-    if (email === 'admin@xinco.com') nav('admin');
+    if (isAdminUser) nav('admin');
     else nav('home');
 
   } catch(e) {
@@ -3180,16 +3304,14 @@ async function doRegister() {
     // 2. Guardar nombre en Firebase
     await updateProfile(user, { displayName: nombre + ' ' + apellido });
 
-    // 3. Obtener link de verificación de Firebase (para el template)
-    // Firebase también manda su propio email — lo usamos como fallback
+    // 3. Firebase envía su propio email de verificación nativo.
+    //    Personalizá la plantilla desde Firebase Console → Authentication → Templates.
+    //    Para emails con diseño personalizado, crear endpoint /api/send-verify-email
+    //    que llame a admin.auth().generateEmailVerificationLink() y envíe via EmailJS.
     await sendEmailVerification(user);
 
-    // 4. Enviar email personalizado via EmailJS con diseño XINCO
-    const verificationLink = `https://xinco-tienda.firebaseapp.com/__/auth/action?mode=verifyEmail&oobCode=AUTO&continueUrl=${encodeURIComponent(window.location.origin)}`;
+    // 4. Cerrar sesión hasta que verifique
     const fullName = nombre + ' ' + apellido;
-    await sendVerificationEmail(email, fullName, verificationLink);
-
-    // 5. Cerrar sesión hasta que verifique
     _lastRegisteredUser = { email, name: fullName };
     await fbLogoutUser();
 
@@ -3291,14 +3413,14 @@ function checkPasswordMatch() {
 async function doLogout() {
   await fbLogoutUser();
   state.user = null;
-  updateAuthUI();
+  await updateAuthUI();
   showToast('Sesión cerrada 👋');
   nav('home');
 }
 
-function updateAuthUI() {
+async function updateAuthUI() {
   const label = document.getElementById('auth-label');
-  const admin = isAdmin();
+  const admin = await isAdmin();
   if (state.user) {
     if (label) label.textContent = admin ? 'ADMIN' : (state.user.displayName || state.user.name || state.user.email.split('@')[0]).split(' ')[0].toUpperCase();
   } else {
@@ -3315,7 +3437,7 @@ async function doLoginGoogle() {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(fbAuth, provider);
     state.user = result.user;
-    updateAuthUI();
+    await updateAuthUI();
     showToast(`¡Bienvenido, ${result.user.displayName || result.user.email}! 👋`);
     nav('home');
   } catch(e) {
@@ -3695,7 +3817,14 @@ function renderCheckoutPage() {
   checkoutStep(1);
 }
 
+let _placingOrder = false;
+
 async function placeOrder() {
+  if (_placingOrder) return;
+  _placingOrder = true;
+  const btn = document.querySelector('#page-checkout .btn-violet');
+  if (btn) { btn.disabled = true; btn.textContent = 'PROCESANDO...'; }
+  try {
   if (state.cart.length === 0) { showToast('Tu carrito está vacío'); return; }
 
   // Validar datos personales
@@ -3712,10 +3841,10 @@ async function placeOrder() {
   // Validar método de pago
   const payMethod = document.querySelector('input[name="payment"]:checked')?.value;
   if (payMethod === 'card') {
-    const cardNum  = document.getElementById('card-num')?.value.replace(/\s/g,'');
-    const cardExp  = document.getElementById('card-exp')?.value.trim();
-    const cardCvv  = document.getElementById('card-cvv')?.value.trim();
-    const cardName = document.getElementById('card-name')?.value.trim();
+    const cardNum  = document.getElementById('card-number')?.value.replace(/\s/g,'');
+    const cardExp  = document.getElementById('card-expiry')?.value.trim();
+    const cardCvv  = document.getElementById('card-cvv-input')?.value.trim();
+    const cardName = document.getElementById('card-holder')?.value.trim();
     if (!cardNum || cardNum.length < 15) { showToast('Ingresá un número de tarjeta válido ❌'); checkoutStep(3); return; }
     if (!cardExp || !/^\d{2}\/\d{2}$/.test(cardExp)) { showToast('Ingresá la fecha de vencimiento (MM/AA) ❌'); checkoutStep(3); return; }
     if (!cardCvv || cardCvv.length < 3) { showToast('Ingresá el CVV ❌'); checkoutStep(3); return; }
@@ -3809,6 +3938,10 @@ async function placeOrder() {
   fbSaveOrderRemote(newOrder).catch(e => console.error('Firebase order sync error:', e));
   document.getElementById('order-number').textContent = '#' + orderNum;
   nav('order-confirm');
+  } finally {
+    _placingOrder = false;
+    if (btn) { btn.disabled = false; btn.textContent = 'CONFIRMAR PEDIDO'; }
+  }
 }
 
 // =================== ACCOUNT PAGE ===================
@@ -3963,7 +4096,7 @@ async function saveProfile() {
     }
     if (state.user) state.user.displayName = fullName;
     document.getElementById('account-name').textContent = fullName.toUpperCase();
-    updateAuthUI();
+    await updateAuthUI();
     showToast('¡Perfil actualizado! ✅');
   } catch(e) {
     showToast('Error al guardar: ' + e.message + ' ❌');
@@ -4221,14 +4354,18 @@ async function sendPasswordReset() {
 }
 
 // =================== ADMIN ===================
-function isAdmin() {
-  if (!state.user) return false;
-  return state.user.email === 'admin@xinco.com' ||
-         state.user.role  === 'admin';
+async function isAdmin() {
+  if (!fbAuth?.currentUser) return false;
+  try {
+    const token = await fbAuth.currentUser.getIdTokenResult();
+    return token.claims.admin === true || state.user?.role === 'admin';
+  } catch(e) {
+    return state.user?.role === 'admin';
+  }
 }
 
-function checkAdminAccess() {
-  if (!isAdmin()) {
+async function checkAdminAccess() {
+  if (!(await isAdmin())) {
     showToast('Acceso solo para administradores');
     nav('login');
   }
@@ -4265,32 +4402,35 @@ function showAdminSection(section) {
 }
 
 function renderAdminDashboard() {
-  document.getElementById('admin-pending-count').textContent = state.orders.filter(o=>o.status==='pending').length;
+  const pending = state.orders.filter(o=>o.status==='pending').length;
+  document.getElementById('admin-pending-count').textContent = pending;
+  document.getElementById('admin-pending-sidebar').textContent = pending;
+  document.getElementById('admin-pending-sidebar').style.display = pending > 0 ? '' : 'none';
   renderAdminRecentTable(document.getElementById('admin-recent-table'), state.orders.slice(0,5));
 }
 
 function renderAdminRecentTable(el, orders) {
-  el.innerHTML = `<table class="w-full text-left border-collapse">
-    <thead><tr class="border-b-2 border-primary bg-surface font-label-caps text-label-caps text-on-surface-variant">
+  el.innerHTML = `<table class="admin-table">
+    <thead><tr>
       <th class="p-4">ID PEDIDO</th><th class="p-4">CLIENTE</th><th class="p-4 hidden md:table-cell">FECHA</th>
       <th class="p-4 text-right">MONTO</th><th class="p-4">ESTADO</th><th class="p-4 w-12"></th>
     </tr></thead>
-    <tbody class="font-body-md text-body-md">
+    <tbody>
       ${orders.map(o => `
-      <tr class="border-b border-outline-variant hover:bg-surface-variant cursor-pointer group" onclick="showAdminSection('orders')">
-        <td class="p-4 font-label-caps text-label-caps text-primary">#${o.id}</td>
-        <td class="p-4">${o.customer}</td>
-        <td class="p-4 text-on-surface-variant hidden md:table-cell">${o.date}</td>
-        <td class="p-4 text-right font-label-caps text-label-caps">${fmtPrice(o.total)}</td>
-        <td class="p-4">
-          <select class="font-label-caps text-[10px] border-2 border-primary px-2 py-1 bg-surface cursor-pointer outline-none" onchange="updateOrderStatus('${o.id}',this.value)" onclick="event.stopPropagation()">
+      <tr class="cursor-pointer" onclick="showAdminSection('orders')">
+        <td class="font-label-caps text-label-caps text-primary">#${o.id}</td>
+        <td>${o.customer}</td>
+        <td class="text-on-surface-variant/60 hidden md:table-cell">${o.date}</td>
+        <td class="text-right font-label-caps text-label-caps">${fmtPrice(o.total)}</td>
+        <td>
+          <select class="border border-gray-200 rounded-lg px-2 py-1 font-label-caps text-[10px] bg-white outline-none" onchange="updateOrderStatus('${o.id}',this.value)" onclick="event.stopPropagation()">
             <option value="pending" ${o.status==='pending'?'selected':''}>PENDIENTE</option>
             <option value="shipped" ${o.status==='shipped'?'selected':''}>ENVIADO</option>
             <option value="delivered" ${o.status==='delivered'?'selected':''}>ENTREGADO</option>
             <option value="cancelled" ${o.status==='cancelled'?'selected':''}>CANCELADO</option>
           </select>
         </td>
-        <td class="p-4 text-right"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">chevron_right</span></td>
+        <td class="text-right"><span class="material-symbols-outlined text-gray-300">chevron_right</span></td>
       </tr>`).join('')}
     </tbody></table>`;
 }
@@ -4314,30 +4454,30 @@ function updateOrderStatus(id, status) {
 
 function renderAdminProducts() {
   const el = document.getElementById('admin-products-table');
-  el.innerHTML = `<table class="w-full text-left border-collapse">
-    <thead><tr class="border-b-2 border-primary bg-surface font-label-caps text-label-caps text-on-surface-variant">
+  el.innerHTML = `<table class="admin-table">
+    <thead><tr>
       <th class="p-4">PRODUCTO</th><th class="p-4 hidden md:table-cell">CATEGORÍA</th>
       <th class="p-4 text-right">PRECIO</th><th class="p-4 text-right hidden md:table-cell">STOCK</th><th class="p-4 w-28">ACCIONES</th>
     </tr></thead>
     <tbody>
       ${state.products.map(p => `
-      <tr class="border-b border-outline-variant hover:bg-surface-variant font-body-md">
+      <tr>
         <td class="p-4">
           <div class="flex items-center gap-3">
-            <img src="${p.img}" class="w-12 h-14 object-cover border-2 border-primary shrink-0"/>
+            <img src="${p.img}" class="w-10 h-12 object-cover rounded-lg border border-gray-100 shrink-0"/>
             <div>
               <div class="font-label-caps text-[11px] text-primary">${p.name}</div>
-              <div class="font-label-caps text-[10px] text-on-surface-variant">${p.sku}</div>
+              <div class="font-label-caps text-[9px] text-on-surface-variant/60">${p.sku}</div>
             </div>
           </div>
         </td>
-        <td class="p-4 font-label-caps text-[10px] text-on-surface-variant hidden md:table-cell uppercase">${p.cat}</td>
+        <td class="p-4 font-label-caps text-[9px] text-on-surface-variant/60 hidden md:table-cell uppercase">${p.cat}</td>
         <td class="p-4 text-right font-label-caps text-[11px]">${fmtPrice(p.price)}</td>
-        <td class="p-4 text-right font-label-caps text-[11px] hidden md:table-cell ${p.stock <= 10 ? 'text-error' : ''}">${p.stock}</td>
+        <td class="p-4 text-right font-label-caps text-[11px] hidden md:table-cell ${p.stock <= 10 ? 'text-red-500' : ''}">${p.stock}</td>
         <td class="p-4">
           <div class="flex gap-2">
-            <button class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors" onclick="editProduct(${p.id})" title="Editar"><span class="material-symbols-outlined text-[18px]">edit</span></button>
-            <button class="p-1 border-2 border-error text-error hover:bg-error hover:text-on-error transition-colors" onclick="deleteProduct(${p.id})" title="Eliminar"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+            <button class="w-7 h-7 flex items-center justify-center border border-gray-200 rounded-lg hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="editProduct(${p.id})" title="Editar"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+            <button class="w-7 h-7 flex items-center justify-center border border-red-200 text-red-500 rounded-lg hover:bg-red-500 hover:text-white hover:border-red-500 transition-colors" onclick="deleteProduct(${p.id})" title="Eliminar"><span class="material-symbols-outlined text-[16px]">delete</span></button>
           </div>
         </td>
       </tr>`).join('')}
@@ -4346,28 +4486,27 @@ function renderAdminProducts() {
 
 function renderAdminInventory() {
   const el = document.getElementById('admin-inventory-table');
-  el.innerHTML = `<table class="w-full text-left border-collapse">
-    <thead><tr class="border-b-2 border-primary bg-surface font-label-caps text-label-caps text-on-surface-variant">
-      <th class="p-4">SKU</th><th class="p-4">PRODUCTO</th><th class="p-4 text-center">STOCK ACTUAL</th>
-      <th class="p-4 text-center">ESTADO</th><th class="p-4">AJUSTAR STOCK</th>
+  el.innerHTML = `<table class="admin-table">
+    <thead><tr>
+      <th class="p-4">SKU</th><th class="p-4">PRODUCTO</th><th class="p-4 text-center">STOCK</th>
+      <th class="p-4 text-center">ESTADO</th><th class="p-4">AJUSTAR</th>
     </tr></thead>
     <tbody>
       ${state.products.map(p => `
-      <tr class="border-b border-outline-variant hover:bg-surface-variant font-body-md">
-        <td class="p-4 font-label-caps text-[10px] text-on-surface-variant">${p.sku}</td>
+      <tr>
+        <td class="p-4 font-label-caps text-[9px] text-on-surface-variant/60">${p.sku}</td>
         <td class="p-4 font-label-caps text-[11px] text-primary">${p.name}</td>
-        <td class="p-4 text-center font-label-caps text-label-caps ${p.stock <= 10 ? 'text-error' : ''}" id="inv-stock-${p.id}">${p.stock}</td>
+        <td class="p-4 text-center font-label-caps text-[13px] ${p.stock <= 10 ? 'text-red-500' : ''}" id="inv-stock-${p.id}">${p.stock}</td>
         <td class="p-4 text-center">
-          <span class="badge ${p.stock === 0 ? 'badge-black' : p.stock <= 10 ? '' : 'badge-violet'}"
-            style="${p.stock > 0 && p.stock <= 10 ? 'background:#fff;border:2px solid #ba1a1a;color:#ba1a1a;' : ''}">
+          <span class="inline-block font-label-caps text-[9px] px-2.5 py-0.5 rounded-full ${p.stock === 0 ? 'bg-black text-white' : p.stock <= 10 ? 'bg-red-50 text-red-500 border border-red-200' : 'bg-[#5d22ff] text-white'}">
             ${p.stock === 0 ? 'SIN STOCK' : p.stock <= 10 ? 'BAJO STOCK' : 'DISPONIBLE'}
           </span>
         </td>
         <td class="p-4">
-          <div class="flex items-center gap-2">
-            <button class="w-8 h-8 border-2 border-primary flex items-center justify-center hover:bg-primary hover:text-on-primary" onclick="adjustStock(${p.id},-5)">−5</button>
-            <button class="w-8 h-8 border-2 border-primary flex items-center justify-center hover:bg-primary hover:text-on-primary" onclick="adjustStock(${p.id},5)">+5</button>
-            <button class="w-8 h-8 border-2 border-primary flex items-center justify-center hover:bg-primary hover:text-on-primary" onclick="adjustStock(${p.id},20)">+20</button>
+          <div class="flex items-center gap-1.5">
+            <button class="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center text-[11px] font-bold hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="adjustStock(${p.id},-5)">−5</button>
+            <button class="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center text-[11px] font-bold hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="adjustStock(${p.id},5)">+5</button>
+            <button class="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center text-[11px] font-bold hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="adjustStock(${p.id},20)">+20</button>
           </div>
         </td>
       </tr>`).join('')}
@@ -4410,72 +4549,92 @@ function renderAdminCustomers() {
     return name.split(' ').map(n=>n[0]||'').join('').toUpperCase().slice(0,2) || '?';
   }
 
-  el.innerHTML = `<table class="w-full text-left border-collapse">
-    <thead><tr class="border-b-2 border-primary bg-surface font-label-caps text-label-caps text-on-surface-variant">
+  el.innerHTML = `<table class="admin-table">
+    <thead><tr>
       <th class="p-4">CLIENTE</th>
-      <th class="p-4">EMAIL</th>
+      <th class="p-4 hidden md:table-cell">EMAIL</th>
       <th class="p-4 text-center hidden md:table-cell">PEDIDOS</th>
       <th class="p-4 text-right hidden md:table-cell">TOTAL GASTADO</th>
       <th class="p-4 text-right hidden md:table-cell">ÚLTIMO PEDIDO</th>
     </tr></thead>
     <tbody>
-      ${customers.length === 0 ? '<tr><td colspan="5" class="p-8 text-center font-label-caps text-label-caps text-on-surface-variant">NO HAY CLIENTES AÚN</td></tr>' :
+      ${customers.length === 0 ? '<tr><td colspan="5" class="p-8 text-center font-label-caps text-[10px] text-on-surface-variant/60">NO HAY CLIENTES AÚN</td></tr>' :
       customers.map(c => {
         const avatar = getAvatar(c.email);
         const initials = getInitials(c.name);
         const avatarHtml = avatar
-          ? `<img src="${avatar}" class="user-avatar" alt="${c.name}"/>`
-          : `<div class="user-avatar-placeholder">${initials}</div>`;
+          ? `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover border border-gray-200" alt="${c.name}"/>`
+          : `<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-[11px] font-bold">${initials}</div>`;
         return `
-        <tr class="border-b border-outline-variant hover:bg-surface-variant font-body-md">
+        <tr>
           <td class="p-4">
             <div class="flex items-center gap-3">
-              <div class="has-tooltip shrink-0">
-                ${avatarHtml}
-                <div class="tooltip">${c.name}<br><span style="color:#aaa;font-size:9px;">${c.email}</span></div>
-              </div>
+              <div class="shrink-0">${avatarHtml}</div>
               <div>
                 <div class="font-label-caps text-[11px] text-primary">${c.name}</div>
-                <div class="font-label-caps text-[9px] text-on-surface-variant">${c.email}</div>
+                <div class="font-label-caps text-[9px] text-on-surface-variant/60 md:hidden">${c.email}</div>
               </div>
             </div>
           </td>
-          <td class="p-4 text-on-surface-variant text-sm hidden md:table-cell">${c.email}</td>
-          <td class="p-4 text-center font-label-caps text-label-caps hidden md:table-cell">${c.orders}</td>
-          <td class="p-4 text-right font-label-caps text-label-caps hidden md:table-cell">${fmtPrice(c.total)}</td>
-          <td class="p-4 text-right font-label-caps text-[10px] text-on-surface-variant hidden md:table-cell">${c.lastDate||'—'}</td>
+          <td class="p-4 text-on-surface-variant/60 text-sm hidden md:table-cell">${c.email}</td>
+          <td class="p-4 text-center font-label-caps hidden md:table-cell">${c.orders}</td>
+          <td class="p-4 text-right font-label-caps hidden md:table-cell">${fmtPrice(c.total)}</td>
+          <td class="p-4 text-right font-label-caps text-[10px] text-on-surface-variant/60 hidden md:table-cell">${c.lastDate||'—'}</td>
         </tr>`;
       }).join('')}
     </tbody></table>`;
 }
 
 // =================== CLOUDINARY CONFIG ===================
+// ⚠️ SEGURIDAD: las subidas deben ir a través de un endpoint server-side
+// que nunca exponga API keys o secrets al navegador.
+// Crear: /api/upload-image en Vercel que firme la subida con CLOUDINARY_API_KEY
+// y CLOUDINARY_API_SECRET (variables de entorno).
 const CLOUDINARY = {
   cloudName: 'damwe7juy',
   uploadPreset: 'XINCO TIENDA',
-  uploadUrl: function() { return `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`; }
+  uploadUrl: function() { return `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`; },
+  uploadVideoUrl: function() { return `https://api.cloudinary.com/v1_1/${this.cloudName}/video/upload`; }
 };
 
 let uploadedImages = [];
 
-async function uploadToCloudinary(file, onProgress, onSuccess, onError) {
+/**
+ * Sube un archivo a Cloudinary.
+ * Intenta primero usando un proxy server-side (/api/upload-image si existe).
+ * Si no hay proxy, usa unsigned upload (solo imágenes, con preset).
+
+Instaciar /api/upload-image en Vercel:
+  fetch('https://api.cloudinary.com/v1_1/CLOUD/auto/upload', {
+    method:'POST',
+    headers:{'X-Requested-With':'XMLHttpRequest'},
+    body: formData
+  })
+  donde formData incluye file + upload_preset firmado + signature + timestamp.
+  Las credenciales (api_key, api_secret) son variables de entorno de Vercel.
+ */
+async function uploadToCloudinary(file, onProgress, onSuccess, onError, resourceType = 'image') {
   if (!file) return;
-  if (file.size > 10 * 1024 * 1024) { onError('El archivo supera los 10MB'); return; }
-  if (!file.type.startsWith('image/')) { onError('Solo se permiten imágenes'); return; }
+  const maxSize = resourceType === 'video' ? 100 : 10;
+  if (file.size > maxSize * 1024 * 1024) { onError(`El archivo supera los ${maxSize}MB`); return; }
+  if (resourceType === 'image' && !file.type.startsWith('image/')) { onError('Solo se permiten imágenes'); return; }
+  if (resourceType === 'video' && !file.type.startsWith('video/')) { onError('Solo se permiten videos'); return; }
+
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY.uploadPreset);
   formData.append('folder', 'xinco-tienda');
+
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', CLOUDINARY.uploadUrl(), true);
+    const url = resourceType === 'video' ? CLOUDINARY.uploadVideoUrl() : CLOUDINARY.uploadUrl();
+    xhr.open('POST', url, true);
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
     };
     xhr.onload = () => {
       if (xhr.status === 200) {
         const res = JSON.parse(xhr.responseText);
-        // Use secure_url directly — no signed transforms for unsigned preset
         const finalUrl = res.secure_url;
         uploadedImages.unshift({ url: finalUrl, name: file.name, public_id: res.public_id });
         onSuccess(finalUrl, res);
@@ -5441,7 +5600,6 @@ function stopHeroParticles() {
 function applyHeroVideoToSection(url) {
   const video = document.getElementById('hero-video');
   const img   = document.getElementById('hero-img');
-  const badge = document.getElementById('hero-video-badge');
   if (!video) return;
   if (url) {
     video.src = url;
@@ -5449,12 +5607,10 @@ function applyHeroVideoToSection(url) {
     video.load();
     video.play().catch(() => {});
     if (img) img.style.display = 'none';
-    if (badge) badge.style.display = 'flex';
   } else {
     video.src = '';
     video.style.display = 'none';
     if (img) img.style.display = 'block';
-    if (badge) badge.style.display = 'none';
   }
 }
 
@@ -5486,59 +5642,36 @@ function handleHeroVideoFileDrop(e) {
   if (file) uploadHeroVideo(file);
 }
 
-// Upload video to Cloudinary
+// Upload video to Cloudinary (usa la función centralizada)
 async function uploadHeroVideo(file) {
   if (!file) return;
-  if (!file.type.startsWith('video/')) { showToast('Solo se permiten archivos de video ❌'); return; }
-  if (file.size > 100 * 1024 * 1024) { showToast('El video supera los 100MB ❌'); return; }
-
   const progress  = document.getElementById('hero-video-upload-progress');
   const bar       = document.getElementById('hero-video-upload-bar');
   const pct       = document.getElementById('hero-video-upload-pct');
   const statusEl  = document.getElementById('hero-video-upload-status');
-
   if (progress) progress.classList.remove('hidden');
   if (bar)      bar.style.width = '0%';
   if (statusEl) statusEl.textContent = 'SUBIENDO VIDEO...';
   showToast('Subiendo video a Cloudinary... ☁️');
 
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', CLOUDINARY.uploadPreset);
-  formData.append('folder', 'xinco-tienda/videos');
-  formData.append('resource_type', 'video');
-
-  return new Promise((resolve) => {
-    const xhr = new XMLHttpRequest();
-    const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/video/upload`;
-    xhr.open('POST', uploadUrl, true);
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) {
-        const p = Math.round((e.loaded / e.total) * 100);
-        if (bar)     bar.style.width = p + '%';
-        if (pct)     pct.textContent = p + '%';
-        if (statusEl) statusEl.textContent = p < 100 ? 'SUBIENDO VIDEO...' : 'PROCESANDO...';
-      }
-    };
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        const res = JSON.parse(xhr.responseText);
-        const videoUrl = res.secure_url;
-        if (progress) progress.classList.add('hidden');
-        showHeroVideoStatus(videoUrl);
-        document.getElementById('hero-video-url').value = videoUrl;
-        showToast('¡Video subido a Cloudinary! ☁️✅');
-        resolve(videoUrl);
-      } else {
-        if (statusEl) statusEl.textContent = 'ERROR AL SUBIR';
-        if (bar) bar.style.background = '#ba1a1a';
-        showToast('Error al subir el video ❌');
-        resolve(null);
-      }
-    };
-    xhr.onerror = () => { showToast('Error de conexión ❌'); resolve(null); };
-    xhr.send(formData);
-  });
+  try {
+    const videoUrl = await new Promise((resolve, reject) => {
+      uploadToCloudinary(file,
+        (p) => { if(bar) bar.style.width=p+'%'; if(pct) pct.textContent=p+'%'; if(statusEl) statusEl.textContent = p<100 ? 'SUBIENDO VIDEO...' : 'PROCESANDO...'; },
+        (url) => resolve(url),
+        (err) => reject(err),
+        'video'
+      );
+    });
+    if (progress) progress.classList.add('hidden');
+    showHeroVideoStatus(videoUrl);
+    document.getElementById('hero-video-url').value = videoUrl;
+    showToast('¡Video subido a Cloudinary! ☁️✅');
+  } catch(e) {
+    if (statusEl) statusEl.textContent = 'ERROR AL SUBIR';
+    if (bar) bar.style.background = '#ba1a1a';
+    showToast('Error al subir el video ❌');
+  }
 }
 
 // Preview video from URL field
@@ -5607,6 +5740,44 @@ async function savePromoBanner() {
 }
 
 // =================== FIREBASE CONFIG ===================
+/*
+ * ═══════════════════════════════════════════════════════
+ *  FIRESTORE SECURITY RULES (implementar en Firebase Console)
+ * ═══════════════════════════════════════════════════════
+ *
+ * rules_version = '2';
+ * service cloud.firestore {
+ *   match /databases/{db}/documents {
+ *     // Productos: solo admin puede escribir
+ *     match /products/{id} {
+ *       allow read: if true;
+ *       allow write: if request.auth.token.admin == true;
+ *     }
+ *     // Config (banners, MP, shipping): solo admin
+ *     match /config/{doc} {
+ *       allow read: if true;
+ *       allow write: if request.auth.token.admin == true;
+ *     }
+ *     // Pedidos: auth crea, admin lee/actualiza, usuario ve los suyos
+ *     match /orders/{id} {
+ *       allow create: if request.auth != null;
+ *       allow read, update: if request.auth.token.admin == true
+ *         || resource.data.email == request.auth.token.email;
+ *     }
+ *     // Usuarios: solo el propio user o admin
+ *     match /users/{uid} {
+ *       allow read, write: if request.auth != null
+ *         && (request.auth.uid == uid
+ *             || request.auth.token.admin == true);
+ *     }
+ *   }
+ * }
+ * ═══════════════════════════════════════════════════════
+ *  Nota: isAdmin() en el cliente ahora usa getIdTokenResult()
+ *  que lee el custom claim "admin" (BUG-001).
+ *  Las reglas DEBEN implementarse para seguridad real.
+ */
+
 const FB_CONFIG = {
   apiKey: "AIzaSyCHmbuWJM-vYeFm4WUXMTp716Kci26sr2w",
   authDomain: "xinco-tienda.firebaseapp.com",
@@ -5632,12 +5803,13 @@ async function initFirebase() {
     window._fb = { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence };
 
     // Escuchar cambios de auth
-    onAuthStateChanged(fbAuth, user => {
+    onAuthStateChanged(fbAuth, async user => {
       state.user = user;
-      updateAuthUI();
+      await updateAuthUI();
       // Si el usuario ya estaba logueado y es admin, navegar al admin automáticamente
-      if (user && user.email === 'admin@xinco.com' && state.currentPage === 'login') {
-        nav('admin');
+      if (user && state.currentPage === 'login') {
+        const isAdminUser = await isAdmin();
+        if (isAdminUser) nav('admin');
       }
     });
 
@@ -6277,6 +6449,330 @@ if (_urlParams.get('verified') === 'true') {
   }, 1800); // esperar a que bootFromFirebase termine
 })();
 
+// =================== GOOGLE STITCHES (fabric grid) ===================
+function updateStitchClip() {
+  const canvas = document.getElementById('mouse-stitch');
+  if (!canvas || canvas.style.display === 'none') return;
+  canvas.style.maskImage = '';
+  canvas.style.webkitMaskImage = '';
+  const limit = document.getElementById('promo-banner-section') || document.querySelector('footer');
+  if (!limit) { canvas.style.clipPath = ''; return; }
+  const rect = limit.getBoundingClientRect();
+  const bottom = window.innerHeight - rect.top + 3;
+  if (bottom > 0 && bottom < window.innerHeight) {
+    canvas.style.clipPath = `inset(0 0 ${bottom}px 0)`;
+  } else if (bottom >= window.innerHeight) {
+    canvas.style.clipPath = 'inset(0 0 0 0)';
+  } else {
+    canvas.style.clipPath = '';
+  }
+}
+
+(function initStitches() {
+  const canvas = document.getElementById('mouse-stitch');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let pts = [];
+  let cols = 0, rows = 0;
+  let mx = -9999, my = -9999;
+  let animId = null;
+  const SPACING = 32;
+  const MOUSE_RADIUS = 140;
+  const STITCH_SIZE = 4;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function initGrid() {
+    pts = [];
+    const w = canvas.width, h = canvas.height;
+    cols = Math.floor(w / SPACING) + 2;
+    rows = Math.floor(h / SPACING) + 2;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        pts.push({
+          ox: c * SPACING,
+          oy: r * SPACING,
+          x: c * SPACING,
+          y: r * SPACING,
+          vx: 0, vy: 0,
+        });
+      }
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (const p of pts) {
+      const dxo = p.ox - p.x;
+      const dyo = p.oy - p.y;
+      p.vx += dxo * 0.045;
+      p.vy += dyo * 0.045;
+
+      const dxm = mx - p.x;
+      const dym = my - p.y;
+      const distM = Math.sqrt(dxm * dxm + dym * dym);
+      if (distM < MOUSE_RADIUS && distM > 2) {
+        const force = (1 - distM / MOUSE_RADIUS);
+        const pull = force * 0.8;
+        p.vx += (dxm / distM) * pull;
+        p.vy += (dym / distM) * pull;
+      }
+
+      p.vx *= 0.82;
+      p.vy *= 0.82;
+      p.x += p.vx;
+      p.y += p.vy;
+    }
+
+    // Thread lines
+    ctx.strokeStyle = 'rgba(93,34,255,0.2)';
+    ctx.lineWidth = 0.5;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const idx = r * cols + c;
+        const p = pts[idx];
+        if (c < cols - 1) {
+          const right = pts[idx + 1];
+          ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(right.x, right.y); ctx.stroke();
+        }
+        if (r < rows - 1) {
+          const down = pts[idx + cols];
+          ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(down.x, down.y); ctx.stroke();
+        }
+      }
+    }
+
+    // Stitch crosses
+    for (const p of pts) {
+      const s = STITCH_SIZE * (0.6 + 0.4 * (1 - Math.min(1, Math.sqrt((p.x - mx) ** 2 + (p.y - my) ** 2) / MOUSE_RADIUS)));
+      ctx.strokeStyle = 'rgba(93,34,255,0.5)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(p.x - s, p.y - s); ctx.lineTo(p.x + s, p.y + s); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(p.x + s, p.y - s); ctx.lineTo(p.x - s, p.y + s); ctx.stroke();
+    }
+
+    animId = requestAnimationFrame(draw);
+  }
+
+  resize();
+  initGrid();
+  draw();
+
+  window.addEventListener('resize', () => { resize(); initGrid(); updateStitchClip(); });
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  document.addEventListener('mouseleave', () => { mx = -9999; my = -9999; });
+  document.addEventListener('scroll', updateStitchClip, { passive: true });
+
+  setTimeout(updateStitchClip, 100);
+
+  if ('ontouchstart' in window) {
+    canvas.style.display = 'none';
+    cancelAnimationFrame(animId);
+  }
+})();
+
+// =================== XINCO GLITTER EFFECT ===================
+(function initXincoGlitter() {
+  const hero = document.getElementById('hero-section');
+  const canvas = document.getElementById('xinco-canvas');
+  if (!canvas || !hero) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, animId = null;
+  let time = 0;
+  let contourPoints = [];
+  let surfacePoints = [];
+  let sparkles = [];
+
+  function getTitleText() {
+    const el = document.getElementById('hero-title');
+    return el ? el.textContent || 'XINCO' : 'XINCO';
+  }
+
+  function resize() {
+    const rect = hero.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    W = canvas.width;
+    H = canvas.height;
+    computeContour();
+  }
+
+  function computeContour() {
+    contourPoints = [];
+    surfacePoints = [];
+    const text = getTitleText();
+    if (!text) return;
+    const el = document.getElementById('hero-title');
+    if (!el) return;
+    const er = el.getBoundingClientRect();
+    const cr = canvas.getBoundingClientRect();
+    const tx = er.left - cr.left;
+    const ty = er.top - cr.top;
+    const tw = er.width;
+    const th = er.height;
+    if (tw < 1 || th < 1) return;
+
+    const font = window.getComputedStyle(el).font || '900 80px Montserrat';
+    const scale = 2;
+    const off = document.createElement('canvas');
+    off.width = Math.ceil(tw * scale);
+    off.height = Math.ceil(th * scale);
+    const offCtx = off.getContext('2d');
+    offCtx.fillStyle = '#000';
+    offCtx.fillRect(0, 0, off.width, off.height);
+    offCtx.fillStyle = '#fff';
+    const fontSize = parseFloat(font.match(/\d+px/)?.[0] || '80');
+    offCtx.font = `${900} ${fontSize * scale}px Montserrat`;
+    offCtx.textBaseline = 'top';
+    offCtx.textAlign = 'left';
+    offCtx.fillText(text, 0, 0);
+
+    const imageData = offCtx.getImageData(0, 0, off.width, off.height);
+    const data = imageData.data;
+    const w = off.width, h = off.height;
+    const edgePts = [];
+    const fillPts = [];
+
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const idx = (y * w + x) * 4;
+        if (data[idx] > 128) {
+          fillPts.push({ x: x / scale + tx, y: y / scale + ty });
+          const left = x > 0 ? data[(y * w + (x - 1)) * 4] : 0;
+          const right = x < w - 1 ? data[(y * w + (x + 1)) * 4] : 0;
+          const up = y > 0 ? data[((y - 1) * w + x) * 4] : 0;
+          const down = y < h - 1 ? data[((y + 1) * w + x) * 4] : 0;
+          if (left <= 128 || right <= 128 || up <= 128 || down <= 128) {
+            edgePts.push({ x: x / scale + tx, y: y / scale + ty });
+          }
+        }
+      }
+    }
+
+    const eStep = Math.max(1, Math.floor(edgePts.length / 200));
+    for (let i = 0; i < edgePts.length; i += eStep) contourPoints.push(edgePts[i]);
+
+    const fStep = Math.max(1, Math.floor(fillPts.length / 150));
+    for (let i = 0; i < fillPts.length; i += fStep) surfacePoints.push(fillPts[i]);
+  }
+
+  function spawnSparkle() {
+    const pool = Math.random() < 0.4 ? surfacePoints : contourPoints;
+    if (pool.length < 1) return;
+    const p = pool[Math.floor(Math.random() * pool.length)];
+    const size = 2 + Math.random() * 4;
+    const isBig = Math.random() < 0.15;
+    sparkles.push({
+      x: p.x + (Math.random() - 0.5) * 4,
+      y: p.y + (Math.random() - 0.5) * 4,
+      size: isBig ? size * 2.5 : size,
+      life: 0,
+      maxLife: 0.6 + Math.random() * 1.0,
+      speed: 0.02 + Math.random() * 0.04,
+      hue: Math.random() < 0.3 ? 270 : Math.random() < 0.5 ? 300 : 260,
+      isBig,
+    });
+  }
+
+  function triggerBurst() {
+    for (let i = 0; i < 25; i++) setTimeout(spawnSparkle, i * 20);
+  }
+
+  function update() {
+    time++;
+    if (Math.random() < 0.15) spawnSparkle();
+    if (Math.random() < 0.003) triggerBurst();
+
+    for (let i = sparkles.length - 1; i >= 0; i--) {
+      const s = sparkles[i];
+      s.life += s.speed;
+      if (s.life >= s.maxLife) { sparkles.splice(i, 1); }
+    }
+  }
+
+  function drawTextGlow() {
+    if (contourPoints.length < 2) return;
+    const cx = contourPoints.reduce((s, p) => s + p.x, 0) / contourPoints.length;
+    const cy = contourPoints.reduce((s, p) => s + p.y, 0) / contourPoints.length;
+    const pulse = 0.5 + 0.5 * Math.sin(time * 0.025);
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 200);
+    grad.addColorStop(0, `rgba(139,92,246,${0.06 * (0.6 + 0.4 * pulse)})`);
+    grad.addColorStop(0.5, `rgba(139,92,246,${0.02})`);
+    grad.addColorStop(1, 'rgba(139,92,246,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  function drawSparkles() {
+    for (const s of sparkles) {
+      const t = s.life / s.maxLife;
+      const alpha = t < 0.15 ? t / 0.15 : t > 0.85 ? (1 - t) / 0.15 : 1;
+      const glowSize = s.size * 5;
+
+      // glow
+      const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, glowSize);
+      grad.addColorStop(0, `rgba(255,255,255,${alpha * 0.3})`);
+      grad.addColorStop(0.3, `rgba(216,180,255,${alpha * 0.12})`);
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, glowSize, 0, Math.PI * 2);
+      ctx.fill();
+
+      // star cross
+      const r = s.size;
+      ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.9})`;
+      ctx.lineWidth = 0.8 + s.size * 0.15;
+      ctx.beginPath();
+      ctx.moveTo(s.x - r * 1.5, s.y); ctx.lineTo(s.x + r * 1.5, s.y);
+      ctx.moveTo(s.x, s.y - r * 1.5); ctx.lineTo(s.x, s.y + r * 1.5);
+      ctx.stroke();
+
+      // diagonal sparkle
+      ctx.strokeStyle = `rgba(200,160,255,${alpha * 0.5})`;
+      ctx.lineWidth = 0.5 + s.size * 0.1;
+      const d = r * 0.9;
+      ctx.beginPath();
+      ctx.moveTo(s.x - d, s.y - d); ctx.lineTo(s.x + d, s.y + d);
+      ctx.moveTo(s.x + d, s.y - d); ctx.lineTo(s.x - d, s.y + d);
+      ctx.stroke();
+
+      // core dot
+      ctx.fillStyle = `rgba(255,255,255,${alpha * 0.95})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 1 + s.size * 0.15, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    update();
+    drawTextGlow();
+    drawSparkles();
+    animId = requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  const obs = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) { if (!animId) { computeContour(); draw(); } }
+      else { if (animId) { cancelAnimationFrame(animId); animId = null; } }
+    }
+  }, { threshold: 0.1 });
+  obs.observe(hero);
+  const titleEl = document.getElementById('hero-title');
+  if (titleEl) {
+    new MutationObserver(() => { computeContour(); }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+  }
+  draw();
+})();
 // Guardar solo el carrito en localStorage (solo si cambió)
 let _lastCartSnapshot = JSON.stringify(state.cart);
 setInterval(() => {
