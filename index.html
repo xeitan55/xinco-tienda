@@ -67,10 +67,11 @@ tailwind.config = {
   @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
   .scrolling-text-inner { display: inline-flex; white-space: nowrap; animation: scrollText 18s linear infinite; }
   @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes splashOut { 0%,80%{opacity:1;} 100%{opacity:0;pointer-events:none;} }
   @keyframes splashTextIn { from{opacity:0;transform:scale(1.15);} to{opacity:1;transform:scale(1);} }
-  .splash { animation: splashOut 2.5s forwards ease-in-out; }
-  .splash-text { animation: splashTextIn 1s forwards ease-out; }
+  /* El splash NO se desvanece con CSS — JS lo controla una vez que las imágenes están cargadas */
+  .splash { opacity:1; transition: opacity 0.6s ease-out; }
+  .splash.hiding { opacity:0; pointer-events:none; }
+  .splash-text { animation: splashTextIn 0.9s forwards ease-out; }
   .page { display: none; animation: fadeInUp 0.35s ease-out; }
   .page.active { display: block; }
   ::-webkit-scrollbar { width: 6px; }
@@ -226,6 +227,60 @@ tailwind.config = {
   .img-slot .slot-remove { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.7); color:#fff; border:none; width:22px; height:22px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; }
   .suggestion-chip { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; font-weight:700; padding:5px 12px; background:rgba(0,0,0,0.06); border:1.5px solid rgba(0,0,0,0.2); color:rgba(0,0,0,0.6); cursor:pointer; transition:all 0.15s; text-transform:uppercase; }
   .suggestion-chip:hover { background:#000; color:#fff; border-color:#000; }
+
+  /* ===== HERO ANIMATIONS ===== */
+  @keyframes heroBadgeIn { from{opacity:0;transform:translateX(-24px);} to{opacity:1;transform:translateX(0);} }
+  @keyframes heroTitleIn { from{opacity:0;transform:translateY(40px) skewY(2deg);} to{opacity:1;transform:translateY(0) skewY(0);} }
+  @keyframes heroSubtitleIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes heroBtnsIn { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes heroCornerPulse { 0%,100%{opacity:0.15;} 50%{opacity:0.35;} }
+  @keyframes heroCornerBlPulse { 0%,100%{opacity:0.08;} 50%{opacity:0.2;} }
+  @keyframes particleDrift {
+    0%   { transform: translateY(0px) translateX(0px) scale(1); opacity: var(--p-opacity); }
+    33%  { transform: translateY(-40px) translateX(12px) scale(1.1); opacity: calc(var(--p-opacity) * 0.7); }
+    66%  { transform: translateY(-20px) translateX(-8px) scale(0.9); opacity: calc(var(--p-opacity) * 1.2); }
+    100% { transform: translateY(0px) translateX(0px) scale(1); opacity: var(--p-opacity); }
+  }
+  @keyframes glitchSlice {
+    0%,95%,100% { clip-path: none; transform: none; }
+    96% { clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); transform: translateX(-4px); }
+    97% { clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); transform: translateX(4px); }
+    98% { clip-path: polygon(0 10%, 100% 10%, 100% 30%, 0 30%); transform: translateX(-2px); }
+    99% { clip-path: none; transform: translateX(2px); }
+  }
+  @keyframes vignetteAnim { 0%,100%{opacity:1;} 50%{opacity:0.85;} }
+  @keyframes scanlineMove { from{background-position:0 0;} to{background-position:0 8px;} }
+
+  .hero-anim-badge { animation: heroBadgeIn 0.7s 0.3s both ease-out; }
+  .hero-anim-title { animation: heroTitleIn 0.9s 0.5s both cubic-bezier(0.22,1,0.36,1); }
+  .hero-anim-subtitle { animation: heroSubtitleIn 0.7s 0.9s both ease-out; }
+  .hero-anim-btns { animation: heroBtnsIn 0.7s 1.1s both ease-out; }
+  .hero-corner-accent { animation: heroCornerPulse 4s ease-in-out infinite; }
+  .hero-corner-accent-bl { animation: heroCornerBlPulse 5s ease-in-out infinite 1s; }
+
+  /* Glitch effect on title (optional, triggered by JS) */
+  .hero-glitch { animation: glitchSlice 8s ease-in-out infinite; }
+
+  /* Particle dot */
+  .hero-particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: particleDrift var(--p-dur) ease-in-out infinite var(--p-delay);
+    opacity: var(--p-opacity);
+    pointer-events: none;
+  }
+
+  /* Hero video admin uploader */
+  #hero-video-dropzone { border:3px dashed #5d22ff; padding:24px; text-align:center; cursor:pointer; transition:all 0.2s; }
+  #hero-video-dropzone:hover, #hero-video-dropzone.drag-over { background:rgba(93,34,255,0.08); border-color:#4500d1; }
+  .hero-media-tab { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; font-weight:700; text-transform:uppercase; padding:10px 20px; border:2px solid #000; background:#fff; cursor:pointer; transition:all 0.15s; }
+  .hero-media-tab.active { background:#000; color:#fff; }
+
+  /* Video badge in hero */
+  #hero-video-badge { position:absolute; top:20px; left:20px; z-index:20; display:none; align-items:center; gap:6px; background:rgba(93,34,255,0.85); color:#fff; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; font-weight:700; padding:5px 10px; backdrop-filter:blur(8px); }
+  #hero-video-badge .rec-dot { width:8px; height:8px; border-radius:50%; background:#fff; animation:heroBadgeIn 1s ease infinite alternate; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -363,16 +418,45 @@ tailwind.config = {
 <!-- ===================================== -->
 <div id="page-home" class="page active">
   <!-- Hero -->
-  <section class="border-b-[3px] border-primary relative overflow-hidden" style="min-height:90vh;background:#000;display:flex;align-items:flex-end;">
-    <img id="hero-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-60"/>
-    <div class="relative z-10 px-6 md:px-12 pb-12 md:pb-20 max-w-[1440px] w-full mx-auto">
-      <span id="hero-badge" class="badge badge-violet mb-4"></span>
-      <h1 id="hero-title" class="text-white uppercase mb-6" style="font-family:Montserrat;font-size:clamp(48px,10vw,120px);font-weight:900;line-height:1;letter-spacing:-0.04em;"></h1>
-      <p id="hero-subtitle" class="text-white/70 mb-8 max-w-md" style="font-family:Inter;font-size:18px;"></p>
-      <div class="flex gap-4 flex-wrap">
+  <section id="hero-section" class="border-b-[3px] border-primary relative overflow-hidden" style="min-height:90vh;background:#000;display:flex;align-items:flex-end;">
+    <!-- Video background (hidden when no video) -->
+    <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
+    <!-- Image background (fallback / default) -->
+    <img id="hero-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-60" id="hero-img"/>
+    <!-- Animated overlay particles -->
+    <div id="hero-particles" class="absolute inset-0 z-[1] pointer-events-none overflow-hidden"></div>
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 z-[2]" style="background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.1) 100%);"></div>
+    <!-- Animated scanline effect -->
+    <div id="hero-scanlines" class="absolute inset-0 z-[3] pointer-events-none" style="display:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);"></div>
+    <!-- Content -->
+    <div class="relative z-10 px-6 md:px-12 pb-12 md:pb-20 max-w-[1440px] w-full mx-auto" style="z-index:10;">
+      <span id="hero-badge" class="badge badge-violet mb-4 hero-anim-badge"></span>
+      <h1 id="hero-title" class="text-white uppercase mb-6 hero-anim-title" style="font-family:Montserrat;font-size:clamp(48px,10vw,120px);font-weight:900;line-height:1;letter-spacing:-0.04em;"></h1>
+      <p id="hero-subtitle" class="text-white/70 mb-8 max-w-md hero-anim-subtitle" style="font-family:Inter;font-size:18px;"></p>
+      <div class="flex gap-4 flex-wrap hero-anim-btns">
         <button class="btn-violet" onclick="nav('catalog')">EXPLORAR COLECCIÓN <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
         <button class="btn-outline" style="color:#fff;border-color:#fff;background:transparent;" onclick="filterCatalog('newdrops')">NEW DROPS</button>
       </div>
+    </div>
+    <!-- Animated corner accent -->
+    <div class="absolute top-0 right-0 z-[5] pointer-events-none hero-corner-accent" style="width:320px;height:320px;opacity:0.15;">
+      <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+        <rect x="160" y="0" width="160" height="3" fill="#5d22ff"/>
+        <rect x="317" y="0" width="3" height="160" fill="#5d22ff"/>
+        <rect x="200" y="40" width="80" height="2" fill="#5d22ff" opacity="0.5"/>
+        <rect x="278" y="40" width="2" height="80" fill="#5d22ff" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="absolute bottom-0 left-0 z-[5] pointer-events-none hero-corner-accent-bl" style="width:200px;height:200px;opacity:0.1;">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="197" width="160" height="3" fill="#ffffff"/>
+        <rect x="0" y="100" width="3" height="100" fill="#ffffff"/>
+      </svg>
+    </div>
+    <!-- Video playing indicator -->
+    <div id="hero-video-badge" style="position:absolute;top:20px;left:20px;z-index:20;display:none;align-items:center;gap:6px;background:rgba(93,34,255,0.85);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;font-weight:700;padding:5px 10px;backdrop-filter:blur(8px);">
+      <span style="width:8px;height:8px;border-radius:50%;background:#fff;display:inline-block;animation:heroCornerPulse 1s ease-in-out infinite;"></span> VIDEO
     </div>
   </section>
 
@@ -766,32 +850,16 @@ tailwind.config = {
         <!-- Step 2: Envío -->
         <div id="checkout-step-2" style="display:none;">
           <h2 class="font-label-caps text-label-caps text-primary mb-6">MÉTODO DE ENVÍO</h2>
-          <div class="space-y-4 mb-8">
-            <label class="flex items-center gap-4 p-4 border-[3px] border-primary cursor-pointer hover:bg-surface-container-low">
-              <input type="radio" name="shipping" value="standard" checked class="text-primary"/>
-              <div class="flex-1">
-                <div class="font-label-caps text-label-caps text-primary">ENVÍO ESTÁNDAR (5-7 DÍAS)</div>
-                <div class="font-body-md text-on-surface-variant text-sm">Correo Argentino / OCA</div>
-              </div>
-              <span class="font-label-caps text-label-caps text-secondary-container">GRATIS</span>
-            </label>
-            <label class="flex items-center gap-4 p-4 border-[3px] border-primary cursor-pointer hover:bg-surface-container-low">
-              <input type="radio" name="shipping" value="express" class="text-primary"/>
-              <div class="flex-1">
-                <div class="font-label-caps text-label-caps text-primary">ENVÍO EXPRESS (1-2 DÍAS)</div>
-                <div class="font-body-md text-on-surface-variant text-sm">Andreani / DHL</div>
-              </div>
-              <span class="font-label-caps text-label-caps text-primary">$2.800</span>
-            </label>
-            <label class="flex items-center gap-4 p-4 border-[3px] border-primary cursor-pointer hover:bg-surface-container-low">
-              <input type="radio" name="shipping" value="pickup" class="text-primary"/>
-              <div class="flex-1">
-                <div class="font-label-caps text-label-caps text-primary">RETIRO EN LOCAL</div>
-                <div class="font-body-md text-on-surface-variant text-sm">Av. Santa Fe 1234, CABA</div>
-              </div>
-              <span class="font-label-caps text-label-caps text-secondary-container">GRATIS</span>
-            </label>
+          <!-- Aviso pendiente -->
+          <div class="flex items-start gap-3 border-[2px] border-outline-variant bg-surface-container-low p-4 mb-5">
+            <span class="material-symbols-outlined text-[20px] text-on-surface-variant mt-0.5">info</span>
+            <div>
+              <div class="font-label-caps text-[10px] text-primary mb-0.5">COSTO DE ENVÍO</div>
+              <p class="font-body-md text-sm text-on-surface-variant">El costo exacto queda <strong>pendiente</strong> y se calcula una vez confirmada la dirección de entrega. Lo verás reflejado en el total final antes de pagar.</p>
+            </div>
           </div>
+          <!-- Opciones dinámicas desde admin (renderShippingOptions las inyecta) -->
+          <div id="shipping-options-list" class="space-y-4 mb-8"></div>
           <div class="flex gap-4">
             <button class="btn-outline" onclick="checkoutStep(1)"><span class="material-symbols-outlined text-[16px]">arrow_back</span> VOLVER</button>
             <button class="btn-primary" onclick="checkoutStep(3)">CONTINUAR <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
@@ -849,8 +917,18 @@ tailwind.config = {
           <div id="checkout-items" class="space-y-4 mb-6"></div>
           <div class="space-y-3 pt-4 border-t-[3px] border-primary">
             <div class="flex justify-between font-label-caps text-label-caps"><span class="text-on-surface-variant">SUBTOTAL</span><span id="checkout-subtotal">$0</span></div>
-            <div class="flex justify-between font-label-caps text-label-caps"><span class="text-on-surface-variant">ENVÍO</span><span>GRATIS</span></div>
+            <div class="flex justify-between font-label-caps text-label-caps items-center">
+              <span class="text-on-surface-variant">ENVÍO</span>
+              <span id="checkout-shipping-display" class="flex items-center gap-1">
+                <span class="inline-block w-2 h-2 rounded-full bg-outline-variant animate-pulse"></span>
+                <span class="text-on-surface-variant" style="font-size:10px;">PENDIENTE</span>
+              </span>
+            </div>
             <div class="flex justify-between font-label-caps text-[15px] font-bold text-primary pt-3 border-t-[3px] border-primary"><span>TOTAL</span><span id="checkout-total">$0</span></div>
+          </div>
+          <!-- Nota envío pendiente (oculta cuando se resuelve) -->
+          <div id="checkout-shipping-note" class="mt-3 font-label-caps text-[9px] text-on-surface-variant text-center opacity-70">
+            EL COSTO DE ENVÍO SE CALCULA ANTES DE CONFIRMAR EL PAGO
           </div>
         </div>
       </aside>
@@ -1680,16 +1758,152 @@ tailwind.config = {
             <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4">
               <span class="material-symbols-outlined text-[18px]">image</span> HERO BANNER PRINCIPAL
             </h3>
-            <p class="font-body-md text-on-surface-variant text-sm mb-6">Editá el texto, subtítulo y badge del banner principal de la home.</p>
+            <p class="font-body-md text-on-surface-variant text-sm mb-6">Editá el texto, subtítulo, badge, imagen o video de fondo del banner principal.</p>
             <!-- Live Preview -->
             <div class="border-[3px] border-primary relative overflow-hidden mb-6" style="height:220px;background:#000;">
+              <video id="hero-preview-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
               <img id="hero-preview-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" class="absolute inset-0 w-full h-full object-cover opacity-50"/>
+              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.15) 100%);"></div>
               <div class="relative z-10 p-6 flex flex-col justify-end h-full">
                 <span id="hero-preview-badge" class="badge badge-violet mb-2 inline-block w-fit"></span>
                 <div id="hero-preview-title" style="font-family:Montserrat;font-size:clamp(20px,4vw,40px);font-weight:900;color:#fff;letter-spacing:-0.03em;line-height:1;text-transform:uppercase;"></div>
                 <div id="hero-preview-subtitle" style="font-family:Inter;font-size:14px;color:rgba(255,255,255,0.7);margin-top:8px;"></div>
               </div>
+              <!-- Video indicator in preview -->
+              <div id="hero-preview-video-badge" class="hidden absolute top-3 left-3 z-20 flex items-center gap-2 px-2 py-1" style="background:rgba(93,34,255,0.85);font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#fff;letter-spacing:0.1em;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#fff;display:inline-block;"></span> VIDEO ACTIVO
+              </div>
             </div>
+
+            <!-- Tabs: imagen / video -->
+            <div class="flex mb-5 border-[3px] border-primary">
+              <button class="hero-media-tab active flex-1 flex items-center justify-center gap-2" id="tab-img-btn" onclick="switchHeroTab('img')">
+                <span class="material-symbols-outlined text-[16px]">image</span> IMAGEN
+              </button>
+              <button class="hero-media-tab flex-1 flex items-center justify-center gap-2 border-l-[3px] border-primary" id="tab-vid-btn" onclick="switchHeroTab('video')">
+                <span class="material-symbols-outlined text-[16px]">videocam</span> VIDEO
+              </button>
+            </div>
+
+            <!-- Panel: imagen -->
+            <div id="hero-tab-img" class="mb-5">
+              <div class="border-[3px] border-primary p-4 bg-surface-container-low">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="flex flex-col gap-3">
+                    <div id="hero-dropzone"
+                      class="border-[3px] border-dashed border-primary p-5 text-center cursor-pointer hover:bg-surface-container transition-colors"
+                      onclick="document.getElementById('hero-file-input').click()"
+                      ondragover="event.preventDefault();this.classList.add('bg-surface-container')"
+                      ondragleave="this.classList.remove('bg-surface-container')"
+                      ondrop="handleHeroFileDrop(event)">
+                      <span class="material-symbols-outlined text-[32px] text-on-surface-variant block mb-1">wallpaper</span>
+                      <p class="font-label-caps text-[10px] text-on-surface-variant">ARRASTRÁ IMAGEN O HACÉ CLIC</p>
+                      <p class="font-label-caps text-[10px] text-outline mt-1">RECOMENDADO: 1920×1080PX OSCURA</p>
+                      <input type="file" id="hero-file-input" accept="image/*" class="hidden" onchange="uploadHeroImage(this.files[0])"/>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <div class="flex-1 h-px bg-outline-variant"></div>
+                      <span class="font-label-caps text-[10px] text-on-surface-variant">O URL</span>
+                      <div class="flex-1 h-px bg-outline-variant"></div>
+                    </div>
+                    <div class="flex gap-2">
+                      <input id="hero-edit-img" class="input-field flex-1 py-2" placeholder="https://images.unsplash.com/..."/>
+                      <button class="btn-outline py-2 px-3 text-[10px]" onclick="previewHeroImg()">USAR</button>
+                    </div>
+                    <div id="hero-upload-progress" class="hidden">
+                      <div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant mb-1">
+                        <span id="hero-upload-status">SUBIENDO...</span>
+                        <span id="hero-upload-pct">0%</span>
+                      </div>
+                      <div class="w-full h-1 bg-outline-variant">
+                        <div id="hero-upload-bar" class="h-1 bg-secondary-container transition-all duration-300" style="width:0%"></div>
+                      </div>
+                    </div>
+                    <div id="hero-upload-result" class="hidden">
+                      <p class="font-label-caps text-[10px] text-secondary-container flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">check_circle</span> IMAGEN SUBIDA A CLOUDINARY
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <p class="font-label-caps text-[10px] text-on-surface-variant">MINIATURAS RECIENTES</p>
+                    <div id="hero-recent-uploads" class="grid grid-cols-3 gap-2">
+                      <div class="aspect-square bg-surface-container border-2 border-outline-variant flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[24px] text-outline-variant">image</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel: video -->
+            <div id="hero-tab-video" class="mb-5 hidden">
+              <div class="border-[3px] border-secondary-container p-4 bg-surface-container-low mb-4">
+                <p class="font-label-caps text-[10px] text-primary mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">info</span> SOBRE VIDEOS EN EL HERO</p>
+                <p class="font-body-md text-sm text-on-surface-variant">Podés usar una URL directa de video MP4 (Cloudinary, CDN propio, etc.). Para Cloudinary subí el video desde su dashboard y copiá la URL <code class="font-label-caps text-[10px] bg-surface-container px-1">.mp4</code>. El video corre automáticamente, sin sonido, en loop. La imagen de fondo queda como fallback.</p>
+              </div>
+
+              <!-- Video dropzone upload -->
+              <div id="hero-video-dropzone"
+                class="border-[3px] border-dashed border-secondary-container p-6 text-center cursor-pointer hover:bg-surface-container transition-colors mb-4"
+                onclick="document.getElementById('hero-video-file-input').click()"
+                ondragover="event.preventDefault();this.classList.add('drag-over')"
+                ondragleave="this.classList.remove('drag-over')"
+                ondrop="handleHeroVideoFileDrop(event)">
+                <span class="material-symbols-outlined text-[40px] text-secondary-container block mb-2">video_file</span>
+                <p class="font-label-caps text-[11px] text-primary">ARRASTRÁ TU VIDEO O HACÉ CLIC</p>
+                <p class="font-label-caps text-[10px] text-on-surface-variant mt-1">MP4 RECOMENDADO — MÁX 100MB — LANDSCAPE OSCURO</p>
+                <input type="file" id="hero-video-file-input" accept="video/mp4,video/webm,video/ogg" class="hidden" onchange="uploadHeroVideo(this.files[0])"/>
+              </div>
+
+              <!-- Video upload progress -->
+              <div id="hero-video-upload-progress" class="hidden mb-4">
+                <div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant mb-1">
+                  <span id="hero-video-upload-status">SUBIENDO VIDEO...</span>
+                  <span id="hero-video-upload-pct">0%</span>
+                </div>
+                <div class="w-full h-2 bg-outline-variant">
+                  <div id="hero-video-upload-bar" class="h-2 bg-secondary-container transition-all duration-300" style="width:0%"></div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 mb-2">
+                <div class="flex-1 h-px bg-outline-variant"></div>
+                <span class="font-label-caps text-[10px] text-on-surface-variant">O PEGÁ URL DIRECTA</span>
+                <div class="flex-1 h-px bg-outline-variant"></div>
+              </div>
+              <div class="flex gap-2 mb-4">
+                <input id="hero-video-url" class="input-field flex-1 py-2" placeholder="https://res.cloudinary.com/tu-cloud/video/upload/tu-video.mp4"/>
+                <button class="btn-outline py-2 px-3 text-[10px]" onclick="previewHeroVideo()">USAR URL</button>
+              </div>
+
+              <!-- Current video status -->
+              <div id="hero-video-status" class="hidden border-[2px] border-secondary-container p-3 flex items-center gap-3">
+                <span class="material-symbols-outlined text-secondary-container">check_circle</span>
+                <div class="flex-1">
+                  <div class="font-label-caps text-[10px] text-primary">VIDEO CONFIGURADO</div>
+                  <div id="hero-video-url-display" class="font-label-caps text-[9px] text-on-surface-variant mt-0.5 truncate"></div>
+                </div>
+                <button class="btn-outline py-1 px-2 text-[9px]" onclick="clearHeroVideo()">
+                  <span class="material-symbols-outlined text-[14px]">delete</span> QUITAR
+                </button>
+              </div>
+
+              <!-- Animation style for video -->
+              <div class="mt-4 border-[2px] border-primary p-4">
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-3">EFECTO SOBRE EL VIDEO</label>
+                <div class="flex flex-wrap gap-2" id="video-effect-selector">
+                  <button class="hero-media-tab active text-[10px] py-2 px-3" data-effect="none" onclick="selectVideoEffect('none',this)">SIN EFECTO</button>
+                  <button class="hero-media-tab text-[10px] py-2 px-3" data-effect="scanlines" onclick="selectVideoEffect('scanlines',this)">SCANLINES</button>
+                  <button class="hero-media-tab text-[10px] py-2 px-3" data-effect="vignette" onclick="selectVideoEffect('vignette',this)">VIÑETA</button>
+                  <button class="hero-media-tab text-[10px] py-2 px-3" data-effect="particles" onclick="selectVideoEffect('particles',this)">PARTÍCULAS</button>
+                  <button class="hero-media-tab text-[10px] py-2 px-3" data-effect="glitch" onclick="selectVideoEffect('glitch',this)">GLITCH</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Texto del hero -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BADGE (etiqueta violeta)</label>
@@ -1704,58 +1918,12 @@ tailwind.config = {
                 <textarea id="hero-edit-subtitle" class="input-field" rows="2" placeholder="Ropa que habla el idioma de la calle..." oninput="previewHero()"></textarea>
               </div>
               <div class="md:col-span-2">
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">IMAGEN DE FONDO DEL HERO</label>
-                <!-- Hero image uploader -->
-                <div class="border-[3px] border-primary p-4 bg-surface-container-low">
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex flex-col gap-3">
-                      <div id="hero-dropzone"
-                        class="border-[3px] border-dashed border-primary p-5 text-center cursor-pointer hover:bg-surface-container transition-colors"
-                        onclick="document.getElementById('hero-file-input').click()"
-                        ondragover="event.preventDefault();this.classList.add('bg-surface-container')"
-                        ondragleave="this.classList.remove('bg-surface-container')"
-                        ondrop="handleHeroFileDrop(event)">
-                        <span class="material-symbols-outlined text-[32px] text-on-surface-variant block mb-1">wallpaper</span>
-                        <p class="font-label-caps text-[10px] text-on-surface-variant">ARRASTRÁ IMAGEN O HACÉ CLIC</p>
-                        <p class="font-label-caps text-[10px] text-outline mt-1">RECOMENDADO: 1920×1080PX OSCURA</p>
-                        <input type="file" id="hero-file-input" accept="image/*" class="hidden" onchange="uploadHeroImage(this.files[0])"/>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <div class="flex-1 h-px bg-outline-variant"></div>
-                        <span class="font-label-caps text-[10px] text-on-surface-variant">O URL</span>
-                        <div class="flex-1 h-px bg-outline-variant"></div>
-                      </div>
-                      <div class="flex gap-2">
-                        <input id="hero-edit-img" class="input-field flex-1 py-2" placeholder="https://images.unsplash.com/..."/>
-                        <button class="btn-outline py-2 px-3 text-[10px]" onclick="previewHeroImg()">USAR</button>
-                      </div>
-                      <!-- Progress -->
-                      <div id="hero-upload-progress" class="hidden">
-                        <div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant mb-1">
-                          <span id="hero-upload-status">SUBIENDO...</span>
-                          <span id="hero-upload-pct">0%</span>
-                        </div>
-                        <div class="w-full h-1 bg-outline-variant">
-                          <div id="hero-upload-bar" class="h-1 bg-secondary-container transition-all duration-300" style="width:0%"></div>
-                        </div>
-                      </div>
-                      <div id="hero-upload-result" class="hidden">
-                        <p class="font-label-caps text-[10px] text-secondary-container flex items-center gap-1">
-                          <span class="material-symbols-outlined text-[14px]">check_circle</span> IMAGEN SUBIDA A CLOUDINARY
-                        </p>
-                      </div>
-                    </div>
-                    <!-- Mini preview already shown in the big preview above -->
-                    <div class="flex flex-col gap-2">
-                      <p class="font-label-caps text-[10px] text-on-surface-variant">MINIATURAS RECIENTES</p>
-                      <div id="hero-recent-uploads" class="grid grid-cols-3 gap-2">
-                        <div class="aspect-square bg-surface-container border-2 border-outline-variant flex items-center justify-center">
-                          <span class="material-symbols-outlined text-[24px] text-outline-variant">image</span>
-                        </div>
-                      </div>
-                      <p class="font-label-caps text-[10px] text-on-surface-variant mt-2">Las imágenes subidas aparecen aquí para reutilizarlas.</p>
-                    </div>
-                  </div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-3">ANIMACIONES DE TEXTO</label>
+                <div class="flex flex-wrap gap-2" id="anim-style-selector">
+                  <button class="hero-media-tab active text-[10px] py-2 px-3" data-anim="default" onclick="selectHeroAnim('default',this)">ESTÁNDAR</button>
+                  <button class="hero-media-tab text-[10px] py-2 px-3" data-anim="glitch" onclick="selectHeroAnim('glitch',this)">GLITCH LOOP</button>
+                  <button class="hero-media-tab text-[10px] py-2 px-3" data-anim="particles" onclick="selectHeroAnim('particles',this)">+ PARTÍCULAS</button>
+                  <button class="hero-media-tab text-[10px] py-2 px-3" data-anim="minimal" onclick="selectHeroAnim('minimal',this)">MINIMAL</button>
                 </div>
               </div>
             </div>
@@ -1763,7 +1931,6 @@ tailwind.config = {
               <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR Y PUBLICAR HERO
             </button>
           </div>
-
           <!-- Promo Banner Editor -->
           <div class="bg-surface-container-lowest border-[3px] border-primary p-6">
             <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4">
@@ -1837,7 +2004,12 @@ tailwind.config = {
             </div>
             <div class="bg-surface-container-low border-l-4 border-secondary-container p-4 mb-4">
               <p class="font-label-caps text-[10px] text-primary mb-1">¿CÓMO FUNCIONA?</p>
-              <p class="font-body-md text-sm text-on-surface-variant">Con tu <strong>Public Key</strong> y <strong>Access Token</strong> de Mercado Pago, cada compra genera un link de pago. El dinero se acredita directo en tu cuenta MP (CBU/CVU). No necesitás servidor propio.</p>
+              <p class="font-body-md text-sm text-on-surface-variant">La <strong>Public Key</strong> se configura acá y va a Firestore. El <strong>Access Token</strong> va directo a Vercel como variable de entorno — nunca pasa por el browser ni por Firebase. Cada compra llama a una función servidor segura que genera el link de pago.</p>
+            </div>
+            <!-- Aviso de seguridad -->
+            <div class="mb-4 p-4 border-l-4 border-secondary-container bg-surface-container-low">
+              <p class="font-label-caps text-[10px] text-primary mb-1">🔒 SOBRE LA SEGURIDAD DEL ACCESS TOKEN</p>
+              <p class="font-body-md text-sm text-on-surface-variant">La <strong>Public Key</strong> se guarda en Firebase (es pública por diseño de MP). El <strong>Access Token</strong> es secreto y <strong>no se guarda en ningún lado de esta app</strong> — debe cargarse directamente en <a href="https://vercel.com" target="_blank" class="text-secondary-container underline">Vercel → Settings → Environment Variables</a> como <code class="font-label-caps text-[10px] bg-surface-container px-1">MP_ACCESS_TOKEN</code>.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
@@ -1845,8 +2017,9 @@ tailwind.config = {
                 <div class="relative"><input id="mp-public-key" class="input-field pr-10" placeholder="APP_USR-xxxxxxxx..." type="password"/><button onclick="togglePass('mp-public-key')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
               </div>
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ACCESS TOKEN * <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="text-secondary-container underline ml-2 text-[9px]">OBTENER →</a></label>
-                <div class="relative"><input id="mp-access-token" class="input-field pr-10" placeholder="APP_USR-xxxxxxxx..." type="password"/><button onclick="togglePass('mp-access-token')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ACCESS TOKEN <span class="text-secondary-container">(solo para verificar — no se guarda aquí)</span></label>
+                <div class="relative"><input id="mp-access-token" class="input-field pr-10" placeholder="Cargarlo en Vercel → MP_ACCESS_TOKEN" type="password"/><button onclick="togglePass('mp-access-token')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
+                <p class="font-label-caps text-[9px] text-on-surface-variant mt-1">Se borra automáticamente al guardar — no queda en memoria</p>
               </div>
               <div>
                 <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CUOTAS SIN INTERÉS</label>
@@ -1893,20 +2066,164 @@ tailwind.config = {
           <div class="bg-white border-[3px] border-primary p-6">
             <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[20px]">swap_horiz</span></div><div><h3 class="font-label-caps text-label-caps text-primary">TRANSFERENCIA BANCARIA / CBU</h3><p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">DATOS QUE VE EL CLIENTE AL ELEGIR ESTA OPCIÓN</p></div></div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BANCO</label><input id="bank-name" class="input-field" value="Banco Galicia"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TITULAR</label><input id="bank-titular" class="input-field" value="XINCO S.R.L."/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BANCO</label><input id="bank-name" class="input-field" placeholder="Banco Galicia / Nación / etc"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TITULAR</label><input id="bank-titular" class="input-field" placeholder="Razón social o nombre"/></div>
               <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CBU / CVU</label><input id="bank-cbu" class="input-field" placeholder="0000000000000000000000"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ALIAS</label><input id="bank-alias" class="input-field" value="XINCO.TIENDA"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ALIAS</label><input id="bank-alias" class="input-field" placeholder="MI.ALIAS.BANCO"/></div>
               <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DESCUENTO TRANSFERENCIA</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="10" min="0" max="50" style="width:80px;"/><span class="font-label-caps text-label-caps">% OFF</span></div></div>
             </div>
-            <button class="btn-primary py-2 px-5 text-[11px]" onclick="showToast('Datos bancarios guardados ✅')"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR DATOS BANCARIOS</button>
+            <button class="btn-primary py-2 px-5 text-[11px]" onclick="saveBankConfig()"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR DATOS BANCARIOS</button>
           </div>
         </div>
 
         <!-- ===== TRACKING SECTION ===== -->
         <div id="admin-section-tracking" class="hidden">
           <h2 style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary uppercase mb-2">SEGUIMIENTO DE ENVÍOS</h2>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-5">CORREO ARGENTINO — ASIGNACIÓN Y CONSULTA DE PAQUETES</p>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-5">PROVEEDORES DE ENVÍO — CONFIGURACIÓN, ASIGNACIÓN Y CONSULTA</p>
+
+          <!-- ── Configuración de proveedores ── -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">local_shipping</span> PROVEEDORES DE ENVÍO
+            </h3>
+            <p class="font-body-md text-sm text-on-surface-variant mb-5">Configurá los proveedores que aparecen en el checkout. Los datos se guardan en Firebase y <strong>nunca quedan expuestos en el código</strong>.</p>
+
+            <!-- Tabs de proveedor -->
+            <div class="flex mb-5 border-[3px] border-primary overflow-x-auto">
+              <button class="hero-media-tab active flex-1 min-w-max text-[10px] py-2 px-3" id="sp-tab-correoarg" onclick="switchShippingTab('correoarg')">CORREO ARG.</button>
+              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l-[3px] border-primary" id="sp-tab-andreani" onclick="switchShippingTab('andreani')">ANDREANI</button>
+              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l-[3px] border-primary" id="sp-tab-oca" onclick="switchShippingTab('oca')">OCA</button>
+              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l-[3px] border-primary" id="sp-tab-pickup" onclick="switchShippingTab('pickup')">RETIRO LOCAL</button>
+            </div>
+
+            <!-- Panel Correo Argentino -->
+            <div id="sp-panel-correoarg" class="space-y-4">
+              <div class="flex items-center gap-3 p-3 border-[2px] border-outline-variant bg-surface-container-low mb-2">
+                <span class="material-symbols-outlined text-secondary-container text-[20px]">info</span>
+                <p class="font-body-md text-sm text-on-surface-variant">Correo Argentino no tiene API pública de cotización. El costo se configura manualmente o se marca como <strong>a calcular</strong>. El número de seguimiento se asigna abajo cuando se despacha el paquete.</p>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE QUE VE EL CLIENTE</label>
+                  <input id="sp-correoarg-label" class="input-field" placeholder="Correo Argentino (5-7 días hábiles)"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TIPO DE COSTO</label>
+                  <select id="sp-correoarg-cost-type" class="input-field" onchange="toggleShippingCostField('correoarg')">
+                    <option value="pending">A CALCULAR (pendiente)</option>
+                    <option value="free">GRATIS</option>
+                    <option value="fixed">PRECIO FIJO</option>
+                  </select>
+                </div>
+                <div id="sp-correoarg-cost-wrap" class="hidden">
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">COSTO FIJO (ARS)</label>
+                  <input id="sp-correoarg-cost" class="input-field" type="number" placeholder="2800" min="0"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">FORMATO DE SEGUIMIENTO</label>
+                  <input id="sp-correoarg-tracking-format" class="input-field" placeholder="CX000000000AR" readonly/>
+                  <p class="font-label-caps text-[9px] text-on-surface-variant mt-1">FORMATO OFICIAL: 2 LETRAS + 9 NÚMEROS + AR</p>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">URL DE SEGUIMIENTO</label>
+                  <input id="sp-correoarg-tracking-url" class="input-field" value="https://www.correoargentino.com.ar/formularios/e-comercio" readonly/>
+                  <p class="font-label-caps text-[9px] text-on-surface-variant mt-1">URL PÚBLICA — NO ES UN TOKEN NI CREDENCIAL</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 pt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="sp-correoarg-enabled" class="form-checkbox h-4 w-4 border-2 border-primary rounded-none"/>
+                  <span class="font-label-caps text-[10px] text-primary">HABILITADO EN EL CHECKOUT</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Panel Andreani -->
+            <div id="sp-panel-andreani" class="space-y-4 hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE QUE VE EL CLIENTE</label>
+                  <input id="sp-andreani-label" class="input-field" placeholder="Andreani Express (1-3 días hábiles)"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TIPO DE COSTO</label>
+                  <select id="sp-andreani-cost-type" class="input-field" onchange="toggleShippingCostField('andreani')">
+                    <option value="pending">A CALCULAR (pendiente)</option>
+                    <option value="free">GRATIS</option>
+                    <option value="fixed">PRECIO FIJO</option>
+                  </select>
+                </div>
+                <div id="sp-andreani-cost-wrap" class="hidden">
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">COSTO FIJO (ARS)</label>
+                  <input id="sp-andreani-cost" class="input-field" type="number" placeholder="3500" min="0"/>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 pt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="sp-andreani-enabled" class="form-checkbox h-4 w-4 border-2 border-primary rounded-none"/>
+                  <span class="font-label-caps text-[10px] text-primary">HABILITADO EN EL CHECKOUT</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Panel OCA -->
+            <div id="sp-panel-oca" class="space-y-4 hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE QUE VE EL CLIENTE</label>
+                  <input id="sp-oca-label" class="input-field" placeholder="OCA (3-5 días hábiles)"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TIPO DE COSTO</label>
+                  <select id="sp-oca-cost-type" class="input-field" onchange="toggleShippingCostField('oca')">
+                    <option value="pending">A CALCULAR (pendiente)</option>
+                    <option value="free">GRATIS</option>
+                    <option value="fixed">PRECIO FIJO</option>
+                  </select>
+                </div>
+                <div id="sp-oca-cost-wrap" class="hidden">
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">COSTO FIJO (ARS)</label>
+                  <input id="sp-oca-cost" class="input-field" type="number" placeholder="2500" min="0"/>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 pt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="sp-oca-enabled" class="form-checkbox h-4 w-4 border-2 border-primary rounded-none"/>
+                  <span class="font-label-caps text-[10px] text-primary">HABILITADO EN EL CHECKOUT</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Panel Retiro en Local -->
+            <div id="sp-panel-pickup" class="space-y-4 hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE QUE VE EL CLIENTE</label>
+                  <input id="sp-pickup-label" class="input-field" placeholder="Retiro en local (sin costo)"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DIRECCIÓN DEL LOCAL</label>
+                  <input id="sp-pickup-address" class="input-field" placeholder="Av. Santa Fe 1234, CABA"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">HORARIO</label>
+                  <input id="sp-pickup-hours" class="input-field" placeholder="Lun–Vie 10–19 hs"/>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 pt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="sp-pickup-enabled" class="form-checkbox h-4 w-4 border-2 border-primary rounded-none"/>
+                  <span class="font-label-caps text-[10px] text-primary">HABILITADO EN EL CHECKOUT</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t-[2px] border-outline-variant mt-4">
+              <button class="btn-violet py-2 px-5 text-[11px]" onclick="saveShippingProviders()">
+                <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR PROVEEDORES
+              </button>
+            </div>
+          </div>
 
           <!-- Asignar -->
           <div class="bg-white border-[3px] border-primary p-6 mb-5">
@@ -2067,6 +2384,8 @@ const USERS = [
 ];
 
 // =================== BANNER STATE ===================
+// VALORES PREDETERMINADOS — solo se usan si Firebase no tiene datos guardados.
+// Object.assign(bannerState, firebaseData) los sobreescribe correctamente al cargar.
 let bannerState = {
   announcements: [
     'ENVÍO GRATIS SUPERANDO LOS $95.000',
@@ -2083,7 +2402,9 @@ let bannerState = {
     label: 'OFERTA LIMITADA',
     title: '30% OFF\nEN BUZOS',
     code: 'URBAN30'
-  }
+  },
+  // categories se carga siempre desde Firestore (config/banners)
+  categories: {}
 };
 
 const PRODUCTS = [
@@ -2182,9 +2503,43 @@ function filterCatalog(tag) {
 }
 
 // =================== SPLASH ===================
-setTimeout(() => {
-  document.getElementById('splash').style.display = 'none';
-}, 2600);
+// El splash se oculta SOLO cuando las imágenes críticas ya están cargadas en memoria.
+// Garantiza: Firebase sync → renderHeroBanner/applySavedCatImages → imágenes decodificadas → splash off.
+
+const SPLASH_MIN_MS   = 900;   // tiempo mínimo que dura el splash (evita parpadeo en cache)
+const SPLASH_MAX_MS   = 8000;  // fallback de seguridad si una imagen no carga
+const _splashStart    = Date.now();
+let   _splashDismissed = false;
+
+function dismissSplash() {
+  if (_splashDismissed) return;
+  _splashDismissed = true;
+  const el = document.getElementById('splash');
+  if (!el) return;
+  // Respetar el tiempo mínimo para que el logo se vea bien
+  const elapsed = Date.now() - _splashStart;
+  const wait    = Math.max(0, SPLASH_MIN_MS - elapsed);
+  setTimeout(() => {
+    el.classList.add('hiding');
+    setTimeout(() => { el.style.display = 'none'; }, 650);
+  }, wait);
+}
+
+// Carga una imagen en memoria y resuelve cuando decodificó (o falla silenciosamente)
+function preloadImage(url) {
+  if (!url) return Promise.resolve();
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload  = () => resolve();
+    img.onerror = () => resolve();   // si falla, no bloqueamos para siempre
+    img.src = url;
+    // Fallback por si el evento no dispara (edge case)
+    setTimeout(resolve, 4000);
+  });
+}
+
+// Fallback de seguridad absoluto: si algo explota, el splash desaparece igual
+setTimeout(dismissSplash, SPLASH_MAX_MS);
 
 // =================== TOAST ===================
 let toastTimer;
@@ -2393,8 +2748,17 @@ function closeMobileMenu() {
 }
 
 // =================== PRODUCTS ===================
+// Normaliza cualquier entrada de imagen (string o {url,colorId}) a una URL string
+function extractImgUrl(entry) {
+  if (!entry) return '';
+  if (typeof entry === 'string') return entry;
+  if (entry.url) return entry.url;
+  return '';
+}
+
 function renderProductCard(p, small=false) {
-  const img = p.img || (p.images && p.images[0]) || '';
+  const rawImg = p.img || (p.images && p.images[0]) || '';
+  const img = extractImgUrl(rawImg);
   const colors = p.colors || [];
   // Get color hex from AVAILABLE_COLORS
   const colorDots = colors.slice(0,5).map(cid => {
@@ -2520,15 +2884,20 @@ function openProduct(id) {
   state.selectedSize  = null;
   state.selectedColor = (p.colors && p.colors[0]) || 'negro';
 
-  // Normalize images to always be [{url, colorId}]
+  // Normalize images to always be [{url, colorId}] — handles string, {url}, or {url,colorId}
   const rawImages = p.images && p.images.length > 0 ? p.images : (p.img ? [p.img] : []);
-  const images = rawImages.map(img =>
-    typeof img === 'string' ? { url: img, colorId: '' } : img
-  );
+  const images = rawImages.map(img => {
+    if (typeof img === 'string') return { url: img, colorId: '' };
+    if (img && img.url) return img;
+    return { url: extractImgUrl(img), colorId: '' };
+  }).filter(im => im.url);
+
+  // Fallback: si aún no hay imágenes, usar p.img directo
+  if (images.length === 0 && p.img) images.push({ url: extractImgUrl(p.img), colorId: '' });
 
   // Find image for the default selected color
   const defaultImg = images.find(im => im.colorId === state.selectedColor)?.url
-    || images[0]?.url || p.img || '';
+    || images[0]?.url || extractImgUrl(p.img) || '';
 
   document.getElementById('product-breadcrumb').textContent = p.name;
   document.getElementById('product-main-img').src = defaultImg;
@@ -2749,16 +3118,16 @@ const EMAILJS = {
   templateId: 'XINCO-VERICATION',
 };
 
-async function sendVerificationEmail(toEmail, toName) {
+async function sendVerificationEmail(toEmail, toName, verificationLink) {
   try {
     await emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, {
       to_email:          toEmail,
       to_name:           toName,
-      verification_link: window.location.origin + '/login',
+      verification_link: verificationLink,
       from_name:         'XINCO Tienda',
       reply_to:          'noreply@xinco.com.ar',
     });
-    console.log('✅ Notificación de verificación enviada via EmailJS');
+    console.log('✅ Email de verificación enviado via EmailJS');
     return true;
   } catch(e) {
     console.error('EmailJS error:', e);
@@ -2811,17 +3180,14 @@ async function doRegister() {
     // 2. Guardar nombre en Firebase
     await updateProfile(user, { displayName: nombre + ' ' + apellido });
 
-    // 3. Enviar email de verificación via Firebase con actionCodeSettings
-    // Firebase envía el email con el link real de verificación
-    const actionCodeSettings = {
-      url: window.location.origin + '/login',
-      handleCodeInApp: false
-    };
-    await sendEmailVerification(user, actionCodeSettings);
+    // 3. Obtener link de verificación de Firebase (para el template)
+    // Firebase también manda su propio email — lo usamos como fallback
+    await sendEmailVerification(user);
 
-    // 4. Enviar notificación via EmailJS (Firebase ya envió el link real)
+    // 4. Enviar email personalizado via EmailJS con diseño XINCO
+    const verificationLink = `https://xinco-tienda.firebaseapp.com/__/auth/action?mode=verifyEmail&oobCode=AUTO&continueUrl=${encodeURIComponent(window.location.origin)}`;
     const fullName = nombre + ' ' + apellido;
-    await sendVerificationEmail(email, fullName);
+    await sendVerificationEmail(email, fullName, verificationLink);
 
     // 5. Cerrar sesión hasta que verifique
     _lastRegisteredUser = { email, name: fullName };
@@ -2845,29 +3211,15 @@ async function doRegister() {
 }
 
 async function resendVerificationEmail() {
-  // 1) Si hay sesión iniciada (usuario logueado pero no verificado)
-  if (fbAuth?.currentUser) {
-    try {
-      const { sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
-      const actionCodeSettings = {
-        url: window.location.origin + '/login',
-        handleCodeInApp: false
-      };
-      await sendEmailVerification(fbAuth.currentUser, actionCodeSettings);
-      showToast('Email de verificación reenviado ✅ — revisá tu bandeja o spam');
-    } catch(e) {
-      showToast('Error al reenviar: ' + e.message + ' ❌');
-    }
-    return;
-  }
-  // 2) Si tenemos datos del último registro (recién se creó la cuenta)
+  // Reenviar via EmailJS si tenemos los datos del último registro
   if (_lastRegisteredUser) {
     const sent = await sendVerificationEmail(
       _lastRegisteredUser.email,
       _lastRegisteredUser.name,
+      `${window.location.origin}/login`
     );
-    if (sent) showToast('Notificación reenviada ✅ — revisá tu bandeja o spam');
-    else showToast('Error al enviar. Revisá spam o intentá más tarde');
+    if (sent) showToast('Email de verificación reenviado ✅ — revisá tu bandeja');
+    else showToast('Error al reenviar. Revisá spam o intentá más tarde');
     return;
   }
   showToast('Revisá tu bandeja o registrate nuevamente');
@@ -3002,17 +3354,24 @@ function toggleCatEditor() {
   if (cats.buzos) document.getElementById('cat-img-buzos').value = cats.buzos;
 }
 
-function saveCatImg(cat) {
+async function saveCatImg(cat) {
   const url = document.getElementById('cat-img-' + cat).value.trim();
   if (!url) { showToast('Ingresá una URL de imagen'); return; }
   if (!bannerState.categories) bannerState.categories = {};
   bannerState.categories[cat] = url;
-  // Actualizar imagen visible
-  const display = document.getElementById('cat-img-' + cat + '-display');
-  if (display) display.src = url;
-  persistAll();
-  fbSaveBannersRemote(bannerState).catch(e => console.warn('Firebase banner sync:', e));
-  showToast('Imagen de ' + cat + ' actualizada ✅');
+  try {
+    console.log('saveCatImg: guardando categoría "' + cat + '" en Firestore config/banners...', url);
+    await fbSaveBannersRemote(bannerState);
+    // Recargar desde Firestore para confirmar escritura
+    await syncFromFirebase();
+  await loadShippingProviders();
+    // Aplicar imágenes SIEMPRE después de cargar Firestore
+    applySavedCatImages();
+    showToast('Imagen de ' + cat + ' actualizada ✅');
+  } catch(e) {
+    console.error('saveCatImg: error guardando categoría "' + cat + '" en Firestore:', e);
+    showToast('⚠️ Error al guardar en Firebase: ' + e.message);
+  }
 }
 
 async function uploadCatImg(cat, file) {
@@ -3036,12 +3395,23 @@ async function uploadCatImg(cat, file) {
   }
 }
 
-// Aplicar imágenes de categorías guardadas al cargar
+// Aplicar imágenes de categorías desde bannerState (cargado desde Firestore)
+// Esta función DEBE llamarse siempre DESPUÉS de syncFromFirebase()
 function applySavedCatImages() {
   const cats = bannerState.categories || {};
-  if (cats.remeras) { const el = document.getElementById('cat-img-remeras-display'); if(el) el.src = cats.remeras; }
-  if (cats.pantalones) { const el = document.getElementById('cat-img-pantalones-display'); if(el) el.src = cats.pantalones; }
-  if (cats.buzos) { const el = document.getElementById('cat-img-buzos-display'); if(el) el.src = cats.buzos; }
+  console.log('applySavedCatImages: aplicando categorías desde Firestore', cats);
+  const catMap = {
+    remeras:    'cat-img-remeras-display',
+    pantalones: 'cat-img-pantalones-display',
+    buzos:      'cat-img-buzos-display',
+    accesorios: 'cat-img-accesorios-display',
+  };
+  Object.entries(catMap).forEach(([cat, elId]) => {
+    if (cats[cat]) {
+      const el = document.getElementById(elId);
+      if (el) el.src = cats[cat];
+    }
+  });
 }
 
 function togglePass(id) {
@@ -3084,6 +3454,224 @@ function goToStep(n) {
   });
 }
 
+
+// =================== SHIPPING PROVIDERS SYSTEM ===================
+
+// Estado de proveedores (cargado desde Firebase config/shipping)
+let shippingProviders = [];
+
+
+// Guardar datos bancarios en Firebase (sin valores hardcodeados en el código)
+async function saveBankConfig() {
+  const name    = document.getElementById('bank-name')?.value.trim();
+  const titular = document.getElementById('bank-titular')?.value.trim();
+  const cbu     = document.getElementById('bank-cbu')?.value.trim();
+  const alias   = document.getElementById('bank-alias')?.value.trim();
+
+  if (!name || !cbu) { showToast('BANCO Y CBU SON OBLIGATORIOS ❌'); return; }
+  if (cbu && !/^\d{22}$/.test(cbu)) { showToast('EL CBU DEBE TENER 22 DÍGITOS ❌'); return; }
+
+  try {
+    const ready = await waitForFirebase();
+    if (!ready) throw new Error('Firebase no disponible');
+    const { doc, setDoc } = window._fb;
+    // Solo datos de transferencia que el cliente ve — ningún token
+    await setDoc(doc(fbDb, 'config', 'bank'), { name, titular, cbu, alias }, { merge: true });
+    showToast('✅ Datos bancarios guardados en Firebase');
+  } catch(e) {
+    console.error('saveBankConfig:', e);
+    showToast('⚠️ Error al guardar: ' + e.message);
+  }
+}
+
+// Guardar configuración de proveedores en Firebase
+async function saveShippingProviders() {
+  const providers = [
+    {
+      id:      'correoarg',
+      label:   document.getElementById('sp-correoarg-label')?.value.trim() || 'Correo Argentino (5-7 días hábiles)',
+      costType: document.getElementById('sp-correoarg-cost-type')?.value || 'pending',
+      cost:    parseInt(document.getElementById('sp-correoarg-cost')?.value) || 0,
+      trackingUrl: 'https://www.correoargentino.com.ar/formularios/e-comercio',
+      trackingFormat: 'CX000000000AR',
+      enabled: document.getElementById('sp-correoarg-enabled')?.checked || false,
+    },
+    {
+      id:      'andreani',
+      label:   document.getElementById('sp-andreani-label')?.value.trim() || 'Andreani Express (1-3 días hábiles)',
+      costType: document.getElementById('sp-andreani-cost-type')?.value || 'pending',
+      cost:    parseInt(document.getElementById('sp-andreani-cost')?.value) || 0,
+      enabled: document.getElementById('sp-andreani-enabled')?.checked || false,
+    },
+    {
+      id:      'oca',
+      label:   document.getElementById('sp-oca-label')?.value.trim() || 'OCA (3-5 días hábiles)',
+      costType: document.getElementById('sp-oca-cost-type')?.value || 'pending',
+      cost:    parseInt(document.getElementById('sp-oca-cost')?.value) || 0,
+      enabled: document.getElementById('sp-oca-enabled')?.checked || false,
+    },
+    {
+      id:      'pickup',
+      label:   document.getElementById('sp-pickup-label')?.value.trim() || 'Retiro en local (sin costo)',
+      costType: 'free',
+      cost:    0,
+      address: document.getElementById('sp-pickup-address')?.value.trim() || '',
+      hours:   document.getElementById('sp-pickup-hours')?.value.trim() || '',
+      enabled: document.getElementById('sp-pickup-enabled')?.checked || false,
+    },
+  ];
+
+  try {
+    const ready = await waitForFirebase();
+    if (!ready) throw new Error('Firebase no disponible');
+    const { doc, setDoc } = window._fb;
+    // Solo guardamos config no sensible — ningún token ni credencial
+    await setDoc(doc(fbDb, 'config', 'shipping'), { providers }, { merge: true });
+    shippingProviders = providers;
+    showToast('✅ Proveedores de envío guardados en Firebase');
+  } catch(e) {
+    console.error('saveShippingProviders:', e);
+    showToast('⚠️ Error al guardar: ' + e.message);
+  }
+}
+
+// Cargar proveedores desde Firebase
+async function loadShippingProviders() {
+  try {
+    const ready = await waitForFirebase();
+    if (!ready) return;
+    const { doc, getDoc } = window._fb;
+    const snap = await getDoc(doc(fbDb, 'config', 'shipping'));
+    if (snap.exists()) {
+      shippingProviders = snap.data().providers || [];
+    }
+  } catch(e) {
+    console.warn('loadShippingProviders:', e);
+  }
+}
+
+// Tab del panel de proveedores en admin
+function switchShippingTab(id) {
+  ['correoarg','andreani','oca','pickup'].forEach(p => {
+    const panel = document.getElementById('sp-panel-' + p);
+    const tab   = document.getElementById('sp-tab-' + p);
+    if (panel) panel.classList.toggle('hidden', p !== id);
+    if (tab)   tab.classList.toggle('active', p === id);
+  });
+}
+
+// Mostrar/ocultar campo de costo fijo
+function toggleShippingCostField(id) {
+  const sel  = document.getElementById('sp-' + id + '-cost-type')?.value;
+  const wrap = document.getElementById('sp-' + id + '-cost-wrap');
+  if (wrap) wrap.classList.toggle('hidden', sel !== 'fixed');
+}
+
+// Inicializar panel de proveedores al entrar a tracking
+function initShippingProviders() {
+  const providers = shippingProviders;
+  if (!providers.length) return;
+  providers.forEach(p => {
+    const labelEl   = document.getElementById('sp-' + p.id + '-label');
+    const typeEl    = document.getElementById('sp-' + p.id + '-cost-type');
+    const costEl    = document.getElementById('sp-' + p.id + '-cost');
+    const enabledEl = document.getElementById('sp-' + p.id + '-enabled');
+    if (labelEl)   labelEl.value   = p.label || '';
+    if (typeEl)    { typeEl.value  = p.costType || 'pending'; toggleShippingCostField(p.id); }
+    if (costEl)    costEl.value    = p.cost || '';
+    if (enabledEl) enabledEl.checked = !!p.enabled;
+    // Pickup extras
+    if (p.id === 'pickup') {
+      const addrEl  = document.getElementById('sp-pickup-address');
+      const hoursEl = document.getElementById('sp-pickup-hours');
+      if (addrEl)  addrEl.value  = p.address || '';
+      if (hoursEl) hoursEl.value = p.hours   || '';
+    }
+  });
+}
+
+// Renderizar opciones de envío en checkout step 2 (desde shippingProviders)
+function renderShippingOptions() {
+  const container = document.getElementById('shipping-options-list');
+  if (!container) return;
+
+  // Opciones activas desde Firebase; si no hay configuración, mostrar fallback
+  const active = shippingProviders.filter(p => p.enabled);
+  if (!active.length) {
+    // Fallback por defecto si el admin no configuró nada aún
+    container.innerHTML = `
+      <label class="flex items-center gap-4 p-4 border-[3px] border-primary cursor-pointer hover:bg-surface-container-low">
+        <input type="radio" name="shipping" value="standard" checked class="text-primary"/>
+        <div class="flex-1">
+          <div class="font-label-caps text-label-caps text-primary">ENVÍO ESTÁNDAR</div>
+          <div class="font-body-md text-on-surface-variant text-sm">Por definir por el administrador</div>
+        </div>
+        <span class="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
+          <span class="inline-block w-2 h-2 rounded-full bg-outline-variant"></span> PENDIENTE
+        </span>
+      </label>`;
+    return;
+  }
+
+  container.innerHTML = active.map((p, i) => {
+    const isFirst = i === 0;
+    let costHtml = '';
+    if (p.costType === 'free') {
+      costHtml = `<span class="font-label-caps text-label-caps text-secondary-container">GRATIS</span>`;
+    } else if (p.costType === 'fixed' && p.cost > 0) {
+      costHtml = `<span class="font-label-caps text-label-caps text-primary">${fmtPrice(p.cost)}</span>`;
+    } else {
+      costHtml = `<span class="font-label-caps text-[10px] text-on-surface-variant flex items-center gap-1">
+        <span class="inline-block w-2 h-2 rounded-full bg-outline-variant animate-pulse"></span> A CALCULAR
+      </span>`;
+    }
+    const subtitle = p.id === 'pickup'
+      ? (p.address ? p.address + (p.hours ? ' — ' + p.hours : '') : 'Retiro sin cargo')
+      : p.label;
+    return `
+      <label class="flex items-center gap-4 p-4 border-[3px] border-primary cursor-pointer hover:bg-surface-container-low" onclick="updateCheckoutShipping('${p.id}')">
+        <input type="radio" name="shipping" value="${p.id}" ${isFirst ? 'checked' : ''} class="text-primary"/>
+        <div class="flex-1">
+          <div class="font-label-caps text-label-caps text-primary">${p.label}</div>
+          ${p.id !== 'pickup' ? '' : `<div class="font-body-md text-on-surface-variant text-sm">${subtitle}</div>`}
+        </div>
+        ${costHtml}
+      </label>`;
+  }).join('');
+
+  // Aplicar costo del primer proveedor activo por defecto
+  if (active.length) updateCheckoutShipping(active[0].id);
+}
+
+// Actualizar resumen cuando cambia la opción de envío
+function updateCheckoutShipping(providerId) {
+  const provider = shippingProviders.find(p => p.id === providerId)
+    || { costType: 'pending', cost: 0 };
+  const sub = cartTotal();
+  const shippingEl = document.getElementById('checkout-shipping-display');
+  const totalEl    = document.getElementById('checkout-total');
+  const noteEl     = document.getElementById('checkout-shipping-note');
+
+  if (provider.costType === 'free') {
+    if (shippingEl) shippingEl.innerHTML = `<span class="text-secondary-container font-label-caps text-label-caps">GRATIS</span>`;
+    if (totalEl) totalEl.textContent = fmtPrice(sub);
+    if (noteEl) noteEl.classList.add('hidden');
+  } else if (provider.costType === 'fixed' && provider.cost > 0) {
+    if (shippingEl) shippingEl.innerHTML = `<span class="font-label-caps text-label-caps text-primary">${fmtPrice(provider.cost)}</span>`;
+    if (totalEl) totalEl.textContent = fmtPrice(sub + provider.cost);
+    if (noteEl) noteEl.classList.add('hidden');
+  } else {
+    // Pendiente
+    if (shippingEl) shippingEl.innerHTML = `
+      <span class="flex items-center gap-1">
+        <span class="inline-block w-2 h-2 rounded-full bg-outline-variant animate-pulse"></span>
+        <span class="text-on-surface-variant" style="font-size:10px;">PENDIENTE</span>
+      </span>`;
+    if (totalEl) totalEl.textContent = fmtPrice(sub) + ' + envío';
+    if (noteEl) noteEl.classList.remove('hidden');
+  }
+}
+
 function renderCheckoutPage() {
   const el = document.getElementById('checkout-items');
   el.innerHTML = state.cart.map(item => `
@@ -3097,15 +3685,22 @@ function renderCheckoutPage() {
     </div>`).join('');
   const sub = cartTotal();
   document.getElementById('checkout-subtotal').textContent = fmtPrice(sub);
-  document.getElementById('checkout-total').textContent = fmtPrice(sub >= 95000 ? sub : sub + 2800);
+  // Envío: pendiente por defecto hasta que el cliente elige método en step 2
+  const shippingEl = document.getElementById('checkout-shipping-display');
+  const totalEl    = document.getElementById('checkout-total');
+  if (shippingEl) shippingEl.innerHTML = `<span class="flex items-center gap-1"><span class="inline-block w-2 h-2 rounded-full bg-outline-variant animate-pulse"></span><span class="text-on-surface-variant" style="font-size:10px;">PENDIENTE</span></span>`;
+  if (totalEl) totalEl.textContent = fmtPrice(sub) + ' + envío';
+  // Renderizar opciones de envío desde Firebase
+  renderShippingOptions();
   checkoutStep(1);
 }
 
-function placeOrder() {
+async function placeOrder() {
   if (state.cart.length === 0) { showToast('Tu carrito está vacío'); return; }
 
   // Validar datos personales
   const nombre  = document.getElementById('co-nombre')?.value.trim();
+  const apellido= document.getElementById('co-apellido')?.value.trim() || '';
   const email   = document.getElementById('co-email')?.value.trim();
   const dir     = document.getElementById('co-dir')?.value.trim();
   const ciudad  = document.getElementById('co-ciudad')?.value.trim();
@@ -3117,43 +3712,101 @@ function placeOrder() {
   // Validar método de pago
   const payMethod = document.querySelector('input[name="payment"]:checked')?.value;
   if (payMethod === 'card') {
-    const cardNum  = document.querySelector('#card-form input[placeholder="0000 0000 0000 0000"]')?.value.replace(/\s/g,'');
-    const cardExp  = document.querySelector('#card-form input[placeholder="MM/AA"]')?.value.trim();
-    const cardCvv  = document.querySelector('#card-form input[placeholder="000"]')?.value.trim();
-    const cardName = document.querySelector('#card-form input[placeholder="JUAN PEREZ"]')?.value.trim();
+    const cardNum  = document.getElementById('card-num')?.value.replace(/\s/g,'');
+    const cardExp  = document.getElementById('card-exp')?.value.trim();
+    const cardCvv  = document.getElementById('card-cvv')?.value.trim();
+    const cardName = document.getElementById('card-name')?.value.trim();
     if (!cardNum || cardNum.length < 15) { showToast('Ingresá un número de tarjeta válido ❌'); checkoutStep(3); return; }
     if (!cardExp || !/^\d{2}\/\d{2}$/.test(cardExp)) { showToast('Ingresá la fecha de vencimiento (MM/AA) ❌'); checkoutStep(3); return; }
     if (!cardCvv || cardCvv.length < 3) { showToast('Ingresá el CVV ❌'); checkoutStep(3); return; }
     if (!cardName) { showToast('Ingresá el nombre de la tarjeta ❌'); checkoutStep(3); return; }
-    // Validar fecha no vencida
     const [mm, yy] = cardExp.split('/');
     const expDate = new Date(2000 + parseInt(yy), parseInt(mm) - 1, 1);
     if (expDate < new Date()) { showToast('Tu tarjeta está vencida ❌'); checkoutStep(3); return; }
   }
 
-  // Validar CBU si eligió transferencia
-  if (payMethod === 'transfer') {
-    const cbu = document.getElementById('bank-cbu')?.value.trim();
-    // Solo info — no bloquear, pero avisar
+  // Generar ID del pedido
+  const orderNum = 'ORD-' + String(Math.floor(Math.random()*9000)+1000);
+  // Calcular total con envío
+  const selectedShippingId = document.querySelector('input[name="shipping"]:checked')?.value || '';
+  const selectedProvider   = shippingProviders.find(p => p.id === selectedShippingId);
+  const shippingCost = (selectedProvider?.costType === 'fixed') ? (selectedProvider.cost || 0)
+                     : (selectedProvider?.costType === 'free') ? 0
+                     : 0; // pendiente: se aclara en el email/admin
+  const shippingLabel = selectedProvider?.label || 'A calcular';
+
+  const newOrder = {
+    id:           orderNum,
+    customer:     (nombre + ' ' + apellido).trim(),
+    email:        email,
+    date:         new Date().toLocaleDateString('es-AR'),
+    subtotal:     cartTotal(),
+    shippingCost,
+    shippingLabel,
+    shippingPending: (selectedProvider?.costType === 'pending' || !selectedProvider),
+    total:        cartTotal() + shippingCost,
+    status:       'pending',
+    payMethod:    payMethod || 'mercadopago',
+    items:        state.cart.map(i => ({name: i.name, qty: i.qty, price: i.price, id: i.productId || i.key}))
+  };
+
+  // ── Mercado Pago: crear preferencia via Vercel Function (token nunca toca el browser) ──
+  if (payMethod === 'mercadopago' && state.mpConfig?.enabled) {
+    const btn = document.querySelector('#page-checkout .btn-violet');
+    if (btn) { btn.textContent = 'GENERANDO PAGO...'; btn.disabled = true; }
+
+    try {
+      const res = await fetch('/api/create-payment', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: orderNum,
+          items:   state.cart.map(i => ({
+            id:        i.productId || i.key,
+            name:      i.name,
+            qty:       i.qty,
+            price:     i.price,
+          })),
+          payer: { email, name: nombre + ' ' + apellido },
+          backUrls: {
+            success: window.location.origin + '/?payment=success&order=' + orderNum,
+            failure: window.location.origin + '/?payment=failure&order=' + orderNum,
+            pending: window.location.origin + '/?payment=pending&order=' + orderNum,
+          },
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.init_point) {
+        throw new Error(data.error || 'No se pudo crear el link de pago');
+      }
+
+      // Guardar pedido en Firebase antes de redirigir
+      state.orders.unshift(newOrder);
+      state.cart = [];
+      updateCartCount();
+      persistAll();
+      await fbSaveOrderRemote(newOrder).catch(e => console.error('Firebase order sync error:', e));
+
+      // Redirigir a Mercado Pago (el token nunca estuvo en el browser)
+      window.location.href = data.init_point;
+      return;
+
+    } catch(e) {
+      console.error('placeOrder MP error:', e);
+      showToast('Error al generar el pago: ' + e.message + ' ❌');
+      if (btn) { btn.textContent = 'CONFIRMAR PEDIDO'; btn.disabled = false; }
+      return;
+    }
   }
 
-  // Todo ok — confirmar pedido
-  const orderNum = 'ORD-' + String(Math.floor(Math.random()*9000)+1000);
-  const newOrder = {
-    id: orderNum,
-    customer: nombre + ' ' + (document.getElementById('co-apellido')?.value.trim() || ''),
-    email: email,
-    date: new Date().toLocaleDateString('es-AR'),
-    total: cartTotal(),
-    status: 'pending',
-    payMethod: payMethod || 'mercadopago',
-    items: state.cart.map(i => ({name: i.name, qty: i.qty, price: i.price}))
-  };
+  // ── Otros métodos de pago (transferencia, tarjeta manual) ──
   state.orders.unshift(newOrder);
   state.cart = [];
   updateCartCount();
   persistAll();
-  fbSaveOrderRemote(newOrder).catch(e => console.warn('Firebase order sync error:', e));
+  fbSaveOrderRemote(newOrder).catch(e => console.error('Firebase order sync error:', e));
   document.getElementById('order-number').textContent = '#' + orderNum;
   nav('order-confirm');
 }
@@ -3605,7 +4258,7 @@ function showAdminSection(section) {
   if (subEl) subEl.textContent = subs[section] || '';
   state.adminSection = section;
   if (section === 'banners') initBannerEditor();
-  if (section === 'tracking') initTrackingSection();
+  if (section === 'tracking') { initTrackingSection(); initShippingProviders(); }
   if (section === 'cobranzas') initCobranzasSection();
   if (section === 'reportes') initReportesSection();
   if (section === 'categorias') initCatEditor();
@@ -3655,7 +4308,7 @@ function updateOrderStatus(id, status) {
     showToast(`Pedido #${id} → ${status.toUpperCase()}`);
     renderAdminDashboard();
     persistAll();
-    fbUpdateOrderStatusRemote(id, status).catch(e => console.warn('Firebase order update error:', e));
+    fbUpdateOrderStatusRemote(id, status).catch(e => console.error('Firebase order update error:', e));
   }
 }
 
@@ -4108,8 +4761,8 @@ function renderTrackingList() {
 }
 
 // =================== COBRANZAS / MP ===================
-function initCobranzasSection() {
-  // Update stats from real orders
+async function initCobranzasSection() {
+  // Estadísticas de cobranza
   const total = state.orders.reduce((s,o) => s + o.total, 0);
   const mpTotal = Math.round(total * 0.62);
   const cardTotal = Math.round(total * 0.24);
@@ -4118,30 +4771,76 @@ function initCobranzasSection() {
   if (statEls[0]) statEls[0].textContent = fmtPrice(mpTotal);
   if (statEls[1]) statEls[1].textContent = fmtPrice(cardTotal);
   if (statEls[2]) statEls[2].textContent = fmtPrice(transTotal);
+
+  // Cargar datos bancarios desde Firebase (nunca hardcodeados en el HTML)
+  try {
+    const ready = await waitForFirebase();
+    if (!ready) return;
+    const { doc, getDoc } = window._fb;
+    const snap = await getDoc(doc(fbDb, 'config', 'bank'));
+    if (snap.exists()) {
+      const d = snap.data();
+      const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+      set('bank-name',    d.name);
+      set('bank-titular', d.titular);
+      set('bank-cbu',     d.cbu);
+      set('bank-alias',   d.alias);
+    }
+  } catch(e) {
+    console.warn('initCobranzasSection: no se pudo cargar config bancaria:', e);
+  }
 }
 
-function saveMPConfig() {
-  const pk = document.getElementById('mp-public-key').value.trim();
-  const at = document.getElementById('mp-access-token').value.trim();
+async function saveMPConfig() {
+  const pk      = document.getElementById('mp-public-key').value.trim();
+  const at      = document.getElementById('mp-access-token').value.trim();
   const enabled = document.getElementById('mp-enabled').checked;
-  if (!pk || !at) { showToast('Ingresá Public Key y Access Token ❌'); return; }
-  state.mpConfig = {
-    publicKey: pk, accessToken: at,
-    cuotas: document.getElementById('mp-cuotas').value,
+
+  if (!pk) { showToast('Ingresá la Public Key ❌'); return; }
+
+  // SEGURIDAD: el Access Token NUNCA se guarda en Firestore ni en el browser.
+  // Debe cargarse en Vercel → Settings → Environment Variables como MP_ACCESS_TOKEN.
+  // En Firestore solo guardamos la publicKey (que es pública por diseño de MP) y config no sensible.
+  if (at) {
+    // Limpiar el campo para que no quede expuesto en memoria del browser
+    document.getElementById('mp-access-token').value = '';
+    showToast('⚠️ Access Token NO se guarda aquí — cargalo en Vercel como variable de entorno MP_ACCESS_TOKEN');
+  }
+
+  const safeConfig = {
+    publicKey: pk,
+    cuotas:    document.getElementById('mp-cuotas').value,
     descuento: document.getElementById('mp-descuento').value,
-    enabled
+    enabled,
+    // accessToken: NUNCA aquí — va en variable de entorno del servidor Vercel
   };
-  dbSave(DB_KEYS.mpConfig, state.mpConfig);
+
+  state.mpConfig = safeConfig;
+
+  try {
+    const ready = await waitForFirebase();
+    if (!ready) throw new Error('Firebase no disponible');
+    const { doc, setDoc } = window._fb;
+    await setDoc(doc(fbDb, 'config', 'mercadopago'), safeConfig, { merge: true });
+  } catch(e) {
+    console.error('saveMPConfig: error guardando en Firestore:', e);
+    showToast('⚠️ Error al guardar: ' + e.message);
+    return;
+  }
+
   const badge = document.getElementById('mp-status-badge');
-  if (badge) { badge.textContent = enabled ? 'ACTIVO ✓' : 'CONFIGURADO'; badge.className = enabled ? 'badge badge-violet ml-auto shrink-0' : 'badge badge-outline ml-auto shrink-0'; }
-  showToast(enabled ? '✅ Mercado Pago activado y guardado' : '✅ Configuración guardada');
+  if (badge) {
+    badge.textContent = enabled ? 'ACTIVO ✓' : 'CONFIGURADO';
+    badge.className   = enabled ? 'badge badge-violet ml-auto shrink-0' : 'badge badge-outline ml-auto shrink-0';
+  }
+  showToast(enabled ? '✅ Mercado Pago configurado — recordá cargar el AT en Vercel' : '✅ Configuración guardada');
 }
 
 // =================== RESET DE FÁBRICA ===================
 function resetToFactory() {
-  if (!confirm('⚠️ Esto borrará TODOS los cambios guardados (productos, pedidos, banners, carrito) y restaurará los datos de fábrica. ¿Estás seguro?')) return;
-  Object.values(DB_KEYS).forEach(k => localStorage.removeItem(k));
-  showToast('Datos restaurados. Recargando...');
+  if (!confirm('⚠️ Esto borrará el carrito local de este dispositivo. Los datos de Firebase no se modifican. ¿Estás seguro?')) return;
+  localStorage.removeItem(DB_KEYS.cart);
+  showToast('Carrito local restaurado. Recargando...');
   setTimeout(() => location.reload(), 1500);
 }
 
@@ -4271,7 +4970,14 @@ function hideProductForm() {
 function editProduct(id) {
   const p = state.products.find(pr => String(pr.id) === String(id));
   if (!p) return;
-  pfImages = p.images ? [...p.images] : (p.img ? [p.img] : []);
+  // Normalizar al editar: siempre {url, colorId}
+  if (p.images && p.images.length > 0) {
+    pfImages = p.images.map(e => typeof e === 'string' ? { url: e, colorId: '' } : e);
+  } else if (p.img) {
+    pfImages = [{ url: extractImgUrl(p.img), colorId: '' }];
+  } else {
+    pfImages = [];
+  }
   pfSelectedColors = p.colors ? [...p.colors] : [];
   document.getElementById('product-form-container').classList.remove('hidden');
   document.getElementById('product-form-title').textContent = 'EDITAR: ' + p.name;
@@ -4302,10 +5008,18 @@ async function saveProduct() {
   if (pfImages.length === 0) { showToast('AGREGÁ AL MENOS UNA IMAGEN ❌'); return; }
   if (pfSelectedColors.length === 0) { showToast('SELECCIONÁ AL MENOS UN COLOR ❌'); return; }
 
+  // Normalizar imágenes: siempre guardar el array completo Y una url string para img
+  const normalizedImages = pfImages.map(entry =>
+    typeof entry === 'string' ? { url: entry, colorId: '' } : entry
+  );
+  const firstImgUrl = normalizedImages[0]?.url || '';
+
   const productData = {
     name: name.toUpperCase(), price, oldPrice, cat, badge, desc,
     sizes: ['XS','S','M','L','XL','XXL'], colors: [...pfSelectedColors],
-    images: [...pfImages], img: pfImages[0], stock,
+    images: normalizedImages,
+    img: firstImgUrl,   // siempre string URL para renderProductCard
+    stock,
     tags: [], updatedAt: new Date().toISOString()
   };
 
@@ -4331,7 +5045,10 @@ async function saveProduct() {
     const saved = editId ? state.products.find(p=>String(p.id)===String(editId)) : productData;
     await fbSaveProductRemote(saved);
     showToast(editId ? 'Producto actualizado en Firebase ✅' : 'Producto creado en Firebase ✅');
-  } catch(e) { showToast('Guardado localmente ⚠️'); }
+  } catch(e) {
+    console.error('Error guardando producto en Firestore:', e);
+    showToast('⚠️ Error al guardar producto en Firebase: ' + e.message);
+  }
   if (btn) { btn.textContent = 'GUARDAR PRODUCTO'; btn.disabled = false; }
 }
 
@@ -4364,12 +5081,19 @@ async function saveAdminCatImg(cat) {
   if (!url) { showToast('Ingresá una URL ❌'); return; }
   if (!bannerState.categories) bannerState.categories = {};
   bannerState.categories[cat] = url;
-  const adminImg = document.getElementById('admin-cat-img-'+cat);
-  if (adminImg) adminImg.src = url;
-  const homeImg = document.getElementById('cat-img-'+cat+'-display');
-  if (homeImg) homeImg.src = url;
-  try { await fbSaveBannersRemote(bannerState); showToast('Categoría '+cat.toUpperCase()+' guardada ✅'); }
-  catch(e) { showToast('Guardado localmente ⚠️'); }
+  try {
+    console.log('saveAdminCatImg: guardando categoría "' + cat + '" en Firestore config/banners...', url);
+    await fbSaveBannersRemote(bannerState);
+    // Recargar desde Firestore para confirmar escritura
+    await syncFromFirebase();
+    // Aplicar imágenes SIEMPRE después de cargar Firestore
+    applySavedCatImages();
+    initCatEditor();
+    showToast('Categoría '+cat.toUpperCase()+' guardada ✅');
+  } catch(e) {
+    console.error('saveAdminCatImg: error guardando categoría "' + cat + '" en Firestore:', e);
+    showToast('⚠️ Error al guardar en Firebase: ' + e.message);
+  }
 }
 
 
@@ -4380,7 +5104,7 @@ function deleteProduct(id) {
   renderAdminProducts();
   renderAdminInventory();
   persistAll();
-  fbDeleteProductRemote(id).catch(e => console.warn('Firebase sync error:', e));
+  fbDeleteProductRemote(id).catch(e => console.error('Firebase sync error:', e));
 }
 
 // =================== SIZE GUIDE ===================
@@ -4421,14 +5145,29 @@ function renderAnnouncementBar() {
 
 function renderHeroBanner() {
   const h = bannerState.hero;
-  const badge = document.getElementById('hero-badge');
-  const title = document.getElementById('hero-title');
+  const badge    = document.getElementById('hero-badge');
+  const title    = document.getElementById('hero-title');
   const subtitle = document.getElementById('hero-subtitle');
-  const img = document.getElementById('hero-img');
-  if (badge) { badge.textContent = h.badge; badge.style.display = h.badge ? '' : 'none'; }
-  if (title) title.innerHTML = h.title.replace(/\n/g, '<br>');
+  const img      = document.getElementById('hero-img');
+
+  if (badge)    { badge.textContent = h.badge; badge.style.display = h.badge ? '' : 'none'; }
+  if (title)    title.innerHTML = h.title.replace(/\n/g, '<br>');
   if (subtitle) subtitle.textContent = h.subtitle;
-  if (img) img.src = h.img;
+
+  // Restore animation state
+  heroAnimStyle   = h.animStyle   || 'default';
+  heroVideoEffect = h.videoEffect || 'none';
+  heroVideoUrl    = h.videoUrl    || '';
+
+  // Apply video or image
+  if (h.videoUrl) {
+    applyHeroVideoToSection(h.videoUrl);
+    applyHeroVideoEffect(h.videoEffect || 'none');
+  } else {
+    applyHeroVideoToSection(''); // ensure video is hidden
+    if (img) img.src = h.img;
+    applyHeroAnimStyle(h.animStyle || 'default');
+  }
 }
 
 function renderPromoBanner() {
@@ -4447,15 +5186,36 @@ function initBannerEditor() {
   // Announcements list
   renderAnnouncementEditorList();
   // Hero fields
-  document.getElementById('hero-edit-badge').value = bannerState.hero.badge;
-  document.getElementById('hero-edit-title').value = bannerState.hero.title;
+  document.getElementById('hero-edit-badge').value    = bannerState.hero.badge;
+  document.getElementById('hero-edit-title').value    = bannerState.hero.title;
   document.getElementById('hero-edit-subtitle').value = bannerState.hero.subtitle;
-  document.getElementById('hero-edit-img').value = bannerState.hero.img;
+  document.getElementById('hero-edit-img').value      = bannerState.hero.img;
   previewHero();
+
+  // Restore video state in admin if saved
+  heroVideoUrl    = bannerState.hero.videoUrl    || '';
+  heroAnimStyle   = bannerState.hero.animStyle   || 'default';
+  heroVideoEffect = bannerState.hero.videoEffect || 'none';
+
+  if (heroVideoUrl) {
+    // Switch to video tab and show status
+    switchHeroTab('video');
+    document.getElementById('hero-video-url').value = heroVideoUrl;
+    showHeroVideoStatus(heroVideoUrl);
+  }
+
+  // Restore anim buttons
+  document.querySelectorAll('#anim-style-selector .hero-media-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.anim === heroAnimStyle);
+  });
+  document.querySelectorAll('#video-effect-selector .hero-media-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.effect === heroVideoEffect);
+  });
+
   // Promo fields
   document.getElementById('promo-edit-label').value = bannerState.promo.label;
   document.getElementById('promo-edit-title').value = bannerState.promo.title;
-  document.getElementById('promo-edit-code').value = bannerState.promo.code;
+  document.getElementById('promo-edit-code').value  = bannerState.promo.code;
   previewPromo();
 }
 
@@ -4503,11 +5263,14 @@ async function saveAnnouncementBar() {
     const idx = parseInt(inp.dataset.index);
     bannerState.announcements[idx] = inp.value.trim() || bannerState.announcements[idx];
   });
-  renderAnnouncementBar();
   try {
+    console.log('saveAnnouncementBar: guardando announcements en Firestore config/banners...', bannerState.announcements);
     await fbSaveBannersRemote(bannerState);
+    await syncFromFirebase();
+    renderAnnouncementBar();
     showToast('✅ Barra de anuncios guardada en Firebase — visible para todos');
   } catch(e) {
+    console.error('saveAnnouncementBar: error guardando en Firestore:', e);
     showToast('⚠️ Error al guardar en Firebase: ' + e.message);
   }
 }
@@ -4541,17 +5304,288 @@ function previewPromo() {
   if (pc) pc.textContent = code;
 }
 
+// =================== HERO VIDEO & ANIMATION SYSTEM ===================
+
+// State for hero media
+let heroVideoUrl = '';
+let heroAnimStyle = 'default';
+let heroVideoEffect = 'none';
+
+// Switch between image and video tabs in admin
+function switchHeroTab(tab) {
+  const imgPanel  = document.getElementById('hero-tab-img');
+  const vidPanel  = document.getElementById('hero-tab-video');
+  const imgBtn    = document.getElementById('tab-img-btn');
+  const vidBtn    = document.getElementById('tab-vid-btn');
+  if (!imgPanel || !vidPanel) return;
+  if (tab === 'img') {
+    imgPanel.classList.remove('hidden');
+    vidPanel.classList.add('hidden');
+    imgBtn.classList.add('active');
+    vidBtn.classList.remove('active');
+  } else {
+    imgPanel.classList.add('hidden');
+    vidPanel.classList.remove('hidden');
+    imgBtn.classList.remove('active');
+    vidBtn.classList.add('active');
+    // If there's a stored video URL, show it
+    if (bannerState.hero.videoUrl) {
+      document.getElementById('hero-video-url').value = bannerState.hero.videoUrl;
+      showHeroVideoStatus(bannerState.hero.videoUrl);
+    }
+  }
+}
+
+// Select animation style
+function selectHeroAnim(style, btn) {
+  heroAnimStyle = style;
+  document.querySelectorAll('#anim-style-selector .hero-media-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  applyHeroAnimStyle(style);
+}
+
+// Select video overlay effect
+function selectVideoEffect(effect, btn) {
+  heroVideoEffect = effect;
+  document.querySelectorAll('#video-effect-selector .hero-media-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  applyHeroVideoEffect(effect);
+}
+
+// Apply animation style to hero live
+function applyHeroAnimStyle(style) {
+  const title = document.getElementById('hero-title');
+  if (!title) return;
+  title.classList.remove('hero-glitch');
+  stopHeroParticles();
+  const scanlines = document.getElementById('hero-scanlines');
+  if (scanlines) scanlines.style.display = 'none';
+
+  if (style === 'glitch') {
+    title.classList.add('hero-glitch');
+  } else if (style === 'particles') {
+    startHeroParticles();
+  } else if (style === 'minimal') {
+    // Clean — just keep CSS entry animations, no extras
+  }
+  // 'default' = just entry animations
+}
+
+// Apply video overlay effect
+function applyHeroVideoEffect(effect) {
+  const scanlines = document.getElementById('hero-scanlines');
+  if (!scanlines) return;
+  scanlines.style.display = 'none';
+  stopHeroParticles();
+  const title = document.getElementById('hero-title');
+  if (title) title.classList.remove('hero-glitch');
+
+  if (effect === 'scanlines') {
+    scanlines.style.display = 'block';
+    scanlines.style.animation = 'scanlineMove 0.2s linear infinite';
+  } else if (effect === 'particles') {
+    startHeroParticles();
+  } else if (effect === 'glitch') {
+    if (title) title.classList.add('hero-glitch');
+  } else if (effect === 'vignette') {
+    scanlines.style.display = 'block';
+    scanlines.style.background = 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.6) 100%)';
+    scanlines.style.animation = 'vignetteAnim 6s ease-in-out infinite';
+  }
+}
+
+// Particle system for hero
+let _particleInterval = null;
+let _particles = [];
+
+function startHeroParticles() {
+  stopHeroParticles();
+  const container = document.getElementById('hero-particles');
+  if (!container) return;
+  container.innerHTML = '';
+  _particles = [];
+
+  const COLORS  = ['#5d22ff','#ffffff','#c6c6c6','#4500d1'];
+  const COUNT   = 28;
+
+  for (let i = 0; i < COUNT; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'hero-particle';
+    const size     = Math.random() * 5 + 2;
+    const x        = Math.random() * 100;
+    const y        = Math.random() * 100;
+    const dur      = (Math.random() * 8 + 6).toFixed(1) + 's';
+    const delay    = (Math.random() * 5).toFixed(1) + 's';
+    const opacity  = (Math.random() * 0.4 + 0.1).toFixed(2);
+    const color    = COLORS[Math.floor(Math.random() * COLORS.length)];
+    dot.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${x}%; top:${y}%;
+      background:${color};
+      --p-dur:${dur}; --p-delay:${delay}; --p-opacity:${opacity};
+      animation-delay:${delay};
+    `;
+    container.appendChild(dot);
+    _particles.push(dot);
+  }
+}
+
+function stopHeroParticles() {
+  const container = document.getElementById('hero-particles');
+  if (container) container.innerHTML = '';
+  _particles = [];
+  if (_particleInterval) { clearInterval(_particleInterval); _particleInterval = null; }
+}
+
+// Apply hero video to the live hero section
+function applyHeroVideoToSection(url) {
+  const video = document.getElementById('hero-video');
+  const img   = document.getElementById('hero-img');
+  const badge = document.getElementById('hero-video-badge');
+  if (!video) return;
+  if (url) {
+    video.src = url;
+    video.style.display = 'block';
+    video.load();
+    video.play().catch(() => {});
+    if (img) img.style.display = 'none';
+    if (badge) badge.style.display = 'flex';
+  } else {
+    video.src = '';
+    video.style.display = 'none';
+    if (img) img.style.display = 'block';
+    if (badge) badge.style.display = 'none';
+  }
+}
+
+// Show video status in admin
+function showHeroVideoStatus(url) {
+  const statusEl  = document.getElementById('hero-video-status');
+  const urlDisp   = document.getElementById('hero-video-url-display');
+  const prevVid   = document.getElementById('hero-preview-video');
+  const prevBadge = document.getElementById('hero-preview-video-badge');
+  if (statusEl) statusEl.classList.remove('hidden');
+  if (urlDisp)  urlDisp.textContent = url;
+  // Live preview
+  if (prevVid) {
+    prevVid.src = url;
+    prevVid.style.display = 'block';
+    prevVid.load();
+    prevVid.play().catch(() => {});
+  }
+  if (prevBadge) prevBadge.classList.remove('hidden');
+  heroVideoUrl = url;
+}
+
+// Handle video file drop in admin
+function handleHeroVideoFileDrop(e) {
+  e.preventDefault();
+  const dz = document.getElementById('hero-video-dropzone');
+  if (dz) dz.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) uploadHeroVideo(file);
+}
+
+// Upload video to Cloudinary
+async function uploadHeroVideo(file) {
+  if (!file) return;
+  if (!file.type.startsWith('video/')) { showToast('Solo se permiten archivos de video ❌'); return; }
+  if (file.size > 100 * 1024 * 1024) { showToast('El video supera los 100MB ❌'); return; }
+
+  const progress  = document.getElementById('hero-video-upload-progress');
+  const bar       = document.getElementById('hero-video-upload-bar');
+  const pct       = document.getElementById('hero-video-upload-pct');
+  const statusEl  = document.getElementById('hero-video-upload-status');
+
+  if (progress) progress.classList.remove('hidden');
+  if (bar)      bar.style.width = '0%';
+  if (statusEl) statusEl.textContent = 'SUBIENDO VIDEO...';
+  showToast('Subiendo video a Cloudinary... ☁️');
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY.uploadPreset);
+  formData.append('folder', 'xinco-tienda/videos');
+  formData.append('resource_type', 'video');
+
+  return new Promise((resolve) => {
+    const xhr = new XMLHttpRequest();
+    const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/video/upload`;
+    xhr.open('POST', uploadUrl, true);
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) {
+        const p = Math.round((e.loaded / e.total) * 100);
+        if (bar)     bar.style.width = p + '%';
+        if (pct)     pct.textContent = p + '%';
+        if (statusEl) statusEl.textContent = p < 100 ? 'SUBIENDO VIDEO...' : 'PROCESANDO...';
+      }
+    };
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        const res = JSON.parse(xhr.responseText);
+        const videoUrl = res.secure_url;
+        if (progress) progress.classList.add('hidden');
+        showHeroVideoStatus(videoUrl);
+        document.getElementById('hero-video-url').value = videoUrl;
+        showToast('¡Video subido a Cloudinary! ☁️✅');
+        resolve(videoUrl);
+      } else {
+        if (statusEl) statusEl.textContent = 'ERROR AL SUBIR';
+        if (bar) bar.style.background = '#ba1a1a';
+        showToast('Error al subir el video ❌');
+        resolve(null);
+      }
+    };
+    xhr.onerror = () => { showToast('Error de conexión ❌'); resolve(null); };
+    xhr.send(formData);
+  });
+}
+
+// Preview video from URL field
+function previewHeroVideo() {
+  const url = document.getElementById('hero-video-url')?.value.trim();
+  if (!url) { showToast('Ingresá una URL de video ❌'); return; }
+  showHeroVideoStatus(url);
+  showToast('Vista previa del video activa ✅');
+}
+
+// Clear hero video
+function clearHeroVideo() {
+  heroVideoUrl = '';
+  const inputs = ['hero-video-url'];
+  inputs.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const statusEl  = document.getElementById('hero-video-status');
+  const prevVid   = document.getElementById('hero-preview-video');
+  const prevBadge = document.getElementById('hero-preview-video-badge');
+  if (statusEl)  statusEl.classList.add('hidden');
+  if (prevVid)   { prevVid.src = ''; prevVid.style.display = 'none'; }
+  if (prevBadge) prevBadge.classList.add('hidden');
+  // Restore image in preview
+  const prevImg = document.getElementById('hero-preview-img');
+  if (prevImg && bannerState.hero.img) { prevImg.src = bannerState.hero.img; }
+  showToast('Video eliminado — se usará la imagen');
+}
+
 async function saveHeroBanner() {
   bannerState.hero.badge    = document.getElementById('hero-edit-badge').value.trim();
   bannerState.hero.title    = document.getElementById('hero-edit-title').value.trim() || 'XINCO';
   bannerState.hero.subtitle = document.getElementById('hero-edit-subtitle').value.trim();
-  const imgUrl = document.getElementById('hero-edit-img').value.trim();
+  const imgUrl = document.getElementById('hero-edit-img')?.value.trim();
   if (imgUrl) bannerState.hero.img = imgUrl;
-  renderHeroBanner();
+
+  // Save video URL (empty string = no video)
+  bannerState.hero.videoUrl    = heroVideoUrl || '';
+  bannerState.hero.animStyle   = heroAnimStyle;
+  bannerState.hero.videoEffect = heroVideoEffect;
+
   try {
+    console.log('saveHeroBanner: guardando en Firestore config/banners...', bannerState.hero);
     await fbSaveBannersRemote(bannerState);
+    await syncFromFirebase();
+    renderHeroBanner();
     showToast('✅ Hero banner guardado en Firebase — visible para todos');
   } catch(e) {
+    console.error('saveHeroBanner: error guardando hero banner en Firestore:', e);
     showToast('⚠️ Error al guardar en Firebase: ' + e.message);
   }
 }
@@ -4560,20 +5594,14 @@ async function savePromoBanner() {
   bannerState.promo.label = document.getElementById('promo-edit-label').value.trim();
   bannerState.promo.title = document.getElementById('promo-edit-title').value.trim();
   bannerState.promo.code  = document.getElementById('promo-edit-code').value.trim().toUpperCase();
-  // Update home section immediately
-  const promoBannerEl = document.getElementById('promo-banner-section');
-  if (promoBannerEl) {
-    const lbl = promoBannerEl.querySelector('.promo-label');
-    const ttl = promoBannerEl.querySelector('.promo-title');
-    const cod = promoBannerEl.querySelector('.promo-code');
-    if (lbl) lbl.textContent = bannerState.promo.label;
-    if (ttl) ttl.innerHTML = bannerState.promo.title.replace(/\n/g,'<br>');
-    if (cod) cod.textContent = bannerState.promo.code;
-  }
   try {
+    console.log('savePromoBanner: guardando promo en Firestore config/banners...', bannerState.promo);
     await fbSaveBannersRemote(bannerState);
+    await syncFromFirebase();
+    renderPromoBanner();
     showToast('✅ Banner promo guardado en Firebase — visible para todos');
   } catch(e) {
+    console.error('savePromoBanner: error guardando promo banner en Firestore:', e);
     showToast('⚠️ Error al guardar en Firebase: ' + e.message);
   }
 }
@@ -4613,55 +5641,12 @@ async function initFirebase() {
       }
     });
 
-    // Sincronizar datos desde Firebase
-    await syncFromFirebase();
-
     // ✅ Firebase listo — resolver la promesa para desbloquear escrituras
     if (_fbReadyResolve) _fbReadyResolve();
 
     console.log('✅ Firebase conectado y listo');
   } catch(e) {
-    console.warn('⚠️ Firebase no disponible, usando localStorage:', e.message);
-  }
-}
-
-async function syncFromFirebase() {
-  if (!fbDb || !window._fb) return;
-  const { collection, getDocs, getDoc, doc, query, orderBy } = window._fb;
-  try {
-    // Productos
-    const prodSnap = await getDocs(collection(fbDb, 'products'));
-    if (!prodSnap.empty) {
-      state.products = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      dbSave(DB_KEYS.products, state.products);
-      renderHomeProducts();
-      renderCatalog();
-    } else {
-      // Primera vez: subir productos por defecto a Firebase
-      await seedFirebaseProducts();
-    }
-    // Pedidos
-    try {
-      const ordSnap = await getDocs(query(collection(fbDb, 'orders'), orderBy('createdAt','desc')));
-      if (!ordSnap.empty) {
-        state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        dbSave(DB_KEYS.orders, state.orders);
-      }
-    } catch(e) {
-      const ordSnap = await getDocs(collection(fbDb, 'orders'));
-      state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    }
-    // Banners
-    const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
-    if (bannerSnap.exists()) {
-      Object.assign(bannerState, bannerSnap.data());
-      dbSave(DB_KEYS.banners, bannerState);
-      renderAnnouncementBar();
-      renderHeroBanner();
-      applySavedCatImages();
-    }
-  } catch(e) {
-    console.warn('Sync Firebase error:', e.message);
+    console.error('Firebase no disponible:', e);
   }
 }
 
@@ -4669,7 +5654,7 @@ async function seedFirebaseProducts() {
   if (!fbDb || !window._fb) return;
   const { doc, setDoc } = window._fb;
   for (const p of state.products) {
-    try { await setDoc(doc(fbDb, 'products', String(p.id)), p); } catch(e) {}
+    try { await setDoc(doc(fbDb, 'products', String(p.id)), p); } catch(e) { console.error('Error sembrando producto en Firestore:', e); }
   }
 }
 
@@ -4744,7 +5729,17 @@ async function fbSaveBannersRemote(data) {
   const ready = await waitForFirebase();
   if (!ready) throw new Error('Firebase no disponible');
   const { doc, setDoc } = window._fb;
-  await setDoc(doc(fbDb, 'config', 'banners'), data);
+  try {
+    await setDoc(
+      doc(fbDb, 'config', 'banners'),
+      data,
+      { merge: true }
+    );
+    console.log('fbSaveBannersRemote: config/banners guardado en Firestore', data);
+  } catch(e) {
+    console.error('fbSaveBannersRemote: error al guardar config/banners:', e);
+    throw e;
+  }
 }
 
 async function fbLoginUser(email, password) {
@@ -4766,15 +5761,10 @@ async function fbLogoutUser() {
 
 // =================== PERSISTENCIA localStorage ===================
 
+// localStorage SOLO para el carrito del usuario — banners y config siempre desde Firestore
 const DB_KEYS = {
-  products:   'xinco_products',
-  orders:     'xinco_orders',
-  customers:  'xinco_customers',
-  cart:       'xinco_cart',
-  banners:    'xinco_banners',
-  tracking:   'xinco_tracking',
-  mpConfig:   'xinco_mp_config',
-  bankConfig: 'xinco_bank_config',
+  cart: 'xinco_cart',
+  // NOTA: xinco_banners fue eliminado — los banners se leen exclusivamente de Firestore (config/banners)
 };
 
 function dbSave(key, data) {
@@ -4791,6 +5781,7 @@ function dbLoad(key, fallback) {
 
 function persistAll() {
   // localStorage SOLO para el carrito (datos del usuario, no del admin)
+  // banners, productos, pedidos y config se persisten ÚNICAMENTE en Firestore
   dbSave(DB_KEYS.cart, state.cart);
 }
 
@@ -5091,51 +6082,96 @@ function printReport() {
   setTimeout(() => { try { printWin.focus(); } catch(e) {} }, 500);
 }
 
+
+// Normaliza un producto venido de Firestore: asegura que img siempre sea string URL
+function normalizeProduct(data) {
+  const p = { ...data };
+  // Normalizar images array
+  if (p.images && Array.isArray(p.images)) {
+    p.images = p.images.map(e => typeof e === 'string' ? { url: e, colorId: '' } : (e && e.url ? e : { url: '', colorId: '' })).filter(e => e.url);
+  } else {
+    p.images = [];
+  }
+  // Siempre garantizar img como string URL
+  if (!p.img || typeof p.img !== 'string') {
+    p.img = p.images[0]?.url || '';
+  }
+  return p;
+}
+
 async function syncFromFirebase() {
-  // Firebase es la UNICA fuente de verdad
+  // Firebase es la ÚNICA fuente de verdad — nunca leer banners desde localStorage
   if (!fbDb || !window._fb) throw new Error('Firebase no inicializado');
   const { collection, getDocs, getDoc, doc, query, orderBy } = window._fb;
 
-  // Productos
-  const prodSnap = await getDocs(collection(fbDb, 'products'));
-  if (!prodSnap.empty) {
-    state.products = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } else {
-    await seedFirebaseProducts();
-    const prodSnap2 = await getDocs(collection(fbDb, 'products'));
-    state.products = prodSnap2.docs.map(d => ({ id: d.id, ...d.data() }));
+  // ── Productos ──────────────────────────────────────────────
+  try {
+    const prodSnap = await getDocs(collection(fbDb, 'products'));
+    if (!prodSnap.empty) {
+      state.products = prodSnap.docs.map(d => normalizeProduct({ id: d.id, ...d.data() }));
+    } else {
+      console.log('syncFromFirebase: colección products vacía — ejecutando seed...');
+      await seedFirebaseProducts();
+      const prodSnap2 = await getDocs(collection(fbDb, 'products'));
+      state.products = prodSnap2.docs.map(d => normalizeProduct({ id: d.id, ...d.data() }));
+    }
+  } catch(e) {
+    console.error('syncFromFirebase: error cargando products:', e);
+    throw e;
   }
 
-  // Pedidos
+  // ── Pedidos ────────────────────────────────────────────────
   try {
     const ordSnap = await getDocs(query(collection(fbDb, 'orders'), orderBy('createdAt','desc')));
     state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch(e) {
-    const ordSnap = await getDocs(collection(fbDb, 'orders'));
-    state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    console.warn('syncFromFirebase: pedidos sin índice, cargando sin orden:', e.message);
+    try {
+      const ordSnap = await getDocs(collection(fbDb, 'orders'));
+      state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch(e2) {
+      console.error('syncFromFirebase: error cargando orders:', e2);
+    }
   }
 
-  // Banners
-  const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
-  if (bannerSnap.exists()) {
-    Object.assign(bannerState, bannerSnap.data());
+  // ── Banners (config/banners) — ÚNICA fuente de verdad ─────
+  try {
+    const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
+    if (bannerSnap.exists()) {
+      const fbData = bannerSnap.data();
+      console.log('BANNERS FIREBASE', fbData);
+      // Deep merge: preservar estructura pero sobreescribir con datos de Firebase
+      if (fbData.announcements) bannerState.announcements = fbData.announcements;
+      if (fbData.hero)          Object.assign(bannerState.hero, fbData.hero);
+      if (fbData.promo)         Object.assign(bannerState.promo, fbData.promo);
+      if (fbData.categories)    bannerState.categories = fbData.categories;
+    } else {
+      console.log('syncFromFirebase: config/banners no existe aún en Firestore — usando defaults');
+    }
+  } catch(e) {
+    console.error('syncFromFirebase: error cargando config/banners:', e);
   }
 
-  // Tracking
+  // ── Tracking ───────────────────────────────────────────────
   try {
     const trackSnap = await getDocs(collection(fbDb, 'tracking'));
     trackSnap.docs.forEach(d => { trackingData[d.id] = d.data(); });
-  } catch(e) {}
+  } catch(e) {
+    console.error('syncFromFirebase: error cargando tracking:', e);
+  }
 
-  // Config MP
+  // ── Config Mercado Pago ────────────────────────────────────
   try {
     const mpSnap = await getDoc(doc(fbDb, 'config', 'mercadopago'));
     if (mpSnap.exists()) state.mpConfig = mpSnap.data();
-  } catch(e) {}
+  } catch(e) {
+    console.error('syncFromFirebase: error cargando config/mercadopago:', e);
+  }
 }
 
 // =================== INIT ===================
-// Solo el carrito desde localStorage (es del usuario, no del admin)
+// Solo el carrito desde localStorage (datos del usuario en este dispositivo)
+// Banners, productos y configuración se cargan SIEMPRE desde Firestore
 loadCart();
 updateCartCount();
 
@@ -5151,22 +6187,45 @@ let retryCount = 0;
 async function bootFromFirebase() {
   showPageLoading();
   try {
+    // 1. Inicializar Firebase
     await initFirebase();
-    // Renderizar con datos REALES de Firebase
-    renderHomeProducts();
-    renderCatalog();
+    // 2. Cargar TODO desde Firestore (productos, pedidos, banners, tracking, MP)
+    await syncFromFirebase();
+    // 3. Renderizar banners con datos reales de Firebase
     renderAnnouncementBar();
     renderHeroBanner();
+    // 4. Aplicar imágenes de categorías (SIEMPRE después de syncFromFirebase)
     applySavedCatImages();
+    // 5. Renderizar catálogo y home con productos reales
+    renderHomeProducts();
+    renderCatalog();
     updateCartCount();
     retryCount = 0;
-    console.log('Firebase cargado correctamente');
+    console.log('✅ Firebase cargado correctamente — banners y productos sincronizados');
+
+    // 6. Precargar imágenes críticas en memoria del navegador ANTES de cerrar el splash
+    //    Así el usuario nunca ve el pop-in de imágenes al aparecer la página
+    const criticalUrls = [
+      bannerState.hero?.img,
+      bannerState.categories?.remeras,
+      bannerState.categories?.pantalones,
+      bannerState.categories?.buzos,
+      bannerState.categories?.accesorios,
+    ].filter(Boolean);
+
+    console.log('Precargando imágenes críticas:', criticalUrls);
+    await Promise.all(criticalUrls.map(preloadImage));
+    console.log('✅ Imágenes críticas listas — cerrando splash');
+
+    dismissSplash();
+
   } catch(e) {
     retryCount++;
-    console.error('Firebase error (intento ' + retryCount + '):', e.message);
+    console.error('bootFromFirebase: error (intento ' + retryCount + '):', e.message);
     const hp = document.getElementById('home-products');
     if (hp) hp.innerHTML = '<div class="col-span-4" style="text-align:center;padding:60px;"><p style="font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.1em;color:#ba1a1a;">ERROR DE CONEXION</p><p style="font-family:JetBrains Mono,monospace;font-size:10px;color:#4c4546;margin-top:8px;">Reintentando en ' + Math.min(retryCount * 3, 15) + ' segundos...</p></div>';
-    // Reintentar con backoff
+    // En caso de error también cerramos el splash para no bloquear al usuario
+    dismissSplash();
     setTimeout(bootFromFirebase, Math.min(retryCount * 3000, 15000));
   }
 }
@@ -5175,11 +6234,12 @@ bootFromFirebase();
 
 // Si viene de verificar email, mostrar mensaje de bienvenida
 const _urlParams = new URLSearchParams(window.location.search);
+
+// Retorno desde verificación de email
 if (_urlParams.get('verified') === 'true') {
   const _verEmail = _urlParams.get('email') || '';
   setTimeout(() => {
     showToast('✅ Email verificado correctamente — ahora podés iniciar sesión');
-    // Navegar directo al login
     nav('login');
     if (_verEmail) {
       const loginInput = document.getElementById('login-email');
@@ -5188,8 +6248,44 @@ if (_urlParams.get('verified') === 'true') {
   }, 1500);
 }
 
-// Guardar solo el carrito en localStorage
-setInterval(() => dbSave(DB_KEYS.cart, state.cart), 30000);
+// Retorno desde Mercado Pago
+(function handleMPReturn() {
+  const paymentStatus = _urlParams.get('payment');
+  const orderId       = _urlParams.get('order');
+  if (!paymentStatus) return;
+
+  // Limpiar params de la URL sin recargar
+  const cleanUrl = window.location.pathname;
+  window.history.replaceState({}, '', cleanUrl);
+
+  setTimeout(() => {
+    if (paymentStatus === 'success') {
+      // Mostrar confirmación
+      if (orderId) {
+        const orderEl = document.getElementById('order-number');
+        if (orderEl) orderEl.textContent = '#' + orderId;
+      }
+      nav('order-confirm');
+      showToast('✅ ¡Pago exitoso! Tu pedido fue confirmado');
+    } else if (paymentStatus === 'pending') {
+      nav('home');
+      showToast('⏳ Pago pendiente de acreditación — te avisaremos por email');
+    } else if (paymentStatus === 'failure') {
+      nav('checkout');
+      showToast('❌ El pago no se pudo procesar — intentá de nuevo');
+    }
+  }, 1800); // esperar a que bootFromFirebase termine
+})();
+
+// Guardar solo el carrito en localStorage (solo si cambió)
+let _lastCartSnapshot = JSON.stringify(state.cart);
+setInterval(() => {
+  const current = JSON.stringify(state.cart);
+  if (current !== _lastCartSnapshot) {
+    dbSave(DB_KEYS.cart, state.cart);
+    _lastCartSnapshot = current;
+  }
+}, 30000);
 </script>
 </body>
 </html>
