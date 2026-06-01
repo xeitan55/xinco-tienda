@@ -2067,6 +2067,8 @@ const USERS = [
 ];
 
 // =================== BANNER STATE ===================
+// VALORES PREDETERMINADOS — solo se usan si Firebase no tiene datos guardados.
+// Object.assign(bannerState, firebaseData) los sobreescribe correctamente al cargar.
 let bannerState = {
   announcements: [
     'ENVÍO GRATIS SUPERANDO LOS $95.000',
@@ -2083,7 +2085,9 @@ let bannerState = {
     label: 'OFERTA LIMITADA',
     title: '30% OFF\nEN BUZOS',
     code: 'URBAN30'
-  }
+  },
+  // categories se carga siempre desde Firestore (config/banners)
+  categories: {}
 };
 
 const PRODUCTS = [
@@ -2985,17 +2989,23 @@ function toggleCatEditor() {
   if (cats.buzos) document.getElementById('cat-img-buzos').value = cats.buzos;
 }
 
-function saveCatImg(cat) {
+async function saveCatImg(cat) {
   const url = document.getElementById('cat-img-' + cat).value.trim();
   if (!url) { showToast('Ingresá una URL de imagen'); return; }
   if (!bannerState.categories) bannerState.categories = {};
   bannerState.categories[cat] = url;
-  // Actualizar imagen visible
-  const display = document.getElementById('cat-img-' + cat + '-display');
-  if (display) display.src = url;
-  persistAll();
-  fbSaveBannersRemote(bannerState).catch(e => console.warn('Firebase banner sync:', e));
-  showToast('Imagen de ' + cat + ' actualizada ✅');
+  try {
+    console.log('saveCatImg: guardando categoría "' + cat + '" en Firestore config/banners...', url);
+    await fbSaveBannersRemote(bannerState);
+    // Recargar desde Firestore para confirmar escritura
+    await syncFromFirebase();
+    // Aplicar imágenes SIEMPRE después de cargar Firestore
+    applySavedCatImages();
+    showToast('Imagen de ' + cat + ' actualizada ✅');
+  } catch(e) {
+    console.error('saveCatImg: error guardando categoría "' + cat + '" en Firestore:', e);
+    showToast('⚠️ Error al guardar en Firebase: ' + e.message);
+  }
 }
 
 async function uploadCatImg(cat, file) {
@@ -3019,12 +3029,23 @@ async function uploadCatImg(cat, file) {
   }
 }
 
-// Aplicar imágenes de categorías guardadas al cargar
+// Aplicar imágenes de categorías desde bannerState (cargado desde Firestore)
+// Esta función DEBE llamarse siempre DESPUÉS de syncFromFirebase()
 function applySavedCatImages() {
   const cats = bannerState.categories || {};
-  if (cats.remeras) { const el = document.getElementById('cat-img-remeras-display'); if(el) el.src = cats.remeras; }
-  if (cats.pantalones) { const el = document.getElementById('cat-img-pantalones-display'); if(el) el.src = cats.pantalones; }
-  if (cats.buzos) { const el = document.getElementById('cat-img-buzos-display'); if(el) el.src = cats.buzos; }
+  console.log('applySavedCatImages: aplicando categorías desde Firestore', cats);
+  const catMap = {
+    remeras:    'cat-img-remeras-display',
+    pantalones: 'cat-img-pantalones-display',
+    buzos:      'cat-img-buzos-display',
+    accesorios: 'cat-img-accesorios-display',
+  };
+  Object.entries(catMap).forEach(([cat, elId]) => {
+    if (cats[cat]) {
+      const el = document.getElementById(elId);
+      if (el) el.src = cats[cat];
+    }
+  });
 }
 
 function togglePass(id) {
@@ -3136,7 +3157,7 @@ function placeOrder() {
   state.cart = [];
   updateCartCount();
   persistAll();
-  fbSaveOrderRemote(newOrder).catch(e => console.warn('Firebase order sync error:', e));
+  fbSaveOrderRemote(newOrder).catch(e => console.error('Firebase order sync error:', e));
   document.getElementById('order-number').textContent = '#' + orderNum;
   nav('order-confirm');
 }
@@ -3638,7 +3659,7 @@ function updateOrderStatus(id, status) {
     showToast(`Pedido #${id} → ${status.toUpperCase()}`);
     renderAdminDashboard();
     persistAll();
-    fbUpdateOrderStatusRemote(id, status).catch(e => console.warn('Firebase order update error:', e));
+    fbUpdateOrderStatusRemote(id, status).catch(e => console.error('Firebase order update error:', e));
   }
 }
 
@@ -4103,7 +4124,7 @@ function initCobranzasSection() {
   if (statEls[2]) statEls[2].textContent = fmtPrice(transTotal);
 }
 
-function saveMPConfig() {
+async function saveMPConfig() {
   const pk = document.getElementById('mp-public-key').value.trim();
   const at = document.getElementById('mp-access-token').value.trim();
   const enabled = document.getElementById('mp-enabled').checked;
@@ -4114,7 +4135,16 @@ function saveMPConfig() {
     descuento: document.getElementById('mp-descuento').value,
     enabled
   };
-  dbSave(DB_KEYS.mpConfig, state.mpConfig);
+  try {
+    const ready = await waitForFirebase();
+    if (!ready) throw new Error('Firebase no disponible');
+    const { doc, setDoc } = window._fb;
+    await setDoc(doc(fbDb, 'config', 'mercadopago'), state.mpConfig, { merge: true });
+  } catch(e) {
+    console.error('Error guardando Mercado Pago en Firestore:', e);
+    showToast('⚠️ Error al guardar Mercado Pago: ' + e.message);
+    return;
+  }
   const badge = document.getElementById('mp-status-badge');
   if (badge) { badge.textContent = enabled ? 'ACTIVO ✓' : 'CONFIGURADO'; badge.className = enabled ? 'badge badge-violet ml-auto shrink-0' : 'badge badge-outline ml-auto shrink-0'; }
   showToast(enabled ? '✅ Mercado Pago activado y guardado' : '✅ Configuración guardada');
@@ -4122,9 +4152,9 @@ function saveMPConfig() {
 
 // =================== RESET DE FÁBRICA ===================
 function resetToFactory() {
-  if (!confirm('⚠️ Esto borrará TODOS los cambios guardados (productos, pedidos, banners, carrito) y restaurará los datos de fábrica. ¿Estás seguro?')) return;
-  Object.values(DB_KEYS).forEach(k => localStorage.removeItem(k));
-  showToast('Datos restaurados. Recargando...');
+  if (!confirm('⚠️ Esto borrará el carrito local de este dispositivo. Los datos de Firebase no se modifican. ¿Estás seguro?')) return;
+  localStorage.removeItem(DB_KEYS.cart);
+  showToast('Carrito local restaurado. Recargando...');
   setTimeout(() => location.reload(), 1500);
 }
 
@@ -4314,7 +4344,10 @@ async function saveProduct() {
     const saved = editId ? state.products.find(p=>String(p.id)===String(editId)) : productData;
     await fbSaveProductRemote(saved);
     showToast(editId ? 'Producto actualizado en Firebase ✅' : 'Producto creado en Firebase ✅');
-  } catch(e) { showToast('Guardado localmente ⚠️'); }
+  } catch(e) {
+    console.error('Error guardando producto en Firestore:', e);
+    showToast('⚠️ Error al guardar producto en Firebase: ' + e.message);
+  }
   if (btn) { btn.textContent = 'GUARDAR PRODUCTO'; btn.disabled = false; }
 }
 
@@ -4347,12 +4380,19 @@ async function saveAdminCatImg(cat) {
   if (!url) { showToast('Ingresá una URL ❌'); return; }
   if (!bannerState.categories) bannerState.categories = {};
   bannerState.categories[cat] = url;
-  const adminImg = document.getElementById('admin-cat-img-'+cat);
-  if (adminImg) adminImg.src = url;
-  const homeImg = document.getElementById('cat-img-'+cat+'-display');
-  if (homeImg) homeImg.src = url;
-  try { await fbSaveBannersRemote(bannerState); showToast('Categoría '+cat.toUpperCase()+' guardada ✅'); }
-  catch(e) { showToast('Guardado localmente ⚠️'); }
+  try {
+    console.log('saveAdminCatImg: guardando categoría "' + cat + '" en Firestore config/banners...', url);
+    await fbSaveBannersRemote(bannerState);
+    // Recargar desde Firestore para confirmar escritura
+    await syncFromFirebase();
+    // Aplicar imágenes SIEMPRE después de cargar Firestore
+    applySavedCatImages();
+    initCatEditor();
+    showToast('Categoría '+cat.toUpperCase()+' guardada ✅');
+  } catch(e) {
+    console.error('saveAdminCatImg: error guardando categoría "' + cat + '" en Firestore:', e);
+    showToast('⚠️ Error al guardar en Firebase: ' + e.message);
+  }
 }
 
 
@@ -4363,7 +4403,7 @@ function deleteProduct(id) {
   renderAdminProducts();
   renderAdminInventory();
   persistAll();
-  fbDeleteProductRemote(id).catch(e => console.warn('Firebase sync error:', e));
+  fbDeleteProductRemote(id).catch(e => console.error('Firebase sync error:', e));
 }
 
 // =================== SIZE GUIDE ===================
@@ -4486,11 +4526,14 @@ async function saveAnnouncementBar() {
     const idx = parseInt(inp.dataset.index);
     bannerState.announcements[idx] = inp.value.trim() || bannerState.announcements[idx];
   });
-  renderAnnouncementBar();
   try {
+    console.log('saveAnnouncementBar: guardando announcements en Firestore config/banners...', bannerState.announcements);
     await fbSaveBannersRemote(bannerState);
+    await syncFromFirebase();
+    renderAnnouncementBar();
     showToast('✅ Barra de anuncios guardada en Firebase — visible para todos');
   } catch(e) {
+    console.error('saveAnnouncementBar: error guardando en Firestore:', e);
     showToast('⚠️ Error al guardar en Firebase: ' + e.message);
   }
 }
@@ -4530,11 +4573,15 @@ async function saveHeroBanner() {
   bannerState.hero.subtitle = document.getElementById('hero-edit-subtitle').value.trim();
   const imgUrl = document.getElementById('hero-edit-img').value.trim();
   if (imgUrl) bannerState.hero.img = imgUrl;
-  renderHeroBanner();
   try {
+    console.log('saveHeroBanner: guardando en Firestore config/banners...', bannerState.hero);
     await fbSaveBannersRemote(bannerState);
+    // Recargar desde Firestore para confirmar que se escribió correctamente
+    await syncFromFirebase();
+    renderHeroBanner();
     showToast('✅ Hero banner guardado en Firebase — visible para todos');
   } catch(e) {
+    console.error('saveHeroBanner: error guardando hero banner en Firestore:', e);
     showToast('⚠️ Error al guardar en Firebase: ' + e.message);
   }
 }
@@ -4543,20 +4590,14 @@ async function savePromoBanner() {
   bannerState.promo.label = document.getElementById('promo-edit-label').value.trim();
   bannerState.promo.title = document.getElementById('promo-edit-title').value.trim();
   bannerState.promo.code  = document.getElementById('promo-edit-code').value.trim().toUpperCase();
-  // Update home section immediately
-  const promoBannerEl = document.getElementById('promo-banner-section');
-  if (promoBannerEl) {
-    const lbl = promoBannerEl.querySelector('.promo-label');
-    const ttl = promoBannerEl.querySelector('.promo-title');
-    const cod = promoBannerEl.querySelector('.promo-code');
-    if (lbl) lbl.textContent = bannerState.promo.label;
-    if (ttl) ttl.innerHTML = bannerState.promo.title.replace(/\n/g,'<br>');
-    if (cod) cod.textContent = bannerState.promo.code;
-  }
   try {
+    console.log('savePromoBanner: guardando promo en Firestore config/banners...', bannerState.promo);
     await fbSaveBannersRemote(bannerState);
+    await syncFromFirebase();
+    renderPromoBanner();
     showToast('✅ Banner promo guardado en Firebase — visible para todos');
   } catch(e) {
+    console.error('savePromoBanner: error guardando promo banner en Firestore:', e);
     showToast('⚠️ Error al guardar en Firebase: ' + e.message);
   }
 }
@@ -4596,55 +4637,12 @@ async function initFirebase() {
       }
     });
 
-    // Sincronizar datos desde Firebase
-    await syncFromFirebase();
-
     // ✅ Firebase listo — resolver la promesa para desbloquear escrituras
     if (_fbReadyResolve) _fbReadyResolve();
 
     console.log('✅ Firebase conectado y listo');
   } catch(e) {
-    console.warn('⚠️ Firebase no disponible, usando localStorage:', e.message);
-  }
-}
-
-async function syncFromFirebase() {
-  if (!fbDb || !window._fb) return;
-  const { collection, getDocs, getDoc, doc, query, orderBy } = window._fb;
-  try {
-    // Productos
-    const prodSnap = await getDocs(collection(fbDb, 'products'));
-    if (!prodSnap.empty) {
-      state.products = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      dbSave(DB_KEYS.products, state.products);
-      renderHomeProducts();
-      renderCatalog();
-    } else {
-      // Primera vez: subir productos por defecto a Firebase
-      await seedFirebaseProducts();
-    }
-    // Pedidos
-    try {
-      const ordSnap = await getDocs(query(collection(fbDb, 'orders'), orderBy('createdAt','desc')));
-      if (!ordSnap.empty) {
-        state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        dbSave(DB_KEYS.orders, state.orders);
-      }
-    } catch(e) {
-      const ordSnap = await getDocs(collection(fbDb, 'orders'));
-      state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    }
-    // Banners
-    const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
-    if (bannerSnap.exists()) {
-      Object.assign(bannerState, bannerSnap.data());
-      dbSave(DB_KEYS.banners, bannerState);
-      renderAnnouncementBar();
-      renderHeroBanner();
-      applySavedCatImages();
-    }
-  } catch(e) {
-    console.warn('Sync Firebase error:', e.message);
+    console.error('Firebase no disponible:', e);
   }
 }
 
@@ -4652,7 +4650,7 @@ async function seedFirebaseProducts() {
   if (!fbDb || !window._fb) return;
   const { doc, setDoc } = window._fb;
   for (const p of state.products) {
-    try { await setDoc(doc(fbDb, 'products', String(p.id)), p); } catch(e) {}
+    try { await setDoc(doc(fbDb, 'products', String(p.id)), p); } catch(e) { console.error('Error sembrando producto en Firestore:', e); }
   }
 }
 
@@ -4727,7 +4725,17 @@ async function fbSaveBannersRemote(data) {
   const ready = await waitForFirebase();
   if (!ready) throw new Error('Firebase no disponible');
   const { doc, setDoc } = window._fb;
-  await setDoc(doc(fbDb, 'config', 'banners'), data);
+  try {
+    await setDoc(
+      doc(fbDb, 'config', 'banners'),
+      data,
+      { merge: true }
+    );
+    console.log('fbSaveBannersRemote: config/banners guardado en Firestore', data);
+  } catch(e) {
+    console.error('fbSaveBannersRemote: error al guardar config/banners:', e);
+    throw e;
+  }
 }
 
 async function fbLoginUser(email, password) {
@@ -4749,15 +4757,10 @@ async function fbLogoutUser() {
 
 // =================== PERSISTENCIA localStorage ===================
 
+// localStorage SOLO para el carrito del usuario — banners y config siempre desde Firestore
 const DB_KEYS = {
-  products:   'xinco_products',
-  orders:     'xinco_orders',
-  customers:  'xinco_customers',
-  cart:       'xinco_cart',
-  banners:    'xinco_banners',
-  tracking:   'xinco_tracking',
-  mpConfig:   'xinco_mp_config',
-  bankConfig: 'xinco_bank_config',
+  cart: 'xinco_cart',
+  // NOTA: xinco_banners fue eliminado — los banners se leen exclusivamente de Firestore (config/banners)
 };
 
 function dbSave(key, data) {
@@ -4774,6 +4777,7 @@ function dbLoad(key, fallback) {
 
 function persistAll() {
   // localStorage SOLO para el carrito (datos del usuario, no del admin)
+  // banners, productos, pedidos y config se persisten ÚNICAMENTE en Firestore
   dbSave(DB_KEYS.cart, state.cart);
 }
 
@@ -5075,50 +5079,78 @@ function printReport() {
 }
 
 async function syncFromFirebase() {
-  // Firebase es la UNICA fuente de verdad
+  // Firebase es la ÚNICA fuente de verdad — nunca leer banners desde localStorage
   if (!fbDb || !window._fb) throw new Error('Firebase no inicializado');
   const { collection, getDocs, getDoc, doc, query, orderBy } = window._fb;
 
-  // Productos
-  const prodSnap = await getDocs(collection(fbDb, 'products'));
-  if (!prodSnap.empty) {
-    state.products = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } else {
-    await seedFirebaseProducts();
-    const prodSnap2 = await getDocs(collection(fbDb, 'products'));
-    state.products = prodSnap2.docs.map(d => ({ id: d.id, ...d.data() }));
+  // ── Productos ──────────────────────────────────────────────
+  try {
+    const prodSnap = await getDocs(collection(fbDb, 'products'));
+    if (!prodSnap.empty) {
+      state.products = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } else {
+      console.log('syncFromFirebase: colección products vacía — ejecutando seed...');
+      await seedFirebaseProducts();
+      const prodSnap2 = await getDocs(collection(fbDb, 'products'));
+      state.products = prodSnap2.docs.map(d => ({ id: d.id, ...d.data() }));
+    }
+  } catch(e) {
+    console.error('syncFromFirebase: error cargando products:', e);
+    throw e;
   }
 
-  // Pedidos
+  // ── Pedidos ────────────────────────────────────────────────
   try {
     const ordSnap = await getDocs(query(collection(fbDb, 'orders'), orderBy('createdAt','desc')));
     state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch(e) {
-    const ordSnap = await getDocs(collection(fbDb, 'orders'));
-    state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    console.warn('syncFromFirebase: pedidos sin índice, cargando sin orden:', e.message);
+    try {
+      const ordSnap = await getDocs(collection(fbDb, 'orders'));
+      state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch(e2) {
+      console.error('syncFromFirebase: error cargando orders:', e2);
+    }
   }
 
-  // Banners
-  const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
-  if (bannerSnap.exists()) {
-    Object.assign(bannerState, bannerSnap.data());
+  // ── Banners (config/banners) — ÚNICA fuente de verdad ─────
+  try {
+    const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
+    if (bannerSnap.exists()) {
+      const fbData = bannerSnap.data();
+      console.log('BANNERS FIREBASE', fbData);
+      // Deep merge: preservar estructura pero sobreescribir con datos de Firebase
+      if (fbData.announcements) bannerState.announcements = fbData.announcements;
+      if (fbData.hero)          Object.assign(bannerState.hero, fbData.hero);
+      if (fbData.promo)         Object.assign(bannerState.promo, fbData.promo);
+      if (fbData.categories)    bannerState.categories = fbData.categories;
+    } else {
+      console.log('syncFromFirebase: config/banners no existe aún en Firestore — usando defaults');
+    }
+  } catch(e) {
+    console.error('syncFromFirebase: error cargando config/banners:', e);
   }
 
-  // Tracking
+  // ── Tracking ───────────────────────────────────────────────
   try {
     const trackSnap = await getDocs(collection(fbDb, 'tracking'));
     trackSnap.docs.forEach(d => { trackingData[d.id] = d.data(); });
-  } catch(e) {}
+  } catch(e) {
+    console.error('syncFromFirebase: error cargando tracking:', e);
+  }
 
-  // Config MP
+  // ── Config Mercado Pago ────────────────────────────────────
   try {
     const mpSnap = await getDoc(doc(fbDb, 'config', 'mercadopago'));
     if (mpSnap.exists()) state.mpConfig = mpSnap.data();
-  } catch(e) {}
+  } catch(e) {
+    console.error('syncFromFirebase: error cargando config/mercadopago:', e);
+  }
 }
 
 // =================== INIT ===================
-// Solo el carrito desde localStorage (es del usuario, no del admin)
+// Solo el carrito desde localStorage (datos del usuario en este dispositivo)
+// Banners, productos y configuración se cargan SIEMPRE desde Firestore
 loadCart();
 updateCartCount();
 
@@ -5134,22 +5166,26 @@ let retryCount = 0;
 async function bootFromFirebase() {
   showPageLoading();
   try {
+    // 1. Inicializar Firebase
     await initFirebase();
-    // Renderizar con datos REALES de Firebase
-    renderHomeProducts();
-    renderCatalog();
+    // 2. Cargar TODO desde Firestore (productos, pedidos, banners, tracking, MP)
+    await syncFromFirebase();
+    // 3. Renderizar banners con datos reales de Firebase
     renderAnnouncementBar();
     renderHeroBanner();
+    // 4. Aplicar imágenes de categorías (SIEMPRE después de syncFromFirebase)
     applySavedCatImages();
+    // 5. Renderizar catálogo y home con productos reales
+    renderHomeProducts();
+    renderCatalog();
     updateCartCount();
     retryCount = 0;
-    console.log('Firebase cargado correctamente');
+    console.log('✅ Firebase cargado correctamente — banners y productos sincronizados');
   } catch(e) {
     retryCount++;
-    console.error('Firebase error (intento ' + retryCount + '):', e.message);
+    console.error('bootFromFirebase: error (intento ' + retryCount + '):', e.message);
     const hp = document.getElementById('home-products');
     if (hp) hp.innerHTML = '<div class="col-span-4" style="text-align:center;padding:60px;"><p style="font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.1em;color:#ba1a1a;">ERROR DE CONEXION</p><p style="font-family:JetBrains Mono,monospace;font-size:10px;color:#4c4546;margin-top:8px;">Reintentando en ' + Math.min(retryCount * 3, 15) + ' segundos...</p></div>';
-    // Reintentar con backoff
     setTimeout(bootFromFirebase, Math.min(retryCount * 3000, 15000));
   }
 }
