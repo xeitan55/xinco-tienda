@@ -1838,7 +1838,12 @@ tailwind.config = {
             </div>
             <div class="bg-surface-container-low border-l-4 border-secondary-container p-4 mb-4">
               <p class="font-label-caps text-[10px] text-primary mb-1">¿CÓMO FUNCIONA?</p>
-              <p class="font-body-md text-sm text-on-surface-variant">Con tu <strong>Public Key</strong> y <strong>Access Token</strong> de Mercado Pago, cada compra genera un link de pago. El dinero se acredita directo en tu cuenta MP (CBU/CVU). No necesitás servidor propio.</p>
+              <p class="font-body-md text-sm text-on-surface-variant">La <strong>Public Key</strong> se configura acá y va a Firestore. El <strong>Access Token</strong> va directo a Vercel como variable de entorno — nunca pasa por el browser ni por Firebase. Cada compra llama a una función servidor segura que genera el link de pago.</p>
+            </div>
+            <!-- Aviso de seguridad -->
+            <div class="mb-4 p-4 border-l-4 border-secondary-container bg-surface-container-low">
+              <p class="font-label-caps text-[10px] text-primary mb-1">🔒 SOBRE LA SEGURIDAD DEL ACCESS TOKEN</p>
+              <p class="font-body-md text-sm text-on-surface-variant">La <strong>Public Key</strong> se guarda en Firebase (es pública por diseño de MP). El <strong>Access Token</strong> es secreto y <strong>no se guarda en ningún lado de esta app</strong> — debe cargarse directamente en <a href="https://vercel.com" target="_blank" class="text-secondary-container underline">Vercel → Settings → Environment Variables</a> como <code class="font-label-caps text-[10px] bg-surface-container px-1">MP_ACCESS_TOKEN</code>.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
@@ -1846,8 +1851,9 @@ tailwind.config = {
                 <div class="relative"><input id="mp-public-key" class="input-field pr-10" placeholder="APP_USR-xxxxxxxx..." type="password"/><button onclick="togglePass('mp-public-key')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
               </div>
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ACCESS TOKEN * <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="text-secondary-container underline ml-2 text-[9px]">OBTENER →</a></label>
-                <div class="relative"><input id="mp-access-token" class="input-field pr-10" placeholder="APP_USR-xxxxxxxx..." type="password"/><button onclick="togglePass('mp-access-token')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ACCESS TOKEN <span class="text-secondary-container">(solo para verificar — no se guarda aquí)</span></label>
+                <div class="relative"><input id="mp-access-token" class="input-field pr-10" placeholder="Cargarlo en Vercel → MP_ACCESS_TOKEN" type="password"/><button onclick="togglePass('mp-access-token')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button></div>
+                <p class="font-label-caps text-[9px] text-on-surface-variant mt-1">Se borra automáticamente al guardar — no queda en memoria</p>
               </div>
               <div>
                 <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CUOTAS SIN INTERÉS</label>
@@ -3140,11 +3146,12 @@ function renderCheckoutPage() {
   checkoutStep(1);
 }
 
-function placeOrder() {
+async function placeOrder() {
   if (state.cart.length === 0) { showToast('Tu carrito está vacío'); return; }
 
   // Validar datos personales
   const nombre  = document.getElementById('co-nombre')?.value.trim();
+  const apellido= document.getElementById('co-apellido')?.value.trim() || '';
   const email   = document.getElementById('co-email')?.value.trim();
   const dir     = document.getElementById('co-dir')?.value.trim();
   const ciudad  = document.getElementById('co-ciudad')?.value.trim();
@@ -3164,30 +3171,76 @@ function placeOrder() {
     if (!cardExp || !/^\d{2}\/\d{2}$/.test(cardExp)) { showToast('Ingresá la fecha de vencimiento (MM/AA) ❌'); checkoutStep(3); return; }
     if (!cardCvv || cardCvv.length < 3) { showToast('Ingresá el CVV ❌'); checkoutStep(3); return; }
     if (!cardName) { showToast('Ingresá el nombre de la tarjeta ❌'); checkoutStep(3); return; }
-    // Validar fecha no vencida
     const [mm, yy] = cardExp.split('/');
     const expDate = new Date(2000 + parseInt(yy), parseInt(mm) - 1, 1);
     if (expDate < new Date()) { showToast('Tu tarjeta está vencida ❌'); checkoutStep(3); return; }
   }
 
-  // Validar CBU si eligió transferencia
-  if (payMethod === 'transfer') {
-    const cbu = document.getElementById('bank-cbu')?.value.trim();
-    // Solo info — no bloquear, pero avisar
-  }
-
-  // Todo ok — confirmar pedido
+  // Generar ID del pedido
   const orderNum = 'ORD-' + String(Math.floor(Math.random()*9000)+1000);
   const newOrder = {
-    id: orderNum,
-    customer: nombre + ' ' + (document.getElementById('co-apellido')?.value.trim() || ''),
-    email: email,
-    date: new Date().toLocaleDateString('es-AR'),
-    total: cartTotal(),
-    status: 'pending',
+    id:        orderNum,
+    customer:  (nombre + ' ' + apellido).trim(),
+    email:     email,
+    date:      new Date().toLocaleDateString('es-AR'),
+    total:     cartTotal(),
+    status:    'pending',
     payMethod: payMethod || 'mercadopago',
-    items: state.cart.map(i => ({name: i.name, qty: i.qty, price: i.price}))
+    items:     state.cart.map(i => ({name: i.name, qty: i.qty, price: i.price, id: i.productId || i.key}))
   };
+
+  // ── Mercado Pago: crear preferencia via Vercel Function (token nunca toca el browser) ──
+  if (payMethod === 'mercadopago' && state.mpConfig?.enabled) {
+    const btn = document.querySelector('#page-checkout .btn-violet');
+    if (btn) { btn.textContent = 'GENERANDO PAGO...'; btn.disabled = true; }
+
+    try {
+      const res = await fetch('/api/create-payment', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: orderNum,
+          items:   state.cart.map(i => ({
+            id:        i.productId || i.key,
+            name:      i.name,
+            qty:       i.qty,
+            price:     i.price,
+          })),
+          payer: { email, name: nombre + ' ' + apellido },
+          backUrls: {
+            success: window.location.origin + '/?payment=success&order=' + orderNum,
+            failure: window.location.origin + '/?payment=failure&order=' + orderNum,
+            pending: window.location.origin + '/?payment=pending&order=' + orderNum,
+          },
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.init_point) {
+        throw new Error(data.error || 'No se pudo crear el link de pago');
+      }
+
+      // Guardar pedido en Firebase antes de redirigir
+      state.orders.unshift(newOrder);
+      state.cart = [];
+      updateCartCount();
+      persistAll();
+      await fbSaveOrderRemote(newOrder).catch(e => console.error('Firebase order sync error:', e));
+
+      // Redirigir a Mercado Pago (el token nunca estuvo en el browser)
+      window.location.href = data.init_point;
+      return;
+
+    } catch(e) {
+      console.error('placeOrder MP error:', e);
+      showToast('Error al generar el pago: ' + e.message + ' ❌');
+      if (btn) { btn.textContent = 'CONFIRMAR PEDIDO'; btn.disabled = false; }
+      return;
+    }
+  }
+
+  // ── Otros métodos de pago (transferencia, tarjeta manual) ──
   state.orders.unshift(newOrder);
   state.cart = [];
   updateCartCount();
@@ -4160,29 +4213,48 @@ function initCobranzasSection() {
 }
 
 async function saveMPConfig() {
-  const pk = document.getElementById('mp-public-key').value.trim();
-  const at = document.getElementById('mp-access-token').value.trim();
+  const pk      = document.getElementById('mp-public-key').value.trim();
+  const at      = document.getElementById('mp-access-token').value.trim();
   const enabled = document.getElementById('mp-enabled').checked;
-  if (!pk || !at) { showToast('Ingresá Public Key y Access Token ❌'); return; }
-  state.mpConfig = {
-    publicKey: pk, accessToken: at,
-    cuotas: document.getElementById('mp-cuotas').value,
+
+  if (!pk) { showToast('Ingresá la Public Key ❌'); return; }
+
+  // SEGURIDAD: el Access Token NUNCA se guarda en Firestore ni en el browser.
+  // Debe cargarse en Vercel → Settings → Environment Variables como MP_ACCESS_TOKEN.
+  // En Firestore solo guardamos la publicKey (que es pública por diseño de MP) y config no sensible.
+  if (at) {
+    // Limpiar el campo para que no quede expuesto en memoria del browser
+    document.getElementById('mp-access-token').value = '';
+    showToast('⚠️ Access Token NO se guarda aquí — cargalo en Vercel como variable de entorno MP_ACCESS_TOKEN');
+  }
+
+  const safeConfig = {
+    publicKey: pk,
+    cuotas:    document.getElementById('mp-cuotas').value,
     descuento: document.getElementById('mp-descuento').value,
-    enabled
+    enabled,
+    // accessToken: NUNCA aquí — va en variable de entorno del servidor Vercel
   };
+
+  state.mpConfig = safeConfig;
+
   try {
     const ready = await waitForFirebase();
     if (!ready) throw new Error('Firebase no disponible');
     const { doc, setDoc } = window._fb;
-    await setDoc(doc(fbDb, 'config', 'mercadopago'), state.mpConfig, { merge: true });
+    await setDoc(doc(fbDb, 'config', 'mercadopago'), safeConfig, { merge: true });
   } catch(e) {
-    console.error('Error guardando Mercado Pago en Firestore:', e);
-    showToast('⚠️ Error al guardar Mercado Pago: ' + e.message);
+    console.error('saveMPConfig: error guardando en Firestore:', e);
+    showToast('⚠️ Error al guardar: ' + e.message);
     return;
   }
+
   const badge = document.getElementById('mp-status-badge');
-  if (badge) { badge.textContent = enabled ? 'ACTIVO ✓' : 'CONFIGURADO'; badge.className = enabled ? 'badge badge-violet ml-auto shrink-0' : 'badge badge-outline ml-auto shrink-0'; }
-  showToast(enabled ? '✅ Mercado Pago activado y guardado' : '✅ Configuración guardada');
+  if (badge) {
+    badge.textContent = enabled ? 'ACTIVO ✓' : 'CONFIGURADO';
+    badge.className   = enabled ? 'badge badge-violet ml-auto shrink-0' : 'badge badge-outline ml-auto shrink-0';
+  }
+  showToast(enabled ? '✅ Mercado Pago configurado — recordá cargar el AT en Vercel' : '✅ Configuración guardada');
 }
 
 // =================== RESET DE FÁBRICA ===================
@@ -5247,11 +5319,12 @@ bootFromFirebase();
 
 // Si viene de verificar email, mostrar mensaje de bienvenida
 const _urlParams = new URLSearchParams(window.location.search);
+
+// Retorno desde verificación de email
 if (_urlParams.get('verified') === 'true') {
   const _verEmail = _urlParams.get('email') || '';
   setTimeout(() => {
     showToast('✅ Email verificado correctamente — ahora podés iniciar sesión');
-    // Navegar directo al login
     nav('login');
     if (_verEmail) {
       const loginInput = document.getElementById('login-email');
@@ -5259,6 +5332,35 @@ if (_urlParams.get('verified') === 'true') {
     }
   }, 1500);
 }
+
+// Retorno desde Mercado Pago
+(function handleMPReturn() {
+  const paymentStatus = _urlParams.get('payment');
+  const orderId       = _urlParams.get('order');
+  if (!paymentStatus) return;
+
+  // Limpiar params de la URL sin recargar
+  const cleanUrl = window.location.pathname;
+  window.history.replaceState({}, '', cleanUrl);
+
+  setTimeout(() => {
+    if (paymentStatus === 'success') {
+      // Mostrar confirmación
+      if (orderId) {
+        const orderEl = document.getElementById('order-number');
+        if (orderEl) orderEl.textContent = '#' + orderId;
+      }
+      nav('order-confirm');
+      showToast('✅ ¡Pago exitoso! Tu pedido fue confirmado');
+    } else if (paymentStatus === 'pending') {
+      nav('home');
+      showToast('⏳ Pago pendiente de acreditación — te avisaremos por email');
+    } else if (paymentStatus === 'failure') {
+      nav('checkout');
+      showToast('❌ El pago no se pudo procesar — intentá de nuevo');
+    }
+  }, 1800); // esperar a que bootFromFirebase termine
+})();
 
 // Guardar solo el carrito en localStorage
 setInterval(() => dbSave(DB_KEYS.cart, state.cart), 30000);
