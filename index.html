@@ -67,10 +67,11 @@ tailwind.config = {
   @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
   .scrolling-text-inner { display: inline-flex; white-space: nowrap; animation: scrollText 18s linear infinite; }
   @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes splashOut { 0%,80%{opacity:1;} 100%{opacity:0;pointer-events:none;} }
   @keyframes splashTextIn { from{opacity:0;transform:scale(1.15);} to{opacity:1;transform:scale(1);} }
-  .splash { animation: splashOut 2.5s forwards ease-in-out; }
-  .splash-text { animation: splashTextIn 1s forwards ease-out; }
+  /* El splash NO se desvanece con CSS — JS lo controla una vez que las imágenes están cargadas */
+  .splash { opacity:1; transition: opacity 0.6s ease-out; }
+  .splash.hiding { opacity:0; pointer-events:none; }
+  .splash-text { animation: splashTextIn 0.9s forwards ease-out; }
   .page { display: none; animation: fadeInUp 0.35s ease-out; }
   .page.active { display: block; }
   ::-webkit-scrollbar { width: 6px; }
@@ -2186,9 +2187,43 @@ function filterCatalog(tag) {
 }
 
 // =================== SPLASH ===================
-setTimeout(() => {
-  document.getElementById('splash').style.display = 'none';
-}, 2600);
+// El splash se oculta SOLO cuando las imágenes críticas ya están cargadas en memoria.
+// Garantiza: Firebase sync → renderHeroBanner/applySavedCatImages → imágenes decodificadas → splash off.
+
+const SPLASH_MIN_MS   = 900;   // tiempo mínimo que dura el splash (evita parpadeo en cache)
+const SPLASH_MAX_MS   = 8000;  // fallback de seguridad si una imagen no carga
+const _splashStart    = Date.now();
+let   _splashDismissed = false;
+
+function dismissSplash() {
+  if (_splashDismissed) return;
+  _splashDismissed = true;
+  const el = document.getElementById('splash');
+  if (!el) return;
+  // Respetar el tiempo mínimo para que el logo se vea bien
+  const elapsed = Date.now() - _splashStart;
+  const wait    = Math.max(0, SPLASH_MIN_MS - elapsed);
+  setTimeout(() => {
+    el.classList.add('hiding');
+    setTimeout(() => { el.style.display = 'none'; }, 650);
+  }, wait);
+}
+
+// Carga una imagen en memoria y resuelve cuando decodificó (o falla silenciosamente)
+function preloadImage(url) {
+  if (!url) return Promise.resolve();
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload  = () => resolve();
+    img.onerror = () => resolve();   // si falla, no bloqueamos para siempre
+    img.src = url;
+    // Fallback por si el evento no dispara (edge case)
+    setTimeout(resolve, 4000);
+  });
+}
+
+// Fallback de seguridad absoluto: si algo explota, el splash desaparece igual
+setTimeout(dismissSplash, SPLASH_MAX_MS);
 
 // =================== TOAST ===================
 let toastTimer;
@@ -5181,11 +5216,29 @@ async function bootFromFirebase() {
     updateCartCount();
     retryCount = 0;
     console.log('✅ Firebase cargado correctamente — banners y productos sincronizados');
+
+    // 6. Precargar imágenes críticas en memoria del navegador ANTES de cerrar el splash
+    //    Así el usuario nunca ve el pop-in de imágenes al aparecer la página
+    const criticalUrls = [
+      bannerState.hero?.img,
+      bannerState.categories?.remeras,
+      bannerState.categories?.pantalones,
+      bannerState.categories?.buzos,
+    ].filter(Boolean);
+
+    console.log('Precargando imágenes críticas:', criticalUrls);
+    await Promise.all(criticalUrls.map(preloadImage));
+    console.log('✅ Imágenes críticas listas — cerrando splash');
+
+    dismissSplash();
+
   } catch(e) {
     retryCount++;
     console.error('bootFromFirebase: error (intento ' + retryCount + '):', e.message);
     const hp = document.getElementById('home-products');
     if (hp) hp.innerHTML = '<div class="col-span-4" style="text-align:center;padding:60px;"><p style="font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.1em;color:#ba1a1a;">ERROR DE CONEXION</p><p style="font-family:JetBrains Mono,monospace;font-size:10px;color:#4c4546;margin-top:8px;">Reintentando en ' + Math.min(retryCount * 3, 15) + ' segundos...</p></div>';
+    // En caso de error también cerramos el splash para no bloquear al usuario
+    dismissSplash();
     setTimeout(bootFromFirebase, Math.min(retryCount * 3000, 15000));
   }
 }
