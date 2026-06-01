@@ -382,7 +382,7 @@ tailwind.config = {
       </button>
     </div>
     <!-- Search box acrílico -->
-    <div class="search-box relative flex items-center mb-2">
+    <div class="search-box relative flex items-center mb-2 rounded-full border-2 border-black/10">
       <span class="material-symbols-outlined absolute left-4 text-black" style="font-size:22px;">search</span>
       <input
         id="search-input"
@@ -424,7 +424,7 @@ tailwind.config = {
     <!-- Left: Search + Mobile menu -->
     <div class="flex items-center gap-4 w-1/3">
       <button class="md:hidden p-1" onclick="openMobileMenu()"><span class="material-symbols-outlined">menu</span></button>
-      <div class="hidden md:flex relative w-full max-w-xs border-2 border-primary group focus-within:border-secondary">
+      <div class="hidden md:flex relative w-full max-w-xs border-2 border-primary group focus-within:border-secondary rounded-full">
         <span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-primary group-focus-within:text-secondary text-[20px]">search</span>
         <input class="w-full bg-transparent border-none pl-9 pr-3 py-2 font-label-caps text-label-caps focus:ring-0 placeholder:text-on-surface-variant outline-none" placeholder="BUSCAR..." type="text" onfocus="openSearch()" id="header-search"/>
       </div>
@@ -450,11 +450,7 @@ tailwind.config = {
   <nav class="hidden md:flex border-t border-outline-variant/30 justify-center gap-12 py-3">
     <a class="nav-link" id="nav-home" onclick="nav('home')">INICIO</a>
     <a class="nav-link" id="nav-catalog" onclick="nav('catalog')">CATÁLOGO</a>
-    <a class="nav-link" id="nav-remeras" onclick="filterCatalog('remeras')">REMERAS</a>
-    <a class="nav-link" id="nav-camperas" onclick="filterCatalog('camperas')">CAMPERAS</a>
-    <a class="nav-link" id="nav-buzos" onclick="filterCatalog('buzos')">BUZOS</a>
     <a class="nav-link" id="nav-accesorios" onclick="filterCatalog('accesorios')">ACCESORIOS</a>
-    <a class="nav-link" id="nav-pantalones" onclick="filterCatalog('pantalones')">PANTALONES</a>
     <a class="nav-link" style="color:#5d22ff;" id="nav-newdrops" onclick="filterCatalog('newdrops')">NEW DROPS</a>
   </nav>
 </header>
@@ -509,7 +505,7 @@ tailwind.config = {
     <div class="flex justify-between items-end mb-8">
       <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase">Categorías</h2>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 h-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
       <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('remeras')">
         <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
@@ -529,13 +525,6 @@ tailwind.config = {
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Buzos</h3>
-        </div>
-      </div>
-      <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('camperas')">
-        <img id="cat-img-camperas-display" src="https://images.unsplash.com/photo-1544923246-77307dd270b6?w=800&q=80" alt="Camperas" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
-        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
-        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
-          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Camperas</h3>
         </div>
       </div>
       <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('accesorios')">
@@ -654,9 +643,6 @@ tailwind.config = {
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
                 <input type="checkbox" value="buzos" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
                 <span class="text-on-surface-variant group-hover:text-primary">Buzos</span></label></li>
-              <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
-                <input type="checkbox" value="camperas" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
-                <span class="text-on-surface-variant group-hover:text-primary">Camperas</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
                 <input type="checkbox" value="accesorios" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
                 <span class="text-on-surface-variant group-hover:text-primary">Accesorios</span></label></li>
@@ -1780,24 +1766,6 @@ tailwind.config = {
                   <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('buzos')">
                     <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
                   </button>
-                </div>
-                <!-- Camperas -->
-                <div class="border border-gray-200 rounded-xl p-4 bg-white">
-                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
-                    <img id="admin-cat-img-camperas" src="https://images.unsplash.com/photo-1544923246-77307dd270b6?w=600&q=80" class="w-full h-full object-cover"/>
-                  </div>
-                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">CAMPERAS</div>
-                  <div class="flex gap-2 mb-2">
-                    <input id="admin-cat-url-camperas" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
-                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-camperas').click()">
-                      <span class="material-symbols-outlined text-[14px]">upload</span>
-                    </button>
-                    <input type="file" id="admin-cat-file-camperas" accept="image/*" class="hidden" onchange="uploadAdminCatImg('camperas',this.files[0])"/>
-                  </div>
-                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('camperas')">
-                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
-                  </button>
-                </div>
                 <!-- Accesorios -->
                 <div class="border border-gray-200 rounded-xl p-4 bg-white">
                   <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
@@ -3477,7 +3445,6 @@ function applySavedCatImages() {
     remeras:    'cat-img-remeras-display',
     pantalones: 'cat-img-pantalones-display',
     buzos:      'cat-img-buzos-display',
-    camperas:   'cat-img-camperas-display',
     accesorios: 'cat-img-accesorios-display',
   };
   Object.entries(catMap).forEach(([cat, elId]) => {
@@ -5166,7 +5133,7 @@ async function saveProduct() {
 // =================== ADMIN CATEGORIES EDITOR ===================
 function initCatEditor() {
   const cats = bannerState.categories || {};
-  ['remeras','pantalones','buzos','camperas','accesorios'].forEach(cat => {
+  ['remeras','pantalones','buzos','accesorios'].forEach(cat => {
     const urlEl = document.getElementById('admin-cat-url-' + cat);
     const imgEl = document.getElementById('admin-cat-img-' + cat);
     if (cats[cat]) { if(urlEl) urlEl.value=cats[cat]; if(imgEl) imgEl.src=cats[cat]; }
