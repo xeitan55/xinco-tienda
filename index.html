@@ -450,7 +450,11 @@ tailwind.config = {
   <nav class="hidden md:flex border-t border-outline-variant/30 justify-center gap-12 py-3">
     <a class="nav-link" id="nav-home" onclick="nav('home')">INICIO</a>
     <a class="nav-link" id="nav-catalog" onclick="nav('catalog')">CATÁLOGO</a>
+    <a class="nav-link" id="nav-remeras" onclick="filterCatalog('remeras')">REMERAS</a>
+    <a class="nav-link" id="nav-camperas" onclick="filterCatalog('camperas')">CAMPERAS</a>
+    <a class="nav-link" id="nav-buzos" onclick="filterCatalog('buzos')">BUZOS</a>
     <a class="nav-link" id="nav-accesorios" onclick="filterCatalog('accesorios')">ACCESORIOS</a>
+    <a class="nav-link" id="nav-pantalones" onclick="filterCatalog('pantalones')">PANTALONES</a>
     <a class="nav-link" style="color:#5d22ff;" id="nav-newdrops" onclick="filterCatalog('newdrops')">NEW DROPS</a>
   </nav>
 </header>
@@ -505,7 +509,7 @@ tailwind.config = {
     <div class="flex justify-between items-end mb-8">
       <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase">Categorías</h2>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 h-auto">
       <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('remeras')">
         <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
@@ -525,6 +529,13 @@ tailwind.config = {
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Buzos</h3>
+        </div>
+      </div>
+      <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('camperas')">
+        <img id="cat-img-camperas-display" src="https://images.unsplash.com/photo-1544923246-77307dd270b6?w=800&q=80" alt="Camperas" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
+        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Camperas</h3>
         </div>
       </div>
       <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('accesorios')">
@@ -643,6 +654,9 @@ tailwind.config = {
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
                 <input type="checkbox" value="buzos" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
                 <span class="text-on-surface-variant group-hover:text-primary">Buzos</span></label></li>
+              <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
+                <input type="checkbox" value="camperas" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
+                <span class="text-on-surface-variant group-hover:text-primary">Camperas</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
                 <input type="checkbox" value="accesorios" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
                 <span class="text-on-surface-variant group-hover:text-primary">Accesorios</span></label></li>
@@ -1635,6 +1649,7 @@ tailwind.config = {
                     <option value="remeras">Remeras</option>
                     <option value="pantalones">Pantalones</option>
                     <option value="buzos">Buzos</option>
+                    <option value="camperas">Camperas</option>
                     <option value="accesorios">Accesorios</option>
                   </select>
                 </div>
@@ -1763,6 +1778,23 @@ tailwind.config = {
                     <input type="file" id="admin-cat-file-buzos" accept="image/*" class="hidden" onchange="uploadAdminCatImg('buzos',this.files[0])"/>
                   </div>
                   <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('buzos')">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
+                  </button>
+                </div>
+                <!-- Camperas -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
+                    <img id="admin-cat-img-camperas" src="https://images.unsplash.com/photo-1544923246-77307dd270b6?w=600&q=80" class="w-full h-full object-cover"/>
+                  </div>
+                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">CAMPERAS</div>
+                  <div class="flex gap-2 mb-2">
+                    <input id="admin-cat-url-camperas" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
+                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-camperas').click()">
+                      <span class="material-symbols-outlined text-[14px]">upload</span>
+                    </button>
+                    <input type="file" id="admin-cat-file-camperas" accept="image/*" class="hidden" onchange="uploadAdminCatImg('camperas',this.files[0])"/>
+                  </div>
+                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('camperas')">
                     <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
                   </button>
                 </div>
@@ -2492,7 +2524,7 @@ const PRODUCTS = [
   {id:1, name:'ARCHIVE HEAVY TEE', price:14500, oldPrice:null, cat:'remeras', badge:'NUEVO', desc:'Remera oversized de algodón 300g. Corte boxy, costuras reforzadas. El básico definitivo.', sizes:['S','M','L','XL'], colors:['negro','blanco'], stock:45, sku:'XNC-REM-001', rating:4.8, reviews:32, img:'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80', images:['https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80','https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80','https://images.unsplash.com/photo-1562157873-818bc0726f68?w=600&q=80'], tags:['newdrops','esenciales']},
   {id:2, name:'TACTICAL CARGO PANT', price:28900, oldPrice:38000, cat:'pantalones', badge:'SALE', desc:'Cargo técnico con 8 bolsillos. Tela ripstop resistente al agua. Para la calle y más allá.', sizes:['M','L','XL'], colors:['negro','gris'], stock:18, sku:'XNC-PAN-002', rating:4.9, reviews:18, img:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80', images:['https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80','https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80'], tags:['esenciales']},
   {id:3, name:'XINCO 01 HOODIE', price:42000, oldPrice:null, cat:'buzos', badge:'DROP EXCLUSIVO', desc:'Buzo pesado con capucha ajustable. Bordado frontal. Fabricado localmente en Argentina.', sizes:['S','M','L','XL','XXL'], colors:['negro','violeta'], stock:30, sku:'XNC-BUZ-003', rating:5.0, reviews:47, img:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80', images:['https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80','https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80','https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80'], tags:['newdrops','stylo']},
-  {id:4, name:'SIGNAL TRACK JACKET', price:55000, oldPrice:null, cat:'buzos', badge:'NUEVO', desc:'Campera track con detalles violeta. Tela técnica anti-viento. Íconos de la calle porteña.', sizes:['S','M','L'], colors:['negro','violeta'], stock:12, sku:'XNC-BUZ-004', rating:4.7, reviews:11, img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80', images:['https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80','https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80'], tags:['newdrops','stylo']},
+  {id:4, name:'SIGNAL TRACK JACKET', price:55000, oldPrice:null, cat:'camperas', badge:'NUEVO', desc:'Campera track con detalles violeta. Tela técnica anti-viento. Íconos de la calle porteña.', sizes:['S','M','L'], colors:['negro','violeta'], stock:12, sku:'XNC-CAM-004', rating:4.7, reviews:11, img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80', images:['https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80','https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80'], tags:['newdrops','stylo']},
   {id:5, name:'MONO LOGO TEE', price:12000, oldPrice:15000, cat:'remeras', badge:'SALE', desc:'Remera slim con logo monocromático. Algodón peinado suave. Clásica y versátil.', sizes:['XS','S','M','L','XL'], colors:['blanco','negro','gris'], stock:60, sku:'XNC-REM-005', rating:4.5, reviews:28, img:'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80', images:['https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80','https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80'], tags:['esenciales']},
   {id:6, name:'STREET JOGGER V2', price:22000, oldPrice:null, cat:'pantalones', badge:null, desc:'Jogging urbano con puños en las piernas y pretina ancha. Para moverse sin límites.', sizes:['S','M','L','XL'], colors:['negro','gris'], stock:25, sku:'XNC-PAN-006', rating:4.6, reviews:15, img:'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80', images:['https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&q=80','https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80'], tags:['esenciales']},
   {id:7, name:'NOIR ZIP HOODIE', price:38000, oldPrice:45000, cat:'buzos', badge:'SALE', desc:'Buzo con cierre completo. Interior polar. Bolsillos kangaroo. Invierno urbano.', sizes:['M','L','XL','XXL'], colors:['negro'], stock:8, sku:'XNC-BUZ-007', rating:4.8, reviews:22, img:'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80', images:['https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80','https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80'], tags:['stylo']},
@@ -2579,6 +2611,7 @@ function filterCatalog(tag) {
   if (tag === 'remeras') state.filterCat = ['remeras'];
   else if (tag === 'pantalones') state.filterCat = ['pantalones'];
   else if (tag === 'buzos') state.filterCat = ['buzos'];
+  else if (tag === 'camperas') state.filterCat = ['camperas'];
   else if (tag === 'accesorios') state.filterCat = ['accesorios'];
   // Setear _tagFilter ANTES de nav() para que renderCatalog lo vea
   if (['newdrops','stylo','esenciales'].includes(tag)) {
@@ -3444,6 +3477,7 @@ function applySavedCatImages() {
     remeras:    'cat-img-remeras-display',
     pantalones: 'cat-img-pantalones-display',
     buzos:      'cat-img-buzos-display',
+    camperas:   'cat-img-camperas-display',
     accesorios: 'cat-img-accesorios-display',
   };
   Object.entries(catMap).forEach(([cat, elId]) => {
@@ -4394,8 +4428,8 @@ function renderAdminProducts() {
         <td class="p-4 text-right font-label-caps text-[11px] hidden md:table-cell ${p.stock <= 10 ? 'text-red-500' : ''}">${p.stock}</td>
         <td class="p-4">
           <div class="flex gap-2">
-            <button class="w-7 h-7 flex items-center justify-center border border-gray-200 rounded-lg hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="editProduct(${p.id})" title="Editar"><span class="material-symbols-outlined text-[16px]">edit</span></button>
-            <button class="w-7 h-7 flex items-center justify-center border border-red-200 text-red-500 rounded-lg hover:bg-red-500 hover:text-white hover:border-red-500 transition-colors" onclick="deleteProduct(${p.id})" title="Eliminar"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+            <button class="w-7 h-7 flex items-center justify-center border border-gray-200 rounded-lg hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="editProduct('${p.id}')" title="Editar"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+            <button class="w-7 h-7 flex items-center justify-center border border-red-200 text-red-500 rounded-lg hover:bg-red-500 hover:text-white hover:border-red-500 transition-colors" onclick="deleteProduct('${p.id}')" title="Eliminar"><span class="material-symbols-outlined text-[16px]">delete</span></button>
           </div>
         </td>
       </tr>`).join('')}
@@ -4422,9 +4456,9 @@ function renderAdminInventory() {
         </td>
         <td class="p-4">
           <div class="flex items-center gap-1.5">
-            <button class="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center text-[11px] font-bold hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="adjustStock(${p.id},-5)">−5</button>
-            <button class="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center text-[11px] font-bold hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="adjustStock(${p.id},5)">+5</button>
-            <button class="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center text-[11px] font-bold hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="adjustStock(${p.id},20)">+20</button>
+            <button class="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center text-[11px] font-bold hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="adjustStock('${p.id}',-5)">−5</button>
+            <button class="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center text-[11px] font-bold hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="adjustStock('${p.id}',5)">+5</button>
+            <button class="w-7 h-7 border border-gray-200 rounded-lg flex items-center justify-center text-[11px] font-bold hover:bg-primary hover:text-on-primary hover:border-primary transition-colors" onclick="adjustStock('${p.id}',20)">+20</button>
           </div>
         </td>
       </tr>`).join('')}
@@ -5132,7 +5166,7 @@ async function saveProduct() {
 // =================== ADMIN CATEGORIES EDITOR ===================
 function initCatEditor() {
   const cats = bannerState.categories || {};
-  ['remeras','pantalones','buzos','accesorios'].forEach(cat => {
+  ['remeras','pantalones','buzos','camperas','accesorios'].forEach(cat => {
     const urlEl = document.getElementById('admin-cat-url-' + cat);
     const imgEl = document.getElementById('admin-cat-img-' + cat);
     if (cats[cat]) { if(urlEl) urlEl.value=cats[cat]; if(imgEl) imgEl.src=cats[cat]; }
@@ -5176,7 +5210,7 @@ async function saveAdminCatImg(cat) {
 
 function deleteProduct(id) {
   if (!confirm('¿Eliminar este producto?')) return;
-  state.products = state.products.filter(p => p.id !== id);
+  state.products = state.products.filter(p => String(p.id) !== String(id));
   showToast('Producto eliminado');
   renderAdminProducts();
   renderAdminInventory();
