@@ -504,63 +504,34 @@ tailwind.config = {
   <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary">
     <div class="flex justify-between items-end mb-8">
       <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase">Categorías</h2>
-      <button id="edit-cats-btn" class="hidden btn-outline py-2 px-4 text-[10px]" onclick="toggleCatEditor()">
-        <span class="material-symbols-outlined text-[16px]">edit</span> EDITAR IMÁGENES
-      </button>
     </div>
-    <!-- Editor de categorías (solo admin) -->
-    <div id="cat-editor" class="hidden mb-6 border-[3px] border-secondary-container p-5 bg-surface-container-low">
-      <p class="font-label-caps text-label-caps text-primary mb-4">EDITAR IMÁGENES DE CATEGORÍAS</p>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label class="font-label-caps text-[10px] text-on-surface-variant block mb-2">REMERAS — URL O SUBIR</label>
-          <div class="flex gap-2 mb-2">
-            <input id="cat-img-remeras" class="input-field flex-1 py-2" placeholder="https://..." value="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80"/>
-            <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('cat-file-remeras').click()"><span class="material-symbols-outlined text-[16px]">upload</span></button>
-            <input type="file" id="cat-file-remeras" accept="image/*" class="hidden" onchange="uploadCatImg('remeras',this.files[0])"/>
-          </div>
-          <button class="btn-primary w-full py-2 text-[10px]" onclick="saveCatImg('remeras')">GUARDAR REMERAS</button>
-        </div>
-        <div>
-          <label class="font-label-caps text-[10px] text-on-surface-variant block mb-2">PANTALONES — URL O SUBIR</label>
-          <div class="flex gap-2 mb-2">
-            <input id="cat-img-pantalones" class="input-field flex-1 py-2" placeholder="https://..." value="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80"/>
-            <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('cat-file-pantalones').click()"><span class="material-symbols-outlined text-[16px]">upload</span></button>
-            <input type="file" id="cat-file-pantalones" accept="image/*" class="hidden" onchange="uploadCatImg('pantalones',this.files[0])"/>
-          </div>
-          <button class="btn-primary w-full py-2 text-[10px]" onclick="saveCatImg('pantalones')">GUARDAR PANTALONES</button>
-        </div>
-        <div>
-          <label class="font-label-caps text-[10px] text-on-surface-variant block mb-2">BUZOS — URL O SUBIR</label>
-          <div class="flex gap-2 mb-2">
-            <input id="cat-img-buzos" class="input-field flex-1 py-2" placeholder="https://..." value="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80"/>
-            <button class="btn-outline py-2 px-3 text-[10px]" onclick="document.getElementById('cat-file-buzos').click()"><span class="material-symbols-outlined text-[16px]">upload</span></button>
-            <input type="file" id="cat-file-buzos" accept="image/*" class="hidden" onchange="uploadCatImg('buzos',this.files[0])"/>
-          </div>
-          <button class="btn-primary w-full py-2 text-[10px]" onclick="saveCatImg('buzos')">GUARDAR BUZOS</button>
-        </div>
-      </div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[560px]">
-      <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('remeras')">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
+      <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('remeras')">
         <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Remeras</h3>
         </div>
       </div>
-      <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('pantalones')">
+      <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('pantalones')">
         <img id="cat-img-pantalones-display" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80" alt="Pantalones" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Pantalones</h3>
         </div>
       </div>
-      <div class="group relative block w-full h-[280px] md:h-full border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('buzos')">
+      <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('buzos')">
         <img id="cat-img-buzos-display" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80" alt="Buzos" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Buzos</h3>
+        </div>
+      </div>
+      <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('accesorios')">
+        <img id="cat-img-accesorios-display" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80" alt="Accesorios" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
+        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Accesorios</h3>
         </div>
       </div>
     </div>
@@ -2916,9 +2887,10 @@ function renderHomeProducts() {
 
 function renderCatalog() {
   let filtered = [...state.products];
-  // Cat filter
+  // Cat filter: usa checkboxes del DOM + state.filterCat (para clicks desde nav/inicio)
   const cats = Array.from(document.querySelectorAll('.filter-cat:checked')).map(c => c.value).filter(v => v !== 'all');
-  if (cats.length > 0) filtered = filtered.filter(p => cats.includes(p.cat));
+  const activeCats = cats.length > 0 ? cats : (state.filterCat || []);
+  if (activeCats.length > 0) filtered = filtered.filter(p => activeCats.includes(p.cat));
   // Tag filter
   if (state._tagFilter) filtered = filtered.filter(p => p.tags.includes(state._tagFilter));
   // Size filter
@@ -2961,6 +2933,7 @@ function resetFilters() {
   document.getElementById('price-label').textContent = '$200.000';
   document.getElementById('sort-select').value = 'default';
   state._tagFilter = null;
+  state.filterCat = [];
   document.getElementById('catalog-title').textContent = 'TODOS LOS ITEMS';
   renderCatalog();
 }
@@ -2973,6 +2946,7 @@ document.querySelectorAll('.filter-cat').forEach(cb => cb.addEventListener('chan
     document.querySelector('.filter-cat[value="all"]').checked = false;
   }
   state._tagFilter = null;
+  state.filterCat = [];
   renderCatalog();
 }));
 
@@ -3424,8 +3398,6 @@ async function updateAuthUI() {
   } else {
     if (label) label.textContent = 'ACCEDER';
   }
-  const editBtn = document.getElementById('edit-cats-btn');
-  if (editBtn) editBtn.classList.toggle('hidden', !admin);
 }
 
 // =================== GOOGLE LOGIN ===================
@@ -3460,58 +3432,6 @@ async function showForgotPassword() {
     showToast('¡Email de recuperación enviado! Revisá tu bandeja 📧');
   } catch(e) {
     showToast('Error: ' + (e.code === 'auth/user-not-found' ? 'Email no registrado' : e.message) + ' ❌');
-  }
-}
-
-// =================== CATEGORY IMAGE EDITOR ===================
-function toggleCatEditor() {
-  const el = document.getElementById('cat-editor');
-  el.classList.toggle('hidden');
-  // Precargar valores actuales
-  const cats = bannerState.categories || {};
-  if (cats.remeras) document.getElementById('cat-img-remeras').value = cats.remeras;
-  if (cats.pantalones) document.getElementById('cat-img-pantalones').value = cats.pantalones;
-  if (cats.buzos) document.getElementById('cat-img-buzos').value = cats.buzos;
-}
-
-async function saveCatImg(cat) {
-  const url = document.getElementById('cat-img-' + cat).value.trim();
-  if (!url) { showToast('Ingresá una URL de imagen'); return; }
-  if (!bannerState.categories) bannerState.categories = {};
-  bannerState.categories[cat] = url;
-  try {
-    console.log('saveCatImg: guardando categoría "' + cat + '" en Firestore config/banners...', url);
-    await fbSaveBannersRemote(bannerState);
-    // Recargar desde Firestore para confirmar escritura
-    await syncFromFirebase();
-  await loadShippingProviders();
-    // Aplicar imágenes SIEMPRE después de cargar Firestore
-    applySavedCatImages();
-    showToast('Imagen de ' + cat + ' actualizada ✅');
-  } catch(e) {
-    console.error('saveCatImg: error guardando categoría "' + cat + '" en Firestore:', e);
-    showToast('⚠️ Error al guardar en Firebase: ' + e.message);
-  }
-}
-
-async function uploadCatImg(cat, file) {
-  if (!file) return;
-  showToast('Subiendo imagen...');
-  const CLOUD = 'damwe7juy', PRESET = 'XINCO TIENDA';
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', PRESET);
-  try {
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`, {method:'POST', body:formData});
-    const data = await res.json();
-    if (data.secure_url) {
-      document.getElementById('cat-img-' + cat).value = data.secure_url;
-      saveCatImg(cat);
-    } else {
-      showToast('Error al subir imagen ❌');
-    }
-  } catch(e) {
-    showToast('Error de conexión ❌');
   }
 }
 
@@ -6757,10 +6677,13 @@ function updateStitchClip() {
   }
 
   resize();
+  // Re-calcular después de que la página termine de renderizar
+  setTimeout(resize, 300);
+  setTimeout(resize, 800);
   window.addEventListener('resize', resize);
   const obs = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (entry.isIntersecting) { if (!animId) { computeContour(); draw(); } }
+      if (entry.isIntersecting) { computeContour(); if (!animId) drawLoop(); }
       else { if (animId) { cancelAnimationFrame(animId); animId = null; } }
     }
   }, { threshold: 0.1 });
@@ -6769,7 +6692,27 @@ function updateStitchClip() {
   if (titleEl) {
     new MutationObserver(() => { computeContour(); }).observe(titleEl, { childList: true, characterData: true, subtree: true });
   }
-  draw();
+  // Recalcular también cuando cambie el viewport (sin esperar resize)
+  let lastW = W, lastH = H;
+  function checkResize() {
+    const r = hero.getBoundingClientRect();
+    if (Math.abs(r.width - lastW) > 1 || Math.abs(r.height - lastH) > 1) {
+      lastW = r.width; lastH = r.height;
+      resize();
+    }
+    requestAnimationFrame(checkResize);
+  }
+  // Iniciar loop de animación con verificación de contorno
+  function drawLoop() {
+    if (contourPoints.length < 5) computeContour();
+    ctx.clearRect(0, 0, W, H);
+    update();
+    drawTextGlow();
+    drawSparkles();
+    animId = requestAnimationFrame(drawLoop);
+  }
+  checkResize();
+  drawLoop();
 })();
 // Guardar solo el carrito en localStorage (solo si cambió)
 let _lastCartSnapshot = JSON.stringify(state.cart);
