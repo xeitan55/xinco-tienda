@@ -2489,8 +2489,10 @@ tailwind.config = {
 </div>
 
 <!-- ===== JS ===== -->
-<script src="config.local.js"></script>
 <script>
+// =================== DATA STORE ===================
+// Autenticación 100% vía Firebase Auth con custom claims.
+
 // =================== BANNER STATE ===================
 // VALORES PREDETERMINADOS — solo se usan si Firebase no tiene datos guardados.
 // Object.assign(bannerState, firebaseData) los sobreescribe correctamente al cargar.
@@ -3216,20 +3218,6 @@ async function doLogin() {
     else nav('home');
 
   } catch(e) {
-    // Fallback local (solo desarrollo): si Firebase falla y existe config.local.js
-    const cfg = window.LOCAL_ADMIN_CONFIG;
-    if (cfg && email === cfg.email && pass === cfg.pass) {
-      const localUser = cfg;
-      if (btn) btn.textContent = 'INICIAR SESIÓN'; btn.disabled = false;
-      state.user = { email: localUser.email, uid: 'local-admin', name: localUser.name, role: localUser.role };
-      localStorage.setItem('xinco_local_user', JSON.stringify(state.user));
-      await updateAuthUI();
-      if (err) err.classList.add('hidden');
-      if (verWarn) verWarn.classList.add('hidden');
-      showToast('¡Bienvenido ' + localUser.name + '! 👋');
-      if (localUser.role === 'admin') nav('admin'); else nav('home');
-      return;
-    }
     if (btn) { btn.textContent = 'INICIAR SESIÓN'; btn.disabled = false; }
     let msg = 'EMAIL O CONTRASEÑA INCORRECTOS';
     if (e.code === 'auth/user-not-found')     msg = 'NO EXISTE UNA CUENTA CON ESE EMAIL';
@@ -3420,7 +3408,6 @@ function checkPasswordMatch() {
 async function doLogout() {
   await fbLogoutUser();
   state.user = null;
-  localStorage.removeItem('xinco_local_user');
   await updateAuthUI();
   showToast('Sesión cerrada 👋');
   nav('home');
@@ -6411,12 +6398,6 @@ async function bootFromFirebase() {
 }
 
 bootFromFirebase();
-
-// Restaurar sesión local (solo desarrollo)
-(function() {
-  const saved = localStorage.getItem('xinco_local_user');
-  if (saved) { try { const u = JSON.parse(saved); if (u?.email) { state.user = u; updateAuthUI(); } } catch(e) {} }
-})();
 
 // Si viene de verificar email, mostrar mensaje de bienvenida
 const _urlParams = new URLSearchParams(window.location.search);
