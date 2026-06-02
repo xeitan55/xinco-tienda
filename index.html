@@ -1784,6 +1784,8 @@ tailwind.config = {
                 <!-- Live Preview -->
                 <div id="hero-preview" class="relative w-full overflow-hidden mb-5" style="aspect-ratio:16/9;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);">
                   <img id="hero-preview-img" class="absolute inset-0 w-full h-full object-cover opacity-60" style="display:none;"/>
+                  <video id="hero-preview-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
+                  <span id="hero-preview-video-badge" class="absolute top-3 right-3 bg-indigo-600 text-white text-[8px] font-bold px-2 py-1 rounded hidden">VIDEO</span>
                   <span id="hero-preview-badge" class="badge badge-violet mb-4" style="position:absolute;top:20px;left:20px;"></span>
                   <div style="position:absolute;bottom:20px;left:20px;right:20px;">
                     <div id="hero-preview-title" style="font-family:Montserrat;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;text-transform:uppercase;" class="text-white"></div>
@@ -1844,12 +1846,12 @@ tailwind.config = {
                       <button class="border border-error rounded-lg py-1.5 px-3 font-label-caps text-[9px] text-error hover:bg-error hover:text-on-error transition-colors" onclick="clearHeroVideo()">LIMPIAR VIDEO</button>
                       <div id="hero-video-url-display" class="font-body-md text-[10px] text-indigo-600 break-all"></div>
                       <div>
-                        <div id="hero-video-dropzone" class="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition-colors" ondragover="this.classList.add('border-indigo-500','bg-indigo-50');event.preventDefault()" ondragleave="this.classList.remove('border-indigo-500','bg-indigo-50')" ondrop="handleHeroVideoFileDrop(event)">
-                          <span class="material-symbols-outlined text-[32px] text-indigo-300">cloud_upload</span>
-                          <p class="font-body-md text-sm text-indigo-400 mt-1">Arrastrá un video o hacé clic para seleccionar</p>
-                          <p class="font-label-caps text-[9px] text-indigo-300 mt-0.5">MP4, WebM — máx 10MB</p>
-                        </div>
-                        <input type="file" id="hero-video-file" accept="video/mp4,video/webm" class="hidden" onchange="handleHeroVideoFile(this.files[0])"/>
+                      <div id="hero-video-dropzone" class="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition-colors" onclick="document.getElementById('hero-video-file').click()" ondragover="this.classList.add('border-indigo-500','bg-indigo-50');event.preventDefault()" ondragleave="this.classList.remove('border-indigo-500','bg-indigo-50')" ondrop="handleHeroVideoFileDrop(event)">
+                        <span class="material-symbols-outlined text-[32px] text-indigo-300">cloud_upload</span>
+                        <p class="font-body-md text-sm text-indigo-400 mt-1">Arrastrá un video o hacé clic para seleccionar</p>
+                        <p class="font-label-caps text-[9px] text-indigo-300 mt-0.5">MP4, WebM — máx 10MB</p>
+                      </div>
+                      <input type="file" id="hero-video-file" accept="video/mp4,video/webm" class="hidden" onchange="uploadHeroVideo(this.files[0])"/>
                         <div id="hero-video-upload-progress" class="hidden mt-3">
                           <div class="w-full bg-indigo-100 rounded-full h-2">
                             <div id="hero-video-upload-bar" class="bg-indigo-600 h-2 rounded-full" style="width:0%"></div>
@@ -2504,10 +2506,13 @@ let bannerState = {
     'HASTA 30% OFF EN SELECCIONADOS'
   ],
   hero: {
-    badge: 'SS/2025 — NUEVA COLECCIÓN',
+    badge: 'NUEVA TEMPORADA',
     title: 'XINCO',
-    subtitle: 'Ropa que habla el idioma de la calle. Diseñado para los que no piden permiso.',
-    img: 'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80'
+    subtitle: 'Tu estilo, tu identidad',
+    img: 'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80',
+    videoUrl: '',
+    animStyle: 'default',
+    videoEffect: 'none'
   },
   promo: {
     enabled: false,
@@ -5474,7 +5479,7 @@ function renderHeroBanner() {
   const img      = document.getElementById('hero-img');
 
   if (badge)    { badge.textContent = h.badge; badge.style.display = h.badge ? '' : 'none'; }
-  if (title)    title.innerHTML = h.title.replace(/\n/g, '<br>');
+  if (title)    title.innerHTML = h.title.replace(/\n/g, '<br>') || 'XINCO';
   if (subtitle) subtitle.textContent = h.subtitle;
 
   // Restore animation state
@@ -5660,7 +5665,7 @@ function previewHero() {
   const realTitle = document.getElementById('hero-title');
   const realSub   = document.getElementById('hero-subtitle');
   if (realBadge) { realBadge.textContent = badge; realBadge.style.display = badge ? '' : 'none'; }
-  if (realTitle) realTitle.innerHTML = title.replace(/\n/g, '<br>');
+  if (realTitle) realTitle.innerHTML = title.replace(/\n/g, '<br>') || 'XINCO';
   if (realSub)   realSub.textContent = subtitle;
 }
 
@@ -5743,8 +5748,6 @@ function applyHeroAnimStyle(style) {
 
   if (style === 'glitch') {
     title.classList.add('hero-glitch');
-  } else if (style === 'particles') {
-    startHeroParticles();
   } else if (style === 'minimal') {
     // Clean — just keep CSS entry animations, no extras
   }
@@ -6510,11 +6513,22 @@ async function syncFromFirebase() {
       if (fbData.announcements) bannerState.announcements = fbData.announcements;
       if (fbData.hero)          Object.assign(bannerState.hero, fbData.hero);
       if (fbData.promo)         Object.assign(bannerState.promo, fbData.promo);
-      if (fbData.categories)    bannerState.categories = fbData.categories;
+      if (fbData.categories)    Object.assign(bannerState.categories, fbData.categories);
       console.log('syncFromFirebase: banners cargados desde Firestore');
     }
   } catch(e) {
     console.warn('syncFromFirebase: no se pudieron cargar banners desde Firestore:', e.message);
+  }
+
+  // ── Coupons (config/coupons) ──────────────────────────────────
+  try {
+    const couponSnap = await getDoc(doc(fbDb, 'config', 'coupons'));
+    if (couponSnap.exists() && couponSnap.data().coupons) {
+      state.coupons = couponSnap.data().coupons;
+      console.log('syncFromFirebase: cupones cargados desde Firestore');
+    }
+  } catch(e) {
+    console.warn('syncFromFirebase: no se pudieron cargar cupones:', e.message);
   }
 }
 
