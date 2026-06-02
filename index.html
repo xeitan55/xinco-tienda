@@ -839,12 +839,7 @@ tailwind.config = {
             <div class="flex justify-between font-label-caps text-label-caps"><span class="text-on-surface-variant">SUBTOTAL</span><span id="cart-page-subtotal">$0</span></div>
             <div class="flex justify-between font-label-caps text-label-caps"><span class="text-on-surface-variant">ENVÍO</span><span id="cart-page-shipping">GRATIS</span></div>
           </div>
-          <div class="mb-6">
-            <div class="flex border-[3px] border-primary">
-              <input id="coupon-input" class="input-field border-0 flex-1 py-2" placeholder="CÓDIGO DESCUENTO"/>
-              <button class="px-4 bg-primary text-on-primary font-label-caps text-label-caps border-l-[3px] border-primary" onclick="applyCoupon()">APLICAR</button>
-            </div>
-          </div>
+
           <div class="flex justify-between font-label-caps text-[16px] font-bold text-primary mb-6 pt-4 border-t-[3px] border-primary">
             <span>TOTAL</span><span id="cart-page-total">$0</span>
           </div>
@@ -975,6 +970,15 @@ tailwind.config = {
               </span>
             </div>
             <div class="flex justify-between font-label-caps text-[15px] font-bold text-primary pt-3 border-t-[3px] border-primary"><span>TOTAL</span><span id="checkout-total">$0</span></div>
+          </div>
+          <!-- Cupón de descuento -->
+          <div class="mt-4 pt-4 border-t-[3px] border-primary">
+            <h3 class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">CUPÓN DE DESCUENTO</h3>
+            <div class="flex gap-2">
+              <input id="coupon-input" class="input-field flex-1 uppercase" placeholder="INGRESÁ TU CÓDIGO" onkeydown="if(event.key==='Enter')applyCoupon()"/>
+              <button class="btn-outline py-2 px-4 text-[10px] shrink-0" onclick="applyCoupon()">APLICAR</button>
+            </div>
+            <div id="coupon-status" class="mt-2 font-label-caps text-[10px]"></div>
           </div>
           <!-- Nota envío pendiente (oculta cuando se resuelve) -->
           <div id="checkout-shipping-note" class="mt-3 font-label-caps text-[9px] text-on-surface-variant text-center opacity-70">
@@ -1533,6 +1537,9 @@ tailwind.config = {
         </button>
         <button class="admin-nav-item w-full" id="admin-nav-reportes" onclick="showAdminSection('reportes')">
           <span class="material-symbols-outlined nav-icon">print</span> REPORTES / PDF
+        </button>
+        <button class="admin-nav-item w-full" id="admin-nav-cupones" onclick="showAdminSection('cupones')">
+          <span class="material-symbols-outlined nav-icon">sell</span> CUPONES
         </button>
       </div>
       <div class="admin-sidebar-footer">
@@ -2469,6 +2476,62 @@ tailwind.config = {
           </div>
         </div>
 
+        <!-- ===== CUPONES SECTION ===== -->
+        <div id="admin-section-cupones" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">CUPONES DE DESCUENTO</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">CREAR Y GESTIONAR CÓDIGOS PROMOCIONALES</p>
+              </div>
+            </div>
+            <div class="admin-card-body space-y-5">
+              <!-- Crear cupón -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">add_circle</span> NUEVO CUPÓN
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CÓDIGO</label>
+                    <input id="cpn-code" class="input-field uppercase" placeholder="EJ: BIENVENIDA20"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TIPO</label>
+                    <select id="cpn-type" class="input-field">
+                      <option value="percentage">% PORCENTAJE</option>
+                      <option value="fixed">$ FIJO</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">VALOR</label>
+                    <input id="cpn-value" class="input-field" type="number" placeholder="30"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">COMPRA MÍNIMA ($)</label>
+                    <input id="cpn-min" class="input-field" type="number" placeholder="0"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">USOS MÁX.</label>
+                    <input id="cpn-uses" class="input-field" type="number" placeholder="999"/>
+                  </div>
+                </div>
+                <button class="btn-violet py-2.5 px-5 text-[10px]" onclick="createCoupon()">
+                  <span class="material-symbols-outlined text-[15px]">add</span> CREAR CUPÓN
+                </button>
+              </div>
+              <!-- Lista de cupones -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">list</span> CUPONES EXISTENTES
+                </h3>
+                <div id="cpn-list" class="space-y-2">
+                  <p class="font-label-caps text-[10px] text-on-surface-variant/60">Cargando...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- ===== END ADMIN SECTIONS ===== -->
       </div>
     </main>
@@ -2570,6 +2633,7 @@ let state = {
   sortOrder: 'default',
   products: [...PRODUCTS],
   orders: [...ORDERS],
+  coupons: [],
   adminSection: 'dashboard'
 };
 
@@ -2711,6 +2775,7 @@ function addToCart(productId, size, color) {
 
 function removeFromCart(key) {
   state.cart = state.cart.filter(i => i.key !== key);
+  if (state.cart.every(i => i.isCoupon)) { state.cart = []; }
   updateCartCount();
   persistAll();
   renderCartDrawer();
@@ -2733,15 +2798,174 @@ function updateCartCount() {
 function cartTotal() { return state.cart.reduce((s, i) => s + i.price * i.qty, 0); }
 function fmtPrice(n) { return '$' + n.toLocaleString('es-AR'); }
 
+// =================== CUPONES ===================
+function validateCartCoupons() {
+  state.cart = state.cart.filter(i => {
+    if (!i.isCoupon) return true;
+    const c = getCouponByCode(i.couponCode);
+    if (!c || !c.enabled) return false;
+    if (c.expiresAt && new Date(c.expiresAt) < new Date()) return false;
+    if (c.maxUses && c.usedCount >= c.maxUses) return false;
+    return true;
+  });
+}
+function getCouponByCode(code) {
+  return state.coupons.find(c => c.code === code.toUpperCase().trim());
+}
+function hasCouponInCart() {
+  return state.cart.some(i => i.isCoupon);
+}
+function applyCoupon() {
+  const input = document.getElementById('coupon-input');
+  const status = document.getElementById('coupon-status');
+  if (!input || !status) return;
+
+  if (hasCouponInCart()) {
+    status.innerHTML = '<span class="text-error">Ya tenés un cupón aplicado — retiralo primero</span>';
+    return;
+  }
+
+  const code = input.value.trim().toUpperCase();
+  if (!code) { status.textContent = 'Ingresá un código'; return; }
+
+  const coupon = getCouponByCode(code);
+  if (!coupon) {
+    status.innerHTML = '<span class="text-error">Cupón inválido ❌</span>';
+    return;
+  }
+  if (!coupon.enabled) {
+    status.innerHTML = '<span class="text-warning">Este cupón ya no está vigente</span>';
+    return;
+  }
+  if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) {
+    status.innerHTML = '<span class="text-error">Cupón vencido ⏰</span>';
+    return;
+  }
+  if (coupon.maxUses && coupon.usedCount >= coupon.maxUses) {
+    status.innerHTML = '<span class="text-error">Cupón agotado</span>';
+    return;
+  }
+  const sub = cartTotal();
+  if (coupon.minPurchase && sub < coupon.minPurchase) {
+    status.innerHTML = `<span class="text-error">Compra mínima: ${fmtPrice(coupon.minPurchase)}</span>`;
+    return;
+  }
+  const discount = coupon.type === 'percentage'
+    ? Math.round(sub * coupon.value / 100)
+    : Math.min(coupon.value, sub);
+  state.cart.push({
+    key: '__coupon__' + code,
+    name: 'CUPÓN: ' + code,
+    price: -discount,
+    qty: 1,
+    img: '',
+    size: '',
+    color: '',
+    isCoupon: true,
+    couponCode: code
+  });
+  input.value = '';
+  status.innerHTML = `<span class="text-secondary-container">Cupón aplicado: -${fmtPrice(discount)} ✅</span>`;
+  updateCartCount();
+  persistAll();
+  renderCartDrawer();
+  if (state.currentPage === 'cart') renderCartPage();
+  if (state.currentPage === 'checkout') renderCheckoutPage();
+}
+function removeCoupon() {
+  state.cart = state.cart.filter(i => !i.isCoupon);
+  const status = document.getElementById('coupon-status');
+  if (status) status.textContent = '';
+  const input = document.getElementById('coupon-input');
+  if (input) input.value = '';
+  updateCartCount();
+  persistAll();
+  renderCartDrawer();
+  if (state.currentPage === 'cart') renderCartPage();
+  if (state.currentPage === 'checkout') renderCheckoutPage();
+}
+// ── Admin: cupones ──
+function renderAdminCupones() {
+  const list = document.getElementById('cpn-list');
+  if (!list) return;
+  if (!state.coupons || state.coupons.length === 0) {
+    list.innerHTML = '<p class="font-label-caps text-[10px] text-on-surface-variant/60">No hay cupones creados aún</p>';
+    return;
+  }
+  list.innerHTML = state.coupons.map(c => {
+    const expired = c.expiresAt && new Date(c.expiresAt) < new Date();
+    const exhausted = c.maxUses && c.usedCount >= c.maxUses;
+    const active = c.enabled && !expired && !exhausted;
+    return `<div class="flex items-center gap-3 p-3 border border-gray-100 rounded-lg ${active ? 'bg-white' : 'bg-gray-50 opacity-60'}">
+      <div class="flex-1 min-w-0">
+        <div class="font-label-caps text-label-caps text-primary flex items-center gap-2">
+          <span class="uppercase font-bold">${c.code}</span>
+          <span class="text-[10px] ${active ? 'text-secondary-container' : 'text-error'}">${active ? '● ACTIVO' : '● INACTIVO'}</span>
+        </div>
+        <div class="font-label-caps text-[10px] text-on-surface-variant mt-1">
+          ${c.type === 'percentage' ? c.value + '% OFF' : fmtPrice(c.value) + ' OFF'}
+          ${c.minPurchase ? ' | Mín: ' + fmtPrice(c.minPurchase) : ''}
+          ${c.maxUses ? ' | Usos: ' + (c.usedCount || 0) + '/' + c.maxUses : ''}
+          ${c.expiresAt ? ' | Vence: ' + c.expiresAt : ''}
+        </div>
+      </div>
+      <button class="border border-error text-error rounded-lg px-3 py-1.5 font-label-caps text-[10px] hover:bg-error hover:text-white transition-colors" onclick="deleteCoupon('${c.code}')">ELIMINAR</button>
+    </div>`;
+  }).join('');
+}
+async function createCoupon() {
+  const code = document.getElementById('cpn-code')?.value.trim().toUpperCase();
+  const type = document.getElementById('cpn-type')?.value;
+  const value = parseFloat(document.getElementById('cpn-value')?.value);
+  const minPurchase = parseFloat(document.getElementById('cpn-min')?.value) || 0;
+  const maxUses = parseInt(document.getElementById('cpn-uses')?.value) || 999;
+  if (!code || code.length < 2) { showToast('Ingresá un código válido'); return; }
+  if (!value || value <= 0) { showToast('Ingresá un valor válido'); return; }
+  if (type === 'percentage' && value > 100) { showToast('El porcentaje no puede superar 100%'); return; }
+  if (getCouponByCode(code)) { showToast('Ya existe un cupón con ese código'); return; }
+  state.coupons.push({
+    code,
+    type,
+    value,
+    minPurchase,
+    maxUses,
+    usedCount: 0,
+    enabled: true,
+    createdAt: new Date().toISOString().split('T')[0]
+  });
+  document.getElementById('cpn-code').value = '';
+  document.getElementById('cpn-value').value = '';
+  await saveCouponsRemote();
+  renderAdminCupones();
+  showToast('Cupón ' + code + ' creado ✅');
+}
+async function deleteCoupon(code) {
+  if (!confirm('Eliminar cupón ' + code + '?')) return;
+  state.coupons = state.coupons.filter(c => c.code !== code);
+  state.cart = state.cart.filter(i => i.isCoupon && i.couponCode !== code);
+  await saveCouponsRemote();
+  renderAdminCupones();
+  updateCartCount();
+  persistAll();
+  showToast('Cupón eliminado');
+}
+async function saveCouponsRemote() {
+  if (!fbDb || !window._fb) return;
+  const { doc, setDoc } = window._fb;
+  await setDoc(doc(fbDb, 'config', 'coupons'), { coupons: state.coupons }, { merge: true });
+}
+
 function renderCartDrawer() {
   const el = document.getElementById('cart-items');
+  const normalItems = state.cart.filter(i => !i.isCoupon);
+  const couponItem = state.cart.find(i => i.isCoupon);
   if (state.cart.length === 0) {
     el.innerHTML = '<div class="text-center py-12"><span class="material-symbols-outlined text-[64px] text-outline-variant">shopping_bag</span><p class="font-label-caps text-label-caps text-on-surface-variant mt-4">TU CARRITO ESTÁ VACÍO</p><button class="btn-primary mt-6" onclick="closeCart();nav(\'catalog\')">EXPLORAR TIENDA</button></div>';
     document.getElementById('cart-subtotal').textContent = '$0';
     document.getElementById('cart-shipping').textContent = 'GRATIS';
     return;
   }
-  el.innerHTML = state.cart.map(item => `
+  el.innerHTML = normalItems.map(item => `
     <div class="flex gap-3 border-b-2 border-outline-variant pb-4">
       <img src="${item.img}" class="w-20 h-24 object-cover border-2 border-primary grayscale-hover shrink-0"/>
       <div class="flex-1 min-w-0">
@@ -2757,6 +2981,19 @@ function renderCartDrawer() {
       </div>
     </div>
   `).join('');
+  if (couponItem) {
+    el.innerHTML += `
+      <div class="flex items-center gap-3 py-3 border-b-2 border-outline-variant">
+        <div class="w-10 h-10 border-2 border-secondary-container flex items-center justify-center bg-secondary-container/10 shrink-0">
+          <span class="material-symbols-outlined text-secondary-container" style="font-size:22px;">sell</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="font-label-caps text-label-caps text-secondary-container truncate">${couponItem.name}</div>
+          <div class="font-label-caps text-[11px] text-secondary-container font-bold">${fmtPrice(couponItem.price)}</div>
+        </div>
+        <button class="text-error hover:text-error/70" onclick="removeCoupon()"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+      </div>`;
+  }
   const sub = cartTotal();
   document.getElementById('cart-subtotal').textContent = fmtPrice(sub);
   document.getElementById('cart-shipping').textContent = sub >= 95000 ? 'GRATIS' : fmtPrice(2800);
@@ -2764,6 +3001,8 @@ function renderCartDrawer() {
 
 function renderCartPage() {
   const el = document.getElementById('cart-page-items');
+  const normalItems = state.cart.filter(i => !i.isCoupon);
+  const couponItem = state.cart.find(i => i.isCoupon);
   if (state.cart.length === 0) {
     el.innerHTML = '<div class="text-center py-16 border-[3px] border-primary"><span class="material-symbols-outlined text-[64px] text-outline-variant">shopping_bag</span><p class="font-label-caps text-label-caps text-on-surface-variant mt-4">TU CARRITO ESTÁ VACÍO</p><button class="btn-primary mt-6" onclick="nav(\'catalog\')">IR AL CATÁLOGO</button></div>';
   } else {
@@ -2772,7 +3011,7 @@ function renderCartPage() {
         <div class="bg-surface-container p-4 border-b-[3px] border-primary grid grid-cols-12 font-label-caps text-label-caps text-on-surface-variant">
           <div class="col-span-6">PRODUCTO</div><div class="col-span-2 text-center">PRECIO</div><div class="col-span-2 text-center">CANTIDAD</div><div class="col-span-2 text-right">TOTAL</div>
         </div>
-        ${state.cart.map(item => `
+        ${normalItems.map(item => `
         <div class="p-4 border-b border-outline-variant grid grid-cols-12 items-center gap-2">
           <div class="col-span-6 flex items-center gap-3">
             <img src="${item.img}" class="w-16 h-20 object-cover border-2 border-primary shrink-0 grayscale-hover"/>
@@ -2790,18 +3029,27 @@ function renderCartPage() {
           </div>
           <div class="col-span-2 text-right font-label-caps text-label-caps text-primary">${fmtPrice(item.price * item.qty)}</div>
         </div>`).join('')}
+        ${couponItem ? `
+        <div class="p-4 border-b border-outline-variant grid grid-cols-12 items-center gap-2 bg-secondary-container/5">
+          <div class="col-span-6 flex items-center gap-3">
+            <div class="w-12 h-12 border-2 border-secondary-container flex items-center justify-center bg-secondary-container/10 shrink-0">
+              <span class="material-symbols-outlined text-secondary-container">sell</span>
+            </div>
+            <div>
+              <div class="font-label-caps text-label-caps text-secondary-container">${couponItem.name}</div>
+              <button class="font-label-caps text-[10px] text-error underline mt-1" onclick="removeCoupon()">QUITAR CUPÓN</button>
+            </div>
+          </div>
+          <div class="col-span-2 text-center font-label-caps text-label-caps text-secondary-container">${fmtPrice(couponItem.price)}</div>
+          <div class="col-span-2"></div>
+          <div class="col-span-2 text-right font-label-caps text-label-caps text-secondary-container">${fmtPrice(couponItem.price)}</div>
+        </div>` : ''}
       </div>`;
   }
   const sub = cartTotal();
   document.getElementById('cart-page-subtotal').textContent = fmtPrice(sub);
   document.getElementById('cart-page-shipping').textContent = sub >= 95000 ? 'GRATIS' : fmtPrice(2800);
   document.getElementById('cart-page-total').textContent = fmtPrice(sub >= 95000 ? sub : sub + 2800);
-}
-
-function applyCoupon() {
-  const code = document.getElementById('coupon-input').value.trim().toUpperCase();
-  if (code === 'URBAN30') showToast('¡Cupón URBAN30 aplicado! 30% OFF en buzos 🎉');
-  else showToast('Código no válido ❌');
 }
 
 // =================== SEARCH ===================
@@ -3761,7 +4009,9 @@ function updateCheckoutShipping(providerId) {
 
 function renderCheckoutPage() {
   const el = document.getElementById('checkout-items');
-  el.innerHTML = state.cart.map(item => `
+  const normalItems = state.cart.filter(i => !i.isCoupon);
+  const couponItem = state.cart.find(i => i.isCoupon);
+  el.innerHTML = normalItems.map(item => `
     <div class="flex gap-3">
       <img src="${item.img}" class="w-14 h-16 object-cover border-2 border-primary shrink-0"/>
       <div class="flex-1 min-w-0">
@@ -3770,6 +4020,14 @@ function renderCheckoutPage() {
       </div>
       <div class="font-label-caps text-[11px] text-primary">${fmtPrice(item.price * item.qty)}</div>
     </div>`).join('');
+  if (couponItem) {
+    el.innerHTML += `
+      <div class="flex items-center gap-2 pt-3 border-t-2 border-outline-variant">
+        <span class="material-symbols-outlined text-secondary-container text-[16px]">sell</span>
+        <span class="font-label-caps text-[11px] text-secondary-container flex-1">${couponItem.name}</span>
+        <span class="font-label-caps text-[11px] text-secondary-container">${fmtPrice(couponItem.price)}</span>
+      </div>`;
+  }
   const sub = cartTotal();
   document.getElementById('checkout-subtotal').textContent = fmtPrice(sub);
   // Envío: pendiente por defecto hasta que el cliente elige método en step 2
@@ -3855,7 +4113,7 @@ async function placeOrder() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           orderId: orderNum,
-          items:   state.cart.map(i => ({
+          items:   state.cart.filter(i => !i.isCoupon).map(i => ({
             id:        i.productId || i.key,
             name:      i.name,
             qty:       i.qty,
@@ -4337,7 +4595,7 @@ async function checkAdminAccess() {
 }
 
 function showAdminSection(section) {
-  ['dashboard','orders','products','inventory','customers','banners','categorias','cobranzas','tracking','reportes'].forEach(s => {
+  ['dashboard','orders','products','inventory','customers','banners','categorias','cobranzas','tracking','reportes','cupones'].forEach(s => {
     const el = document.getElementById('admin-section-'+s);
     if (el) el.classList.toggle('hidden', s !== section);
     const navEl = document.getElementById('admin-nav-'+s);
@@ -4347,14 +4605,15 @@ function showAdminSection(section) {
     dashboard:'TABLERO', orders:'GESTIÓN DE PEDIDOS', products:'PRODUCTOS',
     inventory:'INVENTARIO', customers:'CLIENTES', banners:'EDITOR DE BANNERS',
     categorias:'EDITOR DE CATEGORÍAS', cobranzas:'GESTIÓN DE COBRANZAS',
-    tracking:'SEGUIMIENTO DE ENVÍOS', reportes:'REPORTES Y PDF'
+    tracking:'SEGUIMIENTO DE ENVÍOS', reportes:'REPORTES Y PDF', cupones:'CUPONES DE DESCUENTO'
   };
   document.getElementById('admin-section-title').textContent = titles[section] || section.toUpperCase();
   const subs = {
     dashboard:'VISTA GENERAL', orders:'TODOS LOS PEDIDOS', products:'CATÁLOGO DE PRODUCTOS',
     inventory:'STOCK Y UNIDADES', customers:'BASE DE CLIENTES', banners:'PERSONALIZACIÓN DE LA TIENDA',
     categorias:'IMÁGENES DE LAS CATEGORÍAS EN LA HOME', cobranzas:'MÉTODOS DE PAGO Y COBRANZA',
-    tracking:'CORREO ARGENTINO Y OTROS TRANSPORTES', reportes:'DOCUMENTOS IMPRIMIBLES Y EXPORTACIÓN'
+    tracking:'CORREO ARGENTINO Y OTROS TRANSPORTES', reportes:'DOCUMENTOS IMPRIMIBLES Y EXPORTACIÓN',
+    cupones:'CÓDIGOS PROMOCIONALES Y DESCUENTOS'
   };
   const subEl = document.getElementById('admin-section-sub');
   if (subEl) subEl.textContent = subs[section] || '';
@@ -4364,6 +4623,7 @@ function showAdminSection(section) {
   if (section === 'cobranzas') initCobranzasSection();
   if (section === 'reportes') initReportesSection();
   if (section === 'categorias') initCatEditor();
+  if (section === 'cupones') renderAdminCupones();
 }
 
 function renderAdminDashboard() {
@@ -6305,6 +6565,16 @@ async function syncFromFirebase() {
   } catch(e) {
     console.error('syncFromFirebase: error cargando config/mercadopago:', e);
   }
+
+  // ── Cupones ────────────────────────────────────────────────
+  try {
+    const cpnSnap = await getDoc(doc(fbDb, 'config', 'coupons'));
+    if (cpnSnap.exists()) {
+      state.coupons = cpnSnap.data().coupons || [];
+    }
+  } catch(e) {
+    console.error('syncFromFirebase: error cargando config/coupons:', e);
+  }
 }
 
 // =================== INIT ===================
@@ -6330,12 +6600,14 @@ async function bootFromFirebase() {
 
     // 2. Cargar TODO desde Firestore (productos, pedidos, banners, tracking, MP)
     await syncFromFirebase();
-    // 3. Renderizar banners con datos reales de Firebase
+    // 3. Limpiar cupones inválidos del carrito
+    validateCartCoupons();
+    // 4. Renderizar banners con datos reales de Firebase
     renderAnnouncementBar();
     renderHeroBanner();
-    // 4. Aplicar imágenes de categorías (SIEMPRE después de syncFromFirebase)
+    // 5. Aplicar imágenes de categorías (SIEMPRE después de syncFromFirebase)
     applySavedCatImages();
-    // 5. Renderizar catálogo y home con productos reales
+    // 6. Renderizar catálogo y home con productos reales
     renderHomeProducts();
     renderCatalog();
     updateCartCount();
