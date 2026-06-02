@@ -5501,12 +5501,24 @@ function previewPromo() {
   const label = document.getElementById('promo-edit-label')?.value || '';
   const title = document.getElementById('promo-edit-title')?.value || '';
   const code  = document.getElementById('promo-edit-code')?.value  || '';
+
   const pl = document.getElementById('promo-preview-label');
   const pt = document.getElementById('promo-preview-title');
   const pc = document.getElementById('promo-preview-code');
   if (pl) pl.textContent = label;
   if (pt) pt.innerHTML  = title.replace(/\n/g,'<br>') || '30% OFF';
   if (pc) pc.textContent = code;
+
+  const section = document.getElementById('promo-banner-section');
+  if (section) {
+    section.style.display = enabled ? '' : 'none';
+    const labelEl = section.querySelector('.promo-label');
+    const titleEl = section.querySelector('.promo-title');
+    const codeEl  = section.querySelector('.promo-code');
+    if (labelEl) labelEl.textContent = label;
+    if (titleEl) titleEl.innerHTML = title.replace(/\n/g, '<br>');
+    if (codeEl) codeEl.textContent = code;
+  }
 }
 
 async function savePromoBanner() {
@@ -5579,7 +5591,7 @@ function renderAnnouncementEditorList() {
         </button>
       </div>
       <span class="w-7 h-7 bg-primary text-on-primary flex items-center justify-center font-label-caps text-[11px] shrink-0">${i+1}</span>
-      <input class="input-field flex-1 py-2 ann-input" value="${msg}" data-index="${i}" oninput="bannerState.announcements[${i}]=this.value"/>
+      <input class="input-field flex-1 py-2 ann-input" value="${msg}" data-index="${i}" oninput="bannerState.announcements[${i}]=this.value;renderAnnouncementBar()"/>
       <button onclick="removeAnnouncement(${i})" class="p-2 border-2 border-error text-error hover:bg-error hover:text-on-error transition-colors shrink-0">
         <span class="material-symbols-outlined text-[18px]">delete</span>
       </button>
@@ -5625,17 +5637,30 @@ function previewHero() {
   const badge    = document.getElementById('hero-edit-badge')?.value || '';
   const title    = document.getElementById('hero-edit-title')?.value || '';
   const subtitle = document.getElementById('hero-edit-subtitle')?.value || '';
+
   const prevBadge = document.getElementById('hero-preview-badge');
   const prevTitle = document.getElementById('hero-preview-title');
   const prevSub   = document.getElementById('hero-preview-subtitle');
   if (prevBadge) { prevBadge.textContent = badge; prevBadge.style.display = badge ? '' : 'none'; }
   if (prevTitle) prevTitle.innerHTML = title.replace(/\n/g,'<br>') || 'XINCO';
   if (prevSub)   prevSub.textContent = subtitle;
+
+  const realBadge = document.getElementById('hero-badge');
+  const realTitle = document.getElementById('hero-title');
+  const realSub   = document.getElementById('hero-subtitle');
+  if (realBadge) { realBadge.textContent = badge; realBadge.style.display = badge ? '' : 'none'; }
+  if (realTitle) realTitle.innerHTML = title.replace(/\n/g, '<br>');
+  if (realSub)   realSub.textContent = subtitle;
 }
 
 function previewHeroImg() {
   const url = document.getElementById('hero-edit-img')?.value.trim();
-  if (url) { const img = document.getElementById('hero-preview-img'); if(img) img.src = url; }
+  if (url) {
+    const prevImg = document.getElementById('hero-preview-img');
+    if (prevImg) { prevImg.src = url; prevImg.style.display = ''; }
+    const realImg = document.getElementById('hero-img');
+    if (realImg) realImg.src = url;
+  }
 }
 
 
@@ -5686,6 +5711,14 @@ function selectVideoEffect(effect, btn) {
   document.querySelectorAll('#video-effect-selector .hero-media-tab').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   applyHeroVideoEffect(effect);
+}
+
+function selectAnimStyle(style) {
+  heroAnimStyle = style;
+  document.querySelectorAll('#anim-style-selector .hero-media-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.anim === style);
+  });
+  applyHeroAnimStyle(style);
 }
 
 // Apply animation style to hero live
@@ -5856,6 +5889,7 @@ function previewHeroVideo() {
   const url = document.getElementById('hero-video-url')?.value.trim();
   if (!url) { showToast('Ingresá una URL de video ❌'); return; }
   showHeroVideoStatus(url);
+  applyHeroVideoToSection(url);
   showToast('Vista previa del video activa ✅');
 }
 
