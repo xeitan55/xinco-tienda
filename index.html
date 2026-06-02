@@ -6272,6 +6272,35 @@ async function bootFromFirebase() {
   try {
     // 1. Inicializar Firebase
     await initFirebase();
+
+    // 1b. Procesar verificación de email si viene con mode=verifyEmail
+    const _urlParams = new URLSearchParams(window.location.search);
+    const _mode   = _urlParams.get('mode');
+    const _oobCode = _urlParams.get('oobCode');
+    if (_mode === 'verifyEmail' && _oobCode) {
+      const { applyActionCode, checkActionCode } = window._fb;
+      try {
+        const info = await checkActionCode(_oobCode);
+        const email = info.data.email || '';
+        await applyActionCode(_oobCode);
+        console.log('✅ Email verificado:', email);
+        window.history.replaceState({}, '', window.location.pathname);
+        dismissSplash();
+        showToast('✅ Email verificado correctamente');
+        nav('login');
+        if (email) {
+          const loginInput = document.getElementById('login-email');
+          if (loginInput) loginInput.value = email;
+        }
+        return; // ya navegamos a login, no seguir cargando la home
+      } catch(e) {
+        console.error('Error verificando email:', e);
+        window.history.replaceState({}, '', window.location.pathname);
+        showToast('⚠️ El link expiró o ya fue usado');
+        // seguir con carga normal
+      }
+    }
+
     // 2. Cargar TODO desde Firestore (productos, pedidos, banners, tracking, MP)
     await syncFromFirebase();
     // 3. Renderizar banners con datos reales de Firebase
@@ -6314,58 +6343,6 @@ async function bootFromFirebase() {
 }
 
 bootFromFirebase();
-
-// =================== EMAIL VERIFICATION HANDLER ===================
-// Si Firebase redirige acá con mode=verifyEmail, procesamos la verificación
-const _urlParams = new URLSearchParams(window.location.search);
-const _mode   = _urlParams.get('mode');
-const _oobCode = _urlParams.get('oobCode');
-const _apiKey  = _urlParams.get('apiKey');
-
-if (_mode === 'verifyEmail' && _oobCode) {
-  // Esperar a que Firebase esté listo, luego aplicar el código
-  (async () => {
-    await fbReady;
-    try {
-      const { applyActionCode, checkActionCode, sendEmailVerification } = window._fb;
-      // Obtener email del código antes de aplicarlo
-      const info = await checkActionCode(_oobCode);
-      const email = info.data.email || '';
-      await applyActionCode(_oobCode);
-      console.log('✅ Email verificado:', email);
-      // Recargar usuario para actualizar emailVerified
-      if (fbAuth.currentUser) await fbAuth.currentUser.reload();
-      // Limpiar params de la URL
-      const cleanUrl = window.location.pathname;
-      window.history.replaceState({}, '', cleanUrl);
-      setTimeout(() => {
-        showToast('✅ Email verificado correctamente');
-        if (email) {
-          nav('login');
-          const loginInput = document.getElementById('login-email');
-          if (loginInput) loginInput.value = email;
-        }
-      }, 500);
-    } catch(e) {
-      console.error('Error verificando email:', e);
-      window.history.replaceState({}, '', window.location.pathname);
-      showToast('⚠️ El link de verificación expiró o ya fue usado');
-    }
-  })();
-}
-
-// Retorno desde verificación de email (por continueUrl)
-if (_urlParams.get('verified') === 'true') {
-  const _verEmail = _urlParams.get('email') || '';
-  setTimeout(() => {
-    showToast('✅ Email verificado correctamente — ahora podés iniciar sesión');
-    nav('login');
-    if (_verEmail) {
-      const loginInput = document.getElementById('login-email');
-      if (loginInput) loginInput.value = _verEmail;
-    }
-  }, 1500);
-}
 
 // Retorno desde Mercado Pago
 (function handleMPReturn() {
