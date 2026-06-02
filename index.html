@@ -2094,19 +2094,19 @@ tailwind.config = {
                 <div class="border border-gray-100 rounded-xl p-4 bg-white shadow-sm card-hover">
                   <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[18px]">account_balance_wallet</span></div><span class="font-label-caps text-[9px] bg-[#5d22ff] text-white px-2.5 py-0.5 rounded-full">62%</span></div>
                   <div class="font-label-caps text-[10px] text-on-surface-variant/60 mb-1">MERCADO PAGO</div>
-                  <div style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary">$77.190</div>
+                  <div style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary"><span class="cobr-stat">$77.190</span></div>
                   <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3"><div class="h-1.5 bg-secondary-container rounded-full" style="width:62%"></div></div>
                 </div>
                 <div class="border border-gray-100 rounded-xl p-4 bg-white shadow-sm card-hover">
                   <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[18px]">credit_card</span></div><span class="font-label-caps text-[9px] bg-primary text-white px-2.5 py-0.5 rounded-full">24%</span></div>
                   <div class="font-label-caps text-[10px] text-on-surface-variant/60 mb-1">TARJETA CRÉ/DÉB</div>
-                  <div style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary">$29.880</div>
+                  <div style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary"><span class="cobr-stat">$29.880</span></div>
                   <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3"><div class="h-1.5 bg-primary rounded-full" style="width:24%"></div></div>
                 </div>
                 <div class="border border-gray-100 rounded-xl p-4 bg-white shadow-sm card-hover">
                   <div class="flex justify-between items-center mb-3"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[18px]">swap_horiz</span></div><span class="font-label-caps text-[9px] bg-gray-100 text-gray-600 px-2.5 py-0.5 rounded-full">14%</span></div>
                   <div class="font-label-caps text-[10px] text-on-surface-variant/60 mb-1">TRANSFERENCIA</div>
-                  <div style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary">$17.430</div>
+                  <div style="font-family:Montserrat;font-size:24px;font-weight:800;" class="text-primary"><span class="cobr-stat">$17.430</span></div>
                   <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3"><div class="h-1.5 bg-gray-400 rounded-full" style="width:14%"></div></div>
                 </div>
               </div>
@@ -2764,8 +2764,11 @@ function goToCheckout() {
 function addToCart(productId, size, color) {
   const product = state.products.find(p => p.id === productId);
   if (!product) return;
+  if (product.stock <= 0) { showToast('Producto sin stock ❌'); return; }
   const key = productId + '-' + size + '-' + color;
   const existing = state.cart.find(i => i.key === key);
+  const currentQty = existing ? existing.qty : 0;
+  if (currentQty >= product.stock) { showToast('No hay más stock disponible ❌'); return; }
   if (existing) { existing.qty++; }
   else { state.cart.push({key, productId, name: product.name, price: product.price, size, color, qty: 1, img: product.img}); }
   updateCartCount();
@@ -2796,10 +2799,15 @@ function updateCartCount() {
 }
 
 function cartTotal() { return state.cart.reduce((s, i) => s + i.price * i.qty, 0); }
+function cartSubtotal() { return state.cart.filter(i => !i.isCoupon).reduce((s, i) => s + i.price * i.qty, 0); }
 function fmtPrice(n) { return '$' + n.toLocaleString('es-AR'); }
 
 // =================== CUPONES ===================
 function validateCartCoupons() {
+  const removed = state.cart.filter(i => i.isCoupon).filter(i => {
+    const c = getCouponByCode(i.couponCode);
+    return !c || !c.enabled || (c.expiresAt && new Date(c.expiresAt) < new Date()) || (c.maxUses && c.usedCount >= c.maxUses);
+  });
   state.cart = state.cart.filter(i => {
     if (!i.isCoupon) return true;
     const c = getCouponByCode(i.couponCode);
@@ -2808,6 +2816,7 @@ function validateCartCoupons() {
     if (c.maxUses && c.usedCount >= c.maxUses) return false;
     return true;
   });
+  if (removed.length) showToast('Cupón ' + removed[0].couponCode + ' ya no está disponible — fue removido');
 }
 function getCouponByCode(code) {
   return state.coupons.find(c => c.code === code.toUpperCase().trim());
@@ -2967,7 +2976,7 @@ function renderCartDrawer() {
   }
   el.innerHTML = normalItems.map(item => `
     <div class="flex gap-3 border-b-2 border-outline-variant pb-4">
-      <img src="${item.img}" class="w-20 h-24 object-cover border-2 border-primary grayscale-hover shrink-0"/>
+      <img src="${item.img}" alt="${item.name}" loading="lazy" class="w-20 h-24 object-cover border-2 border-primary grayscale-hover shrink-0"/>
       <div class="flex-1 min-w-0">
         <div class="font-label-caps text-label-caps text-primary truncate">${item.name}</div>
         <div class="font-label-caps text-[10px] text-on-surface-variant mt-1">TALLE: ${item.size} / ${item.color.toUpperCase()}</div>
@@ -2995,8 +3004,9 @@ function renderCartDrawer() {
       </div>`;
   }
   const sub = cartTotal();
+  const rawSub = cartSubtotal();
   document.getElementById('cart-subtotal').textContent = fmtPrice(sub);
-  document.getElementById('cart-shipping').textContent = sub >= 95000 ? 'GRATIS' : fmtPrice(2800);
+  document.getElementById('cart-shipping').textContent = rawSub >= 95000 ? 'GRATIS' : fmtPrice(2800);
 }
 
 function renderCartPage() {
@@ -3014,7 +3024,7 @@ function renderCartPage() {
         ${normalItems.map(item => `
         <div class="p-4 border-b border-outline-variant grid grid-cols-12 items-center gap-2">
           <div class="col-span-6 flex items-center gap-3">
-            <img src="${item.img}" class="w-16 h-20 object-cover border-2 border-primary shrink-0 grayscale-hover"/>
+            <img src="${item.img}" alt="${item.name}" loading="lazy" class="w-16 h-20 object-cover border-2 border-primary shrink-0 grayscale-hover"/>
             <div>
               <div class="font-label-caps text-label-caps text-primary">${item.name}</div>
               <div class="font-label-caps text-[10px] text-on-surface-variant mt-1">T: ${item.size} / ${item.color.toUpperCase()}</div>
@@ -3047,9 +3057,10 @@ function renderCartPage() {
       </div>`;
   }
   const sub = cartTotal();
+  const rawSub = cartSubtotal();
   document.getElementById('cart-page-subtotal').textContent = fmtPrice(sub);
-  document.getElementById('cart-page-shipping').textContent = sub >= 95000 ? 'GRATIS' : fmtPrice(2800);
-  document.getElementById('cart-page-total').textContent = fmtPrice(sub >= 95000 ? sub : sub + 2800);
+  document.getElementById('cart-page-shipping').textContent = rawSub >= 95000 ? 'GRATIS' : fmtPrice(2800);
+  document.getElementById('cart-page-total').textContent = fmtPrice(rawSub >= 95000 ? sub : sub + 2800);
 }
 
 // =================== SEARCH ===================
@@ -3150,7 +3161,7 @@ function renderProductCard(p, small=false) {
       <div class="relative aspect-[3/4] overflow-hidden border-b-[3px] border-primary bg-surface-container">
         ${p.badge ? `<div class="absolute top-4 left-4 z-10"><span class="badge badge-violet">${p.badge}</span></div>` : ''}
         ${p.oldPrice ? `<div class="absolute top-4 right-4 z-10"><span class="badge badge-black">SALE</span></div>` : ''}
-        <img src="${img}" alt="${p.name}" class="w-full h-full object-cover grayscale-hover transition-all duration-500"/>
+        <img src="${img}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover grayscale-hover transition-all duration-500"/>
         <div class="absolute bottom-0 left-0 w-full bg-primary/90 border-t-[3px] border-primary size-overlay flex">
           ${(p.sizes||['S','M','L','XL']).slice(0,4).map(s=>`<button class="flex-1 py-3 font-label-caps text-on-primary hover:bg-secondary-container text-[10px] border-r border-white/20 last:border-0" onclick="event.stopPropagation();quickAddToCart('${p.id}','${s}','${colors[0]||'negro'}')">${s}</button>`).join('')}
         </div>
@@ -4002,7 +4013,7 @@ function updateCheckoutShipping(providerId) {
         <span class="inline-block w-2 h-2 rounded-full bg-outline-variant animate-pulse"></span>
         <span class="text-on-surface-variant" style="font-size:10px;">PENDIENTE</span>
       </span>`;
-    if (totalEl) totalEl.textContent = fmtPrice(sub) + ' + envío';
+    if (totalEl) totalEl.innerHTML = `<span>${fmtPrice(sub)}</span> <span class="text-[10px] text-on-surface-variant">+ envío <span class="inline-block w-2 h-2 rounded-full bg-outline-variant animate-pulse"></span></span>`;
     if (noteEl) noteEl.classList.remove('hidden');
   }
 }
@@ -4013,7 +4024,7 @@ function renderCheckoutPage() {
   const couponItem = state.cart.find(i => i.isCoupon);
   el.innerHTML = normalItems.map(item => `
     <div class="flex gap-3">
-      <img src="${item.img}" class="w-14 h-16 object-cover border-2 border-primary shrink-0"/>
+      <img src="${item.img}" alt="${item.name}" loading="lazy" class="w-14 h-16 object-cover border-2 border-primary shrink-0"/>
       <div class="flex-1 min-w-0">
         <div class="font-label-caps text-[11px] text-primary truncate">${item.name}</div>
         <div class="font-label-caps text-[10px] text-on-surface-variant">${item.size} / x${item.qty}</div>
@@ -4167,7 +4178,6 @@ async function placeOrder() {
   }
 }
 
-// =================== ACCOUNT PAGE ===================
 // =================== ACCOUNT PAGE ===================
 const AVAILABLE_COLORS = [
   { id:'blanco',   hex:'#ffffff', label:'BLANCO' },
@@ -6351,7 +6361,7 @@ function buildReportHTML(tipo, orders) {
               <div style="font-size:11px;margin-bottom:2px;"><b>Fecha:</b> ${o.date}</div>
               <div style="font-size:11px;margin-bottom:2px;"><b>Estado:</b> <span style="color:${statusColor(o.status)};font-weight:bold;">${statusLabel(o.status)}</span></div>
               <div style="font-size:11px;margin-bottom:2px;"><b>Método:</b> ${(o.payMethod||'MP').toUpperCase()}</div>
-              ${state.tracking[o.id] ? `<div style="font-size:11px;"><b>Tracking:</b> ${state.tracking[o.id].number} (${state.tracking[o.id].service})</div>` : ''}
+              ${trackingData[o.id] ? `<div style="font-size:11px;"><b>Tracking:</b> ${trackingData[o.id].number} (${trackingData[o.id].service})</div>` : ''}
             </td>
           </tr>
         </table>
@@ -6514,123 +6524,8 @@ async function syncFromFirebase() {
       state.products = prodSnap2.docs.map(d => normalizeProduct({ id: d.id, ...d.data() }));
     }
   } catch(e) {
-    console.error('syncFromFirebase: error cargando products:', e);
-    throw e;
-  }
-
-  // ── Pedidos ────────────────────────────────────────────────
-  try {
-    const ordSnap = await getDocs(query(collection(fbDb, 'orders'), orderBy('createdAt','desc')));
-    state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch(e) {
-    console.warn('syncFromFirebase: pedidos sin índice, cargando sin orden:', e.message);
-    try {
-      const ordSnap = await getDocs(collection(fbDb, 'orders'));
-      state.orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    } catch(e2) {
-      console.error('syncFromFirebase: error cargando orders:', e2);
-    }
-  }
-
-  // ── Banners (config/banners) — ÚNICA fuente de verdad ─────
-  try {
-    const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
-    if (bannerSnap.exists()) {
-      const fbData = bannerSnap.data();
-      console.log('BANNERS FIREBASE', fbData);
-      // Deep merge: preservar estructura pero sobreescribir con datos de Firebase
-      if (fbData.announcements) bannerState.announcements = fbData.announcements;
-      if (fbData.hero)          Object.assign(bannerState.hero, fbData.hero);
-      if (fbData.promo)         Object.assign(bannerState.promo, fbData.promo);
-      if (fbData.categories)    bannerState.categories = fbData.categories;
-    } else {
-      console.log('syncFromFirebase: config/banners no existe aún en Firestore — usando defaults');
-    }
-  } catch(e) {
-    console.error('syncFromFirebase: error cargando config/banners:', e);
-  }
-
-  // ── Tracking ───────────────────────────────────────────────
-  try {
-    const trackSnap = await getDocs(collection(fbDb, 'tracking'));
-    trackSnap.docs.forEach(d => { trackingData[d.id] = d.data(); });
-  } catch(e) {
-    console.error('syncFromFirebase: error cargando tracking:', e);
-  }
-
-  // ── Config Mercado Pago ────────────────────────────────────
-  try {
-    const mpSnap = await getDoc(doc(fbDb, 'config', 'mercadopago'));
-    if (mpSnap.exists()) state.mpConfig = mpSnap.data();
-  } catch(e) {
-    console.error('syncFromFirebase: error cargando config/mercadopago:', e);
-  }
-
-  // ── Cupones ────────────────────────────────────────────────
-  try {
-    const cpnSnap = await getDoc(doc(fbDb, 'config', 'coupons'));
-    if (cpnSnap.exists()) {
-      state.coupons = cpnSnap.data().coupons || [];
-    }
-  } catch(e) {
-    console.error('syncFromFirebase: error cargando config/coupons:', e);
-  }
-}
-
-// =================== INIT ===================
-// Solo el carrito desde localStorage (datos del usuario en este dispositivo)
-// Banners, productos y configuración se cargan SIEMPRE desde Firestore
-loadCart();
-updateCartCount();
-
-// Mostrar loading mientras Firebase carga
-function showPageLoading() {
-  const hp = document.getElementById('home-products');
-  if (hp) hp.innerHTML = '<div class="col-span-4" style="display:flex;align-items:center;justify-content:center;padding:80px;gap:12px;"><div style="width:28px;height:28px;border:3px solid #e2e2e2;border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;"></div><span style="font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.1em;color:#4c4546;">CARGANDO TIENDA...</span></div>';
-  const cg = document.getElementById('catalog-grid');
-  if (cg) cg.innerHTML = '<div class="col-span-3" style="display:flex;align-items:center;justify-content:center;padding:80px;"><div style="width:28px;height:28px;border:3px solid #e2e2e2;border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;"></div></div>';
-}
-
-let retryCount = 0;
-async function bootFromFirebase() {
-  showPageLoading();
-  try {
-    // 1. Inicializar Firebase
-    await initFirebase();
-
-    // 2. Cargar TODO desde Firestore (productos, pedidos, banners, tracking, MP)
-    await syncFromFirebase();
-    // 3. Limpiar cupones inválidos del carrito
-    validateCartCoupons();
-    // 4. Renderizar banners con datos reales de Firebase
-    renderAnnouncementBar();
-    renderHeroBanner();
-    // 5. Aplicar imágenes de categorías (SIEMPRE después de syncFromFirebase)
-    applySavedCatImages();
-    // 6. Renderizar catálogo y home con productos reales
-    renderHomeProducts();
-    renderCatalog();
-    updateCartCount();
-    retryCount = 0;
-    console.log('✅ Firebase cargado correctamente — banners y productos sincronizados');
-
-    // 6. Precargar imágenes críticas en memoria del navegador ANTES de cerrar el splash
-    //    Así el usuario nunca ve el pop-in de imágenes al aparecer la página
-    const criticalUrls = [
-      bannerState.hero?.img,
-      bannerState.categories?.remeras,
-      bannerState.categories?.pantalones,
-      bannerState.categories?.buzos,
-      bannerState.categories?.accesorios,
-    ].filter(Boolean);
-
-    console.log('Precargando imágenes críticas:', criticalUrls);
-    await Promise.all(criticalUrls.map(preloadImage));
-    console.log('✅ Imágenes críticas listas — cerrando splash');
-
-    dismissSplash();
-
-  } catch(e) {
+    console.error('bootFromFirebase: error (intento ' + retryCount + '):', e.message);
+    if (retryCount === 0) _bootResolved = true; // liberar handleMPReturn aunque falle
     retryCount++;
     console.error('bootFromFirebase: error (intento ' + retryCount + '):', e.message);
     const hp = document.getElementById('home-products');
@@ -6643,8 +6538,9 @@ async function bootFromFirebase() {
 
 bootFromFirebase();
 
-// Retorno desde Mercado Pago
-(function handleMPReturn() {
+// Retorno desde Mercado Pago — espera a que bootFromFirebase termine
+let _bootResolved = false;
+(async function handleMPReturn() {
   const _urlParams    = new URLSearchParams(window.location.search);
   const paymentStatus = _urlParams.get('payment');
   const orderId       = _urlParams.get('order');
@@ -6654,23 +6550,23 @@ bootFromFirebase();
   const cleanUrl = window.location.pathname;
   window.history.replaceState({}, '', cleanUrl);
 
-  setTimeout(() => {
-    if (paymentStatus === 'success') {
-      // Mostrar confirmación
-      if (orderId) {
-        const orderEl = document.getElementById('order-number');
-        if (orderEl) orderEl.textContent = '#' + orderId;
-      }
-      nav('order-confirm');
-      showToast('✅ ¡Pago exitoso! Tu pedido fue confirmado');
-    } else if (paymentStatus === 'pending') {
-      nav('home');
-      showToast('⏳ Pago pendiente de acreditación — te avisaremos por email');
-    } else if (paymentStatus === 'failure') {
-      nav('checkout');
-      showToast('❌ El pago no se pudo procesar — intentá de nuevo');
+  // Esperar a que bootFromFirebase termine
+  while (!_bootResolved) await new Promise(r => setTimeout(r, 100));
+
+  if (paymentStatus === 'success') {
+    if (orderId) {
+      const orderEl = document.getElementById('order-number');
+      if (orderEl) orderEl.textContent = '#' + orderId;
     }
-  }, 1800); // esperar a que bootFromFirebase termine
+    nav('order-confirm');
+    showToast('✅ ¡Pago exitoso! Tu pedido fue confirmado');
+  } else if (paymentStatus === 'pending') {
+    nav('home');
+    showToast('⏳ Pago pendiente de acreditación — te avisaremos por email');
+  } else if (paymentStatus === 'failure') {
+    nav('checkout');
+    showToast('❌ El pago no se pudo procesar — intentá de nuevo');
+  }
 })();
 
 // =================== GOOGLE STITCHES (fabric grid) ===================
@@ -6983,33 +6879,39 @@ function updateStitchClip() {
   }
 
   resize();
-  // Re-calcular después de que la página termine de renderizar
   setTimeout(resize, 300);
   setTimeout(resize, 800);
   window.addEventListener('resize', resize);
+  // IntersectionObserver: pausa animación cuando hero no está visible
+  let heroVisible = false;
   const obs = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (entry.isIntersecting) { computeContour(); if (!animId) drawLoop(); }
+      heroVisible = entry.isIntersecting;
+      if (heroVisible) { computeContour(); if (!animId) drawLoop(); }
       else { if (animId) { cancelAnimationFrame(animId); animId = null; } }
     }
   }, { threshold: 0.1 });
   obs.observe(hero);
   const titleEl = document.getElementById('hero-title');
   if (titleEl) {
-    new MutationObserver(() => { computeContour(); }).observe(titleEl, { childList: true, characterData: true, subtree: true });
+    new MutationObserver(() => { if (heroVisible) computeContour(); }).observe(titleEl, { childList: true, characterData: true, subtree: true });
   }
-  // Recalcular también cuando cambie el viewport (sin esperar resize)
+  // checkResize: solo cuando heroVisible, sin rAF loop continuo
   let lastW = W, lastH = H;
+  let resizeCheckId = null;
   function checkResize() {
+    resizeCheckId = null;
+    if (!heroVisible) return;
     const r = hero.getBoundingClientRect();
     if (Math.abs(r.width - lastW) > 1 || Math.abs(r.height - lastH) > 1) {
       lastW = r.width; lastH = r.height;
       resize();
     }
-    requestAnimationFrame(checkResize);
   }
-  // Iniciar loop de animación con verificación de contorno
+  window.addEventListener('resize', () => { if (!resizeCheckId) resizeCheckId = setTimeout(checkResize, 200); });
+  // Loop de animación (solo cuando heroVisible = true)
   function drawLoop() {
+    if (!heroVisible) { animId = null; return; }
     if (contourPoints.length < 5) computeContour();
     ctx.clearRect(0, 0, W, H);
     update();
@@ -7017,8 +6919,6 @@ function updateStitchClip() {
     drawSparkles();
     animId = requestAnimationFrame(drawLoop);
   }
-  checkResize();
-  drawLoop();
 })();
 // Guardar solo el carrito en localStorage (solo si cambió)
 let _lastCartSnapshot = JSON.stringify(state.cart);
