@@ -226,6 +226,50 @@ tailwind.config = {
     background: #000;
     color: #fff;
   }
+  /* ===== PRODUCT OVERLAY (cristal) ===== */
+  #product-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba(249, 249, 249, 0.55);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    overflow-y: auto;
+  }
+  #product-overlay.open {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #product-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #000 0%, #5d22ff 50%, #000 100%);
+    z-index: 1;
+  }
+  #product-overlay .product-close-btn {
+    position: fixed;
+    top: 24px; right: 24px;
+    z-index: 10;
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid rgba(0,0,0,0.85);
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  #product-overlay .product-close-btn:hover {
+    background: #000;
+    color: #fff;
+  }
   /* ---- Color swatches (producto) ---- */
   .color-swatch { width:32px; height:32px; border-radius:50%; border:3px solid transparent; cursor:pointer; transition:all 0.15s; position:relative; }
   .color-swatch.selected { border-color:#000; box-shadow:0 0 0 2px #fff, 0 0 0 4px #000; }
@@ -696,15 +740,18 @@ tailwind.config = {
 </div>
 
 <!-- ===================================== -->
-<!-- PAGE: PRODUCT DETAIL                  -->
+<!-- OVERLAY: PRODUCT DETAIL (cristal)     -->
 <!-- ===================================== -->
-<div id="page-product" class="page">
-  <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
+<div id="product-overlay">
+  <button class="product-close-btn" onclick="closeProductOverlay()">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+  <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12 w-full">
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface-variant mb-8">
-      <a class="hover:text-primary cursor-pointer" onclick="nav('home')">INICIO</a>
+      <a class="hover:text-primary cursor-pointer" onclick="closeProductOverlay(); nav('home')">INICIO</a>
       <span>/</span>
-      <a class="hover:text-primary cursor-pointer" onclick="nav('catalog')">CATÁLOGO</a>
+      <a class="hover:text-primary cursor-pointer" onclick="closeProductOverlay(); nav('catalog')">CATÁLOGO</a>
       <span>/</span>
       <span id="product-breadcrumb" class="text-primary">PRODUCTO</span>
     </nav>
@@ -3043,7 +3090,13 @@ function openProduct(id) {
   // Related
   const related = state.products.filter(pr => String(pr.id) !== String(p.id) && pr.cat === p.cat).slice(0,4);
   document.getElementById('related-products').innerHTML = related.map(r => renderProductCard(r)).join('');
-  nav('product');
+  document.getElementById('product-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductOverlay() {
+  document.getElementById('product-overlay').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // Swap main image when clicking a thumbnail
@@ -5196,6 +5249,7 @@ document.addEventListener('keydown', function(e) {
     closeSizeGuide();
     closeCart();
     closeMobileMenu();
+    closeProductOverlay();
   }
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
     e.preventDefault();
