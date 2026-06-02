@@ -3272,7 +3272,7 @@ async function doRegister() {
     //    que llame a admin.auth().generateEmailVerificationLink() y envíe via EmailJS.
     const ADMIN_EMAIL = atob('YWRtaW5AeGluY28uY29t');
     if (email !== ADMIN_EMAIL) {
-      await sendEmailVerification(user, { url: 'https://www.xinco.shop/', handleCodeInApp: false });
+      await sendEmailVerification(user, { url: 'https://www.xinco.shop/', handleCodeInApp: true });
     }
 
     // 4. Cerrar sesión hasta que verifique
