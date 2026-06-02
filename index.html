@@ -3272,7 +3272,7 @@ async function doRegister() {
     //    que llame a admin.auth().generateEmailVerificationLink() y envíe via EmailJS.
     const ADMIN_EMAIL = atob('YWRtaW5AeGluY28uY29t');
     if (email !== ADMIN_EMAIL) {
-      await sendEmailVerification(user);
+      await sendEmailVerification(user, { url: 'https://www.xinco.shop/', handleCodeInApp: false });
     }
 
     // 4. Cerrar sesión hasta que verifique
@@ -5704,14 +5704,14 @@ async function initFirebase() {
   try {
     const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
     const { getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
-    const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+    const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, applyActionCode, checkActionCode, sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
 
     fbApp  = initializeApp(FB_CONFIG);
     fbDb   = getFirestore(fbApp);
     fbAuth = getAuth(fbApp);
 
     // Guardar funciones Firestore para uso global
-    window._fb = { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence };
+    window._fb = { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, applyActionCode, checkActionCode, sendEmailVerification };
 
     // Escuchar cambios de auth
     onAuthStateChanged(fbAuth, async user => {
@@ -6315,10 +6315,46 @@ async function bootFromFirebase() {
 
 bootFromFirebase();
 
-// Si viene de verificar email, mostrar mensaje de bienvenida
+// =================== EMAIL VERIFICATION HANDLER ===================
+// Si Firebase redirige acá con mode=verifyEmail, procesamos la verificación
 const _urlParams = new URLSearchParams(window.location.search);
+const _mode   = _urlParams.get('mode');
+const _oobCode = _urlParams.get('oobCode');
+const _apiKey  = _urlParams.get('apiKey');
 
-// Retorno desde verificación de email
+if (_mode === 'verifyEmail' && _oobCode) {
+  // Esperar a que Firebase esté listo, luego aplicar el código
+  (async () => {
+    await fbReady;
+    try {
+      const { applyActionCode, checkActionCode, sendEmailVerification } = window._fb;
+      // Obtener email del código antes de aplicarlo
+      const info = await checkActionCode(_oobCode);
+      const email = info.data.email || '';
+      await applyActionCode(_oobCode);
+      console.log('✅ Email verificado:', email);
+      // Recargar usuario para actualizar emailVerified
+      if (fbAuth.currentUser) await fbAuth.currentUser.reload();
+      // Limpiar params de la URL
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, '', cleanUrl);
+      setTimeout(() => {
+        showToast('✅ Email verificado correctamente');
+        if (email) {
+          nav('login');
+          const loginInput = document.getElementById('login-email');
+          if (loginInput) loginInput.value = email;
+        }
+      }, 500);
+    } catch(e) {
+      console.error('Error verificando email:', e);
+      window.history.replaceState({}, '', window.location.pathname);
+      showToast('⚠️ El link de verificación expiró o ya fue usado');
+    }
+  })();
+}
+
+// Retorno desde verificación de email (por continueUrl)
 if (_urlParams.get('verified') === 'true') {
   const _verEmail = _urlParams.get('email') || '';
   setTimeout(() => {
