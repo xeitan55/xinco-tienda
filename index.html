@@ -585,17 +585,19 @@ tailwind.config = {
     <div id="home-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
   </section>
 
-  <!-- Banner Promo -->
-  <section id="promo-banner-section" class="border-b-[3px] border-primary bg-primary text-on-primary px-6 md:px-12 py-16">
+
+
+  <!-- Banner Promo (oculto por defecto, se muestra desde admin) -->
+  <section id="promo-banner-section" class="border-b-[3px] border-primary bg-primary text-on-primary px-6 md:px-12 py-16" style="display:none;">
     <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
       <div>
-        <span class="promo-label font-label-caps text-label-caps text-secondary-container mb-3 block">OFERTA LIMITADA</span>
-        <h2 class="promo-title uppercase" style="font-family:Montserrat;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;">30% OFF<br>EN BUZOS</h2>
+        <span class="promo-label font-label-caps text-label-caps text-secondary-container mb-3 block"></span>
+        <h2 class="promo-title uppercase" style="font-family:Montserrat;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;"></h2>
       </div>
       <div class="flex flex-col gap-3 text-center">
-        <p class="font-body-md text-on-primary/70">Válido hasta el 31 de Mayo. Aplicar código al pagar.</p>
+        <p class="font-body-md text-on-primary/70">Aplicar código al pagar.</p>
         <div class="border-[3px] border-secondary-container px-8 py-4">
-          <span class="promo-code font-label-caps text-label-caps text-secondary-container tracking-widest text-lg">URBAN30</span>
+          <span class="promo-code font-label-caps text-label-caps text-secondary-container tracking-widest text-lg"></span>
         </div>
         <button class="btn-violet" onclick="filterCatalog('buzos')">CANJEAR AHORA</button>
       </div>
@@ -1828,215 +1830,6 @@ tailwind.config = {
                   </div>
                   <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('accesorios')">
                     <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Banners Section -->
-        <div id="admin-section-banners" class="hidden space-y-5">
-          <div class="admin-card">
-            <div class="admin-card-header">
-              <div>
-                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">EDITOR DE BANNERS</h2>
-                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">LOS CAMBIOS SE APLICAN EN TIEMPO REAL EN LA TIENDA</p>
-              </div>
-            </div>
-            <div class="admin-card-body space-y-6">
-              <!-- Announcement Bar Editor -->
-              <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                <div class="flex justify-between items-center mb-4">
-                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
-                    <span class="material-symbols-outlined text-[18px]">campaign</span> BARRA DE ANUNCIOS (TICKER)
-                  </h3>
-                  <button class="btn-primary py-1.5 px-3 text-[9px]" onclick="addAnnouncementMsg()">
-                    <span class="material-symbols-outlined text-[13px]">add</span> AGREGAR MENSAJE
-                  </button>
-                </div>
-                <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Editá, reordenás o eliminás los mensajes que se desplazan en la barra negra superior.</p>
-                <div id="announcement-editor-list" class="space-y-3 mb-4"></div>
-                <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveAnnouncementBar()">
-                  <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y PUBLICAR
-                </button>
-              </div>
-
-              <!-- Hero Banner Editor -->
-              <div class="border border-gray-100 rounded-xl p-5 bg-white">
-            <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4">
-              <span class="material-symbols-outlined text-[18px]">image</span> HERO BANNER PRINCIPAL
-            </h3>
-            <p class="font-body-md text-on-surface-variant text-sm mb-6">Editá el texto, subtítulo, badge, imagen o video de fondo del banner principal.</p>
-            <!-- Live Preview -->
-            <div class="border-[3px] border-primary relative overflow-hidden mb-6" style="height:220px;background:#000;">
-              <video id="hero-preview-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
-              <img id="hero-preview-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" class="absolute inset-0 w-full h-full object-cover opacity-50"/>
-              <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.15) 100%);"></div>
-              <div class="relative z-10 p-6 flex flex-col justify-end h-full">
-                <span id="hero-preview-badge" class="badge badge-violet mb-2 inline-block w-fit"></span>
-                <div id="hero-preview-title" style="font-family:Montserrat;font-size:clamp(20px,4vw,40px);font-weight:900;color:#fff;letter-spacing:-0.03em;line-height:1;text-transform:uppercase;"></div>
-                <div id="hero-preview-subtitle" style="font-family:Inter;font-size:14px;color:rgba(255,255,255,0.7);margin-top:8px;"></div>
-              </div>
-              <!-- Video indicator in preview -->
-              <div id="hero-preview-video-badge" class="hidden absolute top-3 left-3 z-20 flex items-center gap-2 px-2 py-1" style="background:rgba(93,34,255,0.85);font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#fff;letter-spacing:0.1em;">
-                <span style="width:6px;height:6px;border-radius:50%;background:#fff;display:inline-block;"></span> VIDEO ACTIVO
-              </div>
-            </div>
-
-            <!-- Tabs: imagen / video -->
-            <div class="flex mb-5 border border-gray-200 rounded-lg overflow-hidden">
-              <button class="hero-media-tab active flex-1 flex items-center justify-center gap-2" id="tab-img-btn" onclick="switchHeroTab('img')">
-                <span class="material-symbols-outlined text-[16px]">image</span> IMAGEN
-              </button>
-              <button class="hero-media-tab flex-1 flex items-center justify-center gap-2 border-l border-gray-200" id="tab-vid-btn" onclick="switchHeroTab('video')">
-                <span class="material-symbols-outlined text-[16px]">videocam</span> VIDEO
-              </button>
-            </div>
-
-            <!-- Panel: imagen -->
-            <div id="hero-tab-img" class="mb-5">
-              <div class="border-[3px] border-primary p-4 bg-surface-container-low">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div class="flex flex-col gap-3">
-                    <div id="hero-dropzone"
-                      class="border-[3px] border-dashed border-primary p-5 text-center cursor-pointer hover:bg-surface-container transition-colors"
-                      onclick="document.getElementById('hero-file-input').click()"
-                      ondragover="event.preventDefault();this.classList.add('bg-surface-container')"
-                      ondragleave="this.classList.remove('bg-surface-container')"
-                      ondrop="handleHeroFileDrop(event)">
-                      <span class="material-symbols-outlined text-[32px] text-on-surface-variant block mb-1">wallpaper</span>
-                      <p class="font-label-caps text-[10px] text-on-surface-variant">ARRASTRÁ IMAGEN O HACÉ CLIC</p>
-                      <p class="font-label-caps text-[10px] text-outline mt-1">RECOMENDADO: 1920×1080PX OSCURA</p>
-                      <input type="file" id="hero-file-input" accept="image/*" class="hidden" onchange="uploadHeroImage(this.files[0])"/>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <div class="flex-1 h-px bg-outline-variant"></div>
-                      <span class="font-label-caps text-[10px] text-on-surface-variant">O URL</span>
-                      <div class="flex-1 h-px bg-outline-variant"></div>
-                    </div>
-                    <div class="flex gap-2">
-                      <input id="hero-edit-img" class="input-field flex-1 py-2" placeholder="https://images.unsplash.com/..."/>
-                      <button class="btn-outline py-2 px-3 text-[10px]" onclick="previewHeroImg()">USAR</button>
-                    </div>
-                    <div id="hero-upload-progress" class="hidden">
-                      <div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant mb-1">
-                        <span id="hero-upload-status">SUBIENDO...</span>
-                        <span id="hero-upload-pct">0%</span>
-                      </div>
-                      <div class="w-full h-1 bg-outline-variant">
-                        <div id="hero-upload-bar" class="h-1 bg-secondary-container transition-all duration-300" style="width:0%"></div>
-                      </div>
-                    </div>
-                    <div id="hero-upload-result" class="hidden">
-                      <p class="font-label-caps text-[10px] text-secondary-container flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">check_circle</span> IMAGEN SUBIDA A CLOUDINARY
-                      </p>
-                    </div>
-                  </div>
-                  <div class="flex flex-col gap-2">
-                    <p class="font-label-caps text-[10px] text-on-surface-variant">MINIATURAS RECIENTES</p>
-                    <div id="hero-recent-uploads" class="grid grid-cols-3 gap-2">
-                      <div class="aspect-square bg-surface-container border-2 border-outline-variant flex items-center justify-center">
-                        <span class="material-symbols-outlined text-[24px] text-outline-variant">image</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Panel: video -->
-            <div id="hero-tab-video" class="mb-5 hidden">
-              <div class="border-[3px] border-secondary-container p-4 bg-surface-container-low mb-4">
-                <p class="font-label-caps text-[10px] text-primary mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">info</span> SOBRE VIDEOS EN EL HERO</p>
-                <p class="font-body-md text-sm text-on-surface-variant">Podés usar una URL directa de video MP4 (Cloudinary, CDN propio, etc.). Para Cloudinary subí el video desde su dashboard y copiá la URL <code class="font-label-caps text-[10px] bg-surface-container px-1">.mp4</code>. El video corre automáticamente, sin sonido, en loop. La imagen de fondo queda como fallback.</p>
-              </div>
-
-              <!-- Video dropzone upload -->
-              <div id="hero-video-dropzone"
-                class="border-[3px] border-dashed border-secondary-container p-6 text-center cursor-pointer hover:bg-surface-container transition-colors mb-4"
-                onclick="document.getElementById('hero-video-file-input').click()"
-                ondragover="event.preventDefault();this.classList.add('drag-over')"
-                ondragleave="this.classList.remove('drag-over')"
-                ondrop="handleHeroVideoFileDrop(event)">
-                <span class="material-symbols-outlined text-[40px] text-secondary-container block mb-2">video_file</span>
-                <p class="font-label-caps text-[11px] text-primary">ARRASTRÁ TU VIDEO O HACÉ CLIC</p>
-                <p class="font-label-caps text-[10px] text-on-surface-variant mt-1">MP4 RECOMENDADO — MÁX 100MB — LANDSCAPE OSCURO</p>
-                <input type="file" id="hero-video-file-input" accept="video/mp4,video/webm,video/ogg" class="hidden" onchange="uploadHeroVideo(this.files[0])"/>
-              </div>
-
-              <!-- Video upload progress -->
-              <div id="hero-video-upload-progress" class="hidden mb-4">
-                <div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant mb-1">
-                  <span id="hero-video-upload-status">SUBIENDO VIDEO...</span>
-                  <span id="hero-video-upload-pct">0%</span>
-                </div>
-                <div class="w-full h-2 bg-outline-variant">
-                  <div id="hero-video-upload-bar" class="h-2 bg-secondary-container transition-all duration-300" style="width:0%"></div>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2 mb-2">
-                <div class="flex-1 h-px bg-outline-variant"></div>
-                <span class="font-label-caps text-[10px] text-on-surface-variant">O PEGÁ URL DIRECTA</span>
-                <div class="flex-1 h-px bg-outline-variant"></div>
-              </div>
-              <div class="flex gap-2 mb-4">
-                <input id="hero-video-url" class="input-field flex-1 py-2" placeholder="https://res.cloudinary.com/tu-cloud/video/upload/tu-video.mp4"/>
-                <button class="btn-outline py-2 px-3 text-[10px]" onclick="previewHeroVideo()">USAR URL</button>
-              </div>
-
-              <!-- Current video status -->
-              <div id="hero-video-status" class="hidden border-[2px] border-secondary-container p-3 flex items-center gap-3">
-                <span class="material-symbols-outlined text-secondary-container">check_circle</span>
-                <div class="flex-1">
-                  <div class="font-label-caps text-[10px] text-primary">VIDEO CONFIGURADO</div>
-                  <div id="hero-video-url-display" class="font-label-caps text-[9px] text-on-surface-variant mt-0.5 truncate"></div>
-                </div>
-                <button class="btn-outline py-1 px-2 text-[9px]" onclick="clearHeroVideo()">
-                  <span class="material-symbols-outlined text-[14px]">delete</span> QUITAR
-                </button>
-              </div>
-
-              <!-- Animation style for video -->
-              <div class="mt-4 border-[2px] border-primary p-4">
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-3">EFECTO SOBRE EL VIDEO</label>
-                <div class="flex flex-wrap gap-2" id="video-effect-selector">
-                  <button class="hero-media-tab active text-[10px] py-2 px-3" data-effect="none" onclick="selectVideoEffect('none',this)">SIN EFECTO</button>
-                  <button class="hero-media-tab text-[10px] py-2 px-3" data-effect="scanlines" onclick="selectVideoEffect('scanlines',this)">SCANLINES</button>
-                  <button class="hero-media-tab text-[10px] py-2 px-3" data-effect="vignette" onclick="selectVideoEffect('vignette',this)">VIÑETA</button>
-                  <button class="hero-media-tab text-[10px] py-2 px-3" data-effect="particles" onclick="selectVideoEffect('particles',this)">PARTÍCULAS</button>
-                  <button class="hero-media-tab text-[10px] py-2 px-3" data-effect="glitch" onclick="selectVideoEffect('glitch',this)">GLITCH</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Texto del hero -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BADGE (etiqueta violeta)</label>
-                <input id="hero-edit-badge" class="input-field" placeholder="SS/2025 — NUEVA COLECCIÓN" oninput="previewHero()"/>
-              </div>
-              <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TÍTULO PRINCIPAL</label>
-                <input id="hero-edit-title" class="input-field" placeholder="XINCO" oninput="previewHero()"/>
-              </div>
-              <div class="md:col-span-2">
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">SUBTÍTULO / DESCRIPCIÓN</label>
-                <textarea id="hero-edit-subtitle" class="input-field" rows="2" placeholder="Ropa que habla el idioma de la calle..." oninput="previewHero()"></textarea>
-              </div>
-              <div class="md:col-span-2">
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-3">ANIMACIONES DE TEXTO</label>
-                <div class="flex flex-wrap gap-2" id="anim-style-selector">
-                  <button class="hero-media-tab active text-[10px] py-2 px-3" data-anim="default" onclick="selectHeroAnim('default',this)">ESTÁNDAR</button>
-                  <button class="hero-media-tab text-[10px] py-2 px-3" data-anim="glitch" onclick="selectHeroAnim('glitch',this)">GLITCH LOOP</button>
-                  <button class="hero-media-tab text-[10px] py-2 px-3" data-anim="particles" onclick="selectHeroAnim('particles',this)">+ PARTÍCULAS</button>
-                  <button class="hero-media-tab text-[10px] py-2 px-3" data-anim="minimal" onclick="selectHeroAnim('minimal',this)">MINIMAL</button>
-                </div>
-              </div>
-            </div>
-            <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveHeroBanner()">
-              <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y PUBLICAR HERO
             </button>
           </div>
           <!-- Promo Banner Editor -->
@@ -2044,7 +1837,14 @@ tailwind.config = {
             <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
               <span class="material-symbols-outlined text-[18px]">local_offer</span> BANNER PROMOCIONAL
             </h3>
-            <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Editá el banner de oferta que aparece debajo de los productos en la home.</p>
+            <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Editá el banner de oferta. Solo se muestra en la home si está habilitado.</p>
+            <div class="flex items-center gap-3 mb-5 p-3 bg-surface-container-low rounded-lg">
+              <span class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">MOSTRAR EN LA HOME</span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="promo-edit-enabled" class="sr-only peer" onchange="previewPromo()"/>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-container"></div>
+              </label>
+            </div>
             <!-- Live Preview -->
             <div class="bg-primary text-on-primary p-6 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-xl">
               <div>
@@ -2077,7 +1877,6 @@ tailwind.config = {
           </div>
             </div>
           </div>
-        </div>
 
         <!-- ===== COBRANZAS SECTION ===== -->
         <div id="admin-section-cobranzas" class="hidden space-y-5">
@@ -2583,6 +2382,7 @@ let bannerState = {
     img: 'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80'
   },
   promo: {
+    enabled: false,
     label: 'OFERTA LIMITADA',
     title: '30% OFF\nEN BUZOS',
     code: 'URBAN30'
@@ -5567,13 +5367,46 @@ function renderHeroBanner() {
 
 function renderPromoBanner() {
   const p = bannerState.promo;
-  // Find promo elements in the home page
-  const promoLabelEl = document.querySelector('#page-home .promo-label');
-  const promoTitleEl = document.querySelector('#page-home .promo-title');
-  const promoCodeEl = document.querySelector('#page-home .promo-code');
-  if (promoLabelEl) promoLabelEl.textContent = p.label;
-  if (promoTitleEl) promoTitleEl.innerHTML = p.title.replace(/\n/g, '<br>');
-  if (promoCodeEl) promoCodeEl.textContent = p.code;
+  const section = document.getElementById('promo-banner-section');
+  if (!section) return;
+  if (!p.enabled) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  const labelEl = section.querySelector('.promo-label');
+  const titleEl = section.querySelector('.promo-title');
+  const codeEl  = section.querySelector('.promo-code');
+  if (labelEl) labelEl.textContent = p.label;
+  if (titleEl) titleEl.innerHTML = p.title.replace(/\n/g, '<br>');
+  if (codeEl) codeEl.textContent = p.code;
+}
+
+function previewPromo() {
+  const enabled = document.getElementById('promo-edit-enabled')?.checked || false;
+  const label = document.getElementById('promo-edit-label')?.value || '';
+  const title = document.getElementById('promo-edit-title')?.value || '';
+  const code  = document.getElementById('promo-edit-code')?.value  || '';
+  const pl = document.getElementById('promo-preview-label');
+  const pt = document.getElementById('promo-preview-title');
+  const pc = document.getElementById('promo-preview-code');
+  if (pl) pl.textContent = label;
+  if (pt) pt.innerHTML  = title.replace(/\n/g,'<br>') || '30% OFF';
+  if (pc) pc.textContent = code;
+}
+
+async function savePromoBanner() {
+  bannerState.promo.enabled = document.getElementById('promo-edit-enabled').checked;
+  bannerState.promo.label = document.getElementById('promo-edit-label').value.trim();
+  bannerState.promo.title = document.getElementById('promo-edit-title').value.trim();
+  bannerState.promo.code  = document.getElementById('promo-edit-code').value.trim().toUpperCase();
+  try {
+    console.log('savePromoBanner: guardando promo en Firestore config/banners...', bannerState.promo);
+    await fbSaveBannersRemote(bannerState);
+    await syncFromFirebase();
+    renderPromoBanner();
+    showToast('✅ Banner promo guardado en Firebase — ' + (bannerState.promo.enabled ? 'visible en la home' : 'oculto'));
+  } catch(e) {
+    console.error('savePromoBanner: error guardando promo banner en Firestore:', e);
+    showToast('⚠️ Error al guardar en Firebase: ' + e.message);
+  }
 }
 
 // =================== BANNER EDITOR ===================
@@ -5608,6 +5441,7 @@ function initBannerEditor() {
   });
 
   // Promo fields
+  document.getElementById('promo-edit-enabled').checked = bannerState.promo.enabled;
   document.getElementById('promo-edit-label').value = bannerState.promo.label;
   document.getElementById('promo-edit-title').value = bannerState.promo.title;
   document.getElementById('promo-edit-code').value  = bannerState.promo.code;
@@ -5687,17 +5521,7 @@ function previewHeroImg() {
   if (url) { const img = document.getElementById('hero-preview-img'); if(img) img.src = url; }
 }
 
-function previewPromo() {
-  const label = document.getElementById('promo-edit-label')?.value || '';
-  const title = document.getElementById('promo-edit-title')?.value || '';
-  const code  = document.getElementById('promo-edit-code')?.value  || '';
-  const pl = document.getElementById('promo-preview-label');
-  const pt = document.getElementById('promo-preview-title');
-  const pc = document.getElementById('promo-preview-code');
-  if (pl) pl.textContent = label;
-  if (pt) pt.innerHTML  = title.replace(/\n/g,'<br>') || '30% OFF';
-  if (pc) pc.textContent = code;
-}
+
 
 // =================== HERO VIDEO & ANIMATION SYSTEM ===================
 
@@ -5955,22 +5779,6 @@ async function saveHeroBanner() {
     showToast('✅ Hero banner guardado en Firebase — visible para todos');
   } catch(e) {
     console.error('saveHeroBanner: error guardando hero banner en Firestore:', e);
-    showToast('⚠️ Error al guardar en Firebase: ' + e.message);
-  }
-}
-
-async function savePromoBanner() {
-  bannerState.promo.label = document.getElementById('promo-edit-label').value.trim();
-  bannerState.promo.title = document.getElementById('promo-edit-title').value.trim();
-  bannerState.promo.code  = document.getElementById('promo-edit-code').value.trim().toUpperCase();
-  try {
-    console.log('savePromoBanner: guardando promo en Firestore config/banners...', bannerState.promo);
-    await fbSaveBannersRemote(bannerState);
-    await syncFromFirebase();
-    renderPromoBanner();
-    showToast('✅ Banner promo guardado en Firebase — visible para todos');
-  } catch(e) {
-    console.error('savePromoBanner: error guardando promo banner en Firestore:', e);
     showToast('⚠️ Error al guardar en Firebase: ' + e.message);
   }
 }
@@ -6527,6 +6335,21 @@ async function syncFromFirebase() {
     console.error('syncFromFirebase error:', e.message);
     throw e;
   }
+
+  // ── Banners (config/banners) ─────────────────────────────────
+  try {
+    const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
+    if (bannerSnap.exists()) {
+      const fbData = bannerSnap.data();
+      if (fbData.announcements) bannerState.announcements = fbData.announcements;
+      if (fbData.hero)          Object.assign(bannerState.hero, fbData.hero);
+      if (fbData.promo)         Object.assign(bannerState.promo, fbData.promo);
+      if (fbData.categories)    bannerState.categories = fbData.categories;
+      console.log('syncFromFirebase: banners cargados desde Firestore');
+    }
+  } catch(e) {
+    console.warn('syncFromFirebase: no se pudieron cargar banners desde Firestore:', e.message);
+  }
 }
 
 let retryCount = 0;
@@ -6538,6 +6361,7 @@ async function bootFromFirebase() {
     validateCartCoupons();
     renderAnnouncementBar();
     renderHeroBanner();
+    renderPromoBanner();
     applySavedCatImages();
     renderHomeProducts();
     renderCatalog();
