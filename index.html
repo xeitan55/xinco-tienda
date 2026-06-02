@@ -3272,7 +3272,7 @@ async function doRegister() {
     //    que llame a admin.auth().generateEmailVerificationLink() y envíe via EmailJS.
     const ADMIN_EMAIL = atob('YWRtaW5AeGluY28uY29t');
     if (email !== ADMIN_EMAIL) {
-      await sendEmailVerification(user, { url: 'https://www.xinco.shop/', handleCodeInApp: true });
+      await sendEmailVerification(user, { url: 'https://www.xinco.shop/verify', handleCodeInApp: true });
     }
 
     // 4. Cerrar sesión hasta que verifique
@@ -6272,34 +6272,6 @@ async function bootFromFirebase() {
   try {
     // 1. Inicializar Firebase
     await initFirebase();
-
-    // 1b. Procesar verificación de email si viene con mode=verifyEmail
-    const _urlParams = new URLSearchParams(window.location.search);
-    const _mode   = _urlParams.get('mode');
-    const _oobCode = _urlParams.get('oobCode');
-    if (_mode === 'verifyEmail' && _oobCode) {
-      const { applyActionCode, checkActionCode } = window._fb;
-      try {
-        const info = await checkActionCode(_oobCode);
-        const email = info.data.email || '';
-        await applyActionCode(_oobCode);
-        console.log('✅ Email verificado:', email);
-        window.history.replaceState({}, '', window.location.pathname);
-        dismissSplash();
-        showToast('✅ Email verificado correctamente');
-        nav('login');
-        if (email) {
-          const loginInput = document.getElementById('login-email');
-          if (loginInput) loginInput.value = email;
-        }
-        return; // ya navegamos a login, no seguir cargando la home
-      } catch(e) {
-        console.error('Error verificando email:', e);
-        window.history.replaceState({}, '', window.location.pathname);
-        showToast('⚠️ El link expiró o ya fue usado');
-        // seguir con carga normal
-      }
-    }
 
     // 2. Cargar TODO desde Firestore (productos, pedidos, banners, tracking, MP)
     await syncFromFirebase();
