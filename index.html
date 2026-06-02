@@ -464,7 +464,7 @@ tailwind.config = {
     <!-- Video background (hidden when no video) -->
     <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
     <!-- Image background (fallback / default) -->
-    <img id="hero-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-60" id="hero-img"/>
+    <img id="hero-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-60"/>
     <!-- Animated overlay particles -->
     <div id="hero-particles" class="absolute inset-0 z-[1] pointer-events-none overflow-hidden"></div>
     <!-- Gradient overlay -->
@@ -1758,6 +1758,7 @@ tailwind.config = {
                   <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('buzos')">
                     <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
                   </button>
+                </div>
                 <!-- Accesorios -->
                 <div class="border border-gray-200 rounded-xl p-4 bg-white">
                   <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
@@ -3303,7 +3304,7 @@ async function resendVerificationEmail() {
     const sent = await sendVerificationEmail(
       _lastRegisteredUser.email,
       _lastRegisteredUser.name,
-      `${window.location.origin}/login`
+      `${window.location.origin}/verify`
     );
     if (sent) showToast('Email de verificación reenviado ✅ — revisá tu bandeja');
     else showToast('Error al reenviar. Revisá spam o intentá más tarde');
@@ -6318,6 +6319,7 @@ bootFromFirebase();
 
 // Retorno desde Mercado Pago
 (function handleMPReturn() {
+  const _urlParams    = new URLSearchParams(window.location.search);
   const paymentStatus = _urlParams.get('payment');
   const orderId       = _urlParams.get('order');
   if (!paymentStatus) return;
