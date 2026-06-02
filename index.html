@@ -6524,13 +6524,33 @@ async function syncFromFirebase() {
       state.products = prodSnap2.docs.map(d => normalizeProduct({ id: d.id, ...d.data() }));
     }
   } catch(e) {
+    console.error('syncFromFirebase error:', e.message);
+    throw e;
+  }
+}
+
+let retryCount = 0;
+function showPageLoading() { /* splash already visible */ }
+async function bootFromFirebase() {
+  try {
+    await initFirebase();
+    await syncFromFirebase();
+    validateCartCoupons();
+    renderAnnouncementBar();
+    renderHeroBanner();
+    applySavedCatImages();
+    renderHomeProducts();
+    renderCatalog();
+    updateCartCount();
+    _bootResolved = true;
+    console.log('✅ Firebase cargado correctamente');
+    dismissSplash();
+  } catch(e) {
     console.error('bootFromFirebase: error (intento ' + retryCount + '):', e.message);
-    if (retryCount === 0) _bootResolved = true; // liberar handleMPReturn aunque falle
+    if (retryCount === 0) _bootResolved = true;
     retryCount++;
-    console.error('bootFromFirebase: error (intento ' + retryCount + '):', e.message);
     const hp = document.getElementById('home-products');
     if (hp) hp.innerHTML = '<div class="col-span-4" style="text-align:center;padding:60px;"><p style="font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.1em;color:#ba1a1a;">ERROR DE CONEXION</p><p style="font-family:JetBrains Mono,monospace;font-size:10px;color:#4c4546;margin-top:8px;">Reintentando en ' + Math.min(retryCount * 3, 15) + ' segundos...</p></div>';
-    // En caso de error también cerramos el splash para no bloquear al usuario
     dismissSplash();
     setTimeout(bootFromFirebase, Math.min(retryCount * 3000, 15000));
   }
