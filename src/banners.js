@@ -6,7 +6,7 @@ export function renderAnnouncementBar() {
   if (!scroller) return;
   const msgs = [...bannerState.announcements, ...bannerState.announcements];
   scroller.innerHTML = msgs.map(m =>
-    `<span class="font-label-caps text-label-caps tracking-widest uppercase px-12">${m}</span>`
+    '<span class="font-label-caps text-label-caps tracking-widest uppercase px-12">' + m + '</span>'
   ).join('');
 }
 
@@ -147,7 +147,7 @@ export function startHeroParticles() {
     const delay = (Math.random() * 5).toFixed(1) + 's';
     const opacity = (Math.random() * 0.4 + 0.1).toFixed(2);
     const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-    dot.style.cssText = `width:${size}px; height:${size}px; left:${x}%; top:${y}%; background:${color}; --p-dur:${dur}; --p-delay:${delay}; --p-opacity:${opacity}; animation-delay:${delay};`;
+    dot.style.cssText = 'width:' + size + 'px; height:' + size + 'px; left:' + x + '%; top:' + y + '%; background:' + color + '; --p-dur:' + dur + '; --p-delay:' + delay + '; --p-opacity:' + opacity + '; animation-delay:' + delay + ';';
     container.appendChild(dot);
     _particles.push(dot);
   }
@@ -296,7 +296,7 @@ export async function uploadHeroImage(file) {
         const thumb = document.createElement('div');
         thumb.className = 'aspect-square border-2 border-primary overflow-hidden cursor-pointer hover:border-secondary-container';
         thumb.title = 'Usar esta imagen';
-        thumb.innerHTML = `<img src="${finalUrl}" class="w-full h-full object-cover" onclick="applyHeroImg('${finalUrl}')"/>`;
+        thumb.innerHTML = '<img src="' + finalUrl + '" class="w-full h-full object-cover" onclick="applyHeroImg(\'' + finalUrl + '\')"/>';
         if (recentGrid.children.length === 1 && !recentGrid.querySelector('img')) recentGrid.innerHTML = '';
         recentGrid.prepend(thumb);
         window.showToast?.('¡Imagen del hero subida a Cloudinary! ☁️✅');
