@@ -65,11 +65,13 @@ export function renderAdminDashboard() {
   const totalProd = state.products.length;
   const pendingOrders = state.orders.filter(o => o.status === 'pending').length;
   const totalClients = CUSTOMERS.length;
-  document.getElementById('ad-total-revenue').textContent = window.fmtPrice?.(total) || '$' + total;
-  document.getElementById('ad-total-products').textContent = totalProd;
-  document.getElementById('ad-pending-orders').textContent = pendingOrders;
-  document.getElementById('ad-total-clients').textContent = totalClients;
-  const table = document.getElementById('ad-recent-orders');
+  const elRevenue = document.getElementById('ad-total-revenue');
+  if (elRevenue) elRevenue.textContent = window.fmtPrice?.(total) || '$' + total;
+  const elPending = document.getElementById('ad-pending-orders') || document.getElementById('admin-pending-count');
+  if (elPending) elPending.textContent = pendingOrders;
+  const elClients = document.getElementById('ad-total-clients');
+  if (elClients) elClients.textContent = totalClients;
+  const table = document.getElementById('ad-recent-orders') || document.getElementById('admin-recent-orders');
   if (!table) return;
   table.innerHTML = state.orders.slice(0, 6).map(o => `
     <tr class="border-b-2 border-outline-variant hover:bg-surface-container-low transition-all">
@@ -178,30 +180,22 @@ export function showProductPage(page) {
   const start = (page - 1) * perPage;
   const end = start + perPage;
   const items = state.products.slice(start, end);
-  const container = document.getElementById('admin-products-grid');
+  const container = document.getElementById('admin-products-table');
   if (!container) return;
-  container.innerHTML = items.map(p => `
-    <div class="bg-surface-container-low border-2 border-outline-variant p-4">
-      <img src="${p.img}" alt="${p.name}" loading="lazy" class="w-full h-40 object-cover border-2 border-primary mb-3"/>
-      <div class="font-label-caps text-[11px] text-primary truncate">${p.name}</div>
-      <div class="font-label-caps text-[10px] text-on-surface-variant">${p.cat} / $${p.price}</div>
-      <div class="font-label-caps text-[10px] text-on-surface-variant">Stock: ${p.stock}</div>
-      <div class="flex gap-2 mt-2">
-        <button onclick="editProductAdmin(${p.id})" class="btn-violet flex-1 py-1 text-[9px]">EDITAR</button>
-        <button onclick="confirmDeleteProduct(${p.id})" class="btn-ghost px-2 py-1 text-[9px] text-error"><span class="material-symbols-outlined text-[14px]">delete</span></button>
-      </div>
-    </div>`).join('');
-  renderPagination(totalPages, page);
-}
-
-function renderPagination(totalPages, current) {
-  const el = document.getElementById('admin-products-pagination');
-  if (!el) return;
-  let html = '';
-  for (let i = 1; i <= totalPages; i++) {
-    html += `<button onclick="showProductPage(${i})" class="px-4 py-2 font-label-caps text-[10px] border-2 border-primary ${i === current ? 'bg-primary text-on-primary' : 'text-primary hover:bg-surface-container-low'}">${i}</button>`;
-  }
-  el.innerHTML = html;
+  container.innerHTML = `<table class="w-full text-left">
+    <thead><tr class="border-b-2 border-outline-variant font-label-caps text-[10px] text-on-surface-variant/60">
+      <th class="py-3 px-4">PRODUCTO</th><th class="py-3 px-4">SKU</th><th class="py-3 px-4">NOMBRE</th><th class="py-3 px-4">PRECIO</th><th class="py-3 px-4">STOCK</th><th class="py-3 px-4">CAT</th><th class="py-3 px-4"></th>
+    </tr></thead><tbody>
+    ${items.map(p => `<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-all">
+      <td class="py-3 px-4"><img src="${p.img}" alt="${p.name}" loading="lazy" class="w-12 h-14 object-cover border-2 border-primary"/></td>
+      <td class="py-3 px-4 font-label-caps text-[10px]">${p.sku || '-'}</td>
+      <td class="py-3 px-4 font-body-md text-sm">${p.name}</td>
+      <td class="py-3 px-4 font-label-caps text-[11px] text-primary">$${p.price}</td>
+      <td class="py-3 px-4"><span class="badge ${p.stock > 20 ? 'badge-success' : p.stock > 5 ? 'badge-violet' : 'badge-outline'}">${p.stock}</span></td>
+      <td class="py-3 px-4 font-body-md text-sm">${p.cat}</td>
+      <td class="py-3 px-4"><button onclick="editProductAdmin(${p.id})" class="btn-violet px-3 py-1 text-[9px]">EDITAR</button></td>
+    </tr>`).join('')}
+    </tbody></table>`;
 }
 
 export function confirmDeleteProduct(id) {

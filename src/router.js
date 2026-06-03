@@ -42,7 +42,7 @@ export async function nav(page) {
   if (page === 'account') { const { renderAccountPage } = await import('./auth.js'); renderAccountPage(); }
   if (page === 'admin') {
     const { renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers } = await import('./admin.js');
-    renderAdminDashboard(); renderAdminOrders(); renderAdminProducts(); renderAdminInventory(); renderAdminCustomers();
+    [renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers].forEach(fn => { try { fn(); } catch(e) { console.error(e); } });
   }
 
   setTimeout(() => { try { window.initScrollReveal?.(); } catch(e) {} }, 50);
