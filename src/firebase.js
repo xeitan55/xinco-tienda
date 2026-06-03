@@ -218,7 +218,7 @@ let _bootResolved = false;
 async function bootFromFirebase() {
   try {
     const { validateCartCoupons } = await import('./coupons.js');
-    const { renderAnnouncementBar, renderHeroBanner, renderPromoBanner } = await import('./banners.js');
+    const { renderAnnouncementBar, renderHeroBanner, renderPromoBanner } = await import('./banners.jsx');
     const { applySavedCatImages } = await import('./admin.js');
     const { renderHomeProducts, renderCatalog } = await import('./products.js');
 
