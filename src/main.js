@@ -11,7 +11,7 @@ import { init as initReviews } from './reviews.js';
 import { init as initProducts } from './products.js';
 import { init as initCart } from './cart.js';
 import { init as initCoupons } from './coupons.js';
-import { init as initBanners } from './banners.js';
+import { init as initBanners } from './banners.jsx';
 import { init as initCheckout } from './checkout.js';
 import { init as initAdmin } from './admin.js';
 
