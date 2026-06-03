@@ -675,7 +675,7 @@ tailwind.config = {
     <h1 class="text-white uppercase" style="font-family:Montserrat;font-size:clamp(48px,10vw,120px);font-weight:900;letter-spacing:-0.04em;">
       <span class="splash-letter">X</span><span class="splash-letter">I</span><span class="splash-letter">N</span><span class="splash-letter">C</span><span class="splash-letter">O</span>
     </h1>
-    <p class="splash-tagline text-white/70 font-label-caps text-label-caps tracking-[0.3em]" style="font-family:'JetBrains Mono',monospace;font-size:clamp(8px,1.2vw,12px);letter-spacing:0.4em;margin-top:16px;">URBAN STREETWEAR</p>
+
   </div>
   <div class="splash-bar-track">
     <div class="splash-bar-fill"></div>
@@ -795,7 +795,7 @@ tailwind.config = {
       </button>
       <button class="relative p-1" onclick="openCart()">
         <span class="material-symbols-outlined text-primary">shopping_bag</span>
-        <span id="cart-count" class="absolute -top-1 -right-1 bg-secondary-container text-primary font-label-caps text-[10px] w-5 h-5 flex items-center justify-center border-2 border-primary">0</span>
+        <span id="cart-count" class="absolute -top-1 -right-1 bg-secondary-container text-primary font-label-caps text-[10px] w-5 h-5 flex items-center justify-center border-2 border-primary rounded-full">0</span>
       </button>
     </div>
   </div>
@@ -3108,6 +3108,7 @@ function updateCartCount() {
   const el = document.getElementById('cart-count');
   if (el) {
     el.textContent = total;
+    el.style.display = total > 0 ? '' : 'none';
     el.classList.remove('counter-bounce');
     void el.offsetWidth;
     el.classList.add('counter-bounce');
