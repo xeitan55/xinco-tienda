@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificando email — XINCO</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .card {
+    background: #fff;
+    border: 3px solid #000;
+    border-radius: 16px;
+    padding: 48px 40px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 12px 12px 0 rgba(0,0,0,0.06);
+  }
+  .logo { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 900; color: #000; margin-bottom: 24px; letter-spacing: -0.04em; }
+  .icon { font-size: 48px; margin-bottom: 16px; }
+  .title { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 800; color: #000; margin-bottom: 8px; }
+  .sub { font-size: 14px; color: #666; line-height: 1.5; margin-bottom: 24px; }
+  .btn {
+    display: inline-block;
+    background: #5d22ff;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 4px solid #eee;
+    border-top-color: #5d22ff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 20px auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .error { color: #ba1a1a; font-size: 14px; margin: 12px 0; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">XINCO</div>
+  <div id="loading-state">
+    <div class="icon">📨</div>
+    <div class="title">Verificando tu email...</div>
+    <div class="sub">Por favor esperá un momento.</div>
+    <div class="spinner"></div>
+  </div>
+  <div id="success-state" class="hidden">
+    <div class="icon">✅</div>
+    <div class="title">Email verificado</div>
+    <div class="sub">Tu cuenta fue verificada correctamente. Ya podés iniciar sesión.</div>
+    <a class="btn" href="/">IR AL INICIO DE SESIÓN</a>
+  </div>
+  <div id="error-state" class="hidden">
+    <div class="icon">❌</div>
+    <div class="title">Error de verificación</div>
+    <div class="error" id="error-msg">El link expiró o ya fue usado.</div>
+    <div class="sub">Podés solicitar un nuevo email desde la página de inicio de sesión.</div>
+    <a class="btn" href="/">VOLVER AL INICIO</a>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, applyActionCode, checkActionCode } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+const FB_CONFIG = {
+  apiKey: "AIzaSyCHmbuWJM-vYeFm4WUXMTp716Kci26sr2w",
+  authDomain: "xinco-tienda.firebaseapp.com",
+  projectId: "xinco-tienda",
+  storageBucket: "xinco-tienda.firebasestorage.app",
+  messagingSenderId: "820944615074",
+  appId: "1:820944615074:web:8e61971ec98b5a73c5b55f",
+  measurementId: "G-985N59G7HY"
+};
+
+const app = initializeApp(FB_CONFIG);
+const auth = getAuth(app);
+
+const params = new URLSearchParams(window.location.search);
+const mode = params.get('mode');
+const oobCode = params.get('oobCode');
+
+async function handleVerification() {
+  if (mode !== 'verifyEmail' || !oobCode) {
+    document.getElementById('loading-state').classList.add('hidden');
+    document.getElementById('error-state').classList.remove('hidden');
+    document.getElementById('error-msg').textContent = 'Link inválido — faltan parámetros de verificación.';
+    return;
+  }
+  try {
+    const info = await checkActionCode(auth, oobCode);
+    const email = info.data.email || '';
+    await applyActionCode(auth, oobCode);
+    console.log('✅ Email verificado:', email);
+    document.getElementById('loading-state').classList.add('hidden');
+    document.getElementById('success-state').classList.remove('hidden');
+    window.history.replaceState({}, '', '/verify');
+  } catch(e) {
+    console.error('Error verificando email:', e);
+    document.getElementById('loading-state').classList.add('hidden');
+    document.getElementById('error-state').classList.remove('hidden');
+    if (e.code === 'auth/expired-action-code') {
+      document.getElementById('error-msg').textContent = 'Este link expiró. Solicitá uno nuevo desde el inicio de sesión.';
+    } else if (e.code === 'auth/invalid-action-code') {
+      document.getElementById('error-msg').textContent = 'Este link ya fue usado o no es válido.';
+    } else {
+      document.getElementById('error-msg').textContent = e.message || 'Error al verificar el email.';
+    }
+  }
+}
+
+handleVerification();
+</script>
+</body>
+</html>
