@@ -173,10 +173,89 @@ tailwind.config = {
   .scrolling-text-inner { display: inline-flex; white-space: nowrap; animation: scrollText 18s linear infinite; }
   @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
   @keyframes splashTextIn { from{opacity:0;transform:scale(1.15);} to{opacity:1;transform:scale(1);} }
-  /* El splash NO se desvanece con CSS — JS lo controla una vez que las imágenes están cargadas */
   .splash { opacity:1; transition: opacity 0.6s ease-out; }
   .splash.hiding { opacity:0; pointer-events:none; }
   .splash-text { animation: splashTextIn 0.9s forwards ease-out; }
+  @keyframes splashGridMove {
+    0%   { transform: translateY(0) translateX(0); }
+    25%  { transform: translateY(-8px) translateX(4px); }
+    50%  { transform: translateY(-4px) translateX(-4px); }
+    75%  { transform: translateY(4px) translateX(6px); }
+    100% { transform: translateY(0) translateX(0); }
+  }
+  @keyframes splashLetterIn {
+    0%   { opacity: 0; transform: translateY(60px) scale(0.8) rotateX(-20deg); filter: blur(8px); }
+    60%  { transform: translateY(-8px) scale(1.05) rotateX(2deg); filter: blur(0); }
+    100% { opacity: 1; transform: translateY(0) scale(1) rotateX(0); filter: blur(0); }
+  }
+  @keyframes splashTaglineIn {
+    0%   { opacity: 0; transform: translateY(20px); filter: blur(4px); }
+    100% { opacity: 0.7; transform: translateY(0); filter: blur(0); }
+  }
+  @keyframes splashBarFill {
+    0%   { width: 0%; }
+    100% { width: 100%; }
+  }
+  @keyframes splashPulse {
+    0%,100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.03); }
+  }
+  @keyframes splashGlow {
+    0%,100% { box-shadow: 0 0 20px rgba(93,34,255,0.1); }
+    50% { box-shadow: 0 0 40px rgba(93,34,255,0.25), 0 0 80px rgba(93,34,255,0.08); }
+  }
+  @keyframes splashBgShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes splashCornerIn {
+    0%   { opacity: 0; transform: scale(0); }
+    100% { opacity: 0.12; transform: scale(1); }
+  }
+  .splash-letter {
+    display: inline-block;
+    opacity: 0;
+    animation: splashLetterIn 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  .splash-letter:nth-child(1) { animation-delay: 0.15s; }
+  .splash-letter:nth-child(2) { animation-delay: 0.30s; }
+  .splash-letter:nth-child(3) { animation-delay: 0.45s; }
+  .splash-letter:nth-child(4) { animation-delay: 0.60s; }
+  .splash-letter:nth-child(5) { animation-delay: 0.75s; }
+  .splash-tagline {
+    opacity: 0;
+    animation: splashTaglineIn 0.8s ease-out 1.1s forwards;
+  }
+  .splash-bar-track {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+  }
+  .splash-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #5d22ff, #b388ff, #5d22ff);
+    background-size: 200% 100%;
+    animation: splashBarFill 2.2s cubic-bezier(0.22,1,0.36,1) forwards, splashBgShift 1.5s ease-in-out infinite;
+    width: 0;
+  }
+  .splash-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image:
+      linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: splashGridMove 6s ease-in-out infinite;
+  }
+  .splash-glare {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(93,34,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(179,136,255,0.05) 0%, transparent 50%);
+  }
   .page { display: none; animation: fadeInUp 0.35s ease-out; }
   .page.active { display: block; }
   ::-webkit-scrollbar { width: 6px; }
@@ -401,6 +480,7 @@ tailwind.config = {
     background: #000;
     color: #fff;
   }
+  #review-stars .star-rating { transition: color 0.15s; }
   /* ---- Color swatches (producto) ---- */
   .color-swatch { width:32px; height:32px; border-radius:50%; border:3px solid transparent; cursor:pointer; transition:all 0.15s; position:relative; }
   .color-swatch.selected { border-color:#000; box-shadow:0 0 0 2px #fff, 0 0 0 4px #000; }
@@ -588,8 +668,18 @@ tailwind.config = {
 <canvas id="mouse-stitch"></canvas>
 
 <!-- ===== SPLASH SCREEN ===== -->
-<div id="splash" class="splash fixed inset-0 z-[9999] bg-black flex items-center justify-center pointer-events-none">
-  <h1 class="splash-text font-headline-lg text-white tracking-tighter uppercase" style="font-family:Montserrat;font-size:clamp(48px,10vw,120px);font-weight:900;letter-spacing:-0.04em;">XINCO</h1>
+<div id="splash" class="splash fixed inset-0 z-[9999] bg-black flex items-center justify-center pointer-events-none overflow-hidden">
+  <div class="splash-grid"></div>
+  <div class="splash-glare"></div>
+  <div class="text-center relative z-10">
+    <h1 class="text-white uppercase" style="font-family:Montserrat;font-size:clamp(48px,10vw,120px);font-weight:900;letter-spacing:-0.04em;">
+      <span class="splash-letter">X</span><span class="splash-letter">I</span><span class="splash-letter">N</span><span class="splash-letter">C</span><span class="splash-letter">O</span>
+    </h1>
+    <p class="splash-tagline text-white/70 font-label-caps text-label-caps tracking-[0.3em]" style="font-family:'JetBrains Mono',monospace;font-size:clamp(8px,1.2vw,12px);letter-spacing:0.4em;margin-top:16px;">URBAN STREETWEAR</p>
+  </div>
+  <div class="splash-bar-track">
+    <div class="splash-bar-fill"></div>
+  </div>
 </div>
 
 <!-- ===== TOAST ===== -->
@@ -1046,6 +1136,53 @@ tailwind.config = {
       <h2 style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary uppercase mb-8">TAMBIÉN TE PUEDE GUSTAR</h2>
       <div id="related-products" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
     </div>
+    <!-- Reviews -->
+    <div class="mt-16 pt-12 border-t-[3px] border-primary" id="reviews-section">
+      <div class="flex justify-between items-start mb-8">
+        <div>
+          <h2 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase mb-1">RESEÑAS</h2>
+          <p class="font-label-caps text-label-caps text-on-surface-variant" id="reviews-count">0 OPINIONES</p>
+        </div>
+        <button class="btn-primary text-sm py-2 px-4" id="review-btn" onclick="openReviewForm()">ESCRIBIR UNA RESEÑA</button>
+      </div>
+      <div id="reviews-list" class="space-y-4">
+        <div class="text-center py-12 text-on-surface-variant font-label-caps text-label-caps" id="reviews-empty">Sin reseñas aún. ¡Sé el primero en opinar!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REVIEW FORM MODAL ===== -->
+<div id="review-modal" class="fixed inset-0 z-[600] flex items-center justify-center" style="display:none;">
+  <div class="absolute inset-0 bg-black/50" onclick="closeReviewForm()"></div>
+  <div class="relative bg-surface border-[3px] border-primary w-full max-w-lg mx-4 p-8 max-h-[90vh] overflow-y-auto">
+    <button class="absolute top-4 right-4" onclick="closeReviewForm()"><span class="material-symbols-outlined text-primary">close</span></button>
+    <h3 class="font-headline-md text-primary uppercase mb-6" style="font-family:Montserrat;font-size:22px;font-weight:800;">RESEÑA</h3>
+    <form onsubmit="submitReview();return false" class="space-y-5">
+      <div>
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-2">PUNTUACIÓN</p>
+        <div class="flex gap-2" id="review-stars">
+          <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="1">★</span>
+          <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="2">★</span>
+          <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="3">★</span>
+          <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="4">★</span>
+          <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="5">★</span>
+        </div>
+      </div>
+      <div>
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TÍTULO</label>
+        <input id="review-title" class="input-field w-full" placeholder="Ej: Excelente calidad" maxlength="60"/>
+      </div>
+      <div>
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">OPINIÓN</label>
+        <textarea id="review-text" class="input-field w-full min-h-[100px]" placeholder="Contá tu experiencia con el producto..." maxlength="500"></textarea>
+      </div>
+      <div class="flex items-center gap-3">
+        <input type="checkbox" id="review-delivery" class="form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5"/>
+        <label for="review-delivery" class="font-label-caps text-label-caps text-on-surface-variant text-sm cursor-pointer">El producto llegó en buen estado y a tiempo</label>
+      </div>
+      <button type="submit" class="btn-violet w-full justify-center py-3" id="review-submit-btn">PUBLICAR RESEÑA</button>
+    </form>
   </div>
 </div>
 
@@ -2872,7 +3009,7 @@ function filterCatalog(tag) {
 // El splash se oculta SOLO cuando las imágenes críticas ya están cargadas en memoria.
 // Garantiza: Firebase sync → renderHeroBanner/applySavedCatImages → imágenes decodificadas → splash off.
 
-const SPLASH_MIN_MS   = 900;   // tiempo mínimo que dura el splash (evita parpadeo en cache)
+const SPLASH_MIN_MS   = 2400;  // tiempo mínimo que dura el splash (permite ver animación completa)
 const SPLASH_MAX_MS   = 8000;  // fallback de seguridad si una imagen no carga
 const _splashStart    = Date.now();
 let   _splashDismissed = false;
@@ -3537,6 +3674,7 @@ function openProduct(id) {
   document.getElementById('product-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
   setTimeout(initProductZoom, 50);
+  setTimeout(() => loadReviews(p.id), 100);
 }
 
 function closeProductOverlay() {
@@ -3611,6 +3749,143 @@ function selectSize(s) {
     if (b.textContent === s) b.classList.add('selected');
     else b.classList.remove('selected');
   });
+}
+
+// =================== REVIEW SYSTEM ===================
+let _reviewRating = 0;
+let _reviewProductId = null;
+
+function loadReviews(productId) {
+  _reviewProductId = productId;
+  const list = document.getElementById('reviews-list');
+  const countEl = document.getElementById('reviews-count');
+  const empty = document.getElementById('reviews-empty');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center py-8"><div class="skeleton w-8 h-8 mx-auto mb-4" style="border-radius:50%;"></div><div class="skeleton h-4 w-32 mx-auto"></div></div>';
+
+  const btn = document.getElementById('review-btn');
+  if (btn) btn.style.display = state.user ? '' : 'none';
+
+  if (!fbDb || !window._fb) { list.innerHTML = ''; return; }
+  const { collection, getDocs, query, orderBy } = window._fb;
+  getDocs(query(collection(fbDb, 'reviews', String(productId), 'reviews'), orderBy('createdAt', 'desc')))
+    .then(snap => {
+      const reviews = [];
+      snap.forEach(d => reviews.push({ id: d.id, ...d.data() }));
+      renderReviews(reviews, list, countEl, empty);
+    })
+    .catch(() => { list.innerHTML = ''; });
+}
+
+function renderReviews(reviews, list, countEl, empty) {
+  if (!list) return;
+  if (reviews.length === 0) {
+    if (empty) empty.style.display = '';
+    list.innerHTML = '';
+    if (countEl) countEl.textContent = '0 OPINIONES';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+  if (countEl) countEl.textContent = reviews.length + ' OPINION' + (reviews.length !== 1 ? 'ES' : '');
+  list.innerHTML = reviews.map(r => `
+    <div class="border-2 border-primary p-5">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-label-caps text-sm font-bold">${(r.userName||'A')[0].toUpperCase()}</div>
+          <div>
+            <div class="font-label-caps text-label-caps text-primary">${r.userName || 'Anónimo'}</div>
+            <div class="flex items-center gap-2 text-[11px] text-on-surface-variant font-label-caps">
+              <span>${new Date(r.createdAt?.toDate?.() || r.createdAt).toLocaleDateString('es-AR', { day:'numeric', month:'short', year:'numeric' })}</span>
+              ${r.verified ? `<span class="text-secondary-container">● VERIFICADO</span>` : ''}
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-0.5">
+          ${Array.from({length:5},(_,i) => `<span class="text-sm ${i < r.rating ? 'text-primary' : 'text-outline-variant'}">★</span>`).join('')}
+        </div>
+      </div>
+      ${r.title ? `<div class="font-label-caps text-label-caps text-primary mb-1 text-sm">${r.title}</div>` : ''}
+      <p class="font-body-md text-on-surface-variant text-sm">${r.text}</p>
+      ${r.delivery ? `<div class="flex items-center gap-2 mt-3 text-[11px] font-label-caps text-secondary-container"><span class="material-symbols-outlined text-[14px]">check_circle</span> ENVÍO CONFORME</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function openReviewForm() {
+  if (!state.user) { showToast('INICIÁ SESIÓN PARA OPINAR ❌'); nav('login'); return; }
+  if (!_reviewProductId) return;
+  _reviewRating = 0;
+  document.getElementById('review-title').value = '';
+  document.getElementById('review-text').value = '';
+  document.getElementById('review-delivery').checked = false;
+  document.querySelectorAll('#review-stars .star-rating').forEach(s => s.style.color = '');
+  document.getElementById('review-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeReviewForm() {
+  document.getElementById('review-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Set up star rating click
+document.addEventListener('click', function(e) {
+  const star = e.target.closest('.star-rating');
+  if (!star) return;
+  const val = parseInt(star.dataset.val);
+  _reviewRating = val;
+  document.querySelectorAll('#review-stars .star-rating').forEach(s => {
+    s.style.color = parseInt(s.dataset.val) <= val ? 'var(--primary)' : '';
+  });
+});
+
+async function submitReview() {
+  if (!_reviewRating) { showToast('SELECCIONÁ UNA PUNTUACIÓN ❌'); return; }
+  const title = document.getElementById('review-title').value.trim();
+  const text = document.getElementById('review-text').value.trim();
+  if (!text) { showToast('ESCRIBÍ TU OPINIÓN ❌'); return; }
+  const delivery = document.getElementById('review-delivery').checked;
+  const btn = document.getElementById('review-submit-btn');
+  btn.disabled = true; btn.textContent = 'PUBLICANDO...';
+
+  try {
+    if (!fbDb || !window._fb) throw new Error('Firebase no disponible');
+    const { addDoc, collection, doc, getDoc, setDoc, getDocs, query } = window._fb;
+    // Check if user already reviewed this product
+    const existing = await getDocs(query(collection(fbDb, 'reviews', String(_reviewProductId), 'reviews')));
+    let alreadyReviewed = false;
+    existing.forEach(d => { if (d.data().userId === state.user.uid) alreadyReviewed = true; });
+    if (alreadyReviewed) { showToast('YA OPINASTE SOBRE ESTE PRODUCTO ❌'); btn.disabled = false; btn.textContent = 'PUBLICAR RESEÑA'; return; }
+
+    const review = {
+      userId: state.user.uid,
+      userName: state.user.displayName || state.user.email?.split('@')[0] || 'Usuario',
+      userPhoto: state.user.photoURL || '',
+      rating: _reviewRating,
+      title,
+      text,
+      delivery,
+      verified: true,
+      createdAt: new Date().toISOString()
+    };
+    await addDoc(collection(fbDb, 'reviews', String(_reviewProductId), 'reviews'), review);
+    // Update product review count in Firestore
+    try {
+      const prodRef = doc(fbDb, 'products', String(_reviewProductId));
+      const prodSnap = await getDoc(prodRef);
+      if (prodSnap.exists()) {
+        const curr = prodSnap.data().reviews || 0;
+        await setDoc(prodRef, { reviews: curr + 1 }, { merge: true });
+      }
+    } catch(e) { console.warn('review: error updating product review count', e); }
+    showToast('RESEÑA PUBLICADA ✅');
+    closeReviewForm();
+    loadReviews(_reviewProductId);
+  } catch(e) {
+    console.error('submitReview error:', e);
+    showToast('ERROR AL PUBLICAR ❌');
+  }
+  btn.disabled = false; btn.textContent = 'PUBLICAR RESEÑA';
 }
 
 function selectColor(c) {
