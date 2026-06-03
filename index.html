@@ -801,7 +801,7 @@ tailwind.config = {
       </div>
       <a class="hidden md:inline-flex items-center font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 hover:text-secondary-container hover:border-secondary-container transition-colors cursor-pointer" onclick="nav('catalog')">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
     </div>
-    <div id="home-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+    <div id="home-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
   </section>
 
 
@@ -949,7 +949,7 @@ tailwind.config = {
             </select>
           </div>
         </div>
-        <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="catalog-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
         <div id="catalog-empty" class="hidden py-16 text-center">
           <span class="material-symbols-outlined text-[64px] text-outline-variant">search_off</span>
           <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">NO SE ENCONTRARON PRODUCTOS</p>
@@ -981,7 +981,7 @@ tailwind.config = {
       <div class="md:col-span-6">
         <div class="aspect-[4/5] bg-surface-container-high overflow-hidden border-[3px] border-primary mb-3 relative group cursor-crosshair" id="product-img-container">
           <img id="product-main-img" src="" alt="" class="w-full h-full object-cover grayscale-hover"/>
-          <div id="zoom-lens" class="absolute pointer-events-none z-10 border-2 border-primary" style="width:140px;height:140px;border-radius:50%;display:none;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,0.3), 0 4px 20px rgba(0,0,0,0.15);"></div>
+          <div id="zoom-lens" class="absolute pointer-events-none z-10 border-2 border-primary" style="width:200px;height:200px;border-radius:50%;display:none;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,0.3), 0 4px 20px rgba(0,0,0,0.15);"></div>
           <div class="absolute bottom-3 right-3 bg-surface/80 backdrop-blur-sm px-2.5 py-1.5 border border-primary rounded text-[10px] font-label-caps text-on-surface opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <span class="material-symbols-outlined text-[14px] align-middle">search</span> ZOOM
           </div>
@@ -3340,20 +3340,20 @@ function renderProductCard(p, small=false) {
 
   return `
     <div class="group relative flex flex-col bg-surface border-[3px] border-primary product-card card-hover" onclick="openProduct('${p.id}')">
-      <div class="relative aspect-[3/4] overflow-hidden border-b-[3px] border-primary bg-surface-container">
-        ${p.badge ? `<div class="absolute top-4 left-4 z-10"><span class="badge badge-violet">${p.badge}</span></div>` : ''}
-        ${p.oldPrice ? `<div class="absolute top-4 right-4 z-10"><span class="badge badge-black">SALE</span></div>` : ''}
+      <div class="relative aspect-[4/5] overflow-hidden border-b-[3px] border-primary bg-surface-container">
+        ${p.badge ? `<div class="absolute top-3 left-3 z-10"><span class="badge badge-violet text-[9px]">${p.badge}</span></div>` : ''}
+        ${p.oldPrice ? `<div class="absolute top-3 right-3 z-10"><span class="badge badge-black text-[9px]">SALE</span></div>` : ''}
         <img src="${img}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover grayscale-hover transition-all duration-500"/>
         <div class="absolute bottom-0 left-0 w-full bg-primary/90 border-t-[3px] border-primary size-overlay flex">
-          ${(p.sizes||['S','M','L','XL']).slice(0,4).map(s=>`<button class="flex-1 py-3 font-label-caps text-on-primary hover:bg-secondary-container text-[10px] border-r border-white/20 last:border-0" onclick="event.stopPropagation();quickAddToCart('${p.id}','${s}','${colors[0]||'negro'}')">${s}</button>`).join('')}
+          ${(p.sizes||['S','M','L','XL']).slice(0,4).map(s=>`<button class="flex-1 py-2 font-label-caps text-on-primary hover:bg-secondary-container text-[9px] border-r border-white/20 last:border-0" onclick="event.stopPropagation();quickAddToCart('${p.id}','${s}','${colors[0]||'negro'}')">${s}</button>`).join('')}
         </div>
       </div>
-      <div class="p-4">
-        <div class="font-label-caps text-label-caps text-primary truncate mb-1">${p.name}</div>
+      <div class="p-3">
+        <div class="font-label-caps text-label-caps text-primary truncate mb-1 text-[11px]">${p.name}</div>
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span class="font-label-caps text-[13px] text-primary">${fmtPrice(p.price)}</span>
-            ${p.oldPrice ? `<span class="font-label-caps text-[11px] text-outline line-through">${fmtPrice(p.oldPrice)}</span>` : ''}
+            <span class="font-label-caps text-[12px] text-primary">${fmtPrice(p.price)}</span>
+            ${p.oldPrice ? `<span class="font-label-caps text-[10px] text-outline line-through">${fmtPrice(p.oldPrice)}</span>` : ''}
           </div>
           ${colorDots ? `<div class="flex gap-1 items-center">${colorDots}</div>` : ''}
         </div>
@@ -3570,7 +3570,7 @@ function initProductZoom() {
   if (!container || !lens || !img) return;
 
   const zoom = 2.5;
-  const lensSize = 140;
+  const lensSize = 200;
   lens.style.width = lensSize + 'px';
   lens.style.height = lensSize + 'px';
   lens.style.backgroundRepeat = 'no-repeat';
