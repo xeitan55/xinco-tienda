@@ -5,13 +5,7 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "routes": [
-    {
-      "src": "/verify",
-      "dest": "/verify.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+    { "src": "/verify", "dest": "/verify.html" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
