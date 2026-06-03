@@ -1957,12 +1957,12 @@ table{border-collapse:collapse}.page-break{page-break-before:always}</style></he
 }
 
 export const BG_COLORS = {
-  violet: { label:'Violeta', hue:[240,290], css:'#9b87f5', cssLight:'#c4b5fd', cssDim:'rgba(155,135,245,' },
-  blue: { label:'Azul', hue:[200,240], css:'#5b9cf5', cssLight:'#8bbaff', cssDim:'rgba(91,156,245,' },
-  pink: { label:'Rosa', hue:[300,340], css:'#e87be8', cssLight:'#f5b0f5', cssDim:'rgba(232,123,232,' },
-  green: { label:'Verde', hue:[120,160], css:'#5cc97a', cssLight:'#8edfa3', cssDim:'rgba(92,201,122,' },
-  gold: { label:'Dorado', hue:[40,60], css:'#e8c84a', cssLight:'#f0db6e', cssDim:'rgba(232,200,74,' },
-  red: { label:'Rojo', hue:[0,30], css:'#f56060', cssLight:'#f59090', cssDim:'rgba(245,96,96,' }
+  violet: { label:'Violeta', hue:[240,290], css:'#9b87f5', cssLight:'#c4b5fd' },
+  blue: { label:'Azul', hue:[200,240], css:'#5b9cf5', cssLight:'#8bbaff' },
+  pink: { label:'Rosa', hue:[300,340], css:'#e87be8', cssLight:'#f5b0f5' },
+  green: { label:'Verde', hue:[120,160], css:'#5cc97a', cssLight:'#8edfa3' },
+  gold: { label:'Dorado', hue:[40,60], css:'#e8c84a', cssLight:'#f0db6e' },
+  red: { label:'Rojo', hue:[0,30], css:'#f56060', cssLight:'#f59090' }
 };
 let _currentBgColor = localStorage.getItem('adminBgColor') || 'violet';
 let _bgAnimId = null;
@@ -1976,15 +1976,12 @@ function applyBgColor(scheme) {
   if (!r) return;
   r.style.setProperty('--admin-accent', c.css);
   r.style.setProperty('--admin-accent-light', c.cssLight);
+  r.style.setProperty('--admin-accent-dim', c.css + '18');
   document.querySelectorAll('.color-swatch').forEach(el => el.classList.toggle('active', el.dataset.color === scheme));
   document.getElementById('admin-color-picker')?.classList.remove('open');
   document.getElementById('admin-color-btn')?.classList.remove('active');
-  const dockItems = document.querySelectorAll('.dock-item');
-  dockItems.forEach(el => { el.style.setProperty('color', c.css, 'important'); });
   const avatar = document.querySelector('.admin-avatar');
   if (avatar) avatar.style.background = c.css;
-  const iconWrappers = document.querySelectorAll('.admin-current-section .section-icon-wrapper');
-  iconWrappers.forEach(el => { el.style.background = c.cssDim + '0.15)'; });
   const iconEl = document.querySelector('.section-icon');
   if (iconEl) iconEl.style.color = c.css;
 }
@@ -2016,96 +2013,61 @@ export function initAdminBg() {
   canvas._bgInit = true;
   const ctx = canvas.getContext('2d');
   let W, H;
-  const PARTICLES = 70;
-  const CONNECT_DIST = 160;
-  const ORBS = 3;
-  const particles = [];
-  const orbs = [];
+  const CHARS = ['X', 'Y', 'O'];
+  const COUNT = 24;
+  const vectors = [];
 
-  function createParticle() {
+  function createVector() {
     const scheme = getBgColor();
-    const hueRange = scheme.hue[1] - scheme.hue[0];
+    const hue = scheme.hue[0] + Math.random() * (scheme.hue[1] - scheme.hue[0]);
+    const char = CHARS[Math.floor(Math.random() * CHARS.length)];
+    const dirs = { 'X': { vx: 0.15 + Math.random() * 0.2, vy: -0.15 - Math.random() * 0.15 },
+                  'Y': { vx: -0.15 - Math.random() * 0.2, vy: 0.1 + Math.random() * 0.15 },
+                  'O': { vx: 0.1 + Math.random() * 0.15, vy: 0.1 + Math.random() * 0.15 } };
+    const d = dirs[char];
     return {
       x: Math.random() * W, y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4 - 0.12,
-      r: Math.random() * 2.2 + 0.8,
-      alpha: Math.random() * 0.4 + 0.15,
-      hue: Math.random() * hueRange * 0.7 + scheme.hue[0] + hueRange * 0.15,
+      vx: d.vx * (0.6 + Math.random() * 0.6),
+      vy: d.vy * (0.6 + Math.random() * 0.6),
+      char,
+      size: 40 + Math.random() * 80,
+      alpha: 0.02 + Math.random() * 0.05,
+      hue,
+      rotation: (Math.random() - 0.5) * 0.02,
+      rot: 0,
     };
   }
 
-  function initParticles() {
+  function initVectors() {
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
-    particles.length = 0;
-    for (let i = 0; i < PARTICLES; i++) particles.push(createParticle());
-    if (orbs.length === 0) {
-      for (let i = 0; i < ORBS; i++) {
-        const scheme = getBgColor();
-        const hueRange = scheme.hue[1] - scheme.hue[0];
-        orbs.push({
-          x: Math.random() * W, y: Math.random() * H,
-          vx: (Math.random() - 0.5) * 0.15, vy: (Math.random() - 0.5) * 0.15,
-          r: Math.random() * 200 + 150, alpha: Math.random() * 0.04 + 0.02,
-          hue: Math.random() * hueRange * 0.4 + scheme.hue[0] + hueRange * 0.3,
-        });
-      }
-    }
-    for (const o of orbs) { o.x = Math.random() * W; o.y = Math.random() * H; }
+    vectors.length = 0;
+    for (let i = 0; i < COUNT; i++) vectors.push(createVector());
   }
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    for (const o of orbs) {
-      const grad = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
-      grad.addColorStop(0, `hsla(${o.hue}, 90%, 70%, ${o.alpha})`);
-      grad.addColorStop(1, `hsla(${o.hue}, 90%, 70%, 0)`);
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
-    }
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < CONNECT_DIST) {
-          ctx.beginPath();
-          ctx.strokeStyle = `hsla(${(particles[i].hue + particles[j].hue) / 2}, 80%, 75%, ${0.07 * (1 - dist / CONNECT_DIST)})`;
-          ctx.lineWidth = 0.5;
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-    for (const p of particles) {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${p.hue}, 80%, 75%, ${p.alpha})`;
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${p.hue}, 80%, 75%, ${p.alpha * 0.06})`;
-      ctx.fill();
-    }
-    for (const p of particles) {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < -20) p.x = W + 20;
-      if (p.x > W + 20) p.x = -20;
-      if (p.y < -20) p.y = H + 20;
-      if (p.y > H + 20) p.y = -20;
-    }
-    for (const o of orbs) {
-      o.x += o.vx; o.y += o.vy;
-      if (o.x < -o.r) o.x = W + o.r;
-      if (o.x > W + o.r) o.x = -o.r;
-      if (o.y < -o.r) o.y = H + o.r;
-      if (o.y > H + o.r) o.y = -o.r;
+    for (const v of vectors) {
+      ctx.save();
+      ctx.translate(v.x, v.y);
+      ctx.rotate(v.rot);
+      ctx.font = `${v.size}px "Montserrat", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = `hsla(${v.hue}, 60%, 55%, ${v.alpha})`;
+      ctx.fillText(v.char, 0, 0);
+      ctx.restore();
+      v.x += v.vx; v.y += v.vy;
+      v.rot += v.rotation;
+      if (v.x < -120) v.x = W + 120;
+      if (v.x > W + 120) v.x = -120;
+      if (v.y < -120) v.y = H + 120;
+      if (v.y > H + 120) v.y = -120;
     }
     _bgAnimId = requestAnimationFrame(draw);
   }
 
-  initParticles();
+  initVectors();
   draw();
   if (!canvas._resizeInit) {
     canvas._resizeInit = true;
