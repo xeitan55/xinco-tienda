@@ -1,4 +1,5 @@
-import { bannerState, fbDb } from './firebase.js';
+import { bannerState } from './state.js';
+import { fbDb } from './firebase.js';
 
 export function renderAnnouncementBar() {
   const scroller = document.getElementById('announcement-scroller');
@@ -345,22 +346,23 @@ export function initBannerEditor() {
 export function renderAnnouncementEditorList() {
   const el = document.getElementById('announcement-editor-list');
   if (!el) return;
-  el.innerHTML = bannerState.announcements.map((msg, i) => `
-    <div class="flex items-center gap-3 p-3 border-[2px] border-outline-variant bg-surface" id="ann-row-${i}">
-      <div class="flex flex-col gap-1 shrink-0">
-        <button onclick="moveAnnouncement(${i},-1)" ${i===0?'disabled style="opacity:0.3"':''} class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors disabled:cursor-not-allowed">
-          <span class="material-symbols-outlined text-[14px]">keyboard_arrow_up</span>
-        </button>
-        <button onclick="moveAnnouncement(${i},1)" ${i===bannerState.announcements.length-1?'disabled style="opacity:0.3"':''} class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors">
-          <span class="material-symbols-outlined text-[14px]">keyboard_arrow_down</span>
-        </button>
-      </div>
-      <span class="w-7 h-7 bg-primary text-on-primary flex items-center justify-center font-label-caps text-[11px] shrink-0">${i+1}</span>
-      <input class="input-field flex-1 py-2 ann-input" value="${msg}" data-index="${i}" oninput="bannerState.announcements[${i}]=this.value;renderAnnouncementBar()"/>
-      <button onclick="removeAnnouncement(${i})" class="p-2 border-2 border-error text-error hover:bg-error hover:text-on-error transition-colors shrink-0">
-        <span class="material-symbols-outlined text-[18px]">delete</span>
-      </button>
-    </div>`).join('');
+  const total = bannerState.announcements.length;
+  el.innerHTML = bannerState.announcements.map((msg, i) => {
+    const upDisabled = i === 0 ? 'disabled style="opacity:0.3"' : '';
+    const dnDisabled = i === total - 1 ? 'disabled style="opacity:0.3"' : '';
+    return (
+      '<div class="flex items-center gap-3 p-3 border-[2px] border-outline-variant bg-surface" id="ann-row-' + i + '">' +
+      '<div class="flex flex-col gap-1 shrink-0">' +
+      '<button onclick="moveAnnouncement(' + i + ',-1)" ' + upDisabled + ' class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors disabled:cursor-not-allowed">' +
+      '<span class="material-symbols-outlined text-[14px]">keyboard_arrow_up</span></button>' +
+      '<button onclick="moveAnnouncement(' + i + ',1)" ' + dnDisabled + ' class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors">' +
+      '<span class="material-symbols-outlined text-[14px]">keyboard_arrow_down</span></button></div>' +
+      '<span class="w-7 h-7 bg-primary text-on-primary flex items-center justify-center font-label-caps text-[11px] shrink-0">' + (i + 1) + '</span>' +
+      '<input class="input-field flex-1 py-2 ann-input" value="' + msg + '" data-index="' + i + '" oninput="bannerState.announcements[' + i + ']=this.value;renderAnnouncementBar()"/>' +
+      '<button onclick="removeAnnouncement(' + i + ')" class="p-2 border-2 border-error text-error hover:bg-error hover:text-on-error transition-colors shrink-0">' +
+      '<span class="material-symbols-outlined text-[18px]">delete</span></button></div>'
+    );
+  }).join('');
 }
 
 export function addAnnouncementMsg() {
