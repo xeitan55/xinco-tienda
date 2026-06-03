@@ -213,8 +213,15 @@ tailwind.config = {
   .cart-drawer.open { transform: translateX(0); }
   .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 899; }
   .cart-overlay.open { display: block; }
-  .mobile-menu { display: none; position: fixed; inset: 0; background: var(--mobile-menu-bg); z-index: 950; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
-  .mobile-menu.open { display: flex; }
+  .mobile-menu { visibility: hidden; opacity: 0; transform: translateY(-24px) scale(0.96); position: fixed; inset: 0; background: var(--mobile-menu-bg); z-index: 950; flex-direction: column; align-items: center; justify-content: center; gap: 32px; transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s; }
+  .mobile-menu.open { visibility: visible; opacity: 1; transform: translateY(0) scale(1); transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0s; }
+  .mobile-menu a { opacity: 0; transform: translateY(16px); transition: opacity 0.35s ease-out, transform 0.35s ease-out; }
+  .mobile-menu.open a:nth-child(2) { transition-delay: 0.08s; opacity: 1; transform: translateY(0); }
+  .mobile-menu.open a:nth-child(3) { transition-delay: 0.14s; opacity: 1; transform: translateY(0); }
+  .mobile-menu.open a:nth-child(4) { transition-delay: 0.20s; opacity: 1; transform: translateY(0); }
+  .mobile-menu.open a:nth-child(5) { transition-delay: 0.26s; opacity: 1; transform: translateY(0); }
+  .mobile-menu .close-btn-anim { opacity: 0; transition: opacity 0.3s ease; }
+  .mobile-menu.open .close-btn-anim { opacity: 1; transition-delay: 0.3s; }
   @media (max-width: 768px) {
     .hide-mobile { display: none !important; }
     .show-mobile { display: flex !important; }
@@ -263,6 +270,8 @@ tailwind.config = {
   .admin-table tr:hover td { background: #f8f5ff; }
   .hero-media-tab { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; padding: 10px 20px; background: #fff; cursor: pointer; transition: all 0.2s; color: #888; }
   .hero-media-tab.active, .hero-media-tab:hover { background: #f0edff; color: #5d22ff; }
+  #hero-img { transition: opacity 0.4s ease; }
+  #hero-img.loading { opacity: 0; }
   .star { color: #5d22ff; font-size: 16px; }
   .star.empty { color: #e2e2e2; }
   #search-overlay {
@@ -486,6 +495,91 @@ tailwind.config = {
   /* ===== 3D TILT HERO ===== */
   .hero-tilt { transform-style: preserve-3d; perspective: 800px; }
   .hero-tilt-child { transition: transform 0.15s ease-out; will-change: transform; }
+
+  /* ===== PAGE TRANSITIONS ===== */
+  @keyframes fadeOut {
+    0%   { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-12px); }
+  }
+  @keyframes slideInRight {
+    0%   { opacity: 0; transform: translateX(40px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideOutLeft {
+    0%   { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(-40px); }
+  }
+  @keyframes scaleIn {
+    0%   { opacity: 0; transform: scale(0.92); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .page-exit { animation: fadeOut 0.25s ease-in both; }
+  .slide-in-right { animation: slideInRight 0.35s ease-out both; }
+  .scale-in { animation: scaleIn 0.3s ease-out both; }
+
+  /* ===== SCROLL REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+  .reveal-scale { opacity: 0; transform: scale(0.9); transition: opacity 0.5s ease-out, transform 0.5s ease-out; }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+  /* ===== STAGGERED CHILDREN ===== */
+  .stagger-children > * { opacity: 0; transform: translateY(20px); transition: opacity 0.4s ease-out, transform 0.4s ease-out; }
+  .stagger-children.visible > * { opacity: 1; transform: translateY(0); }
+  .stagger-children.visible > *:nth-child(1)  { transition-delay: 0.03s; }
+  .stagger-children.visible > *:nth-child(2)  { transition-delay: 0.06s; }
+  .stagger-children.visible > *:nth-child(3)  { transition-delay: 0.09s; }
+  .stagger-children.visible > *:nth-child(4)  { transition-delay: 0.12s; }
+  .stagger-children.visible > *:nth-child(5)  { transition-delay: 0.15s; }
+  .stagger-children.visible > *:nth-child(6)  { transition-delay: 0.18s; }
+  .stagger-children.visible > *:nth-child(7)  { transition-delay: 0.21s; }
+  .stagger-children.visible > *:nth-child(8)  { transition-delay: 0.24s; }
+  .stagger-children.visible > *:nth-child(9)  { transition-delay: 0.27s; }
+  .stagger-children.visible > *:nth-child(10) { transition-delay: 0.30s; }
+  .stagger-children.visible > *:nth-child(11) { transition-delay: 0.33s; }
+  .stagger-children.visible > *:nth-child(12) { transition-delay: 0.36s; }
+  .stagger-children.visible > *:nth-child(13) { transition-delay: 0.39s; }
+  .stagger-children.visible > *:nth-child(14) { transition-delay: 0.42s; }
+  .stagger-children.visible > *:nth-child(15) { transition-delay: 0.45s; }
+  .stagger-children.visible > *:nth-child(16) { transition-delay: 0.48s; }
+
+  /* ===== SKELETON LOADING ===== */
+  .skeleton { background: linear-gradient(90deg, rgba(200,200,200,0.2) 25%, rgba(200,200,200,0.5) 50%, rgba(200,200,200,0.2) 75%); background-size: 200% 100%; animation: shimmer 1.5s ease-in-out infinite; border-radius: 8px; }
+
+  /* ===== COUNTER BOUNCE ===== */
+  @keyframes counterBounce {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.35); }
+    100% { transform: scale(1); }
+  }
+  .counter-bounce { animation: counterBounce 0.3s ease-out; }
+
+  /* ===== CART ITEM SLIDE ===== */
+  @keyframes cartItemIn {
+    0%   { opacity: 0; transform: translateX(30px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  .cart-item-anim { animation: cartItemIn 0.3s ease-out both; }
+
+  /* ===== TOAST ENHANCED ===== */
+  .toast.visible { transform: translateY(0) scale(1); opacity: 1; }
+
+  /* ===== PREFERS REDUCED MOTION ===== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .hero-particle { display: none; }
+    .scrolling-text-inner { animation: none !important; }
+    .skeleton { animation: none !important; background: rgba(200,200,200,0.15); }
+    #xinco-canvas { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -527,7 +621,7 @@ tailwind.config = {
 
 <!-- ===== MOBILE MENU ===== -->
 <div id="mobile-menu" class="mobile-menu">
-  <button onclick="closeMobileMenu()" class="absolute top-6 right-6 text-white"><span class="material-symbols-outlined text-[32px]">close</span></button>
+  <button onclick="closeMobileMenu()" class="absolute top-6 right-6 text-white close-btn-anim"><span class="material-symbols-outlined text-[32px]">close</span></button>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('home');closeMobileMenu()">INICIO</a>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">CATÁLOGO</a>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">COLECCIONES</a>
@@ -662,7 +756,7 @@ tailwind.config = {
   </section>
 
   <!-- Categorías -->
-  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary">
+  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary reveal">
     <div class="flex justify-between items-end mb-8">
       <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase">Categorías</h2>
     </div>
@@ -699,7 +793,7 @@ tailwind.config = {
   </section>
 
   <!-- New Arrivals -->
-  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary">
+  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary reveal">
     <div class="flex justify-between items-end mb-8">
       <div>
         <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2">NEW ARRIVALS</span>
@@ -730,7 +824,7 @@ tailwind.config = {
   </section>
 
   <!-- Footer -->
-   <footer class="bg-primary text-on-primary px-6 md:px-12 py-16">
+   <footer class="bg-primary text-on-primary px-6 md:px-12 py-16 reveal">
     <div class="max-w-[1440px] mx-auto">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 pb-12 border-b" style="border-color:rgba(128,128,128,0.3);">
         <div>
@@ -2697,8 +2791,22 @@ let state = {
 
 // =================== NAVIGATION ===================
 async function nav(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
+  const current = document.querySelector('.page.active');
+  const target = document.getElementById('page-' + page);
+  if (!target) return;
+
+  // Exit animation on current page
+  if (current && current !== target) {
+    current.classList.remove('active');
+    current.classList.add('page-exit');
+    await new Promise(r => setTimeout(r, 220));
+    current.classList.remove('page-exit');
+    current.style.display = 'none';
+  }
+
+  // Show target page
+  target.style.display = '';
+  target.classList.add('active');
   state.currentPage = page;
   window.scrollTo(0, 0);
 
@@ -2725,6 +2833,9 @@ async function nav(page) {
   if (page === 'checkout') renderCheckoutPage();
   if (page === 'account') renderAccountPage();
   if (page === 'admin') { await checkAdminAccess(); renderAdminDashboard(); renderAdminOrders(); renderAdminProducts(); renderAdminInventory(); renderAdminCustomers(); }
+
+  // Trigger scroll reveal after render
+  setTimeout(initScrollReveal, 50);
 }
 
 async function handleAuthBtn() {
@@ -2853,7 +2964,13 @@ function updateQty(key, delta) {
 
 function updateCartCount() {
   const total = state.cart.reduce((s, i) => s + i.qty, 0);
-  document.getElementById('cart-count').textContent = total;
+  const el = document.getElementById('cart-count');
+  if (el) {
+    el.textContent = total;
+    el.classList.remove('counter-bounce');
+    void el.offsetWidth;
+    el.classList.add('counter-bounce');
+  }
 }
 
 function cartTotal() { return state.cart.reduce((s, i) => s + i.price * i.qty, 0); }
@@ -3065,6 +3182,7 @@ function renderCartDrawer() {
   const rawSub = cartSubtotal();
   document.getElementById('cart-subtotal').textContent = fmtPrice(sub);
   document.getElementById('cart-shipping').textContent = rawSub >= 95000 ? 'GRATIS' : fmtPrice(2800);
+  staggerEnter(el, 0.06);
 }
 
 function renderCartPage() {
@@ -3119,6 +3237,7 @@ function renderCartPage() {
   document.getElementById('cart-page-subtotal').textContent = fmtPrice(sub);
   document.getElementById('cart-page-shipping').textContent = rawSub >= 95000 ? 'GRATIS' : fmtPrice(2800);
   document.getElementById('cart-page-total').textContent = fmtPrice(rawSub >= 95000 ? sub : sub + 2800);
+  staggerEnter(el, 0.06);
 }
 
 // =================== SEARCH ===================
@@ -3181,6 +3300,7 @@ function handleSearch(q) {
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(0,0,0,0.35);margin-top:2px;text-transform:uppercase;">${p.cat}</div>
       </div>
     </div>`).join('');
+  staggerEnter(el, 0.05);
 }
 
 // =================== MOBILE MENU ===================
@@ -3239,8 +3359,10 @@ function renderProductCard(p, small=false) {
 
 function renderHomeProducts() {
   const el = document.getElementById('home-products');
+  if (!el) return;
   const products = state.products.filter(p => p.tags.includes('newdrops') || p.badge).slice(0,4);
   el.innerHTML = products.map(p => renderProductCard(p)).join('');
+  staggerEnter(el);
 }
 
 function renderCatalog() {
@@ -3280,6 +3402,7 @@ function renderCatalog() {
   } else {
     empty.classList.add('hidden');
     grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
+    staggerEnter(grid);
   }
 }
 
@@ -3845,9 +3968,12 @@ function checkoutStep(n) {
 }
 
 function goToStep(n) {
-  document.getElementById('checkout-step-1').style.display = n === 1 ? '' : 'none';
-  document.getElementById('checkout-step-2').style.display = n === 2 ? '' : 'none';
-  document.getElementById('checkout-step-3').style.display = n === 3 ? '' : 'none';
+  const s1 = document.getElementById('checkout-step-1');
+  const s2 = document.getElementById('checkout-step-2');
+  const s3 = document.getElementById('checkout-step-3');
+  s1.style.display = n === 1 ? '' : 'none';
+  s2.style.display = n === 2 ? '' : 'none';
+  s3.style.display = n === 3 ? '' : 'none';
   currentStep = n;
   [1,2,3].forEach(i => {
     const tab = document.getElementById(`step-${i}-tab`);
@@ -3856,6 +3982,9 @@ function goToStep(n) {
     tab.className = `flex-1 flex items-center justify-center gap-2 py-3 font-label-caps text-label-caps border-l-[3px] border-primary ${active ? 'bg-primary text-on-primary' : 'bg-surface text-on-surface'}`;
     if (i === 1) tab.style.borderLeft = 'none';
   });
+  // Animate current step
+  const currentEl = document.getElementById(`checkout-step-${n}`);
+  if (currentEl) animateCheckoutStep(currentEl);
 }
 
 
@@ -5800,7 +5929,11 @@ function previewHeroImg() {
     const prevImg = document.getElementById('hero-preview-img');
     if (prevImg) { prevImg.src = url; prevImg.style.display = ''; }
     const realImg = document.getElementById('hero-img');
-    if (realImg) realImg.src = url;
+    if (realImg) {
+      realImg.classList.add('loading');
+      realImg.onload = () => { realImg.classList.remove('loading'); };
+      realImg.src = url;
+    }
   }
 }
 
@@ -6686,6 +6819,7 @@ async function bootFromFirebase() {
 }
 
 bootFromFirebase();
+setTimeout(() => { initScrollReveal(); initTiltEffect(); }, 300);
 
 // Retorno desde Mercado Pago — espera a que bootFromFirebase termine
 let _bootResolved = false;
@@ -7069,6 +7203,81 @@ function updateStitchClip() {
     animId = requestAnimationFrame(drawLoop);
   }
 })();
+// =================== SCROLL REVEAL ===================
+function initScrollReveal() {
+  const els = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger-children');
+  if (els.length === 0) return;
+  let observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    }
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(el => observer.observe(el));
+}
+
+// =================== 3D TILT EFFECT ===================
+function initTiltEffect() {
+  const container = document.querySelector('.hero-tilt');
+  if (!container) return;
+  container.addEventListener('mousemove', (e) => {
+    const rect = container.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const rotateX = (y - 0.5) * -12;
+    const rotateY = (x - 0.5) * 12;
+    container.querySelectorAll('.hero-tilt-child').forEach(el => {
+      el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+  });
+  container.addEventListener('mouseleave', () => {
+    container.querySelectorAll('.hero-tilt-child').forEach(el => {
+      el.style.transform = 'rotateX(0) rotateY(0)';
+    });
+  });
+}
+
+// =================== CART COUNT BOUNCE ===================
+function animateCartCount() {
+  const badge = document.getElementById('cart-count');
+  if (!badge) return;
+  badge.classList.remove('counter-bounce');
+  void badge.offsetWidth;
+  badge.classList.add('counter-bounce');
+}
+
+// =================== STAGGER ENTRY HELPER ===================
+function staggerEnter(container, delay = 0.04) {
+  if (!container) return;
+  const children = container.children;
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+    child.style.opacity = '0';
+    child.style.transform = 'translateY(16px)';
+    child.style.transition = `opacity 0.4s ease-out ${i * delay}s, transform 0.4s ease-out ${i * delay}s`;
+    requestAnimationFrame(() => {
+      child.style.opacity = '1';
+      child.style.transform = 'translateY(0)';
+    });
+  }
+}
+
+// =================== CHECKOUT STEP TRANSITION ===================
+function animateCheckoutStep(stepEl) {
+  if (!stepEl) return;
+  stepEl.style.opacity = '0';
+  stepEl.style.transform = 'translateX(20px)';
+  stepEl.style.transition = 'none';
+  void stepEl.offsetWidth;
+  stepEl.style.transition = 'opacity 0.35s ease-out, transform 0.35s ease-out';
+  requestAnimationFrame(() => {
+    stepEl.style.opacity = '1';
+    stepEl.style.transform = 'translateX(0)';
+  });
+}
+
 // =================== THEME SYSTEM ===================
 function toggleTheme() {
   const html = document.documentElement;
@@ -7079,8 +7288,7 @@ function toggleTheme() {
 }
 (function initTheme() {
   const saved = localStorage.getItem('xinco-theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (saved === 'dark' || (!saved && prefersDark)) {
+  if (saved === 'dark') {
     document.documentElement.classList.add('dark');
     const icon = document.querySelector('#theme-toggle .material-symbols-outlined');
     if (icon) icon.textContent = 'light_mode';
