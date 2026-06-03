@@ -976,11 +976,15 @@ tailwind.config = {
       <span>/</span>
       <span id="product-breadcrumb" class="text-primary">PRODUCTO</span>
     </nav>
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
       <!-- Images -->
-      <div class="md:col-span-7">
-        <div class="aspect-[4/5] bg-surface-container-high overflow-hidden border-[3px] border-primary mb-3">
+      <div class="md:col-span-6">
+        <div class="aspect-[4/5] bg-surface-container-high overflow-hidden border-[3px] border-primary mb-3 relative group cursor-crosshair" id="product-img-container">
           <img id="product-main-img" src="" alt="" class="w-full h-full object-cover grayscale-hover"/>
+          <div id="zoom-lens" class="absolute pointer-events-none z-10 border-2 border-primary" style="width:140px;height:140px;border-radius:50%;display:none;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,0.3), 0 4px 20px rgba(0,0,0,0.15);"></div>
+          <div class="absolute bottom-3 right-3 bg-surface/80 backdrop-blur-sm px-2.5 py-1.5 border border-primary rounded text-[10px] font-label-caps text-on-surface opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <span class="material-symbols-outlined text-[14px] align-middle">search</span> ZOOM
+          </div>
         </div>
         <div class="grid grid-cols-3 gap-2" id="product-thumbs"></div>
       </div>
@@ -3532,6 +3536,7 @@ function openProduct(id) {
   document.getElementById('related-products').innerHTML = related.map(r => renderProductCard(r)).join('');
   document.getElementById('product-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  setTimeout(initProductZoom, 50);
 }
 
 function closeProductOverlay() {
@@ -3543,6 +3548,9 @@ function closeProductOverlay() {
 function swapProductImage(url, thumbEl) {
   const mainImg = document.getElementById('product-main-img');
   if (mainImg) mainImg.src = url;
+  // Update zoom background
+  const lens = document.getElementById('zoom-lens');
+  if (lens) lens.style.backgroundImage = `url('${url}')`;
   // Highlight active thumb
   if (thumbEl && thumbEl.parentNode) {
     thumbEl.parentNode.querySelectorAll('div').forEach(d => {
@@ -3552,6 +3560,48 @@ function swapProductImage(url, thumbEl) {
     thumbEl.classList.remove('border-primary');
     thumbEl.classList.add('border-secondary-container','ring-2','ring-secondary-container');
   }
+}
+
+// =================== PRODUCT ZOOM MAGNIFIER ===================
+function initProductZoom() {
+  const container = document.getElementById('product-img-container');
+  const lens = document.getElementById('zoom-lens');
+  const img = document.getElementById('product-main-img');
+  if (!container || !lens || !img) return;
+
+  const zoom = 2.5;
+  const lensSize = 140;
+  lens.style.width = lensSize + 'px';
+  lens.style.height = lensSize + 'px';
+  lens.style.backgroundRepeat = 'no-repeat';
+  lens.style.transition = 'opacity 0.15s ease';
+  lens.style.opacity = '0';
+
+  container.onmouseenter = function() {
+    lens.style.display = 'block';
+    lens.style.backgroundImage = `url('${img.src}')`;
+    const rect = container.getBoundingClientRect();
+    lens.style.backgroundSize = (rect.width * zoom) + 'px ' + (rect.height * zoom) + 'px';
+    requestAnimationFrame(() => { lens.style.opacity = '1'; });
+  };
+  container.onmousemove = function(e) {
+    if (lens.style.display !== 'block') return;
+    const rect = container.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    if (mx < 0 || my < 0 || mx > rect.width || my > rect.height) return;
+    const xPct = (mx / rect.width) * 100;
+    const yPct = (my / rect.height) * 100;
+    const lx = Math.max(0, Math.min(rect.width - lensSize, mx - lensSize / 2));
+    const ly = Math.max(0, Math.min(rect.height - lensSize, my - lensSize / 2));
+    lens.style.left = lx + 'px';
+    lens.style.top = ly + 'px';
+    lens.style.backgroundPosition = `${xPct.toFixed(1)}% ${yPct.toFixed(1)}%`;
+  };
+  container.onmouseleave = function() {
+    lens.style.opacity = '0';
+    setTimeout(() => { lens.style.display = 'none'; }, 150);
+  };
 }
 
 function selectSize(s) {
@@ -7170,7 +7220,7 @@ function updateStitchClip() {
   const obs = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       heroVisible = entry.isIntersecting;
-      if (heroVisible) { computeContour(); if (!animId) drawLoop(); }
+      if (heroVisible) { resize(); if (!animId) drawLoop(); }
       else { if (animId) { cancelAnimationFrame(animId); animId = null; } }
     }
   }, { threshold: 0.1 });
