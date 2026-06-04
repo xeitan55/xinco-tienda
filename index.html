@@ -811,11 +811,19 @@ tailwind.config = {
         <div class="text-center">
           <span class="font-body-md text-on-surface-variant text-sm">¿No tenés cuenta? </span>
           <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('register')">REGISTRATE</a>
+                </div>
+              </div>
+              <!-- Save button -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <button onclick="saveAppearanceToFirebase()" class="btn-violet w-full py-3 text-[11px] font-label-caps tracking-wider flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-[18px]">cloud_upload</span>
+                  GUARDAR CAMBIOS EN LA NUBE
+                </button>
+                <p class="font-label-caps text-[9px] text-on-surface-variant/50 text-center mt-2">Los cambios se guardan localmente al instante. Usá este botón para sincronizar con Firebase.</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- ===================================== -->
 <!-- PAGE: REGISTER                        -->
