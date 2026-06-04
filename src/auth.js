@@ -34,7 +34,6 @@ export async function doLogin() {
     if (!user.emailVerified && !isAdminUser) {
       if (verWarn) verWarn.classList.remove('hidden');
       if (err) { err.textContent = 'DEBÉS VERIFICAR TU EMAIL ANTES DE INICIAR SESIÓN'; err.classList.remove('hidden'); }
-      await fbLogoutUser();
       if (btn) { btn.textContent = 'INICIAR SESIÓN'; btn.disabled = false; }
       return;
     }
@@ -119,9 +118,12 @@ export async function doRegister() {
     }
     const fullName = nombre + ' ' + apellido;
     _lastRegisteredUser = { email, name: fullName };
-    await fbLogoutUser();
+    localStorage.setItem('xinco_last_reg_email', email);
+    state.user = user;
+    await updateAuthUI();
     document.getElementById('register-form-panel').classList.add('hidden');
     document.getElementById('register-success-panel').classList.remove('hidden');
+    document.getElementById('reg-resend-btn')?.classList.remove('hidden');
     const sentEl = document.getElementById('reg-sent-email');
     if (sentEl) sentEl.textContent = email;
   } catch(e) {
@@ -136,14 +138,28 @@ export async function doRegister() {
 }
 
 export async function resendVerificationEmail() {
-  if (_lastRegisteredUser) {
-    const sent = await sendVerificationEmail(
-      _lastRegisteredUser.email, _lastRegisteredUser.name,
-      `${window.location.origin}/verificar-email`
-    );
-    if (sent) window.showToast?.('Email de verificación reenviado ✅ — revisá tu bandeja');
-    else window.showToast?.('Error al reenviar. Revisá spam o intentá más tarde');
+  if (fbAuth?.currentUser && !fbAuth.currentUser.emailVerified) {
+    try {
+      const { sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+      await sendEmailVerification(fbAuth.currentUser);
+      window.showToast?.('✅ Email de verificación reenviado — revisá tu bandeja');
+    } catch(e) {
+      console.error('resendVerificationEmail:', e);
+      window.showToast?.('❌ Error al reenviar: ' + (e.message || e.code));
+    }
     return;
+  }
+  // Fallback: try with stored email from registration
+  if (_lastRegisteredUser?.email) {
+    try {
+      const { sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+      const user = fbAuth?.currentUser;
+      if (user) {
+        await sendEmailVerification(user);
+        window.showToast?.('✅ Email de verificación reenviado');
+        return;
+      }
+    } catch(e) {}
   }
   window.showToast?.('Revisá tu bandeja o registrate nuevamente');
 }
