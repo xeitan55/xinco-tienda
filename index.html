@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>XINCO</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='85' font-size='90' font-weight='900' font-family='Montserrat,sans-serif' fill='%23000'%3EX%3C/text%3E%3C/svg%3E">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        surface: "var(--surface)", "surface-dim": "var(--surface-dim)", "surface-bright": "var(--surface-bright)",
+        "surface-container-lowest": "var(--surface-container-lowest)", "surface-container-low": "var(--surface-container-low)",
+        "surface-container": "var(--surface-container)", "surface-container-high": "var(--surface-container-high)",
+        "surface-container-highest": "var(--surface-container-highest)", "on-surface": "var(--on-surface)",
+        "on-surface-variant": "var(--on-surface-variant)", "inverse-surface": "var(--inverse-surface)",
+        "inverse-on-surface": "var(--inverse-on-surface)", outline: "var(--outline)", "outline-variant": "var(--outline-variant)",
+        "surface-tint": "var(--surface-tint)", primary: "var(--primary)", "on-primary": "var(--on-primary)",
+        "primary-container": "var(--primary-container)", "on-primary-container": "var(--on-primary-container)",
+        "inverse-primary": "var(--inverse-primary)", secondary: "#4500d1", "on-secondary": "#ffffff",
+        "secondary-container": "#5d22ff", "on-secondary-container": "#d8cfff",
+        tertiary: "var(--tertiary)", "on-tertiary": "var(--on-tertiary)", "tertiary-container": "var(--tertiary-container)",
+        "on-tertiary-container": "var(--on-tertiary-container)", error: "var(--error)", "on-error": "var(--on-error)",
+        "error-container": "var(--error-container)", "on-error-container": "var(--on-error-container)",
+        "primary-fixed": "var(--surface-container-highest)", "primary-fixed-dim": "var(--surface-dim)",
+        "on-primary-fixed": "var(--on-surface)", "on-primary-fixed-variant": "var(--on-surface-variant)",
+        "secondary-fixed": "#e6deff", "secondary-fixed-dim": "#cabeff",
+        "on-secondary-fixed": "#1c0062", "on-secondary-fixed-variant": "#4700d7",
+        "tertiary-fixed": "var(--surface-container-highest)", "tertiary-fixed-dim": "var(--surface-dim)",
+        "on-tertiary-fixed": "var(--on-surface)", "on-tertiary-fixed-variant": "var(--on-surface-variant)",
+        background: "var(--background)", "on-background": "var(--on-background)", "surface-variant": "var(--surface-variant)"
+      },
+      borderRadius: { DEFAULT: "12px", lg: "16px", xl: "24px", full: "9999px" },
+      spacing: {
+        unit: "4px", gutter: "24px", margin: "48px", "container-max": "1440px",
+        "stack-lg": "64px", "stack-md": "32px", "stack-sm": "16px"
+      },
+      fontFamily: {
+        "headline-md": ["Montserrat"], "headline-lg": ["Montserrat"],
+        "label-caps": ["JetBrains Mono"], "display-xl": ["Montserrat"],
+        "body-md": ["Inter"], "body-lg": ["Inter"]
+      },
+      fontSize: {
+        "headline-md": ["32px", {lineHeight:"1.2", letterSpacing:"-0.01em", fontWeight:"800"}],
+        "headline-lg": ["48px", {lineHeight:"1.1", letterSpacing:"-0.02em", fontWeight:"800"}],
+        "label-caps": ["12px", {lineHeight:"1.0", letterSpacing:"0.1em", fontWeight:"700"}],
+        "display-xl": ["80px", {lineHeight:"1.0", letterSpacing:"-0.04em", fontWeight:"900"}],
+        "body-md": ["16px", {lineHeight:"1.6", letterSpacing:"0", fontWeight:"400"}],
+        "body-lg": ["18px", {lineHeight:"1.6", letterSpacing:"0", fontWeight:"400"}]
+      }
+    }
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  (function(){ emailjs.init({ publicKey: 'oMkYlKHW6eJXZrEkY' }); })();
+</script>
+</head>
+<body>
+
+<!-- ===== MOUSE STITCH CANVAS ===== -->
+<canvas id="mouse-stitch"></canvas>
+
+<!-- ===== SPLASH SCREEN ===== -->
+<div id="splash" class="splash fixed inset-0 z-[9999] bg-black flex items-center justify-center pointer-events-none overflow-hidden">
+  <div class="splash-glow"></div>
+  <div class="text-center relative z-10">
+    <h1 class="splash-heading">
+      <span class="splash-letter">X</span><span class="splash-letter">I</span><span class="splash-letter">N</span><span class="splash-letter">C</span><span class="splash-letter">O</span>
+    </h1>
+    <div class="splash-rule"></div>
+  </div>
+  <div class="splash-bar-track">
+    <div class="splash-bar-fill"></div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast" class="toast"></div>
+
+<!-- ===== CART OVERLAY ===== -->
+<div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
+
+<!-- ===== CART DRAWER ===== -->
+<div id="cart-drawer" class="cart-drawer">
+  <div class="p-stack-sm border-b-[3px] border-primary flex justify-between items-center sticky top-0 bg-surface z-10">
+    <h2 class="font-headline-md text-primary uppercase" style="font-family:Montserrat;font-size:24px;font-weight:900;">TU CARRITO</h2>
+    <button onclick="closeCart()" class="p-2 hover:bg-surface-container"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div id="cart-items" class="p-stack-sm flex flex-col gap-gutter"></div>
+  <div id="cart-footer" class="p-stack-sm border-t-[3px] border-primary sticky bottom-0 bg-surface">
+    <div class="flex justify-between mb-4">
+      <span class="font-label-caps text-label-caps text-on-surface-variant">SUBTOTAL</span>
+      <span id="cart-subtotal" class="font-label-caps text-label-caps text-primary">$0</span>
+    </div>
+    <div class="flex justify-between mb-stack-sm">
+      <span class="font-label-caps text-label-caps text-on-surface-variant">ENVÍO</span>
+      <span id="cart-shipping" class="font-label-caps text-label-caps text-primary">GRATIS</span>
+    </div>
+    <button class="btn-violet w-full justify-center" onclick="goToCheckout()">FINALIZAR COMPRA <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+    <button class="btn-outline w-full justify-center mt-2" onclick="closeCart()">SEGUIR COMPRANDO</button>
+  </div>
+</div>
+
+<!-- ===== MOBILE MENU ===== -->
+<div id="mobile-menu" class="mobile-menu">
+  <button onclick="closeMobileMenu()" class="absolute top-6 right-6 text-white close-btn-anim"><span class="material-symbols-outlined text-[32px]">close</span></button>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('home');closeMobileMenu()">INICIO</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">CATÁLOGO</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">COLECCIONES</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">NEW DROPS</a>
+</div>
+
+<!-- ===== SEARCH OVERLAY ===== -->
+<div id="search-overlay">
+  <div class="max-w-3xl mx-auto w-full relative">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h2 class="search-title" style="font-family:Montserrat;font-size:clamp(36px,6vw,56px);font-weight:900;letter-spacing:-0.03em;">BUSCAR</h2>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(0,0,0,0.4);margin-top:4px;">CTRL+K PARA ABRIR / ESC PARA CERRAR</p>
+      </div>
+      <button onclick="closeSearch()" class="close-btn p-3">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <!-- Search box acrílico -->
+    <div class="search-box relative flex items-center mb-2 rounded-full border-2 border-black/10">
+      <span class="material-symbols-outlined absolute left-4 text-black" style="font-size:22px;">search</span>
+      <input
+        id="search-input"
+        class="w-full bg-transparent border-none pl-14 pr-5 py-4 outline-none placeholder:text-black/30"
+        style="font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:0.05em;color:#000;"
+        placeholder="NOMBRE, CATEGORÍA, SKU..."
+        oninput="handleSearch(this.value)"
+      />
+      <div id="search-clear" class="hidden absolute right-4 cursor-pointer text-black/40 hover:text-black" onclick="clearSearch()">
+        <span class="material-symbols-outlined text-[20px]">backspace</span>
+      </div>
+    </div>
+    <!-- Sugerencias rápidas -->
+    <div id="search-suggestions" class="flex flex-wrap gap-2 mb-8">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(0,0,0,0.4);">SUGERENCIAS:</span>
+      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Remeras';handleSearch('Remeras')">REMERAS</button>
+      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Buzos';handleSearch('Buzos')">BUZOS</button>
+      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Pantalones';handleSearch('Pantalones')">PANTALONES</button>
+      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='NUEVO';handleSearch('NUEVO')">NEW DROPS</button>
+      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='SALE';handleSearch('SALE')">SALE</button>
+    </div>
+    <!-- Results grid -->
+    <div id="search-results" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+    <!-- Empty state -->
+    <div id="search-empty" class="hidden text-center py-12">
+      <span class="material-symbols-outlined text-[56px]" style="color:rgba(0,0,0,0.15);">search_off</span>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(0,0,0,0.35);margin-top:12px;">SIN RESULTADOS — INTENTÁ CON OTRO TÉRMINO</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<div id="announcement-bar" class="bg-primary text-on-primary py-2 overflow-hidden border-b-[3px] border-primary relative">
+  <div id="announcement-scroller" class="scrolling-text-inner"></div>
+</div>
+
+<header id="main-header" class="bg-background top-0 sticky border-b-[3px] border-primary z-50">
+  <div class="flex justify-between items-center w-full px-4 md:px-8 py-3 max-w-[1440px] mx-auto">
+    <!-- Left: Search + Mobile menu -->
+    <div class="flex items-center gap-4 w-1/3">
+      <button class="md:hidden p-1" onclick="openMobileMenu()"><span class="material-symbols-outlined">menu</span></button>
+      <div class="hidden md:flex relative w-full max-w-xs border-2 border-primary group focus-within:border-secondary rounded-full">
+        <span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-primary group-focus-within:text-secondary text-[20px]">search</span>
+        <input class="w-full bg-transparent border-none pl-9 pr-3 py-2 font-label-caps text-label-caps focus:ring-0 placeholder:text-on-surface-variant outline-none" placeholder="BUSCAR..." type="text" onfocus="openSearch()" id="header-search"/>
+      </div>
+    </div>
+    <!-- Center: Logo -->
+    <div class="flex-1 flex justify-center">
+      <a class="font-headline-lg text-primary tracking-tighter cursor-pointer" style="font-family:Montserrat;font-size:clamp(24px,4vw,40px);font-weight:900;letter-spacing:-0.04em;" onclick="nav('home')">XINCO</a>
+    </div>
+    <!-- Right: Auth + Cart -->
+    <div class="flex items-center gap-3 w-1/3 justify-end">
+      <button class="md:hidden p-1" onclick="openSearch()"><span class="material-symbols-outlined">search</span></button>
+      <button id="auth-btn" class="hidden md:flex items-center gap-1 font-label-caps text-label-caps hover:text-secondary-container transition-colors" onclick="handleAuthBtn()">
+        <span id="auth-label">ACCEDER</span>
+        <span class="material-symbols-outlined text-[20px]">account_circle</span>
+      </button>
+      <button class="relative p-1" id="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
+        <span class="material-symbols-outlined text-primary">dark_mode</span>
+      </button>
+      <button class="relative p-1" onclick="openCart()">
+        <span class="material-symbols-outlined text-primary">shopping_bag</span>
+        <span id="cart-count" class="absolute -top-1 -right-1 bg-secondary-container text-primary font-label-caps text-[10px] w-5 h-5 flex items-center justify-center border-2 border-primary rounded-full">0</span>
+      </button>
+    </div>
+  </div>
+  <!-- Nav Links Desktop -->
+  <nav class="hidden md:flex border-t border-outline-variant/30 justify-center gap-8 py-2">
+    <a class="nav-link" id="nav-home" onclick="nav('home')">INICIO</a>
+    <a class="nav-link" id="nav-catalog" onclick="nav('catalog')">CATÁLOGO</a>
+    <a class="nav-link" id="nav-accesorios" onclick="filterCatalog('accesorios')">ACCESORIOS</a>
+    <a class="nav-link" style="color:#5d22ff;" id="nav-newdrops" onclick="filterCatalog('newdrops')">NEW DROPS</a>
+  </nav>
+</header>
+
+<!-- ===================================== -->
+<!-- PAGE: HOME                            -->
+<!-- ===================================== -->
+<div id="page-home" class="page active">
+  <!-- Hero -->
+  <section id="hero-section" class="border-b-[3px] border-primary relative overflow-hidden" style="min-height:90vh;background:#000;display:flex;align-items:flex-end;">
+    <!-- Video background (hidden when no video) -->
+    <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
+    <!-- Image background (fallback / default) -->
+    <img id="hero-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-60"/>
+    <!-- Animated overlay particles -->
+    <div id="hero-particles" class="absolute inset-0 z-[1] pointer-events-none overflow-hidden"></div>
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 z-[2]" style="background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.1) 100%);"></div>
+    <!-- Animated scanline effect -->
+    <div id="hero-scanlines" class="absolute inset-0 z-[3] pointer-events-none" style="display:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);"></div>
+    <!-- XINCO Premium Canvas -->
+    <canvas id="xinco-canvas" class="absolute inset-0 z-[11] pointer-events-none" style="width:100%;height:100%;"></canvas>
+    <!-- Content -->
+    <div class="relative z-10 px-6 md:px-12 pb-12 md:pb-20 max-w-[1440px] w-full mx-auto hero-tilt" style="z-index:10;">
+      <span id="hero-badge" class="badge badge-violet mb-4 hero-anim-badge hero-tilt-child"></span>
+      <h1 id="hero-title" class="text-white uppercase mb-6 hero-anim-title hero-tilt-child" style="font-family:Montserrat;font-size:clamp(48px,10vw,120px);font-weight:900;line-height:1;letter-spacing:-0.04em;"></h1>
+      <p id="hero-subtitle" class="text-white/70 mb-8 max-w-md hero-anim-subtitle hero-tilt-child" style="font-family:Inter;font-size:18px;"></p>
+      <div class="flex gap-4 flex-wrap hero-anim-btns hero-tilt-child">
+        <button class="btn-violet" onclick="nav('catalog')">EXPLORAR COLECCIÓN <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+        <button class="btn-outline" style="color:#fff;border-color:#fff;background:transparent;" onclick="filterCatalog('newdrops')">NEW DROPS</button>
+      </div>
+    </div>
+
+    <div class="absolute bottom-0 left-0 z-[5] pointer-events-none hero-corner-accent-bl" style="width:200px;height:200px;opacity:0.1;">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="197" width="160" height="3" fill="#ffffff"/>
+        <rect x="0" y="100" width="3" height="100" fill="#ffffff"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Categorías -->
+  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary reveal">
+    <div class="flex justify-between items-end mb-8">
+      <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase">Categorías</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
+      <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('remeras')">
+        <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
+        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Remeras</h3>
+        </div>
+      </div>
+      <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('pantalones')">
+        <img id="cat-img-pantalones-display" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80" alt="Pantalones" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
+        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Pantalones</h3>
+        </div>
+      </div>
+      <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('buzos')">
+        <img id="cat-img-buzos-display" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80" alt="Buzos" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
+        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Buzos</h3>
+        </div>
+      </div>
+      <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('accesorios')">
+        <img id="cat-img-accesorios-display" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80" alt="Accesorios" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
+        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Accesorios</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- New Arrivals -->
+  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary reveal">
+    <div class="flex justify-between items-end mb-8">
+      <div>
+        <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2">NEW ARRIVALS</span>
+        <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase">Acaban de caer</h2>
+      </div>
+      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 hover:text-secondary-container hover:border-secondary-container transition-colors cursor-pointer" onclick="nav('catalog')">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
+    </div>
+    <div id="home-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+  </section>
+
+
+
+  <!-- Banner Promo (oculto por defecto, se muestra desde admin) -->
+  <section id="promo-banner-section" class="border-b-[3px] border-primary bg-primary text-on-primary px-6 md:px-12 py-16" style="display:none;">
+    <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+      <div>
+        <span class="promo-label font-label-caps text-label-caps text-secondary-container mb-3 block"></span>
+        <h2 class="promo-title uppercase" style="font-family:Montserrat;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;"></h2>
+      </div>
+      <div class="flex flex-col gap-3 text-center">
+        <p class="font-body-md text-on-primary/70">Aplicar código al pagar.</p>
+        <div class="border-[3px] border-secondary-container px-8 py-4">
+          <span class="promo-code font-label-caps text-label-caps text-secondary-container tracking-widest text-lg"></span>
+        </div>
+        <button class="btn-violet" onclick="filterCatalog('buzos')">CANJEAR AHORA</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+   <footer class="bg-primary text-on-primary px-6 md:px-12 py-16 reveal">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 pb-12 border-b" style="border-color:rgba(128,128,128,0.3);">
+        <div>
+          <h3 style="font-family:Montserrat;font-size:32px;font-weight:900;" class="mb-4">XINCO</h3>
+          <p class="text-on-primary/60 text-sm" style="font-family:Inter;">XINCO All Rights Reserved.<br>Mar del Plata, Buenos Aires,<br>Argentina.</p>
+        </div>
+        <div>
+          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4">TIENDA</h4>
+          <ul class="space-y-2">
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="nav('catalog')">Catálogo</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('newdrops')">New Drops</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('buzos')">Buzos</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('remeras')">Remeras</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4">AYUDA</h4>
+          <ul class="space-y-2">
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer">Guía de Talles</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer">Envíos</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer">Devoluciones</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer">Contacto</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4">NEWSLETTER</h4>
+          <p class="text-on-primary/60 text-sm mb-3" style="font-family:Inter;">Enterate primero de los drops.</p>
+          <div class="flex border-2" style="border-color:var(--on-primary);">
+            <input class="bg-transparent flex-1 px-3 py-2 text-on-primary text-sm outline-none placeholder:text-on-primary/40" style="font-family:Inter;" placeholder="tu@email.com"/>
+            <button class="bg-on-primary text-primary px-4 font-label-caps text-[11px]" onclick="showToast('¡Suscripto! 🔥')">OK</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <span class="font-label-caps text-label-caps text-on-primary/40">© 2025 XINCO — MAR DEL PLATA, BUENOS AIRES, ARGENTINA</span>
+        <div class="flex gap-4">
+          <span class="badge badge-outline" style="background:transparent;border-color:var(--on-primary);color:var(--on-primary);opacity:0.5;">INSTAGRAM</span>
+          <span class="badge badge-outline" style="background:transparent;border-color:var(--on-primary);color:var(--on-primary);opacity:0.5;">TIKTOK</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: CATALOG                         -->
+<!-- ===================================== -->
+<div id="page-catalog" class="page">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
+    <header class="mb-12 border-b-[3px] border-primary pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+      <div>
+        <h1 id="catalog-title" style="font-family:Montserrat;font-size:clamp(36px,7vw,80px);font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">TODOS LOS ITEMS</h1>
+        <p class="font-body-lg text-on-surface-variant mt-2">Explorá nuestra colección de urban streetwear.</p>
+      </div>
+      <span id="catalog-count" class="font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap"></span>
+    </header>
+    <div class="flex flex-col md:flex-row gap-10">
+      <!-- Sidebar Filters -->
+      <aside class="w-full md:w-64 shrink-0">
+        <div class="md:sticky md:top-24 space-y-8">
+          <div class="border-b-2 border-primary pb-6">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4">CATEGORÍA</h3>
+            <ul class="space-y-2" id="filter-categories">
+              <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
+                <input type="checkbox" value="all" checked class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
+                <span>Todos</span></label></li>
+              <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
+                <input type="checkbox" value="remeras" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
+                <span class="text-on-surface-variant group-hover:text-primary">Remeras</span></label></li>
+              <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
+                <input type="checkbox" value="pantalones" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
+                <span class="text-on-surface-variant group-hover:text-primary">Pantalones</span></label></li>
+              <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
+                <input type="checkbox" value="buzos" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
+                <span class="text-on-surface-variant group-hover:text-primary">Buzos</span></label></li>
+              <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
+                <input type="checkbox" value="accesorios" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
+                <span class="text-on-surface-variant group-hover:text-primary">Accesorios</span></label></li>
+            </ul>
+          </div>
+          <div class="border-b-2 border-primary pb-6">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4">TALLE</h3>
+            <div class="flex flex-wrap gap-2" id="filter-sizes">
+              <button class="size-btn filter-size" data-size="XS">XS</button>
+              <button class="size-btn filter-size" data-size="S">S</button>
+              <button class="size-btn filter-size" data-size="M">M</button>
+              <button class="size-btn filter-size" data-size="L">L</button>
+              <button class="size-btn filter-size" data-size="XL">XL</button>
+              <button class="size-btn filter-size" data-size="XXL">XXL</button>
+            </div>
+          </div>
+          <div class="border-b-2 border-primary pb-6">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4">COLOR</h3>
+            <div class="flex flex-wrap gap-2" id="filter-colors">
+              <button class="w-8 h-8 border-2 border-primary bg-black filter-color" data-color="negro" title="Negro"></button>
+              <button class="w-8 h-8 border-2 border-primary bg-white filter-color" data-color="blanco" title="Blanco"></button>
+              <button class="w-8 h-8 border-2 border-primary bg-gray-400 filter-color" data-color="gris" title="Gris"></button>
+              <button class="w-8 h-8 border-2 border-primary filter-color" data-color="violeta" title="Violeta" style="background:#5d22ff;"></button>
+            </div>
+          </div>
+          <div class="border-b-2 border-primary pb-6">
+            <h3 class="font-label-caps text-label-caps text-primary mb-2">PRECIO</h3>
+            <div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant mb-3">
+              <span>$0</span><span id="price-label">$200.000</span>
+            </div>
+            <input type="range" min="0" max="200000" value="200000" step="5000" id="price-range" class="w-full" oninput="document.getElementById('price-label').textContent='$'+Number(this.value).toLocaleString('es-AR');renderCatalog()"/>
+          </div>
+          <button class="btn-outline w-full justify-center" onclick="resetFilters()">LIMPIAR FILTROS</button>
+        </div>
+      </aside>
+      <!-- Products Grid -->
+      <main class="flex-1">
+        <div class="flex justify-between items-center mb-6">
+          <span id="catalog-count-2" class="font-label-caps text-label-caps text-on-surface-variant"></span>
+          <div class="flex items-center gap-2">
+            <span class="font-label-caps text-label-caps text-on-surface-variant">ORDENAR:</span>
+            <select id="sort-select" class="input-field py-2" style="width:auto;font-size:11px;" onchange="renderCatalog()">
+              <option value="default">RELEVANCIA</option>
+              <option value="price-asc">PRECIO: MENOR A MAYOR</option>
+              <option value="price-desc">PRECIO: MAYOR A MENOR</option>
+              <option value="newest">MÁS NUEVOS</option>
+            </select>
+          </div>
+        </div>
+        <div id="catalog-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        <div id="catalog-empty" class="hidden py-16 text-center">
+          <span class="material-symbols-outlined text-[64px] text-outline-variant">search_off</span>
+          <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">NO SE ENCONTRARON PRODUCTOS</p>
+          <button class="btn-outline mt-6" onclick="resetFilters()">VER TODOS</button>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- OVERLAY: PRODUCT DETAIL (cristal)     -->
+<!-- ===================================== -->
+<div id="product-overlay">
+  <button class="product-close-btn" onclick="closeProductOverlay()">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+  <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12 w-full">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface-variant mb-8">
+      <a class="hover:text-primary cursor-pointer" onclick="closeProductOverlay(); nav('home')">INICIO</a>
+      <span>/</span>
+      <a class="hover:text-primary cursor-pointer" onclick="closeProductOverlay(); nav('catalog')">CATÁLOGO</a>
+      <span>/</span>
+      <span id="product-breadcrumb" class="text-primary">PRODUCTO</span>
+    </nav>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+      <!-- Images -->
+      <div class="md:col-span-6">
+        <div class="aspect-[4/5] bg-surface-container-high overflow-hidden border-[3px] border-primary mb-3 relative group cursor-crosshair" id="product-img-container">
+          <img id="product-main-img" src="" alt="" class="w-full h-full object-cover grayscale-hover"/>
+          <div id="zoom-lens" class="absolute pointer-events-none z-10 border-2 border-primary" style="width:200px;height:200px;border-radius:50%;display:none;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,0.3), 0 4px 20px rgba(0,0,0,0.15);"></div>
+          <div class="absolute bottom-3 right-3 bg-surface/80 backdrop-blur-sm px-2.5 py-1.5 border border-primary rounded text-[10px] font-label-caps text-on-surface opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <span class="material-symbols-outlined text-[14px] align-middle">search</span> ZOOM
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2" id="product-thumbs"></div>
+      </div>
+      <!-- Details -->
+      <div class="md:col-span-5 md:sticky md:top-24">
+        <span id="product-badge" class="badge badge-violet mb-4 inline-block"></span>
+        <h1 id="product-name" style="font-family:Montserrat;font-size:clamp(24px,4vw,40px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase mb-2"></h1>
+        <div class="flex items-center gap-3 mb-4">
+          <span id="product-price" class="font-label-caps text-[20px] text-primary"></span>
+          <span id="product-old-price" class="font-label-caps text-label-caps text-outline line-through"></span>
+        </div>
+        <!-- Stars -->
+        <div class="flex items-center gap-2 mb-6">
+          <div id="product-stars" class="flex gap-1"></div>
+          <span id="product-reviews" class="font-label-caps text-label-caps text-on-surface-variant"></span>
+        </div>
+        <!-- Color Selector -->
+        <div class="mb-6">
+          <p class="font-label-caps text-label-caps mb-3 uppercase">COLOR: <span id="selected-color-label">NEGRO FANTASMA</span></p>
+          <div class="flex gap-2" id="color-selector"></div>
+        </div>
+        <!-- Size Selector -->
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-3">
+            <p class="font-label-caps text-label-caps uppercase">TALLE: <span id="selected-size-label">—</span></p>
+            <button class="font-label-caps text-[10px] underline cursor-pointer" onclick="showSizeGuide()">GUÍA DE TALLES</button>
+          </div>
+          <div id="size-selector" class="grid grid-cols-5 gap-2"></div>
+        </div>
+        <!-- Description -->
+        <p id="product-desc" class="font-body-md text-on-surface-variant mb-6"></p>
+        <!-- Actions -->
+        <button id="add-to-cart-btn" class="btn-violet w-full justify-center mb-3 text-base py-4" onclick="addSelectedToCart()">AGREGAR AL CARRITO <span class="material-symbols-outlined">shopping_bag</span></button>
+        <button class="btn-outline w-full justify-center mb-6" onclick="showToast('¡Guardado en favoritos! ❤️')">GUARDAR EN FAVORITOS <span class="material-symbols-outlined text-[16px]">favorite_border</span></button>
+        <!-- Product Details -->
+        <div class="border-t-[3px] border-primary pt-6 space-y-3">
+          <div class="flex justify-between font-label-caps text-label-caps">
+            <span class="text-on-surface-variant">SKU</span><span id="product-sku" class="text-primary"></span>
+          </div>
+          <div class="flex justify-between font-label-caps text-label-caps">
+            <span class="text-on-surface-variant">CATEGORÍA</span><span id="product-cat" class="text-primary uppercase"></span>
+          </div>
+          <div class="flex justify-between font-label-caps text-label-caps">
+            <span class="text-on-surface-variant">STOCK</span><span id="product-stock" class="text-primary"></span>
+          </div>
+          <div class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface-variant mt-4">
+            <span class="material-symbols-outlined text-[18px]">local_shipping</span>
+            <span>ENVÍO GRATIS A PARTIR DE $95.000</span>
+          </div>
+          <div class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface-variant">
+            <span class="material-symbols-outlined text-[18px]">replay</span>
+            <span>30 DÍAS DE GARANTÍA DE DEVOLUCIÓN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Related Products -->
+    <div class="mt-16 pt-12 border-t-[3px] border-primary">
+      <h2 style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary uppercase mb-8">TAMBIÉN TE PUEDE GUSTAR</h2>
+      <div id="related-products" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+    </div>
+    <!-- Reviews -->
+    <div class="mt-16 pt-12 border-t-[3px] border-primary" id="reviews-section">
+      <div class="flex justify-between items-start mb-8">
+        <div>
+          <h2 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase mb-1">RESEÑAS</h2>
+          <p class="font-label-caps text-label-caps text-on-surface-variant" id="reviews-count">0 OPINIONES</p>
+        </div>
+        <button class="btn-primary text-sm py-2 px-4" id="review-btn" onclick="openReviewForm()">ESCRIBIR UNA RESEÑA</button>
+      </div>
+      <div id="reviews-list" class="space-y-4">
+        <div class="text-center py-12 text-on-surface-variant font-label-caps text-label-caps" id="reviews-empty">Sin reseñas aún. ¡Sé el primero en opinar!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REVIEW FORM MODAL ===== -->
+<div id="review-modal" class="fixed inset-0 z-[600] flex items-center justify-center" style="display:none;">
+  <div class="absolute inset-0 bg-black/50" onclick="closeReviewForm()"></div>
+  <div class="relative bg-surface border-[3px] border-primary w-full max-w-lg mx-4 p-8 max-h-[90vh] overflow-y-auto">
+    <button class="absolute top-4 right-4" onclick="closeReviewForm()"><span class="material-symbols-outlined text-primary">close</span></button>
+    <h3 class="font-headline-md text-primary uppercase mb-6" style="font-family:Montserrat;font-size:22px;font-weight:800;">RESEÑA</h3>
+    <form onsubmit="submitReview();return false" class="space-y-5">
+      <div>
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-2">PUNTUACIÓN</p>
+        <div class="flex gap-2" id="review-stars">
+          <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="1">★</span>
+          <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="2">★</span>
+          <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="3">★</span>
+          <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="4">★</span>
+          <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="5">★</span>
+        </div>
+      </div>
+      <div>
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TÍTULO</label>
+        <input id="review-title" class="input-field w-full" placeholder="Ej: Excelente calidad" maxlength="60"/>
+      </div>
+      <div>
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">OPINIÓN</label>
+        <textarea id="review-text" class="input-field w-full min-h-[100px]" placeholder="Contá tu experiencia con el producto..." maxlength="500"></textarea>
+      </div>
+      <div class="flex items-center gap-3">
+        <input type="checkbox" id="review-delivery" class="form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5"/>
+        <label for="review-delivery" class="font-label-caps text-label-caps text-on-surface-variant text-sm cursor-pointer">El producto llegó en buen estado y a tiempo</label>
+      </div>
+      <button type="submit" class="btn-violet w-full justify-center py-3" id="review-submit-btn">PUBLICAR RESEÑA</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: CART                            -->
+<!-- ===================================== -->
+<div id="page-cart" class="page">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
+    <h1 style="font-family:Montserrat;font-size:clamp(32px,6vw,64px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-[3px] border-primary pb-6">TU CARRITO</h1>
+    <div class="flex flex-col lg:flex-row gap-12">
+      <div class="flex-1" id="cart-page-items"></div>
+      <aside class="lg:w-80 shrink-0">
+        <div class="border-[3px] border-primary p-6 md:sticky md:top-24">
+          <h3 class="font-label-caps text-label-caps text-primary mb-6 pb-3 border-b-[3px] border-primary">RESUMEN DEL PEDIDO</h3>
+          <div class="space-y-3 mb-6">
+            <div class="flex justify-between font-label-caps text-label-caps"><span class="text-on-surface-variant">SUBTOTAL</span><span id="cart-page-subtotal">$0</span></div>
+            <div class="flex justify-between font-label-caps text-label-caps"><span class="text-on-surface-variant">ENVÍO</span><span id="cart-page-shipping">GRATIS</span></div>
+          </div>
+
+          <div class="flex justify-between font-label-caps text-[16px] font-bold text-primary mb-6 pt-4 border-t-[3px] border-primary">
+            <span>TOTAL</span><span id="cart-page-total">$0</span>
+          </div>
+          <button class="btn-violet w-full justify-center py-4" onclick="nav('checkout')">FINALIZAR COMPRA <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+          <button class="btn-outline w-full justify-center mt-3" onclick="nav('catalog')">SEGUIR COMPRANDO</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: CHECKOUT                        -->
+<!-- ===================================== -->
+<div id="page-checkout" class="page">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
+    <h1 style="font-family:Montserrat;font-size:clamp(28px,5vw,56px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-[3px] border-primary pb-6">FINALIZAR COMPRA</h1>
+    <div class="flex flex-col lg:flex-row gap-12">
+      <!-- Form -->
+      <div class="flex-1">
+        <!-- Steps -->
+        <div class="flex gap-0 mb-10 border-[3px] border-primary">
+          <div class="flex-1 flex items-center justify-center gap-2 py-3 bg-primary text-on-primary font-label-caps text-label-caps" id="step-1-tab">
+            <span class="w-6 h-6 flex items-center justify-center border-2 border-white text-[11px]">1</span> DATOS
+          </div>
+          <div class="flex-1 flex items-center justify-center gap-2 py-3 bg-surface text-on-surface font-label-caps text-label-caps border-l-[3px] border-primary" id="step-2-tab">
+            <span class="w-6 h-6 flex items-center justify-center border-2 border-primary text-[11px]">2</span> ENVÍO
+          </div>
+          <div class="flex-1 flex items-center justify-center gap-2 py-3 bg-surface text-on-surface font-label-caps text-label-caps border-l-[3px] border-primary" id="step-3-tab">
+            <span class="w-6 h-6 flex items-center justify-center border-2 border-primary text-[11px]">3</span> PAGO
+          </div>
+        </div>
+        <!-- Step 1: Datos Personales -->
+        <div id="checkout-step-1">
+          <h2 class="font-label-caps text-label-caps text-primary mb-6">DATOS PERSONALES</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label><input class="input-field" id="co-nombre" placeholder="Juan"/></div>
+            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO *</label><input class="input-field" id="co-apellido" placeholder="Pérez"/></div>
+            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL *</label><input class="input-field" id="co-email" type="email" placeholder="juan@email.com"/></div>
+            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TELÉFONO</label><input class="input-field" id="co-tel" placeholder="+54 9 11 0000-0000"/></div>
+          </div>
+          <h2 class="font-label-caps text-label-caps text-primary mb-6">DIRECCIÓN DE ENVÍO</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DIRECCIÓN *</label><input class="input-field" id="co-dir" placeholder="Av. Corrientes 1234"/></div>
+            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CIUDAD *</label><input class="input-field" id="co-ciudad" placeholder="Buenos Aires"/></div>
+            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CÓDIGO POSTAL *</label><input class="input-field" id="co-cp" placeholder="1000"/></div>
+            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PROVINCIA *</label>
+              <select class="input-field"><option>Buenos Aires</option><option>CABA</option><option>Córdoba</option><option>Santa Fe</option><option>Mendoza</option><option>Otro</option></select>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="checkoutStep(2)">CONTINUAR <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+        </div>
+        <!-- Step 2: Envío -->
+        <div id="checkout-step-2" style="display:none;">
+          <h2 class="font-label-caps text-label-caps text-primary mb-6">MÉTODO DE ENVÍO</h2>
+          <!-- Aviso pendiente -->
+          <div class="flex items-start gap-3 border-[2px] border-outline-variant bg-surface-container-low p-4 mb-5">
+            <span class="material-symbols-outlined text-[20px] text-on-surface-variant mt-0.5">info</span>
+            <div>
+              <div class="font-label-caps text-[10px] text-primary mb-0.5">COSTO DE ENVÍO</div>
+              <p class="font-body-md text-sm text-on-surface-variant">El costo exacto queda <strong>pendiente</strong> y se calcula una vez confirmada la dirección de entrega. Lo verás reflejado en el total final antes de pagar.</p>
+            </div>
+          </div>
+          <!-- Opciones dinámicas desde admin (renderShippingOptions las inyecta) -->
+          <div id="shipping-options-list" class="space-y-4 mb-8"></div>
+          <div class="flex gap-4">
+            <button class="btn-outline" onclick="checkoutStep(1)"><span class="material-symbols-outlined text-[16px]">arrow_back</span> VOLVER</button>
+            <button class="btn-primary" onclick="checkoutStep(3)">CONTINUAR <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+          </div>
+        </div>
+        <!-- Step 3: Pago -->
+        <div id="checkout-step-3" style="display:none;">
+          <h2 class="font-label-caps text-label-caps text-primary mb-6">MÉTODO DE PAGO</h2>
+          <div class="space-y-4 mb-8">
+            <label class="flex items-center gap-4 p-4 border-[3px] border-primary cursor-pointer hover:bg-surface-container-low">
+              <input type="radio" name="payment" value="mercadopago" checked class="text-primary"/>
+              <span class="material-symbols-outlined">account_balance_wallet</span>
+              <div>
+                <div class="font-label-caps text-label-caps text-primary">MERCADO PAGO</div>
+                <div class="font-body-md text-on-surface-variant text-sm">Tarjeta, efectivo, cuotas</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-4 p-4 border-[3px] border-primary cursor-pointer hover:bg-surface-container-low">
+              <input type="radio" name="payment" value="card" class="text-primary"/>
+              <span class="material-symbols-outlined">credit_card</span>
+              <div>
+                <div class="font-label-caps text-label-caps text-primary">TARJETA DE CRÉDITO / DÉBITO</div>
+                <div class="font-body-md text-on-surface-variant text-sm">Hasta 12 cuotas sin interés</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-4 p-4 border-[3px] border-primary cursor-pointer hover:bg-surface-container-low">
+              <input type="radio" name="payment" value="transfer" class="text-primary"/>
+              <span class="material-symbols-outlined">swap_horiz</span>
+              <div>
+                <div class="font-label-caps text-label-caps text-primary">TRANSFERENCIA BANCARIA</div>
+                <div class="font-body-md text-on-surface-variant text-sm">10% de descuento adicional</div>
+              </div>
+            </label>
+          </div>
+          <div id="card-form" class="border-[3px] border-primary p-6 mb-6">
+            <div class="grid grid-cols-1 gap-4">
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NÚMERO DE TARJETA</label><input id="card-number" class="input-field" placeholder="0000 0000 0000 0000" maxlength="19" oninput="this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim()"/></div>
+              <div class="grid grid-cols-2 gap-4">
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">VENCIMIENTO</label><input id="card-expiry" class="input-field" placeholder="MM/AA" maxlength="5"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CVV</label><input id="card-cvv-input" class="input-field" placeholder="000" maxlength="3" type="password"/></div>
+              </div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE EN LA TARJETA</label><input id="card-holder" class="input-field" placeholder="JUAN PEREZ"/></div>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <button class="btn-outline" onclick="checkoutStep(2)"><span class="material-symbols-outlined text-[16px]">arrow_back</span> VOLVER</button>
+            <button class="btn-violet flex-1 justify-center py-4" onclick="placeOrder()">CONFIRMAR PEDIDO <span class="material-symbols-outlined">check</span></button>
+          </div>
+        </div>
+      </div>
+      <!-- Order Summary -->
+      <aside class="lg:w-80 shrink-0">
+        <div class="border-[3px] border-primary p-6 md:sticky md:top-24">
+          <h3 class="font-label-caps text-label-caps text-primary mb-6 pb-3 border-b-[3px] border-primary">TU PEDIDO</h3>
+          <div id="checkout-items" class="space-y-4 mb-6"></div>
+          <div class="space-y-3 pt-4 border-t-[3px] border-primary">
+            <div class="flex justify-between font-label-caps text-label-caps"><span class="text-on-surface-variant">SUBTOTAL</span><span id="checkout-subtotal">$0</span></div>
+            <div class="flex justify-between font-label-caps text-label-caps items-center">
+              <span class="text-on-surface-variant">ENVÍO</span>
+              <span id="checkout-shipping-display" class="flex items-center gap-1">
+                <span class="inline-block w-2 h-2 rounded-full bg-outline-variant animate-pulse"></span>
+                <span class="text-on-surface-variant" style="font-size:10px;">PENDIENTE</span>
+              </span>
+            </div>
+            <div class="flex justify-between font-label-caps text-[15px] font-bold text-primary pt-3 border-t-[3px] border-primary"><span>TOTAL</span><span id="checkout-total">$0</span></div>
+          </div>
+          <!-- Cupón de descuento -->
+          <div class="mt-4 pt-4 border-t-[3px] border-primary">
+            <h3 class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">CUPÓN DE DESCUENTO</h3>
+            <div class="flex gap-2">
+              <input id="coupon-input" class="input-field flex-1 uppercase" placeholder="INGRESÁ TU CÓDIGO" onkeydown="if(event.key==='Enter')applyCoupon()"/>
+              <button class="btn-outline py-2 px-4 text-[10px] shrink-0" onclick="applyCoupon()">APLICAR</button>
+            </div>
+            <div id="coupon-status" class="mt-2 font-label-caps text-[10px]"></div>
+          </div>
+          <!-- Nota envío pendiente (oculta cuando se resuelve) -->
+          <div id="checkout-shipping-note" class="mt-3 font-label-caps text-[9px] text-on-surface-variant text-center opacity-70">
+            EL COSTO DE ENVÍO SE CALCULA ANTES DE CONFIRMAR EL PAGO
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: LOGIN                           -->
+<!-- ===================================== -->
+<div id="page-login" class="page">
+  <div class="min-h-screen flex items-center justify-center bg-background px-6 py-12">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-10">
+        <a onclick="nav('home')" class="cursor-pointer">
+          <h1 style="font-family:Montserrat;font-size:48px;font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">XINCO</h1>
+        </a>
+        <p class="font-label-caps text-label-caps text-on-surface-variant mt-2">ACCEDÉ A TU CUENTA</p>
+      </div>
+      <!-- Email not verified warning -->
+      <div id="login-verify-warning" class="hidden border-[3px] border-secondary-container p-4 mb-5 flex items-start gap-3">
+        <span class="material-symbols-outlined text-secondary-container shrink-0">mark_email_unread</span>
+        <div>
+          <p class="font-label-caps text-label-caps text-primary mb-1">VERIFICÁ TU EMAIL</p>
+          <p class="font-body-md text-sm text-on-surface-variant">Tu cuenta no está verificada. Revisá tu bandeja de entrada y hacé clic en el link que te enviamos.</p>
+          <button class="font-label-caps text-[10px] text-secondary-container underline mt-2" onclick="resendVerificationEmail()">REENVIAR EMAIL DE VERIFICACIÓN</button>
+        </div>
+      </div>
+      <div class="border-[3px] border-primary p-8 bg-white">
+        <div id="login-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
+        <div class="mb-5">
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL</label>
+          <input id="login-email" class="input-field" type="email" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
+        </div>
+        <div class="mb-4">
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONTRASEÑA</label>
+          <div class="relative">
+            <input id="login-pass" class="input-field" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant" onclick="togglePass('login-pass')"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+          </div>
+        </div>
+        <!-- Remember me -->
+        <div class="flex items-center justify-between mb-5">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="login-remember" class="form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5" checked/>
+            <span class="font-label-caps text-label-caps text-on-surface-variant">RECORDAR MI CUENTA</span>
+          </label>
+          <a class="font-label-caps text-[10px] text-on-surface-variant underline cursor-pointer" onclick="showForgotPassword()">¿OLVIDASTE TU CONTRASEÑA?</a>
+        </div>
+        <button class="btn-primary w-full justify-center py-4 mb-4" onclick="doLogin()">INICIAR SESIÓN</button>
+        <div class="flex items-center gap-3 my-4">
+          <div class="flex-1 h-px bg-outline-variant"></div>
+          <span class="font-label-caps text-[10px] text-on-surface-variant">O CONTINUÁ CON</span>
+          <div class="flex-1 h-px bg-outline-variant"></div>
+        </div>
+        <button class="btn-outline w-full justify-center py-3 mb-5" onclick="doLoginGoogle()">
+          <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+          INICIAR CON GOOGLE
+        </button>
+        <div class="text-center">
+          <span class="font-body-md text-on-surface-variant text-sm">¿No tenés cuenta? </span>
+          <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('register')">REGISTRATE</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: REGISTER                        -->
+<!-- ===================================== -->
+<div id="page-register" class="page">
+  <div class="min-h-screen flex items-center justify-center bg-background px-6 py-12">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-10">
+        <a onclick="nav('home')" class="cursor-pointer">
+          <h1 style="font-family:Montserrat;font-size:48px;font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">XINCO</h1>
+        </a>
+        <p class="font-label-caps text-label-caps text-on-surface-variant mt-2">CREÁ TU CUENTA</p>
+      </div>
+
+      <!-- FORMULARIO DE REGISTRO -->
+      <div id="register-form-panel" class="border-[3px] border-primary p-8 bg-white">
+        <div id="reg-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label>
+            <input id="reg-nombre" class="input-field" placeholder="Juan"/>
+          </div>
+          <div>
+            <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO *</label>
+            <input id="reg-apellido" class="input-field" placeholder="Pérez"/>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL *</label>
+          <div class="relative">
+            <input id="reg-email" class="input-field pr-10" type="email" placeholder="tu@email.com" oninput="validateEmailField()"/>
+            <span id="reg-email-icon" class="absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] hidden"></span>
+          </div>
+          <p id="reg-email-hint" class="font-label-caps text-[10px] mt-1 hidden"></p>
+        </div>
+        <div class="mb-4">
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONTRASEÑA *</label>
+          <div class="relative">
+            <input id="reg-pass" class="input-field pr-10" type="password" placeholder="Mínimo 8 caracteres" oninput="checkPasswordStrength()"/>
+            <button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('reg-pass')"><span class="material-symbols-outlined text-[20px] text-on-surface-variant">visibility</span></button>
+          </div>
+          <!-- Password strength bar -->
+          <div class="mt-2 space-y-1">
+            <div class="flex gap-1">
+              <div id="str-bar-1" class="flex-1 h-1 bg-outline-variant transition-all"></div>
+              <div id="str-bar-2" class="flex-1 h-1 bg-outline-variant transition-all"></div>
+              <div id="str-bar-3" class="flex-1 h-1 bg-outline-variant transition-all"></div>
+              <div id="str-bar-4" class="flex-1 h-1 bg-outline-variant transition-all"></div>
+            </div>
+            <p id="str-label" class="font-label-caps text-[10px] text-on-surface-variant"></p>
+          </div>
+        </div>
+        <div class="mb-5">
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONFIRMAR CONTRASEÑA *</label>
+          <div class="relative">
+            <input id="reg-pass2" class="input-field pr-10" type="password" placeholder="Repetí tu contraseña" oninput="checkPasswordMatch()"/>
+            <button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('reg-pass2')"><span class="material-symbols-outlined text-[20px] text-on-surface-variant">visibility</span></button>
+          </div>
+          <p id="reg-pass-match" class="font-label-caps text-[10px] mt-1 hidden"></p>
+        </div>
+        <label class="flex items-start gap-3 mb-5 cursor-pointer">
+          <input type="checkbox" id="reg-terms" class="mt-1 form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5"/>
+          <span class="font-body-md text-sm text-on-surface-variant">Acepto los <a class="text-primary underline cursor-pointer">Términos y Condiciones</a> y la <a class="text-primary underline cursor-pointer">Política de Privacidad</a></span>
+        </label>
+        <button id="reg-submit-btn" class="btn-primary w-full justify-center py-4 mb-4" onclick="doRegister()">CREAR CUENTA</button>
+        <div class="text-center">
+          <span class="font-body-md text-on-surface-variant text-sm">¿Ya tenés cuenta? </span>
+          <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('login')">INICIÁ SESIÓN</a>
+        </div>
+      </div>
+
+      <!-- PANTALLA: EMAIL ENVIADO -->
+      <div id="register-success-panel" class="hidden border-[3px] border-primary p-8 text-center">
+        <div class="w-20 h-20 bg-primary flex items-center justify-center mx-auto mb-6">
+          <span class="material-symbols-outlined text-white text-[48px]">mark_email_read</span>
+        </div>
+        <h2 style="font-family:Montserrat;font-size:28px;font-weight:900;letter-spacing:-0.02em;" class="text-primary uppercase mb-3">¡REVISÁ TU EMAIL!</h2>
+        <p class="font-body-md text-on-surface-variant mb-2">Te enviamos un correo de verificación a:</p>
+        <div class="border-[2px] border-secondary-container px-5 py-3 mb-5 inline-block">
+          <span id="reg-sent-email" class="font-label-caps text-label-caps text-secondary-container"></span>
+        </div>
+        <p class="font-body-md text-on-surface-variant text-sm mb-6">Hacé clic en el link del email para activar tu cuenta. Luego podés iniciar sesión normalmente.</p>
+        <div class="space-y-3">
+          <button class="btn-primary w-full justify-center py-4" onclick="nav('login')">
+            <span class="material-symbols-outlined text-[16px]">login</span> IR AL INICIO DE SESIÓN
+          </button>
+          <button class="btn-outline w-full justify-center py-3" onclick="resendFromRegister()">
+            <span class="material-symbols-outlined text-[16px]">refresh</span> REENVIAR EMAIL
+          </button>
+        </div>
+        <p class="font-label-caps text-[10px] text-on-surface-variant mt-4">¿No lo encontrás? Revisá la carpeta de spam o correo no deseado.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: MY ACCOUNT                      -->
+<!-- ===================================== -->
+<div id="page-account" class="page">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
+    <h1 style="font-family:Montserrat;font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-[3px] border-primary pb-6">MI CUENTA</h1>
+    <div class="flex flex-col md:flex-row gap-8">
+
+      <!-- Sidebar -->
+      <aside class="w-full md:w-72 shrink-0">
+        <div class="border-[3px] border-primary overflow-hidden md:sticky md:top-24">
+          <!-- Avatar + Info -->
+          <div class="bg-primary text-on-primary p-6">
+            <div class="flex flex-col items-center text-center">
+              <!-- Avatar editable -->
+              <div class="relative mb-4 group cursor-pointer" onclick="document.getElementById('avatar-file-input').click()">
+                <div id="account-avatar-container" class="w-24 h-24 border-3 border-white overflow-hidden flex items-center justify-center" style="border:3px solid #fff;border-radius:50%;">
+                  <img id="account-avatar-img" src="" alt="" class="hidden w-full h-full object-cover" style="border-radius:50%;"/>
+                  <span id="account-avatar-initials" class="text-white font-label-caps text-2xl font-bold">?</span>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity" style="border-radius:50%;">
+                  <span class="material-symbols-outlined text-white text-[20px]">photo_camera</span>
+                </div>
+                <input type="file" id="avatar-file-input" accept="image/*" class="hidden" onchange="uploadAvatar(this.files[0])"/>
+              </div>
+              <div id="account-name" class="font-label-caps text-label-caps text-white mb-1">USUARIO</div>
+              <div id="account-email-disp" class="text-white/60 mt-1" style="font-family:'JetBrains Mono',monospace;font-size:10px;"></div>
+              <div id="account-member-since" class="text-white/40 mt-1" style="font-family:'JetBrains Mono',monospace;font-size:9px;"></div>
+            </div>
+          </div>
+          <!-- Nav tabs -->
+          <nav class="divide-y divide-outline-variant">
+            <button class="tab-btn active w-full text-left" id="acc-tab-orders" onclick="showAccountTab('orders')">
+              <span class="material-symbols-outlined text-[16px] mr-2">receipt_long</span>MIS PEDIDOS
+            </button>
+            <button class="tab-btn w-full text-left" id="acc-tab-profile" onclick="showAccountTab('profile')">
+              <span class="material-symbols-outlined text-[16px] mr-2">person</span>MI PERFIL
+            </button>
+            <button class="tab-btn w-full text-left" id="acc-tab-payment" onclick="showAccountTab('payment')">
+              <span class="material-symbols-outlined text-[16px] mr-2">payments</span>MÉTODOS DE PAGO
+            </button>
+            <button class="tab-btn w-full text-left" id="acc-tab-addresses" onclick="showAccountTab('addresses')">
+              <span class="material-symbols-outlined text-[16px] mr-2">location_on</span>DIRECCIONES
+            </button>
+            <button class="tab-btn w-full text-left" id="acc-tab-security" onclick="showAccountTab('security')">
+              <span class="material-symbols-outlined text-[16px] mr-2">lock</span>SEGURIDAD
+            </button>
+          </nav>
+          <div class="p-3">
+            <button class="btn-outline w-full justify-center py-2 text-[11px]" onclick="doLogout()">
+              <span class="material-symbols-outlined text-[14px]">logout</span> CERRAR SESIÓN
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="flex-1 min-w-0">
+
+        <!-- PEDIDOS -->
+        <div id="acc-content-orders">
+          <div class="flex justify-between items-center mb-5">
+            <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase">MIS PEDIDOS</h2>
+            <span id="acc-orders-count" class="font-label-caps text-[10px] text-on-surface-variant"></span>
+          </div>
+          <div id="account-orders-empty" class="text-center py-16 border-[3px] border-primary">
+            <span class="material-symbols-outlined text-[64px] text-outline-variant">package_2</span>
+            <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">NO TENÉS PEDIDOS AÚN</p>
+            <button class="btn-primary mt-6" onclick="nav('catalog')">EMPEZAR A COMPRAR</button>
+          </div>
+          <div id="account-orders-list" class="hidden space-y-4"></div>
+        </div>
+
+        <!-- PERFIL -->
+        <div id="acc-content-profile" class="hidden">
+          <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">DATOS PERSONALES</h2>
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <div id="profile-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-4 border-2 border-error"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label>
+                <input id="acc-nombre" class="input-field" placeholder="Tu nombre" oninput="validateProfileField('acc-nombre')"/>
+                <p id="acc-nombre-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO *</label>
+                <input id="acc-apellido" class="input-field" placeholder="Tu apellido" oninput="validateProfileField('acc-apellido')"/>
+                <p id="acc-apellido-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div class="md:col-span-2">
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TELÉFONO</label>
+                <input id="acc-tel" class="input-field" placeholder="+54 9 11 0000-0000" oninput="validateProfileField('acc-tel')"/>
+                <p id="acc-tel-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div class="md:col-span-2">
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DNI</label>
+                <input id="acc-dni" class="input-field" placeholder="12.345.678" oninput="validateProfileField('acc-dni')"/>
+                <p id="acc-dni-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">FECHA DE NACIMIENTO</label>
+                <input id="acc-bday" class="input-field" type="date" oninput="validateProfileField('acc-bday')"/>
+                <p id="acc-bday-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">GÉNERO</label>
+                <select id="acc-genero" class="input-field">
+                  <option value="">Prefiero no decir</option>
+                  <option value="m">Masculino</option>
+                  <option value="f">Femenino</option>
+                  <option value="nb">No binario</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn-primary" onclick="saveProfile()">
+              <span class="material-symbols-outlined text-[16px]">save</span> GUARDAR CAMBIOS
+            </button>
+          </div>
+        </div>
+
+        <!-- MÉTODOS DE PAGO -->
+        <div id="acc-content-payment" class="hidden">
+          <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">MÉTODOS DE PAGO</h2>
+
+          <!-- Mercado Pago -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 flex items-center justify-center shrink-0" style="background:#009ee3;">
+                <span class="material-symbols-outlined text-white text-[20px]">account_balance_wallet</span>
+              </div>
+              <div>
+                <h3 class="font-label-caps text-label-caps text-primary">MERCADO PAGO</h3>
+                <p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">VINCULÁ TU CUENTA PARA RECIBIR PAGOS</p>
+              </div>
+              <span id="user-mp-status" class="badge badge-outline ml-auto shrink-0">NO VINCULADO</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CBU / CVU</label>
+                <input id="user-mp-cbu" class="input-field" placeholder="0000000000000000000000" oninput="validatePaymentField('user-mp-cbu')"/>
+                <p id="user-mp-cbu-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ALIAS</label>
+                <input id="user-mp-alias" class="input-field" placeholder="MI.ALIAS.MP" oninput="validatePaymentField('user-mp-alias')"/>
+                <p id="user-mp-alias-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div class="md:col-span-2">
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL DE MERCADO PAGO</label>
+                <input id="user-mp-email" class="input-field" type="email" placeholder="tu@email.com" oninput="validatePaymentField('user-mp-email')"/>
+                <p id="user-mp-email-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+            </div>
+            <button class="btn-violet" onclick="saveUserPayment('mp')">
+              <span class="material-symbols-outlined text-[16px]">save</span> GUARDAR MERCADO PAGO
+            </button>
+          </div>
+
+          <!-- Tarjetas -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-white text-[20px]">credit_card</span>
+              </div>
+              <div>
+                <h3 class="font-label-caps text-label-caps text-primary">TARJETAS GUARDADAS</h3>
+                <p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">CRÉDITO Y DÉBITO</p>
+              </div>
+            </div>
+            <div id="user-cards-list" class="space-y-3 mb-4">
+              <div class="text-center py-6 border-[2px] border-dashed border-outline-variant">
+                <span class="material-symbols-outlined text-[32px] text-outline-variant">credit_card_off</span>
+                <p class="font-label-caps text-[10px] text-on-surface-variant mt-2">NO HAY TARJETAS GUARDADAS</p>
+              </div>
+            </div>
+            <button class="btn-outline text-[11px]" onclick="showAddCardForm()">
+              <span class="material-symbols-outlined text-[14px]">add</span> AGREGAR TARJETA
+            </button>
+            <!-- Add card form (hidden by default) -->
+            <div id="add-card-form" class="hidden mt-4 border-[2px] border-primary p-4">
+              <div class="grid grid-cols-1 gap-3 mb-3">
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NÚMERO DE TARJETA</label>
+                  <input id="card-num" class="input-field" placeholder="0000 0000 0000 0000" maxlength="19" oninput="this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim(); validateCardField()"/>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">VENCIMIENTO</label>
+                    <input id="card-exp" class="input-field" placeholder="MM/AA" maxlength="5" oninput="validateCardField()"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CVV</label>
+                    <input id="card-cvv" class="input-field" placeholder="000" maxlength="4" type="password"/>
+                  </div>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE EN LA TARJETA</label>
+                  <input id="card-name" class="input-field" placeholder="JUAN PEREZ"/>
+                </div>
+              </div>
+              <p id="card-err" class="font-label-caps text-[10px] text-error mb-3 hidden"></p>
+              <div class="flex gap-2">
+                <button class="btn-primary text-[11px]" onclick="saveCard()">GUARDAR TARJETA</button>
+                <button class="btn-outline text-[11px]" onclick="document.getElementById('add-card-form').classList.add('hidden')">CANCELAR</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transferencia -->
+          <div class="bg-white border-[3px] border-primary p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-white text-[20px]">swap_horiz</span>
+              </div>
+              <div>
+                <h3 class="font-label-caps text-label-caps text-primary">TRANSFERENCIA BANCARIA</h3>
+                <p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">DATOS PARA RECIBIR TRANSFERENCIAS</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">BANCO</label>
+                <input id="user-bank-name" class="input-field" placeholder="Banco Galicia / Nación / etc"/>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TITULAR</label>
+                <input id="user-bank-titular" class="input-field" placeholder="Nombre completo"/>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CBU</label>
+                <input id="user-bank-cbu" class="input-field" placeholder="0000000000000000000000" oninput="validatePaymentField('user-bank-cbu')"/>
+                <p id="user-bank-cbu-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">ALIAS</label>
+                <input id="user-bank-alias" class="input-field" placeholder="MI.ALIAS.BANCO"/>
+              </div>
+            </div>
+            <button class="btn-primary text-[11px]" onclick="saveUserPayment('bank')">
+              <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR DATOS BANCARIOS
+            </button>
+          </div>
+        </div>
+
+        <!-- DIRECCIONES -->
+        <div id="acc-content-addresses" class="hidden">
+          <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">MIS DIRECCIONES</h2>
+          <div class="bg-white border-[3px] border-primary p-6">
+            <div id="addresses-list" class="space-y-3 mb-4"></div>
+            <button class="btn-outline text-[11px]" onclick="showAddAddressForm()">
+              <span class="material-symbols-outlined text-[14px]">add</span> AGREGAR DIRECCIÓN
+            </button>
+            <div id="add-address-form" class="hidden mt-4 border-[2px] border-primary p-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CALLE Y NÚMERO *</label><input id="addr-street" class="input-field" placeholder="Av. Corrientes 1234"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CIUDAD *</label><input id="addr-city" class="input-field" placeholder="Mar del Plata"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CP *</label><input id="addr-cp" class="input-field" placeholder="7600"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PROVINCIA *</label><select id="addr-prov" class="input-field"><option>Buenos Aires</option><option>CABA</option><option>Córdoba</option><option>Santa Fe</option><option>Mendoza</option><option>Otro</option></select></div>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn-primary text-[11px]" onclick="saveAddress()">GUARDAR DIRECCIÓN</button>
+                <button class="btn-outline text-[11px]" onclick="document.getElementById('add-address-form').classList.add('hidden')">CANCELAR</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEGURIDAD -->
+        <div id="acc-content-security" class="hidden">
+          <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">SEGURIDAD DE LA CUENTA</h2>
+
+          <!-- Cambiar email -->
+          <div class="bg-white border-[3px] border-primary p-6 mb-5">
+            <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">email</span> CAMBIAR EMAIL
+            </h3>
+            <p class="font-body-md text-sm text-on-surface-variant mb-4">Al cambiar el email recibirás una verificación en la nueva dirección antes de que el cambio se aplique.</p>
+            <div id="email-change-msg" class="hidden bg-surface-container-low border-[2px] border-secondary-container p-3 mb-4 font-label-caps text-[10px] text-primary"></div>
+            <div class="grid grid-cols-1 gap-3 mb-4">
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL ACTUAL</label>
+                <input id="acc-email-current" class="input-field" disabled style="opacity:0.6;"/>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NUEVO EMAIL *</label>
+                <div class="relative">
+                  <input id="acc-email-new" class="input-field pr-10" type="email" placeholder="nuevo@email.com" oninput="validateNewEmail()"/>
+                  <span id="new-email-icon" class="hidden absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px]"></span>
+                </div>
+                <p id="new-email-hint" class="font-label-caps text-[10px] mt-1 hidden"></p>
+              </div>
+              <div>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONTRASEÑA ACTUAL (para confirmar)</label>
+                <div class="relative">
+                  <input id="acc-email-pass" class="input-field pr-10" type="password" placeholder="Tu contraseña actual"/>
+                  <button onclick="togglePass('acc-email-pass')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">visibility</span></button>
+                </div>
+              </div>
+            </div>
+            <button class="btn-primary" onclick="changeUserEmail()">
+              <span class="material-symbols-outlined text-[16px]">send</span> ENVIAR VERIFICACIÓN AL NUEVO EMAIL
+            </button>
+          </div>
+
+          <!-- Cambiar contraseña -->
+          <div class="bg-white border-[3px] border-primary p-6">
+            <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">lock</span> CAMBIAR CONTRASEÑA
+            </h3>
+            <p class="font-body-md text-sm text-on-surface-variant mb-4">Te enviaremos un email para restablecer tu contraseña.</p>
+            <button class="btn-outline" onclick="sendPasswordReset()">
+              <span class="material-symbols-outlined text-[16px]">lock_reset</span> ENVIAR EMAIL DE RESTABLECIMIENTO
+            </button>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: ORDER CONFIRMATION              -->
+<!-- ===================================== -->
+<div id="page-order-confirm" class="page">
+  <div class="min-h-screen flex items-center justify-center px-6 py-16">
+    <div class="max-w-lg w-full text-center">
+      <div class="w-20 h-20 bg-primary flex items-center justify-center mx-auto mb-6">
+        <span class="material-symbols-outlined text-white text-[48px]">check</span>
+      </div>
+      <h1 style="font-family:Montserrat;font-size:clamp(28px,5vw,56px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-4">¡PEDIDO<br>CONFIRMADO!</h1>
+      <p class="font-body-lg text-on-surface-variant mb-3">Tu número de pedido es:</p>
+      <div class="inline-block border-[3px] border-secondary-container px-8 py-4 mb-6">
+        <span id="order-number" class="font-label-caps text-label-caps text-secondary-container text-lg tracking-widest"></span>
+      </div>
+      <p class="font-body-md text-on-surface-variant mb-8">Recibirás un email de confirmación con los detalles de tu pedido y el tracking de envío.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button class="btn-primary" onclick="nav('account')">MIS PEDIDOS</button>
+        <button class="btn-outline" onclick="nav('catalog')">SEGUIR COMPRANDO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: ADMIN (full panel)              -->
+<!-- ===================================== -->
+<div id="page-admin" class="page">
+  <canvas id="admin-bg-canvas"></canvas>
+  <div class="flex min-h-screen">
+     <main class="flex-1 overflow-auto" style="background:#f5f5f7;">
+      <header class="admin-header">
+        <div class="admin-current-section">
+          <div class="section-icon-wrapper"><i class="section-icon" id="admin-section-icon" data-lucide="layout-dashboard"></i></div>
+          <div>
+            <div class="section-title" id="admin-section-title">TABLERO</div>
+            <div class="section-sub" id="admin-section-sub">Vista general</div>
+          </div>
+        </div>
+        <div class="admin-brand-center">
+          <div class="brand-main">XINCO</div>
+        </div>
+        <div class="admin-header-right">
+          <div class="brand-sub">Panel Admin</div>
+          <div class="admin-color-btn" id="admin-color-btn" onclick="toggleColorPicker()">
+            <span class="material-symbols-outlined">palette</span>
+          </div>
+          <div class="admin-color-picker" id="admin-color-picker">
+            <button class="color-swatch active" data-color="violet" style="background:#9b87f5" onclick="setAdminColor('violet')"></button>
+            <button class="color-swatch" data-color="blue" style="background:#5b9cf5" onclick="setAdminColor('blue')"></button>
+            <button class="color-swatch" data-color="pink" style="background:#e87be8" onclick="setAdminColor('pink')"></button>
+            <button class="color-swatch" data-color="green" style="background:#5cc97a" onclick="setAdminColor('green')"></button>
+            <button class="color-swatch" data-color="gold" style="background:#e8c84a" onclick="setAdminColor('gold')"></button>
+            <button class="color-swatch" data-color="red" style="background:#f56060" onclick="setAdminColor('red')"></button>
+          </div>
+          <div class="admin-avatar"><span class="material-symbols-outlined">person</span></div>
+        </div>
+      </header>
+      <div class="admin-content">
+        <!-- Dashboard Section -->
+        <div id="admin-section-dashboard" class="space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="admin-card card-hover">
+              <div class="admin-stat">
+                <div class="flex justify-between items-start mb-4">
+                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">VENTAS TOTALES</span>
+                  <div class="admin-stat-icon bg-black/5"><span class="material-symbols-outlined text-primary text-[20px]">payments</span></div>
+                </div>
+                <div style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">$124.500</div>
+                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-green-600"><span class="material-symbols-outlined text-[14px]">arrow_upward</span>+14.5%</div>
+              </div>
+            </div>
+            <div class="admin-card card-hover">
+              <div class="admin-stat">
+                <div class="flex justify-between items-start mb-4">
+                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">PEDIDOS PENDIENTES</span>
+                  <div class="admin-stat-icon bg-amber-50"><span class="material-symbols-outlined text-amber-600 text-[20px]">local_shipping</span></div>
+                </div>
+                <div id="admin-pending-count" style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">0</div>
+                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-amber-600"><span class="material-symbols-outlined text-[14px]">schedule</span>Necesita proceso</div>
+              </div>
+            </div>
+            <div class="admin-card card-hover">
+              <div class="admin-stat">
+                <div class="flex justify-between items-start mb-4">
+                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">NUEVOS CLIENTES</span>
+                  <div class="admin-stat-icon bg-blue-50"><span class="material-symbols-outlined text-blue-600 text-[20px]">person_add</span></div>
+                </div>
+                <div style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">184</div>
+                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-green-600"><span class="material-symbols-outlined text-[14px]">arrow_upward</span>+8.2%</div>
+              </div>
+            </div>
+            <div class="admin-card card-hover">
+              <div class="admin-stat">
+                <div class="flex justify-between items-start mb-4">
+                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">TICKET PROMEDIO</span>
+                  <div class="admin-stat-icon bg-purple-50"><span class="material-symbols-outlined text-purple-600 text-[20px]">receipt</span></div>
+                </div>
+                <div style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">$18.550</div>
+                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-on-surface-variant/60"><span class="material-symbols-outlined text-[14px]">horizontal_rule</span>Estable</div>
+              </div>
+            </div>
+          </div>
+          <!-- Chart -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div><h3 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">RESUMEN DE VENTAS</h3><p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">ÚLTIMOS 30 DÍAS</p></div>
+              <div class="flex gap-1 bg-black/5 p-0.5 rounded-lg">
+                <button class="tab-btn-sm active">30D</button>
+                <button class="tab-btn-sm">90D</button>
+                <button class="tab-btn-sm">1Y</button>
+              </div>
+            </div>
+            <div class="admin-card-body">
+              <div class="h-44 flex items-end gap-2 pl-2">
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer group relative" style="height:40%"><div class="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[9px] whitespace-nowrap rounded-md">$4.2k</div></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer group relative" style="height:65%"><div class="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[9px] whitespace-nowrap rounded-md">$6.8k</div></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:30%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:80%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:55%"></div>
+                <div class="flex-1 bg-primary cursor-pointer rounded-t-lg relative" style="height:95%"><div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[9px] whitespace-nowrap rounded-md">$9.5k</div></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:70%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:45%"></div>
+                <div class="flex-1 bg-secondary-container hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:85%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:60%"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Recent Orders -->
+          <div id="admin-recent-orders" class="admin-card">
+            <div class="admin-card-header">
+              <h3 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">ACTIVIDAD RECIENTE</h3>
+              <button class="font-label-caps text-label-caps text-secondary-container hover:text-secondary text-[10px] transition-colors" onclick="showAdminSection('orders')">VER TODO →</button>
+            </div>
+            <div id="admin-recent-table" class="overflow-x-auto"></div>
+          </div>
+        </div>
+        <!-- Orders Section -->
+        <div id="admin-section-orders" class="hidden">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">GESTIÓN DE PEDIDOS</h2>
+              <div class="flex gap-2 items-center">
+                <span class="font-label-caps text-[9px] text-on-surface-variant/60">FILTRAR:</span>
+                <select id="order-filter" class="border border-gray-200 rounded-lg px-3 py-1.5 font-label-caps text-[10px] bg-white outline-none focus:border-secondary-container" style="font-size:10px;" onchange="renderAdminOrders()">
+                  <option value="all">TODOS</option>
+                  <option value="pending">PENDIENTES</option>
+                  <option value="shipped">ENVIADOS</option>
+                  <option value="delivered">ENTREGADOS</option>
+                </select>
+              </div>
+            </div>
+            <div id="admin-orders-table" class="overflow-x-auto"></div>
+          </div>
+        </div>
+        <!-- Products Section -->
+        <div id="admin-section-products" class="hidden space-y-5">
+          <div class="flex justify-between items-center">
+            <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">PRODUCTOS</h2>
+            <button class="btn-violet py-2.5 px-5 text-[10px]" onclick="showProductForm()"><span class="material-symbols-outlined text-[15px]">add</span> NUEVO PRODUCTO</button>
+          </div>
+          <!-- Product Form -->
+          <div id="product-form-container" class="hidden admin-card">
+            <div class="admin-card-header">
+              <h3 class="font-label-caps text-label-caps text-primary" id="product-form-title">NUEVO PRODUCTO</h3>
+            </div>
+            <div class="admin-card-body">
+              <input type="hidden" id="pf-id"/>
+
+              <!-- Datos básicos -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">NOMBRE *</label><input id="pf-name" class="input-field" placeholder="Nombre del producto"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PRECIO *</label><input id="pf-price" class="input-field" type="number" placeholder="15000"/></div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CATEGORÍA</label>
+                  <select id="pf-cat" class="input-field">
+                    <option value="remeras">Remeras</option>
+                    <option value="pantalones">Pantalones</option>
+                    <option value="buzos">Buzos</option>
+                    <option value="camperas">Camperas</option>
+                    <option value="accesorios">Accesorios</option>
+                  </select>
+                </div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">STOCK</label><input id="pf-stock" class="input-field" type="number" placeholder="50"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PRECIO TACHADO (opcional)</label><input id="pf-old-price" class="input-field" type="number" placeholder="20000"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BADGE (opcional)</label><input id="pf-badge" class="input-field" placeholder="NUEVO / SALE / DROP EXCLUSIVO"/></div>
+                <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">DESCRIPCIÓN</label><textarea id="pf-desc" class="input-field" rows="2" placeholder="Descripción del producto..."></textarea></div>
+              </div>
+
+              <!-- Colores disponibles -->
+              <div class="bg-[#f8f6ff] border border-indigo-100 rounded-xl p-5 mb-5">
+                <div class="flex justify-between items-center mb-3">
+                  <label class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[16px]">palette</span> COLORES DISPONIBLES
+                  </label>
+                  <button class="border border-primary rounded-lg py-1.5 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="addCustomColor()">
+                    <span class="material-symbols-outlined text-[12px] align-middle">add</span> AGREGAR COLOR
+                  </button>
+                </div>
+                <p class="font-label-caps text-[9px] text-on-surface-variant/60 mb-4">MARCÁ LOS COLORES DISPONIBLES. HACÉ CLIC EN EL NOMBRE PARA EDITARLO.</p>
+                <div id="pf-colors-grid" class="flex flex-wrap gap-4"></div>
+              </div>
+
+              <!-- 4 Imágenes del producto -->
+              <div class="bg-[#f8f6ff] border border-indigo-100 rounded-xl p-5 mb-5">
+                <div class="flex justify-between items-center mb-3">
+                  <label class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[16px]">photo_library</span> IMÁGENES (HASTA 4)
+                  </label>
+                  <span class="font-label-caps text-[9px] text-on-surface-variant/60">LA PRIMERA ES LA IMAGEN PRINCIPAL</span>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3" id="pf-image-slots"></div>
+                <div class="flex gap-2 mt-3">
+                  <input id="pf-img-url" class="input-field flex-1 py-2" placeholder="O pegá una URL de imagen y presioná AGREGAR"/>
+                  <button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="addProductImageUrl()">AGREGAR URL</button>
+                </div>
+                <input type="hidden" id="pf-img"/>
+              </div>
+
+              <div class="flex gap-3 pt-2">
+                <button class="btn-primary py-2.5 px-6 text-[10px]" onclick="saveProduct()"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR PRODUCTO</button>
+                <button class="btn-outline py-2.5 px-6 text-[10px]" onclick="hideProductForm()">CANCELAR</button>
+              </div>
+            </div>
+          </div>
+          <!-- Products Table -->
+          <div id="admin-products-table" class="admin-card overflow-x-auto"></div>
+        </div>
+
+        <!-- Inventory Section -->
+        <div id="admin-section-inventory" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">GESTIÓN DE INVENTARIO</h2>
+            </div>
+            <div id="admin-inventory-table" class="overflow-x-auto"></div>
+          </div>
+        </div>
+
+        <!-- Customers Section -->
+        <div id="admin-section-customers" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">DIRECTORIO DE CLIENTES</h2>
+            </div>
+            <div id="admin-customers-table" class="overflow-x-auto"></div>
+          </div>
+        </div>
+
+        <!-- Banners Section -->
+        <div id="admin-section-banners" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">EDITOR DE BANNERS</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">PERSONALIZACIÓN DE LA TIENDA</p>
+              </div>
+            </div>
+            <div class="admin-card-body space-y-6">
+              <!-- Announcements -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">campaign</span> BARRRA ANUNCIOS
+                </h3>
+                <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Mensajes que se muestran en la barra superior de la tienda.</p>
+                <div id="announcement-editor-list" class="space-y-2 mb-4"></div>
+                <div class="flex gap-2">
+                  <button class="btn-outline py-2 px-4 text-[10px]" onclick="addAnnouncementMsg()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR MENSAJE</button>
+                  <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveAnnouncementBar()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR</button>
+                </div>
+              </div>
+              <!-- Hero Banner -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">photo</span> HERO PRINCIPAL
+                </h3>
+                <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Personalizá el banner principal de la portada.</p>
+                <!-- Live Preview -->
+                <div id="hero-preview" class="relative w-full overflow-hidden mb-5" style="aspect-ratio:16/9;background:var(--hero-gradient);">
+                  <img id="hero-preview-img" class="absolute inset-0 w-full h-full object-cover opacity-60" style="display:none;"/>
+                  <video id="hero-preview-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
+                  <span id="hero-preview-video-badge" class="absolute top-3 right-3 bg-indigo-600 text-white text-[8px] font-bold px-2 py-1 rounded hidden">VIDEO</span>
+                  <span id="hero-preview-badge" class="badge badge-violet mb-4" style="position:absolute;top:20px;left:20px;"></span>
+                  <div style="position:absolute;bottom:20px;left:20px;right:20px;">
+                    <div id="hero-preview-title" style="font-family:Montserrat;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;text-transform:uppercase;" class="text-white"></div>
+                    <div id="hero-preview-subtitle" class="font-body-md text-white/70 mt-2"></div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BADGE</label>
+                    <input id="hero-edit-badge" class="input-field" placeholder="NUEVA TEMPORADA" oninput="previewHero()"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO</label>
+                    <input id="hero-edit-title" class="input-field" placeholder="XINCO" oninput="previewHero()"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">SUBTÍTULO</label>
+                    <input id="hero-edit-subtitle" class="input-field" placeholder="Tu estilo, tu identidad" oninput="previewHero()"/>
+                  </div>
+                </div>
+                <!-- Image / Video Tab Buttons -->
+                <div class="flex gap-2 mb-4 border-b border-gray-200 pb-2">
+                  <button id="tab-img-btn" class="hero-media-tab active px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('img')"><span class="material-symbols-outlined text-[14px] align-middle">image</span> IMAGEN</button>
+                  <button id="tab-vid-btn" class="hero-media-tab px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('video')"><span class="material-symbols-outlined text-[14px] align-middle">videocam</span> VIDEO</button>
+                </div>
+                <!-- Image Tab -->
+                <div id="hero-tab-img">
+                  <div class="mb-4">
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">URL IMAGEN</label>
+                    <input id="hero-edit-img" class="input-field" placeholder="https://..." oninput="previewHeroImg()"/>
+                  </div>
+                  <!-- Animation Style -->
+                  <div class="mb-4">
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">ESTILO DE ANIMACIÓN</label>
+                    <div id="anim-style-selector" class="flex flex-wrap gap-2">
+                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="default" onclick="selectAnimStyle('default')">CLÁSICO</button>
+                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="glitch" onclick="selectAnimStyle('glitch')">GLITCH</button>
+                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="typewriter" onclick="selectAnimStyle('typewriter')">MÁQUINA ESCRIBIR</button>
+                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="fade" onclick="selectAnimStyle('fade')">DESVANECER</button>
+                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="slide" onclick="selectAnimStyle('slide')">DESLIZAR</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Video Tab -->
+                <div id="hero-tab-video" class="hidden">
+                  <div class="border border-indigo-100 rounded-xl p-4 bg-[#f8f6ff] mb-4">
+                    <div class="flex items-center gap-2 mb-3">
+                      <span class="material-symbols-outlined text-[18px] text-indigo-600">videocam</span>
+                      <span class="font-label-caps text-label-caps text-indigo-800 text-[10px]">VIDEO DE FONDO</span>
+                    </div>
+                    <p class="font-body-md text-on-surface-variant/70 text-sm mb-3">Subí un video para reemplazar la imagen de fondo del hero.</p>
+                    <div class="space-y-3">
+                      <div class="flex gap-2">
+                        <input id="hero-video-url" class="input-field flex-1 py-2" placeholder="URL de video (MP4, WebM)"/>
+                        <button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="previewHeroVideo()">VISTA PREVIA</button>
+                      </div>
+                      <div id="hero-video-status" class="font-label-caps text-[9px] text-on-surface-variant/60"></div>
+                      <button class="border border-error rounded-lg py-1.5 px-3 font-label-caps text-[9px] text-error hover:bg-error hover:text-on-error transition-colors" onclick="clearHeroVideo()">LIMPIAR VIDEO</button>
+                      <div id="hero-video-url-display" class="font-body-md text-[10px] text-indigo-600 break-all"></div>
+                      <div>
+                      <div id="hero-video-dropzone" class="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition-colors" onclick="document.getElementById('hero-video-file').click()" ondragover="this.classList.add('border-indigo-500','bg-indigo-50');event.preventDefault()" ondragleave="this.classList.remove('border-indigo-500','bg-indigo-50')" ondrop="handleHeroVideoFileDrop(event)">
+                        <span class="material-symbols-outlined text-[32px] text-indigo-300">cloud_upload</span>
+                        <p class="font-body-md text-sm text-indigo-400 mt-1">Arrastrá un video o hacé clic para seleccionar</p>
+                        <p class="font-label-caps text-[9px] text-indigo-300 mt-0.5">MP4, WebM — máx 10MB</p>
+                      </div>
+                      <input type="file" id="hero-video-file" accept="video/mp4,video/webm" class="hidden" onchange="uploadHeroVideo(this.files[0])"/>
+                        <div id="hero-video-upload-progress" class="hidden mt-3">
+                          <div class="w-full bg-indigo-100 rounded-full h-2">
+                            <div id="hero-video-upload-bar" class="bg-indigo-600 h-2 rounded-full" style="width:0%"></div>
+                          </div>
+                          <p id="hero-video-upload-pct" class="font-label-caps text-[9px] text-indigo-600 mt-1">0%</p>
+                          <p id="hero-video-upload-status" class="font-label-caps text-[9px] text-indigo-400 mt-0.5"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Video Effect -->
+                  <div class="mb-4">
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">EFECTO DE VIDEO</label>
+                    <div id="video-effect-selector" class="flex flex-wrap gap-2">
+                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="none" onclick="selectVideoEffect('none')">NINGUNO</button>
+                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="blur" onclick="selectVideoEffect('blur')">BORROSO</button>
+                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="grayscale" onclick="selectVideoEffect('grayscale')">BLANCO Y NEGRO</button>
+                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="sepia" onclick="selectVideoEffect('sepia')">SEPIA</button>
+                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="contrast" onclick="selectVideoEffect('contrast')">CONTRASTE</button>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveHeroBanner()">
+                  <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR HERO
+                </button>
+              </div>
+              <!-- Promo Banner -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">local_offer</span> BANNER PROMOCIONAL
+                </h3>
+                <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Editá el banner de oferta. Solo se muestra en la home si está habilitado.</p>
+                <div class="flex items-center gap-3 mb-5 p-3 bg-surface-container-low rounded-lg">
+                  <span class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">MOSTRAR EN LA HOME</span>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="promo-edit-enabled" class="sr-only peer" onchange="previewPromo()"/>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-container"></div>
+                  </label>
+                </div>
+                <div class="bg-primary text-on-primary p-6 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-xl">
+                  <div>
+                    <span id="promo-preview-label" class="font-label-caps text-[10px] text-secondary-container block mb-2"></span>
+                    <div id="promo-preview-title" style="font-family:Montserrat;font-size:clamp(20px,3vw,40px);font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;"></div>
+                  </div>
+                  <div>
+                    <div class="border-2 border-secondary-container px-6 py-3 rounded-xl">
+                      <span id="promo-preview-code" class="font-label-caps text-label-caps text-secondary-container tracking-widest"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ETIQUETA SUPERIOR</label>
+                    <input id="promo-edit-label" class="input-field" placeholder="OFERTA LIMITADA" oninput="previewPromo()"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CÓDIGO DE DESCUENTO</label>
+                    <input id="promo-edit-code" class="input-field" placeholder="URBAN30" oninput="previewPromo()"/>
+                  </div>
+                  <div class="md:col-span-2">
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO OFERTA</label>
+                    <input id="promo-edit-title" class="input-field" placeholder="30% OFF EN BUZOS" oninput="previewPromo()"/>
+                  </div>
+                </div>
+                <button class="btn-violet py-2 px-5 text-[10px]" onclick="savePromoBanner()">
+                  <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y PUBLICAR PROMO
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Categories Section (moved from home to admin) -->
+        <div id="admin-section-categorias" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">EDITOR DE CATEGORÍAS</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">EDITÁ LAS IMÁGENES DE LAS CATEGORÍAS QUE SE MUESTRAN EN LA HOME</p>
+              </div>
+            </div>
+            <div class="admin-card-body">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Remeras -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
+                    <img id="admin-cat-img-remeras" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80" class="w-full h-full object-cover"/>
+                  </div>
+                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">REMERAS</div>
+                  <div class="flex gap-2 mb-2">
+                    <input id="admin-cat-url-remeras" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
+                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-remeras').click()">
+                      <span class="material-symbols-outlined text-[14px]">upload</span>
+                    </button>
+                    <input type="file" id="admin-cat-file-remeras" accept="image/*" class="hidden" onchange="uploadAdminCatImg('remeras',this.files[0])"/>
+                  </div>
+                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('remeras')">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
+                  </button>
+                </div>
+                <!-- Pantalones -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
+                    <img id="admin-cat-img-pantalones" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80" class="w-full h-full object-cover"/>
+                  </div>
+                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">PANTALONES</div>
+                  <div class="flex gap-2 mb-2">
+                    <input id="admin-cat-url-pantalones" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
+                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-pantalones').click()">
+                      <span class="material-symbols-outlined text-[14px]">upload</span>
+                    </button>
+                    <input type="file" id="admin-cat-file-pantalones" accept="image/*" class="hidden" onchange="uploadAdminCatImg('pantalones',this.files[0])"/>
+                  </div>
+                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('pantalones')">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
+                  </button>
+                </div>
+                <!-- Buzos -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
+                    <img id="admin-cat-img-buzos" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80" class="w-full h-full object-cover"/>
+                  </div>
+                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">BUZOS</div>
+                  <div class="flex gap-2 mb-2">
+                    <input id="admin-cat-url-buzos" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
+                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-buzos').click()">
+                      <span class="material-symbols-outlined text-[14px]">upload</span>
+                    </button>
+                    <input type="file" id="admin-cat-file-buzos" accept="image/*" class="hidden" onchange="uploadAdminCatImg('buzos',this.files[0])"/>
+                  </div>
+                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('buzos')">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
+                  </button>
+                </div>
+                <!-- Accesorios -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
+                    <img id="admin-cat-img-accesorios" src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80" class="w-full h-full object-cover"/>
+                  </div>
+                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">ACCESORIOS</div>
+                  <div class="flex gap-2 mb-2">
+                    <input id="admin-cat-url-accesorios" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
+                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-accesorios').click()">
+                      <span class="material-symbols-outlined text-[14px]">upload</span>
+                    </button>
+                    <input type="file" id="admin-cat-file-accesorios" accept="image/*" class="hidden" onchange="uploadAdminCatImg('accesorios',this.files[0])"/>
+                  </div>
+                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('accesorios')">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+        <!-- ===== COBRANZAS SECTION ===== -->
+        <div id="admin-section-cobranzas" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">GESTIÓN DE COBRANZAS</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">CONFIGURACIÓN DE MÉTODOS DE PAGO Y ESTADÍSTICAS</p>
+              </div>
+            </div>
+            <div class="admin-card-body space-y-6">
+              <!-- Stats -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="cobr-card admin-card card-hover">
+                  <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[24px]">account_balance_wallet</span></div><span class="font-label-caps text-[11px]" style="background:var(--admin-accent,#9b87f5);color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;">62%</span></div>
+                  <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">MERCADO PAGO</div>
+                  <div style="font-family:Montserrat;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$77.190</span></div>
+                  <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:#009ee3;border-radius:999px;width:62%"></div></div>
+                </div>
+                <div class="cobr-card admin-card card-hover">
+                  <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">credit_card</span></div><span class="font-label-caps text-[11px]" style="background:var(--admin-accent,#9b87f5);color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;">24%</span></div>
+                  <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">TARJETA CRÉ/DÉB</div>
+                  <div style="font-family:Montserrat;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$29.880</span></div>
+                  <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:var(--admin-accent,#9b87f5);border-radius:999px;width:24%"></div></div>
+                </div>
+                <div class="cobr-card admin-card card-hover">
+                  <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">swap_horiz</span></div><span class="font-label-caps text-[11px]" style="background:rgba(0,0,0,0.06);color:rgba(0,0,0,0.45);padding:4px 12px;border-radius:999px;font-weight:700;">14%</span></div>
+                  <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">TRANSFERENCIA</div>
+                  <div style="font-family:Montserrat;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$17.430</span></div>
+                  <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:rgba(0,0,0,0.15);border-radius:999px;width:14%"></div></div>
+                </div>
+              </div>
+
+              <!-- MERCADO PAGO -->
+              <div class="admin-card card-hover p-5">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[24px]">account_balance_wallet</span></div>
+                  <div class="flex-1"><h3 style="font-weight:700;font-size:13px;color:#1a1c1c;letter-spacing:0.02em;">MERCADO PAGO — VINCULAR CUENTA</h3><p style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:2px;letter-spacing:0.05em;">LOS PAGOS SE ACREDITAN DIRECTO EN TU CBU/CVU</p></div>
+                  <span id="mp-status-badge" style="border:1px solid rgba(0,0,0,0.12);padding:6px 12px;font-size:10px;border-radius:999px;color:rgba(0,0,0,0.45);white-space:nowrap;">NO CONFIGURADO</span>
+                </div>
+                <div style="background:rgba(0,0,0,0.03);border-left:4px solid var(--admin-accent,#9b87f5);border-radius:8px;padding:16px;margin-bottom:16px;">
+                  <p style="font-size:11px;color:#1a1c1c;margin-bottom:4px;font-weight:700;">¿CÓMO FUNCIONA?</p>
+                  <p style="font-size:13px;color:rgba(0,0,0,0.55);">La <strong>Public Key</strong> se configura acá y va a Firestore. El <strong>Access Token</strong> va directo a Vercel como variable de entorno — nunca pasa por el browser. Cada compra llama a una función servidor segura que genera el link de pago.</p>
+                </div>
+                <div style="background:rgba(0,0,0,0.03);border-left:4px solid var(--admin-accent,#9b87f5);border-radius:8px;padding:16px;margin-bottom:16px;">
+                  <p style="font-size:11px;color:#1a1c1c;margin-bottom:4px;font-weight:700;">🔒 SOBRE LA SEGURIDAD DEL ACCESS TOKEN</p>
+                  <p style="font-size:13px;color:rgba(0,0,0,0.55);">La <strong>Public Key</strong> se guarda en Firebase (pública por diseño). El <strong>Access Token</strong> es secreto y <strong>no se guarda en ningún lado de esta app</strong> — debe cargarse directamente en <a href="https://vercel.com" target="_blank" style="color:var(--admin-accent,#9b87f5);text-decoration:underline;">Vercel → Environment Variables</a> como <code style="font-size:9px;background:rgba(0,0,0,0.04);padding:0 4px;border-radius:4px;color:rgba(0,0,0,0.55);">MP_ACCESS_TOKEN</code>.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                  <div>
+                    <label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">PUBLIC KEY * <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" style="color:var(--admin-accent,#9b87f5);text-decoration:underline;margin-left:8px;font-size:10px;">OBTENER →</a></label>
+                    <div class="relative"><input id="mp-public-key" class="input-field pr-10" placeholder="APP_USR-xxxxxxxx..." type="password"/><button onclick="togglePass('mp-public-key')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined" style="font-size:18px;color:rgba(0,0,0,0.3);">visibility</span></button></div>
+                  </div>
+                  <div>
+                    <label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">ACCESS TOKEN <span style="color:rgba(0,0,0,0.3);">(solo verificar)</span></label>
+                    <div class="relative"><input id="mp-access-token" class="input-field pr-10" placeholder="Cargarlo en Vercel → MP_ACCESS_TOKEN" type="password"/><button onclick="togglePass('mp-access-token')" class="absolute right-3 top-1/2 -translate-y-1/2"><span class="material-symbols-outlined" style="font-size:18px;color:rgba(0,0,0,0.3);">visibility</span></button></div>
+                    <p style="font-size:9px;color:rgba(0,0,0,0.25);margin-top:4px;">Se borra automáticamente al guardar</p>
+                  </div>
+                  <div>
+                    <label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">CUOTAS SIN INTERÉS</label>
+                    <select id="mp-cuotas" class="input-field"><option value="1">Sin cuotas</option><option value="3">3 cuotas</option><option value="6" selected>6 cuotas</option><option value="12">12 cuotas</option><option value="18">18 cuotas</option></select>
+                  </div>
+                  <div>
+                    <label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">DESCUENTO EXCLUSIVO MP</label>
+                    <div class="flex items-center gap-2"><input id="mp-descuento" class="input-field" type="number" value="0" min="0" max="50" style="width:100px;"/><span style="font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.02em;">%</span></div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(0,0,0,0.03);border-radius:8px;border:1px solid rgba(0,0,0,0.06);margin-bottom:16px;">
+                  <input type="checkbox" id="mp-enabled" checked class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:8px;width:20px;height:20px;"/>
+                  <label for="mp-enabled" style="font-size:11px;cursor:pointer;color:#1a1c1c;letter-spacing:0.02em;">HABILITAR MERCADO PAGO EN EL CHECKOUT</label>
+                </div>
+                <div class="flex gap-3 flex-wrap">
+                  <button class="btn-violet py-2.5 px-5 text-[11px]" onclick="saveMPConfig()"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR Y VINCULAR</button>
+                  <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="btn-outline py-2.5 px-5 text-[11px]" style="border-color:var(--admin-accent,#9b87f5);color:var(--admin-accent,#9b87f5);"><span class="material-symbols-outlined text-[14px]">open_in_new</span> IR A CREDENCIALES MP</a>
+                </div>
+              </div>
+
+              <!-- Tarjetas -->
+              <div class="admin-card card-hover p-5">
+                <div class="flex items-center gap-4 mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">credit_card</span></div><div><h3 style="font-weight:700;font-size:13px;color:#1a1c1c;letter-spacing:0.02em;">DÉBITO Y CRÉDITO</h3><p style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:2px;letter-spacing:0.05em;">GESTIONADAS VÍA MERCADO PAGO</p></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                  <div>
+                    <label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:8px;letter-spacing:0.02em;">TARJETAS HABILITADAS</label>
+                    <div class="flex flex-wrap gap-2">
+                      <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" checked class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> VISA</label>
+                      <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" checked class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> MASTERCARD</label>
+                      <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> AMEX</label>
+                      <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" checked class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> NARANJA</label>
+                      <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> CABAL</label>
+                    </div>
+                  </div>
+                  <div class="space-y-4">
+                    <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">RECARGO CRÉDITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="0" min="0" max="30" style="width:100px;"/><span style="font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.02em;">%</span></div></div>
+                    <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">DESCUENTO DÉBITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="5" min="0" max="30" style="width:100px;"/><span style="font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.02em;">%</span></div></div>
+                  </div>
+                </div>
+                <button class="btn-violet py-2.5 px-5 text-[11px]" onclick="showToast('Configuración de tarjetas guardada ✅')"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR CONFIG TARJETAS</button>
+              </div>
+
+              <!-- Transferencia -->
+              <div class="admin-card card-hover p-5">
+                <div class="flex items-center gap-4 mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">swap_horiz</span></div><div><h3 style="font-weight:700;font-size:13px;color:#1a1c1c;letter-spacing:0.02em;">TRANSFERENCIA BANCARIA / CBU</h3><p style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:2px;letter-spacing:0.05em;">DATOS QUE VE EL CLIENTE AL ELEGIR ESTA OPCIÓN</p></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                  <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">BANCO</label><input id="bank-name" class="input-field" placeholder="Banco Galicia / Nación"/></div>
+                  <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">TITULAR</label><input id="bank-titular" class="input-field" placeholder="Razón social"/></div>
+                  <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">CBU / CVU</label><input id="bank-cbu" class="input-field" placeholder="0000000000000000000000"/></div>
+                  <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">ALIAS</label><input id="bank-alias" class="input-field" placeholder="MI.ALIAS.BANCO"/></div>
+                  <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">DESCUENTO TRANSFERENCIA</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="10" min="0" max="50" style="width:100px;"/><span style="font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.02em;">% OFF</span></div></div>
+                </div>
+                <button class="btn-violet py-2.5 px-5 text-[11px]" onclick="saveBankConfig()"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR DATOS BANCARIOS</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== TRACKING SECTION ===== -->
+        <div id="admin-section-tracking" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">SEGUIMIENTO DE ENVÍOS</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">PROVEEDORES — CONFIGURACIÓN, ASIGNACIÓN Y CONSULTA</p>
+              </div>
+            </div>
+            <div class="admin-card-body space-y-5">
+
+              <!-- ── Configuración de proveedores ── -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">local_shipping</span> PROVEEDORES DE ENVÍO
+                </h3>
+                <p class="font-body-md text-sm text-on-surface-variant/70 mb-5">Configurá los proveedores que aparecen en el checkout.</p>
+
+            <!-- Tabs de proveedor -->
+            <div class="flex mb-5 border border-gray-200 rounded-lg overflow-hidden">
+              <button class="hero-media-tab active flex-1 min-w-max text-[10px] py-2 px-3" id="sp-tab-correoarg" onclick="switchShippingTab('correoarg')">CORREO ARG.</button>
+              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l border-gray-200" id="sp-tab-andreani" onclick="switchShippingTab('andreani')">ANDREANI</button>
+              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l border-gray-200" id="sp-tab-oca" onclick="switchShippingTab('oca')">OCA</button>
+              <button class="hero-media-tab flex-1 min-w-max text-[10px] py-2 px-3 border-l border-gray-200" id="sp-tab-pickup" onclick="switchShippingTab('pickup')">RETIRO LOCAL</button>
+            </div>
+
+            <!-- Panel Correo Argentino -->
+            <div id="sp-panel-correoarg" class="space-y-4">
+              <div class="flex items-center gap-3 p-3 border-[2px] border-outline-variant bg-surface-container-low mb-2">
+                <span class="material-symbols-outlined text-secondary-container text-[20px]">info</span>
+                <p class="font-body-md text-sm text-on-surface-variant">Correo Argentino no tiene API pública de cotización. El costo se configura manualmente o se marca como <strong>a calcular</strong>. El número de seguimiento se asigna abajo cuando se despacha el paquete.</p>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE QUE VE EL CLIENTE</label>
+                  <input id="sp-correoarg-label" class="input-field" placeholder="Correo Argentino (5-7 días hábiles)"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TIPO DE COSTO</label>
+                  <select id="sp-correoarg-cost-type" class="input-field" onchange="toggleShippingCostField('correoarg')">
+                    <option value="pending">A CALCULAR (pendiente)</option>
+                    <option value="free">GRATIS</option>
+                    <option value="fixed">PRECIO FIJO</option>
+                  </select>
+                </div>
+                <div id="sp-correoarg-cost-wrap" class="hidden">
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">COSTO FIJO (ARS)</label>
+                  <input id="sp-correoarg-cost" class="input-field" type="number" placeholder="2800" min="0"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">FORMATO DE SEGUIMIENTO</label>
+                  <input id="sp-correoarg-tracking-format" class="input-field" placeholder="CX000000000AR" readonly/>
+                  <p class="font-label-caps text-[9px] text-on-surface-variant mt-1">FORMATO OFICIAL: 2 LETRAS + 9 NÚMEROS + AR</p>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">URL DE SEGUIMIENTO</label>
+                  <input id="sp-correoarg-tracking-url" class="input-field" value="https://www.correoargentino.com.ar/formularios/e-comercio" readonly/>
+                  <p class="font-label-caps text-[9px] text-on-surface-variant mt-1">URL PÚBLICA — NO ES UN TOKEN NI CREDENCIAL</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 pt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="sp-correoarg-enabled" class="form-checkbox h-4 w-4 border-2 border-primary rounded-none"/>
+                  <span class="font-label-caps text-[10px] text-primary">HABILITADO EN EL CHECKOUT</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Panel Andreani -->
+            <div id="sp-panel-andreani" class="space-y-4 hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE QUE VE EL CLIENTE</label>
+                  <input id="sp-andreani-label" class="input-field" placeholder="Andreani Express (1-3 días hábiles)"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TIPO DE COSTO</label>
+                  <select id="sp-andreani-cost-type" class="input-field" onchange="toggleShippingCostField('andreani')">
+                    <option value="pending">A CALCULAR (pendiente)</option>
+                    <option value="free">GRATIS</option>
+                    <option value="fixed">PRECIO FIJO</option>
+                  </select>
+                </div>
+                <div id="sp-andreani-cost-wrap" class="hidden">
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">COSTO FIJO (ARS)</label>
+                  <input id="sp-andreani-cost" class="input-field" type="number" placeholder="3500" min="0"/>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 pt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="sp-andreani-enabled" class="form-checkbox h-4 w-4 border-2 border-primary rounded-none"/>
+                  <span class="font-label-caps text-[10px] text-primary">HABILITADO EN EL CHECKOUT</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Panel OCA -->
+            <div id="sp-panel-oca" class="space-y-4 hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE QUE VE EL CLIENTE</label>
+                  <input id="sp-oca-label" class="input-field" placeholder="OCA (3-5 días hábiles)"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TIPO DE COSTO</label>
+                  <select id="sp-oca-cost-type" class="input-field" onchange="toggleShippingCostField('oca')">
+                    <option value="pending">A CALCULAR (pendiente)</option>
+                    <option value="free">GRATIS</option>
+                    <option value="fixed">PRECIO FIJO</option>
+                  </select>
+                </div>
+                <div id="sp-oca-cost-wrap" class="hidden">
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">COSTO FIJO (ARS)</label>
+                  <input id="sp-oca-cost" class="input-field" type="number" placeholder="2500" min="0"/>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 pt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="sp-oca-enabled" class="form-checkbox h-4 w-4 border-2 border-primary rounded-none"/>
+                  <span class="font-label-caps text-[10px] text-primary">HABILITADO EN EL CHECKOUT</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Panel Retiro en Local -->
+            <div id="sp-panel-pickup" class="space-y-4 hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE QUE VE EL CLIENTE</label>
+                  <input id="sp-pickup-label" class="input-field" placeholder="Retiro en local (sin costo)"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DIRECCIÓN DEL LOCAL</label>
+                  <input id="sp-pickup-address" class="input-field" placeholder="Av. Santa Fe 1234, CABA"/>
+                </div>
+                <div>
+                  <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">HORARIO</label>
+                  <input id="sp-pickup-hours" class="input-field" placeholder="Lun–Vie 10–19 hs"/>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 pt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="sp-pickup-enabled" class="form-checkbox h-4 w-4 border-2 border-primary rounded-none"/>
+                  <span class="font-label-caps text-[10px] text-primary">HABILITADO EN EL CHECKOUT</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t-[2px] border-outline-variant mt-4">
+              <button class="btn-violet py-2 px-5 text-[11px]" onclick="saveShippingProviders()">
+                <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR PROVEEDORES
+              </button>
+            </div>
+          </div>
+
+          <!-- Asignar -->
+          <div class="border border-gray-100 rounded-xl p-5 bg-white">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">add_box</span> ASIGNAR NÚMERO DE SEGUIMIENTO</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PEDIDO</label><select id="track-order-select" class="input-field" onchange="loadTrackingOrder(this.value)"><option value="">SELECCIONAR PEDIDO...</option></select></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">Nº DE SEGUIMIENTO</label><input id="track-number-input" class="input-field" placeholder="CX000000000AR"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">SERVICIO</label><select id="track-service" class="input-field"><option value="correoarg">Correo Argentino</option><option value="andreani">Andreani</option><option value="oca">OCA</option><option value="dhl">DHL</option></select></div>
+            </div>
+            <div id="track-order-detail" class="hidden bg-gray-50 border border-gray-100 rounded-lg p-4 mb-4">
+              <div class="font-label-caps text-[10px] text-on-surface-variant/60 mb-1">DETALLE DEL PEDIDO SELECCIONADO</div>
+              <div id="track-order-info" class="font-label-caps text-label-caps text-primary"></div>
+            </div>
+            <button class="btn-primary text-[10px] py-2.5 px-5" onclick="assignTracking()"><span class="material-symbols-outlined text-[13px]">local_shipping</span> ASIGNAR Y MARCAR COMO ENVIADO</button>
+          </div>
+
+          <!-- Consultar -->
+          <div class="border border-gray-100 rounded-xl p-5 bg-white">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">search</span> CONSULTAR ESTADO DE ENVÍO</h3>
+            <div class="flex gap-3 mb-5">
+              <input id="track-search-input" class="input-field flex-1" placeholder="Ej: CX123456789AR — número de seguimiento"/>
+              <button class="btn-primary text-[10px]" onclick="consultarTracking()"><span class="material-symbols-outlined text-[13px]">search</span> CONSULTAR</button>
+            </div>
+            <div id="tracking-result" class="hidden">
+              <div class="border border-gray-200 rounded-xl p-5 bg-gray-50">
+                <div class="flex justify-between items-start mb-5">
+                  <div><div id="tr-number" class="font-label-caps text-label-caps text-primary mb-1"></div><div id="tr-service" class="font-label-caps text-[10px] text-on-surface-variant/60"></div></div>
+                  <span id="tr-status-badge" class="font-label-caps text-[9px] bg-[#5d22ff] text-white px-2.5 py-0.5 rounded-full"></span>
+                </div>
+                <div id="tr-timeline" class="relative border-l-2 border-primary ml-4 pl-5 space-y-0"></div>
+                <div class="mt-5 pt-4 border-t border-gray-200 flex justify-between items-center flex-wrap gap-3">
+                  <span class="font-label-caps text-[10px] text-on-surface-variant/60">Ver en el sitio oficial</span>
+                  <a id="tr-official-link" href="#" target="_blank" class="btn-outline py-2 px-4 text-[10px]">VER TRACKING OFICIAL <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabla envíos -->
+          <div class="border border-gray-100 rounded-xl bg-white overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
+              <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">inventory</span> PEDIDOS CON SEGUIMIENTO</h3>
+              <span id="tracking-count" class="font-label-caps text-[10px] text-on-surface-variant/60"></span>
+            </div>
+            <div id="tracking-list" class="overflow-x-auto min-h-[80px]"></div>
+          </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== REPORTES SECTION ===== -->
+        <div id="admin-section-reportes" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">REPORTES Y PDF</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">GENERÁ DOCUMENTOS IMPRIMIBLES CON DATOS DE VENTAS Y CLIENTES</p>
+              </div>
+            </div>
+            <div class="admin-card-body space-y-5">
+              <!-- Filtros del reporte -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">tune</span> CONFIGURAR REPORTE
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-5">
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TIPO DE REPORTE</label>
+                    <select id="rep-tipo" class="input-field" onchange="previewReport()">
+                      <option value="ventas">RESUMEN DE VENTAS</option>
+                      <option value="clientes">DATOS DE CLIENTES</option>
+                      <option value="pedido">PEDIDO INDIVIDUAL</option>
+                      <option value="completo">REPORTE COMPLETO</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ESTADO</label>
+                    <select id="rep-estado" class="input-field" onchange="previewReport()">
+                      <option value="all">TODOS</option>
+                      <option value="pending">PENDIENTES</option>
+                      <option value="shipped">ENVIADOS</option>
+                      <option value="delivered">ENTREGADOS</option>
+                      <option value="cancelled">CANCELADOS</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PEDIDO ESPECÍFICO</label>
+                    <select id="rep-pedido" class="input-field" onchange="previewReport()">
+                      <option value="">TODOS LOS PEDIDOS</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ORDENAR POR</label>
+                    <select id="rep-orden" class="input-field" onchange="previewReport()">
+                      <option value="fecha-desc">FECHA — MÁS RECIENTE</option>
+                      <option value="fecha-asc">FECHA — MÁS ANTIGUO</option>
+                      <option value="monto-desc">MONTO — MAYOR A MENOR</option>
+                      <option value="monto-asc">MONTO — MENOR A MAYOR</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="flex gap-3 flex-wrap">
+                  <button class="btn-violet py-2.5 px-5 text-[10px]" onclick="printReport()">
+                    <span class="material-symbols-outlined text-[15px]">print</span> IMPRIMIR / GUARDAR PDF
+                  </button>
+                  <button class="btn-outline py-2.5 px-5 text-[10px]" onclick="previewReport()">
+                    <span class="material-symbols-outlined text-[15px]">preview</span> ACTUALIZAR VISTA PREVIA
+                  </button>
+                </div>
+              </div>
+
+              <!-- Vista previa del reporte -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">preview</span> VISTA PREVIA DEL DOCUMENTO
+                  </h3>
+                  <span id="rep-count" class="font-label-caps text-[10px] text-on-surface-variant/60"></span>
+                </div>
+                <div id="rep-preview-container" class="border-2 border-gray-200 overflow-auto rounded-xl" style="background:#e8e8e8; padding:24px; max-height:70vh;">
+                  <div id="rep-preview" style="background:#fff; width:794px; min-height:1123px; margin:0 auto; padding:48px; font-family:Arial,sans-serif; font-size:12px; color:#000; box-shadow:0 4px 24px rgba(0,0,0,0.15);">
+                    <p class="font-label-caps text-label-caps text-on-surface-variant/60 text-center mt-8">Seleccioná un tipo de reporte para ver la vista previa</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== CUPONES SECTION ===== -->
+        <div id="admin-section-cupones" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">CUPONES DE DESCUENTO</h2>
+                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">CREAR Y GESTIONAR CÓDIGOS PROMOCIONALES</p>
+              </div>
+            </div>
+            <div class="admin-card-body space-y-5">
+              <!-- Crear cupón -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">add_circle</span> NUEVO CUPÓN
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CÓDIGO</label>
+                    <input id="cpn-code" class="input-field uppercase" placeholder="EJ: BIENVENIDA20"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TIPO</label>
+                    <select id="cpn-type" class="input-field">
+                      <option value="percentage">% PORCENTAJE</option>
+                      <option value="fixed">$ FIJO</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">VALOR</label>
+                    <input id="cpn-value" class="input-field" type="number" placeholder="30"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">COMPRA MÍNIMA ($)</label>
+                    <input id="cpn-min" class="input-field" type="number" placeholder="0"/>
+                  </div>
+                  <div>
+                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">USOS MÁX.</label>
+                    <input id="cpn-uses" class="input-field" type="number" placeholder="999"/>
+                  </div>
+                </div>
+                <button class="btn-violet py-2.5 px-5 text-[10px]" onclick="createCoupon()">
+                  <span class="material-symbols-outlined text-[15px]">add</span> CREAR CUPÓN
+                </button>
+              </div>
+              <!-- Lista de cupones -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">list</span> CUPONES EXISTENTES
+                </h3>
+                <div id="cpn-list" class="space-y-2">
+                  <p class="font-label-caps text-[10px] text-on-surface-variant/60">Cargando...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ===== END ADMIN SECTIONS ===== -->
+      </div>
+    </main>
+  </div>
+  <!-- Admin Dock -->
+  <div class="admin-dock" id="admin-dock">
+    <button class="dock-item" onclick="showAdminSection('dashboard')" data-section="TABLERO">
+      <i data-lucide="layout-dashboard" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('orders')" data-section="PEDIDOS">
+      <i data-lucide="shopping-bag" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('customers')" data-section="CLIENTES">
+      <i data-lucide="users" class="dock-icon"></i>
+    </button>
+    <div class="dock-divider"></div>
+    <button class="dock-item" onclick="showAdminSection('products')" data-section="PRODUCTOS">
+      <i data-lucide="package" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('banners')" data-section="BANNERS">
+      <i data-lucide="image" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('categorias')" data-section="CATEGORÍAS">
+      <i data-lucide="grid-3x3" class="dock-icon"></i>
+    </button>
+    <div class="dock-divider"></div>
+    <button class="dock-item" onclick="showAdminSection('cobranzas')" data-section="COBRANZAS">
+      <i data-lucide="credit-card" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('tracking')" data-section="ENVÍOS">
+      <i data-lucide="truck" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('cupones')" data-section="CUPONES">
+      <i data-lucide="percent" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('reportes')" data-section="REPORTES">
+      <i data-lucide="bar-chart-3" class="dock-icon"></i>
+    </button>
+    <div class="dock-divider"></div>
+    <button class="dock-item" onclick="nav('home')" data-section="TIENDA">
+      <i data-lucide="store" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="resetToFactory()" data-section="RESETEAR">
+      <i data-lucide="refresh-cw" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="doLogout()" data-section="SALIR">
+      <i data-lucide="log-out" class="dock-icon"></i>
+    </button>
+  </div>
+</div>
+
+<!-- ===== SIZE GUIDE MODAL ===== -->
+<div id="size-guide-modal" class="modal-overlay">
+  <div class="bg-surface border-[3px] border-primary p-8 max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h2 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">GUÍA DE TALLES</h2>
+      <button onclick="closeSizeGuide()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <table class="w-full border-collapse font-label-caps text-label-caps">
+      <thead><tr class="bg-primary text-on-primary">
+        <th class="p-3 text-left">TALLE</th><th class="p-3">PECHO (CM)</th><th class="p-3">CINTURA (CM)</th><th class="p-3">CADERA (CM)</th>
+      </tr></thead>
+      <tbody>
+        <tr class="border-b border-outline-variant"><td class="p-3">XS</td><td class="p-3 text-center">82-86</td><td class="p-3 text-center">62-66</td><td class="p-3 text-center">86-90</td></tr>
+        <tr class="border-b border-outline-variant bg-surface-container-low"><td class="p-3">S</td><td class="p-3 text-center">86-92</td><td class="p-3 text-center">66-72</td><td class="p-3 text-center">90-96</td></tr>
+        <tr class="border-b border-outline-variant"><td class="p-3">M</td><td class="p-3 text-center">92-98</td><td class="p-3 text-center">72-78</td><td class="p-3 text-center">96-102</td></tr>
+        <tr class="border-b border-outline-variant bg-surface-container-low"><td class="p-3">L</td><td class="p-3 text-center">98-104</td><td class="p-3 text-center">78-84</td><td class="p-3 text-center">102-108</td></tr>
+        <tr class="border-b border-outline-variant"><td class="p-3">XL</td><td class="p-3 text-center">104-110</td><td class="p-3 text-center">84-90</td><td class="p-3 text-center">108-114</td></tr>
+        <tr class="bg-surface-container-low"><td class="p-3">XXL</td><td class="p-3 text-center">110-118</td><td class="p-3 text-center">90-98</td><td class="p-3 text-center">114-122</td></tr>
+      </tbody>
+    </table>
+    <p class="font-body-md text-on-surface-variant text-sm mt-4">Medidas en centímetros. En caso de duda, elegí el talle más grande.</p>
+  </div>
+</div>
+
+<!-- ===== JS ===== -->
+<script type="module" src="/src/main.js"></script>
+</body>
