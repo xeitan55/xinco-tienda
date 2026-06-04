@@ -51,20 +51,30 @@ export function renderHomeProducts() {
 
 export function renderCatalog() {
   let filtered = [...state.products];
-  const cats = Array.from(document.querySelectorAll('.filter-cat:checked')).map(c => c.value).filter(v => v !== 'all');
-  const activeCats = cats.length > 0 ? cats : (state.filterCat || []);
-  if (activeCats.length > 0) filtered = filtered.filter(p => activeCats.includes(p.cat));
+
+  const checkedCats = Array.from(document.querySelectorAll('.filter-cat:checked')).map(c => c.value);
+  const hasAll = checkedCats.includes('all');
+  const cats = checkedCats.filter(v => v !== 'all');
+  if (!hasAll && cats.length > 0) filtered = filtered.filter(p => cats.includes(p.cat));
+
   if (state._tagFilter) filtered = filtered.filter(p => p.tags.includes(state._tagFilter));
+
   const sizes = Array.from(document.querySelectorAll('.filter-size.selected')).map(b => b.dataset.size);
-  if (sizes.length > 0) filtered = filtered.filter(p => sizes.some(s => p.sizes.includes(s)));
+  if (sizes.length > 0) filtered = filtered.filter(p => sizes.some(s => (p.sizes||[]).includes(s)));
+
   const colors = Array.from(document.querySelectorAll('.filter-color.selected')).map(b => b.dataset.color);
-  if (colors.length > 0) filtered = filtered.filter(p => colors.some(c => p.colors.includes(c)));
-  const maxPrice = parseInt(document.getElementById('price-range').value);
+  if (colors.length > 0) filtered = filtered.filter(p => colors.some(c => (p.colors||[]).includes(c)));
+
+  const priceEl = document.getElementById('price-range');
+  const maxPrice = priceEl ? parseInt(priceEl.value) : 200000;
   filtered = filtered.filter(p => p.price <= maxPrice);
-  const sort = document.getElementById('sort-select').value;
+
+  const sortEl = document.getElementById('sort-select');
+  const sort = sortEl ? sortEl.value : 'default';
   if (sort === 'price-asc') filtered.sort((a,b) => a.price - b.price);
   else if (sort === 'price-desc') filtered.sort((a,b) => b.price - a.price);
-  else if (sort === 'newest') filtered.sort((a,b) => (b.tags.includes('newdrops')?1:0) - (a.tags.includes('newdrops')?1:0));
+  else if (sort === 'newest') filtered.sort((a,b) => (b.tags?.includes('newdrops')?1:0) - (a.tags?.includes('newdrops')?1:0));
+
   const grid = document.getElementById('catalog-grid');
   const empty = document.getElementById('catalog-empty');
   const count1 = document.getElementById('catalog-count');
@@ -73,11 +83,11 @@ export function renderCatalog() {
   if (count1) count1.textContent = countStr;
   if (count2) count2.textContent = countStr;
   if (filtered.length === 0) {
-    grid.innerHTML = '';
-    empty.classList.remove('hidden');
+    if (grid) grid.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
   } else {
-    empty.classList.add('hidden');
-    grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
+    if (empty) empty.classList.add('hidden');
+    if (grid) grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
     try { window.staggerEnter?.(grid); } catch(e) {}
   }
 }

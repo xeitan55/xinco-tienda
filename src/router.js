@@ -98,16 +98,17 @@ export async function handleAuthBtn() {
 }
 
 export function filterCatalog(tag) {
+  state._tagFilter = ['newdrops','stylo','esenciales'].includes(tag) ? tag : null;
   state.filterCat = [];
-  if (tag === 'remeras') state.filterCat = ['remeras'];
-  else if (tag === 'pantalones') state.filterCat = ['pantalones'];
-  else if (tag === 'buzos') state.filterCat = ['buzos'];
-  else if (tag === 'camperas') state.filterCat = ['camperas'];
-  else if (tag === 'accesorios') state.filterCat = ['accesorios'];
-  if (['newdrops','stylo','esenciales'].includes(tag)) {
-    state._tagFilter = tag;
+  if (['remeras','pantalones','buzos','camperas','accesorios'].includes(tag)) {
+    state.filterCat = [tag];
+    document.querySelectorAll('.filter-cat').forEach(cb => {
+      cb.checked = cb.value === tag;
+    });
   } else {
-    state._tagFilter = null;
+    document.querySelectorAll('.filter-cat').forEach(cb => {
+      cb.checked = cb.value === 'all';
+    });
   }
   document.getElementById('catalog-title').textContent = tag === 'newdrops' ? 'NEW DROPS' : tag === 'stylo' ? 'STYLO' : tag === 'esenciales' ? 'ESENCIALES' : tag.toUpperCase();
   nav('catalog');
