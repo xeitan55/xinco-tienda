@@ -2134,6 +2134,7 @@ let _pageBgAnimId = null;
 export function initPageBg() {
   const canvas = document.getElementById('bg-canvas');
   if (!canvas) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ctx = canvas.getContext('2d');
   let W, H, particles = [], cfg = loadAppearance();
   const BASE_COUNT = 25;
@@ -2155,7 +2156,7 @@ export function initPageBg() {
       vx: (Math.random() - 0.5) * 0.15,
       vy: -(0.3 + Math.random() * 0.5) * (cfg.bgSpeed / 3),
       r: size,
-      alpha: 0.04 + Math.random() * 0.08,
+      alpha: 0.06 + Math.random() * 0.12,
       hue: hue + (Math.random() - 0.5) * 40,
       phase: Math.random() * Math.PI * 2,
     };
@@ -2428,7 +2429,6 @@ export function init() {
   const cfg = loadAppearance();
   window._appearanceCfg = cfg;
   applyAppearance(cfg);
-  initPageBg();
   try { lucide?.createIcons(); } catch(e) {}
   showAdminSection('dashboard');
 }
