@@ -57,11 +57,11 @@ export async function nav(page, opts) {
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   if (document.getElementById('nav-'+page)) document.getElementById('nav-'+page).classList.add('active');
 
-  const { renderHomeProducts, renderCatalog } = await import('./products.js');
+  const { renderHomeProducts, renderExclusiveProducts, renderCatalog } = await import('./products.js');
   const { renderCartPage } = await import('./cart.js');
   const { renderCheckoutPage } = await import('./checkout.js');
 
-  if (page === 'home') renderHomeProducts();
+  if (page === 'home') { renderHomeProducts(); renderExclusiveProducts(); }
   if (page === 'catalog') {
     if (!state._catFilterNav) {
       state.filterCat = [];

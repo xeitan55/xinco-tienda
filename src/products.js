@@ -341,9 +341,21 @@ export async function quickAddToCart(id, size, color) {
   addToCart(id, size, color);
 }
 
+export function renderExclusiveProducts() {
+  const el = document.getElementById('exclusive-products');
+  const section = document.getElementById('exclusive-section');
+  if (!el || !section) return;
+  const products = state.products.filter(p => p.exclusive).slice(0,4);
+  if (products.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  el.innerHTML = products.map(p => renderProductCard(p)).join('');
+  try { window.staggerEnter?.(el); } catch(e) {}
+}
+
 export function init() {
   window.renderProductCard = renderProductCard;
   window.renderHomeProducts = renderHomeProducts;
+  window.renderExclusiveProducts = renderExclusiveProducts;
   window.renderCatalog = renderCatalog;
   window.openProduct = openProduct;
   window.closeProductOverlay = closeProductOverlay;

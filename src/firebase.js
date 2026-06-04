@@ -220,7 +220,7 @@ async function bootFromFirebase() {
     const { validateCartCoupons } = await import('./coupons.js');
     const { renderAnnouncementBar, renderHeroBanner, renderPromoBanner } = await import('./banners.jsx');
     const { applySavedCatImages } = await import('./admin.js');
-    const { renderHomeProducts, renderCatalog } = await import('./products.js');
+    const { renderHomeProducts, renderExclusiveProducts, renderCatalog } = await import('./products.js');
 
     loadCart();
     await initFirebase();
@@ -231,6 +231,7 @@ async function bootFromFirebase() {
     renderPromoBanner();
     applySavedCatImages();
     renderHomeProducts();
+    renderExclusiveProducts();
     renderCatalog();
     updateCartCount();
     _bootResolved = true;

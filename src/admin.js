@@ -284,6 +284,8 @@ export function editProductAdmin(id) {
   set('pf-id', p.id); set('pf-name', p.name); set('pf-price', p.price);
   set('pf-stock', p.stock); set('pf-desc', p.desc); set('pf-img', p.img);
   set('pf-badge', p.badge||''); set('pf-old-price', p.oldPrice||'');
+  const excEl = document.getElementById('pf-exclusive');
+  if (excEl) excEl.checked = !!p.exclusive;
   if (document.getElementById('pf-cat')) document.getElementById('pf-cat').value = p.cat;
   renderProductImageSlots();
   renderColorSwatches(pfSelectedColors);
@@ -339,6 +341,8 @@ export function showProductForm() {
   document.getElementById('product-form-container').classList.remove('hidden');
   document.getElementById('product-form-title').textContent = 'NUEVO PRODUCTO';
   ['pf-id','pf-name','pf-price','pf-stock','pf-desc','pf-img','pf-img-url','pf-badge','pf-old-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const excEl = document.getElementById('pf-exclusive');
+  if (excEl) excEl.checked = false;
   renderProductImageSlots();
   renderColorSwatches([]);
   document.getElementById('product-form-container').scrollIntoView({behavior:'smooth',block:'start'});
@@ -384,8 +388,9 @@ export async function saveProduct() {
     typeof entry === 'string' ? { url: entry, colorId: '' } : entry
   );
   const firstImgUrl = normalizedImages[0]?.url || '';
+  const exclusive = document.getElementById('pf-exclusive')?.checked || false;
   const productData = {
-    name: name.toUpperCase(), price, oldPrice, cat, badge, desc,
+    name: name.toUpperCase(), price, oldPrice, cat, badge, desc, exclusive,
     sizes: ['XS','S','M','L','XL','XXL'], colors: [...pfSelectedColors],
     images: normalizedImages,
     img: firstImgUrl,
