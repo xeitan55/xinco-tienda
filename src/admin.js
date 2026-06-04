@@ -2164,6 +2164,25 @@ export function init() {
         item.style.removeProperty('--z-scale');
       });
     });
+    // Auto-hide dock after 5s, show on mouse near bottom
+    let dockTimer;
+    const DOCK_ZONE = 60;
+    function showDock() {
+      dock.classList.remove('dock-hidden');
+      clearTimeout(dockTimer);
+      dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), 5000);
+    }
+    function initDockHide() {
+      clearTimeout(dockTimer);
+      dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), 5000);
+    }
+    document.addEventListener('mousemove', (e) => {
+      if (e.clientY > window.innerHeight - DOCK_ZONE) showDock();
+    });
+    dock.addEventListener('mouseenter', () => { clearTimeout(dockTimer); });
+    dock.addEventListener('mouseleave', () => { dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), 5000); });
+    dock.addEventListener('click', () => showDock());
+    initDockHide();
   }
   window.isAdmin = isAdmin;
   window.renderAdmin = renderAdmin;
