@@ -65,6 +65,9 @@ tailwind.config = {
 </head>
 <body>
 
+<!-- ===== BACKGROUND ANIMATION CANVAS ===== -->
+<canvas id="bg-canvas"></canvas>
+
 <!-- ===== MOUSE STITCH CANVAS ===== -->
 <canvas id="mouse-stitch"></canvas>
 
@@ -1263,7 +1266,7 @@ tailwind.config = {
      <main class="flex-1 overflow-auto" style="background:#f5f5f7;">
       <header class="admin-header">
         <div class="admin-current-section">
-          <div class="section-icon-wrapper"><i class="section-icon" id="admin-section-icon" data-lucide="layout-dashboard"></i></div>
+          <div class="section-icon-wrapper"><span class="material-symbols-outlined section-icon" id="admin-section-icon">dashboard</span></div>
           <div>
             <div class="section-title" id="admin-section-title">TABLERO</div>
             <div class="section-sub" id="admin-section-sub">Vista general</div>
@@ -2171,6 +2174,87 @@ tailwind.config = {
             </div>
           </div>
         </div>
+        <!-- ===== APARIENCIA SECTION ===== -->
+        <div id="admin-section-apariencia" class="hidden space-y-5">
+          <div class="admin-card">
+            <div class="admin-card-body space-y-6">
+              <!-- Fondo Animado -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">blur_on</span> FONDO ANIMADO
+                </h3>
+                <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Partículas flotando hacia arriba en el fondo de la tienda.</p>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="font-label-caps text-[11px] text-on-surface-variant/70">ACTIVAR</span>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="ap-bg-enabled" class="sr-only admin-toggle" onchange="saveAppearance()"/>
+                    <div class="toggle-track w-11 h-6 rounded-full relative transition-all duration-200" style="background:rgba(0,0,0,0.15);"><div class="toggle-dot absolute top-[2px] left-[2px] bg-white rounded-full h-5 w-5 transition-all duration-200 shadow-sm"></div></div>
+                  </label>
+                </div>
+                <div class="space-y-4">
+                  <div>
+                    <div class="flex justify-between mb-1">
+                      <span class="font-label-caps text-[10px] text-on-surface-variant/70">DENSIDAD</span>
+                      <span class="font-label-caps text-[10px] text-primary" id="ap-density-val">3</span>
+                    </div>
+                    <input type="range" id="ap-bg-density" min="1" max="6" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-density-val').textContent=this.value"/>
+                  </div>
+                  <div>
+                    <div class="flex justify-between mb-1">
+                      <span class="font-label-caps text-[10px] text-on-surface-variant/70">VELOCIDAD</span>
+                      <span class="font-label-caps text-[10px] text-primary" id="ap-speed-val">3</span>
+                    </div>
+                    <input type="range" id="ap-bg-speed" min="1" max="5" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-speed-val').textContent=this.value"/>
+                  </div>
+                </div>
+              </div>
+              <!-- Dock -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">dock_to_bottom</span> DOCK
+                </h3>
+                <div class="space-y-4">
+                  <div>
+                    <div class="flex justify-between mb-1">
+                      <span class="font-label-caps text-[10px] text-on-surface-variant/70">OPACIDAD</span>
+                      <span class="font-label-caps text-[10px] text-primary" id="ap-dock-opacity-val">50</span>
+                    </div>
+                    <input type="range" id="ap-dock-opacity" min="10" max="100" value="50" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-opacity-val').textContent=this.value"/>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-label-caps text-[11px] text-on-surface-variant/70">AUTO-OCULTAR</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="ap-dock-autohide" class="sr-only admin-toggle" onchange="saveAppearance()"/>
+                      <div class="toggle-track w-11 h-6 rounded-full relative transition-all duration-200" style="background:rgba(0,0,0,0.15);"><div class="toggle-dot absolute top-[2px] left-[2px] bg-white rounded-full h-5 w-5 transition-all duration-200 shadow-sm"></div></div>
+                    </label>
+                  </div>
+                  <div>
+                    <div class="flex justify-between mb-1">
+                      <span class="font-label-caps text-[10px] text-on-surface-variant/70">DEMORA EN OCULTAR (seg)</span>
+                      <span class="font-label-caps text-[10px] text-primary" id="ap-dock-delay-val">5</span>
+                    </div>
+                    <input type="range" id="ap-dock-delay" min="1" max="15" value="5" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-delay-val').textContent=this.value"/>
+                  </div>
+                </div>
+              </div>
+              <!-- Color de Énfasis (reuse) -->
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">palette</span> COLOR DE ÉNFASIS
+                </h3>
+                <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Color principal del panel de administración.</p>
+                <div class="flex gap-3 flex-wrap">
+                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="violet" style="background:#9b87f5" onclick="setAdminColor('violet')"></button>
+                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="blue" style="background:#5b9cf5" onclick="setAdminColor('blue')"></button>
+                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="pink" style="background:#e87be8" onclick="setAdminColor('pink')"></button>
+                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="green" style="background:#5cc97a" onclick="setAdminColor('green')"></button>
+                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="gold" style="background:#e8c84a" onclick="setAdminColor('gold')"></button>
+                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="red" style="background:#f56060" onclick="setAdminColor('red')"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- ===== END ADMIN SECTIONS ===== -->
       </div>
     </main>
@@ -2208,6 +2292,9 @@ tailwind.config = {
     </button>
     <button class="dock-item" onclick="showAdminSection('reportes')" data-section="REPORTES">
       <i data-lucide="bar-chart-3" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('apariencia')" data-section="APARIENCIA">
+      <i data-lucide="palette" class="dock-icon"></i>
     </button>
     <div class="dock-divider"></div>
     <button class="dock-item" onclick="nav('home')" data-section="TIENDA">
