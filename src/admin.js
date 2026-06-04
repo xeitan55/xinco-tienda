@@ -2044,7 +2044,7 @@ export function initAdminBg() {
       vy: d.vy * (0.6 + Math.random() * 0.6),
       char,
       size: 40 + Math.random() * 80,
-      alpha: 0.06 + Math.random() * 0.08,
+      alpha: 0.08 + Math.random() * 0.12,
       hue,
       rotation: (Math.random() - 0.5) * 0.02,
       rot: 0,
@@ -2058,8 +2058,8 @@ export function initAdminBg() {
       x: Math.random() * W, y: Math.random() * H,
       vx: (Math.random() - 0.5) * 0.15,
       vy: (Math.random() - 0.5) * 0.15,
-      r: 1.5 + Math.random() * 2.5,
-      alpha: 0.04 + Math.random() * 0.06,
+      r: 1.5 + Math.random() * 3,
+      alpha: 0.06 + Math.random() * 0.08,
       hue,
     };
   }
@@ -2078,7 +2078,7 @@ export function initAdminBg() {
     for (const d of dots) {
       ctx.beginPath();
       ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${d.hue}, 50%, 40%, ${d.alpha})`;
+      ctx.fillStyle = `hsla(${d.hue}, 50%, 30%, ${d.alpha})`;
       ctx.fill();
       d.x += d.vx; d.y += d.vy;
       if (d.x < -10) d.x = W + 10;
@@ -2093,7 +2093,7 @@ export function initAdminBg() {
       ctx.font = `${v.size}px "Montserrat", sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = `hsla(${v.hue}, 50%, 40%, ${v.alpha})`;
+      ctx.fillStyle = `hsla(${v.hue}, 50%, 30%, ${v.alpha})`;
       ctx.fillText(v.char, 0, 0);
       ctx.restore();
       v.x += v.vx; v.y += v.vy;
@@ -2134,7 +2134,6 @@ export function init() {
       rafId = requestAnimationFrame(() => {
         const rect = dock.getBoundingClientRect();
         const mx = e.clientX - rect.left;
-        let maxItemScale = 1;
         items.forEach(item => {
           const ir = item.getBoundingClientRect();
           const cx = ir.left + ir.width / 2 - rect.left;
@@ -2149,10 +2148,7 @@ export function init() {
             item.classList.remove('zoomed');
             item.style.removeProperty('--z-scale');
           }
-          if (scale > maxItemScale) maxItemScale = scale;
         });
-        const dockScale = 1 + (maxItemScale - 1) * 0.3;
-        dock.style.setProperty('--dock-scale', dockScale);
       });
     });
     dock.addEventListener('mouseleave', () => {
@@ -2160,7 +2156,6 @@ export function init() {
         item.classList.remove('zoomed');
         item.style.removeProperty('--z-scale');
       });
-      dock.style.removeProperty('--dock-scale');
     });
   }
   window.isAdmin = isAdmin;
