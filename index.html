@@ -1367,24 +1367,22 @@ tailwind.config = {
             <div id="admin-recent-table" class="overflow-x-auto"></div>
           </div>
         </div>
-        <!-- Orders Section -->
-        <div id="admin-section-orders" class="hidden">
-          <div class="admin-card">
-            <div class="admin-card-header">
-              <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">GESTIÓN DE PEDIDOS</h2>
-              <div class="flex gap-2 items-center">
-                <span class="font-label-caps text-[9px] text-on-surface-variant/60">FILTRAR:</span>
-                <select id="order-filter" class="border border-gray-200 rounded-lg px-3 py-1.5 font-label-caps text-[10px] bg-white outline-none focus:border-secondary-container" style="font-size:10px;" onchange="renderAdminOrders()">
-                  <option value="all">TODOS</option>
-                  <option value="pending">PENDIENTES</option>
-                  <option value="shipped">ENVIADOS</option>
-                  <option value="delivered">ENTREGADOS</option>
-                </select>
+          <div id="admin-section-orders" class="hidden">
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <div class="flex gap-2 items-center">
+                  <span class="font-label-caps text-[10px] text-on-surface-variant/60">FILTRAR:</span>
+                  <select id="order-filter" class="border border-gray-200 rounded-lg px-4 py-2 font-label-caps text-[11px] bg-white outline-none focus:border-secondary-container" onchange="renderAdminOrders()">
+                    <option value="all">TODOS</option>
+                    <option value="pending">PENDIENTES</option>
+                    <option value="shipped">ENVIADOS</option>
+                    <option value="delivered">ENTREGADOS</option>
+                  </select>
+                </div>
               </div>
+              <div id="admin-orders-table" class="overflow-x-auto"></div>
             </div>
-            <div id="admin-orders-table" class="overflow-x-auto"></div>
           </div>
-        </div>
         <!-- Products Section -->
         <div id="admin-section-products" class="hidden space-y-5">
           <div class="flex justify-between items-center">
@@ -1462,9 +1460,6 @@ tailwind.config = {
         <!-- Inventory Section -->
         <div id="admin-section-inventory" class="hidden space-y-5">
           <div class="admin-card">
-            <div class="admin-card-header">
-              <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">GESTIÓN DE INVENTARIO</h2>
-            </div>
             <div id="admin-inventory-table" class="overflow-x-auto"></div>
           </div>
         </div>
@@ -1472,9 +1467,6 @@ tailwind.config = {
         <!-- Customers Section -->
         <div id="admin-section-customers" class="hidden space-y-5">
           <div class="admin-card">
-            <div class="admin-card-header">
-              <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">DIRECTORIO DE CLIENTES</h2>
-            </div>
             <div id="admin-customers-table" class="overflow-x-auto"></div>
           </div>
         </div>
@@ -1482,12 +1474,6 @@ tailwind.config = {
         <!-- Banners Section -->
         <div id="admin-section-banners" class="hidden space-y-5">
           <div class="admin-card">
-            <div class="admin-card-header">
-              <div>
-                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">EDITOR DE BANNERS</h2>
-                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">PERSONALIZACIÓN DE LA TIENDA</p>
-              </div>
-            </div>
             <div class="admin-card-body">
               <div class="sub-tab-bar mb-5">
                 <button class="sub-tab-btn active" data-tab="anuncios" onclick="showSectionTab('banners','anuncios')">ANUNCIOS</button>
@@ -1662,12 +1648,6 @@ tailwind.config = {
         <!-- Categories Section (moved from home to admin) -->
         <div id="admin-section-categorias" class="hidden space-y-5">
           <div class="admin-card">
-            <div class="admin-card-header">
-              <div>
-                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">EDITOR DE CATEGORÍAS</h2>
-                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">EDITÁ LAS IMÁGENES DE LAS CATEGORÍAS QUE SE MUESTRAN EN LA HOME</p>
-              </div>
-            </div>
             <div class="admin-card-body">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <!-- Remeras -->
@@ -1746,12 +1726,6 @@ tailwind.config = {
         <!-- ===== COBRANZAS SECTION ===== -->
         <div id="admin-section-cobranzas" class="hidden space-y-5">
           <div class="admin-card">
-            <div class="admin-card-header">
-              <div>
-                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">GESTIÓN DE COBRANZAS</h2>
-                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">CONFIGURACIÓN DE MÉTODOS DE PAGO Y ESTADÍSTICAS</p>
-              </div>
-            </div>
             <div class="admin-card-body">
               <div class="sub-tab-bar mb-5">
                 <button class="sub-tab-btn active" data-tab="stats" onclick="showSectionTab('cobranzas','stats')">ESTADÍSTICAS</button>
@@ -1869,12 +1843,6 @@ tailwind.config = {
         <!-- ===== TRACKING SECTION ===== -->
         <div id="admin-section-tracking" class="hidden space-y-5">
           <div class="admin-card">
-            <div class="admin-card-header">
-              <div>
-                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">SEGUIMIENTO DE ENVÍOS</h2>
-                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">PROVEEDORES — CONFIGURACIÓN, ASIGNACIÓN Y CONSULTA</p>
-              </div>
-            </div>
             <div class="admin-card-body space-y-5">
               <div class="sub-tab-bar mb-2">
                 <button class="sub-tab-btn active" data-tab="proveedores" onclick="showSectionTab('tracking','proveedores')">PROVEEDORES</button>
@@ -2083,12 +2051,6 @@ tailwind.config = {
         <!-- ===== REPORTES SECTION ===== -->
         <div id="admin-section-reportes" class="hidden space-y-5">
           <div class="admin-card">
-            <div class="admin-card-header">
-              <div>
-                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">REPORTES Y PDF</h2>
-                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">GENERÁ DOCUMENTOS IMPRIMIBLES CON DATOS DE VENTAS Y CLIENTES</p>
-              </div>
-            </div>
             <div class="admin-card-body space-y-5">
               <!-- Filtros del reporte -->
               <div class="border border-gray-100 rounded-xl p-5 bg-white">
@@ -2162,12 +2124,6 @@ tailwind.config = {
         <!-- ===== CUPONES SECTION ===== -->
         <div id="admin-section-cupones" class="hidden space-y-5">
           <div class="admin-card">
-            <div class="admin-card-header">
-              <div>
-                <h2 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">CUPONES DE DESCUENTO</h2>
-                <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">CREAR Y GESTIONAR CÓDIGOS PROMOCIONALES</p>
-              </div>
-            </div>
             <div class="admin-card-body space-y-5">
               <!-- Crear cupón -->
               <div class="border border-gray-100 rounded-xl p-5 bg-white">
