@@ -69,21 +69,17 @@ export function showAdminSection(section) {
   const titles = { dashboard:'TABLERO', orders:'PEDIDOS', products:'PRODUCTOS', inventory:'INVENTARIO',
     customers:'CLIENTES', cupones:'CUPONES', banners:'BANNERS', categorias:'CATEGORÍAS',
     tracking:'ENVÍOS', reportes:'REPORTES', cobranzas:'COBRANZAS' };
-  const subs = { dashboard:'Vista general', orders:'Gestión de pedidos', products:'Catálogo de productos', inventory:'Control de stock',
-    customers:'Base de clientes', cupones:'Códigos promocionales', banners:'Personalización visual', categorias:'Imágenes de categorías',
-    tracking:'Seguimiento de envíos', reportes:'Documentos e informes', cobranzas:'Métodos de pago' };
+  const subs = { dashboard:'Vista general del negocio', orders:'Lista completa de pedidos', products:'Crear y editar productos', inventory:'Stock y talles',
+    customers:'Información de clientes', cupones:'Códigos de descuento', banners:'Slider principal, hero y promos', categorias:'Imágenes de categorías en home',
+    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'Mercado Pago, tarjetas y transferencia' };
   const icons = { dashboard:'layout-dashboard', orders:'shopping-bag', products:'package', customers:'users',
     cupones:'percent', banners:'image', categorias:'grid-3x3', tracking:'truck', reportes:'bar-chart-3', cobranzas:'credit-card' };
   const title = document.getElementById('admin-section-title');
-  if (title) title.textContent = titles[section] || section.toUpperCase();
+  if (title) { title.style.opacity = '0'; title.style.transform = 'translateY(-4px)'; setTimeout(() => { title.textContent = titles[section] || section.toUpperCase(); title.style.transition = 'all 0.25s cubic-bezier(0.16,1,0.3,1)'; title.style.opacity = '1'; title.style.transform = 'translateY(0)'; }, 40); }
   const sub = document.getElementById('admin-section-sub');
   if (sub) sub.textContent = subs[section] || '';
   const iconEl = document.getElementById('admin-section-icon');
-  if (iconEl) {
-    const iconName = icons[section] || 'layout-dashboard';
-    iconEl.setAttribute('data-lucide', iconName);
-    if (window.lucide) lucide.createIcons?.({ attrs: { class: 'section-icon' } });
-  }
+  if (iconEl) { iconEl.style.opacity = '0'; iconEl.style.transform = 'scale(0.8)'; setTimeout(() => { const iconName = icons[section] || 'layout-dashboard'; iconEl.setAttribute('data-lucide', iconName); if (window.lucide) lucide.createIcons?.({ attrs: { class: 'section-icon' } }); iconEl.style.transition = 'all 0.3s cubic-bezier(0.16,1,0.3,1)'; iconEl.style.opacity = '1'; iconEl.style.transform = 'scale(1)'; }, 40); }
   if (section === 'inventory') initInventoryChart();
   if (section === 'cobranzas') window.initCobranzasSection?.();
   if (section === 'cupones') showAdminCouponTab?.('active');
@@ -2023,7 +2019,7 @@ export function initAdminBg() {
   if (!canvas || canvas._bgInit) return;
   canvas._bgInit = true;
   const ctx = canvas.getContext('2d');
-  let W, H;
+  let W, H, time = 0;
   const CHARS = ['X', 'Y', 'O'];
   const COUNT = 20;
   const DOTS = 40;
@@ -2038,16 +2034,19 @@ export function initAdminBg() {
                   'Y': { vx: -0.15 - Math.random() * 0.2, vy: 0.1 + Math.random() * 0.15 },
                   'O': { vx: 0.1 + Math.random() * 0.15, vy: 0.1 + Math.random() * 0.15 } };
     const d = dirs[char];
+    const isBig = Math.random() < 0.2;
     return {
       x: Math.random() * W, y: Math.random() * H,
       vx: d.vx * (0.6 + Math.random() * 0.6),
       vy: d.vy * (0.6 + Math.random() * 0.6),
       char,
-      size: 40 + Math.random() * 80,
-      alpha: 0.08 + Math.random() * 0.12,
+      size: isBig ? 120 + Math.random() * 80 : 40 + Math.random() * 80,
+      alpha: isBig ? 0.04 + Math.random() * 0.06 : 0.08 + Math.random() * 0.12,
       hue,
       rotation: (Math.random() - 0.5) * 0.02,
       rot: 0,
+      isBig,
+      glowPhase: Math.random() * Math.PI * 2,
     };
   }
 
@@ -2061,6 +2060,7 @@ export function initAdminBg() {
       r: 1.5 + Math.random() * 3,
       alpha: 0.06 + Math.random() * 0.08,
       hue,
+      phase: Math.random() * Math.PI * 2,
     };
   }
 
@@ -2074,10 +2074,12 @@ export function initAdminBg() {
   }
 
   function draw() {
+    time += 0.02;
     ctx.clearRect(0, 0, W, H);
     for (const d of dots) {
+      const pulse = 1 + Math.sin(time * 0.5 + d.phase) * 0.15;
       ctx.beginPath();
-      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.arc(d.x, d.y, d.r * pulse, 0, Math.PI * 2);
       ctx.fillStyle = `hsla(${d.hue}, 50%, 30%, ${d.alpha})`;
       ctx.fill();
       d.x += d.vx; d.y += d.vy;
@@ -2090,10 +2092,15 @@ export function initAdminBg() {
       ctx.save();
       ctx.translate(v.x, v.y);
       ctx.rotate(v.rot);
+      const glow = v.isBig ? 0.3 + Math.sin(time + v.glowPhase) * 0.15 : 0;
+      if (glow > 0.1) {
+        ctx.shadowColor = `hsla(${v.hue}, 50%, 50%, ${glow})`;
+        ctx.shadowBlur = 20;
+      }
       ctx.font = `${v.size}px "Montserrat", sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = `hsla(${v.hue}, 50%, 30%, ${v.alpha})`;
+      ctx.fillStyle = `hsla(${v.hue}, 50%, 30%, ${v.alpha + glow * 0.3})`;
       ctx.fillText(v.char, 0, 0);
       ctx.restore();
       v.x += v.vx; v.y += v.vy;
