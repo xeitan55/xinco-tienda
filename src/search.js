@@ -41,7 +41,7 @@ export function handleSearch(q) {
     p.name.toLowerCase().includes(q.toLowerCase()) ||
     p.cat.toLowerCase().includes(q.toLowerCase()) ||
     (p.badge && p.badge.toLowerCase().includes(q.toLowerCase())) ||
-    p.sku.toLowerCase().includes(q.toLowerCase())
+    (p.sku && p.sku.toLowerCase().includes(q.toLowerCase()))
   );
   if (results.length === 0) {
     el.innerHTML = '';

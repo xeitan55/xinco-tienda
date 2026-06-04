@@ -67,8 +67,8 @@ export async function nav(page, opts) {
   if (page === 'checkout') renderCheckoutPage();
   if (page === 'account') { const { renderAccountPage } = await import('./auth.js'); renderAccountPage(); }
   if (page === 'admin') {
-    const { renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers } = await import('./admin.js');
-    [renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers].forEach(fn => { try { fn(); } catch(e) { console.error(e); } });
+    const { renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers, renderAdminCupones, renderAdminTracking, renderAdminReports, renderAdminCatEditor } = await import('./admin.js');
+    [renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers, renderAdminCupones, renderAdminTracking, renderAdminReports, renderAdminCatEditor].forEach(fn => { try { fn(); } catch(e) { console.error(e); } });
   }
 
   // Update URL
@@ -113,7 +113,7 @@ export function filterCatalog(tag) {
   nav('catalog');
 }
 
-export function resetFilters() {
+export async function resetFilters() {
   document.querySelectorAll('.filter-cat').forEach(c => { c.checked = c.value === 'all'; });
   document.querySelectorAll('.filter-size').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.filter-color').forEach(b => b.style.outline = '');
@@ -123,7 +123,7 @@ export function resetFilters() {
   state._tagFilter = null;
   state.filterCat = [];
   document.getElementById('catalog-title').textContent = 'TODOS LOS ITEMS';
-  const { renderCatalog } = require_products();
+  const { renderCatalog } = await import('./products.js');
   renderCatalog();
 }
 

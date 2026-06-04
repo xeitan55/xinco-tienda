@@ -82,7 +82,7 @@ export function showAdminSection(section) {
   if (iconEl) { iconEl.style.opacity = '0'; iconEl.style.transform = 'scale(0.8)'; setTimeout(() => { iconEl.textContent = icons[section] || 'dashboard'; iconEl.style.transition = 'all 0.3s cubic-bezier(0.16,1,0.3,1)'; iconEl.style.opacity = '1'; iconEl.style.transform = 'scale(1)'; }, 40); }
   if (section === 'inventory') initInventoryChart();
   if (section === 'cobranzas') window.initCobranzasSection?.();
-  if (section === 'cupones') showAdminCouponTab?.('active');
+  if (section === 'cupones') { showAdminCouponTab?.('active'); renderAdminCupones(); }
   if (section === 'banners') window.initBannerEditor?.();
   if (section === 'tracking') { window.initTrackingSection?.(); window.initShippingProviders?.(); }
   if (section === 'reportes') window.initReportesSection?.();
@@ -602,10 +602,8 @@ export async function createCoupon() {
   if (new Date(exp) <= new Date()) { window.showToast?.('La fecha debe ser futura ❌'); return; }
   const data = {
     code, type,
-    discount: type === 'percentage' ? disc : disc,
-    discountAmount: type === 'fixed' ? disc : 0,
-    discountPercent: type === 'percentage' ? disc : 0,
-    minPurchase: min, maxUses, expiration: exp, enabled: true, used: 0,
+    value: disc,
+    minPurchase, maxUses, expiresAt: exp, enabled: true, usedCount: 0,
   };
   state.coupons.push(data);
   const { waitForFirebase } = await import('./firebase.js');
@@ -639,9 +637,18 @@ export function renderAdminCupones() {
   const activeEl = document.getElementById('active-coupons');
   const expiredEl = document.getElementById('expired-coupons');
   const now = new Date();
+  function fmtDiscount(c) {
+    if (c.type === 'percentage') return c.value + '% OFF';
+    if (c.type === 'fixed') return window.fmtPrice?.(c.value) || '$' + c.value;
+    if (c.discountPercent) return c.discountPercent + '% OFF';
+    if (c.discountAmount) return window.fmtPrice?.(c.discountAmount) || '$' + c.discountAmount;
+    return '';
+  }
+  const expiresKey = c => c.expiresAt || c.expiration;
+  const usedKey = c => c.usedCount ?? c.used ?? 0;
   if (activeEl) {
-    const active = state.coupons.filter(c => new Date(c.expiration) > now && c.enabled !== false);
-    const usedCoupons = state.coupons.filter(c => c.used > 0);
+    const active = state.coupons.filter(c => !expiresKey(c) || (new Date(expiresKey(c)) > now && c.enabled !== false));
+    const usedCoupons = state.coupons.filter(c => usedKey(c) > 0);
     activeEl.innerHTML = [
       ...(usedCoupons.length ? [`
       <div class="p-4 bg-surface-container-low border-2 border-outline-variant mb-4">
@@ -651,11 +658,11 @@ export function renderAdminCupones() {
             <div class="bg-surface border-2 border-outline-variant p-4 opacity-60">
               <div class="flex justify-between items-center">
                 <span class="font-label-caps text-[14px] tracking-wider text-primary">${c.code}</span>
-                <span class="badge badge-outline text-[9px]">USADO x${c.used}</span>
+                <span class="badge badge-outline text-[9px]">USADO x${usedKey(c)}</span>
               </div>
-              <div class="font-body-md text-sm mt-1">${c.discountPercent ? c.discountPercent + '% OFF' : c.discountAmount ? window.fmtPrice?.(c.discountAmount) : ''}
+              <div class="font-body-md text-sm mt-1">${fmtDiscount(c)}
                 ${c.minPurchase > 0 ? ' / mín $' + c.minPurchase : ''}</div>
-              <div class="font-label-caps text-[9px] text-on-surface-variant mt-2">Exp: ${c.expiration}</div>
+              <div class="font-label-caps text-[9px] text-on-surface-variant mt-2">Exp: ${expiresKey(c) || '—'}</div>
             </div>`).join('')}
         </div>
       </div>`] : []),
@@ -667,22 +674,22 @@ export function renderAdminCupones() {
               <span class="font-label-caps text-[14px] tracking-wider text-primary">${c.code}</span>
               <button onclick="deleteCoupon('${c.code}')" class="text-error hover:opacity-70"><span class="material-symbols-outlined text-[16px]">delete</span></button>
             </div>
-            <div class="font-body-md text-sm mt-1">${c.discountPercent ? c.discountPercent + '% OFF' : c.discountAmount ? window.fmtPrice?.(c.discountAmount) : ''}
+            <div class="font-body-md text-sm mt-1">${fmtDiscount(c)}
               ${c.minPurchase > 0 ? ' / mín ' + window.fmtPrice?.(c.minPurchase) : ''}</div>
-            <div class="font-label-caps text-[9px] text-on-surface-variant mt-1">Exp: ${c.expiration} | Usos: ${c.used || 0}${c.maxUses ? '/' + c.maxUses : ''}</div>
+            <div class="font-label-caps text-[9px] text-on-surface-variant mt-1">Exp: ${expiresKey(c) || '—'} | Usos: ${usedKey(c)}${c.maxUses ? '/' + c.maxUses : ''}</div>
             <button onclick="navigator.clipboard.writeText('${c.code}').then(()=>showToast?.('✅ Código copiado'))" class="btn-violet w-full mt-3 py-2 text-[9px]">COPIAR CÓDIGO</button>
           </div>`).join('')}
       </div>` : '<div class="text-on-surface-variant font-body-md text-sm p-8 text-center">No hay cupones activos</div>'),
     ].join('');
   }
   if (expiredEl) {
-    const expired = state.coupons.filter(c => new Date(c.expiration) <= now);
+    const expired = state.coupons.filter(c => expiresKey(c) && new Date(expiresKey(c)) <= now);
     expiredEl.innerHTML = expired.length
       ? `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">${expired.map(c => `
           <div class="bg-surface border-2 border-outline-variant p-4 opacity-50">
             <div class="font-label-caps text-[14px] tracking-wider text-primary">${c.code}</div>
-            <div class="font-body-md text-sm mt-1">${c.discountPercent ? c.discountPercent + '% OFF' : c.discountAmount ? window.fmtPrice?.(c.discountAmount) : ''}</div>
-            <div class="font-label-caps text-[9px] text-on-surface-variant mt-2">Expiró: ${c.expiration}</div>
+            <div class="font-body-md text-sm mt-1">${fmtDiscount(c)}</div>
+            <div class="font-label-caps text-[9px] text-on-surface-variant mt-2">Expiró: ${expiresKey(c)}</div>
           </div>`).join('')}</div>`
       : '<div class="text-on-surface-variant font-body-md text-sm p-8 text-center">No hay cupones expirados</div>';
   }
