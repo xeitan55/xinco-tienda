@@ -157,11 +157,18 @@ export async function openProduct(id) {
   document.body.style.overflow = 'hidden';
   setTimeout(() => { try { initProductZoom(); } catch(e) {} }, 50);
   setTimeout(() => { try { loadReviews(p.id); } catch(e) {} }, 100);
+
+  // Update URL to product slug
+  const { slugify } = await import('./router.js');
+  const slug = slugify(p.name);
+  history.pushState({ page: 'product', productId: p.id }, '', '/producto/' + slug);
 }
 
 export function closeProductOverlay() {
   document.getElementById('product-overlay').classList.remove('open');
   document.body.style.overflow = '';
+  // Return to previous page in history
+  if (history.state?.page === 'product') history.back();
 }
 
 export function swapProductImage(url, thumbEl) {

@@ -1,6 +1,30 @@
 import { state } from './state.js';
 
-export async function nav(page) {
+const SLUG_MAP = {
+  home: '/',
+  catalog: '/catalogo',
+  cart: '/carrito',
+  checkout: '/checkout',
+  login: '/login',
+  register: '/registro',
+  account: '/cuenta',
+  admin: '/admin',
+  'verify-email': '/verificar-email',
+  'order-confirm': '/confirmacion',
+};
+
+const PAGE_FROM_SLUG = Object.fromEntries(
+  Object.entries(SLUG_MAP).map(([k, v]) => [v, k])
+);
+
+export function slugify(text) {
+  return text.toLowerCase()
+    .replace(/[^a-z0-9áéíóúñü]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .substring(0, 80);
+}
+
+export async function nav(page, opts) {
   const current = document.querySelector('.page.active');
   const target = document.getElementById('page-' + page);
   if (!target) return;
@@ -45,6 +69,19 @@ export async function nav(page) {
   if (page === 'admin') {
     const { renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers } = await import('./admin.js');
     [renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers].forEach(fn => { try { fn(); } catch(e) { console.error(e); } });
+  }
+
+  // Update URL
+  let slug;
+  if (page === 'product' && state.currentProduct) {
+    slug = '/producto/' + slugify(state.currentProduct.name);
+  } else {
+    slug = SLUG_MAP[page] || '/' + page;
+  }
+  if (!opts?.replace) {
+    history.pushState({ page }, '', slug);
+  } else {
+    history.replaceState({ page }, '', slug);
   }
 
   setTimeout(() => { try { window.initScrollReveal?.(); } catch(e) {} }, 50);
@@ -95,6 +132,7 @@ export function init() {
   window.handleAuthBtn = handleAuthBtn;
   window.filterCatalog = filterCatalog;
   window.resetFilters = resetFilters;
+  window.slugify = slugify;
   window.closeMobileMenu = () => {
     document.getElementById('mobile-menu').classList.remove('open');
     document.body.style.overflow = '';
@@ -103,6 +141,42 @@ export function init() {
     document.getElementById('mobile-menu').classList.add('open');
     document.body.style.overflow = 'hidden';
   };
+
+  // Browser back/forward
+  window.addEventListener('popstate', (e) => {
+    const page = e.state?.page;
+    if (page === 'product' && e.state?.productId) {
+      window.openProduct(e.state.productId);
+    } else if (page && page !== 'product') {
+      // Close product overlay if open
+      const overlay = document.getElementById('product-overlay');
+      if (overlay?.classList.contains('open')) {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      nav(page, { replace: true });
+    } else if (!page) {
+      nav('home', { replace: true });
+    }
+  });
+
+  // Initial navigation from URL
+  const path = window.location.pathname;
+  const page = PAGE_FROM_SLUG[path];
+  if (page && page !== 'home') {
+    setTimeout(() => nav(page, { replace: true }), 100);
+  } else if (path.startsWith('/producto/')) {
+    // Product slug route — handled after boot
+    const slug = path.replace('/producto/', '');
+    setTimeout(() => {
+      const p = (window.state?.products || []).find(pr =>
+        slugify(pr.name) === slug
+      );
+      if (p) window.openProduct(p.id);
+    }, 200);
+  } else if (path !== '/') {
+    history.replaceState({ page: 'home' }, '', '/');
+  }
 
   // Filter event listeners
   document.querySelectorAll('.filter-cat').forEach(cb => cb.addEventListener('change', () => {

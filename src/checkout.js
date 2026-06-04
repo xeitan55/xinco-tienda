@@ -226,9 +226,44 @@ export async function placeOrder() {
   document.getElementById('order-number').textContent = '#' + orderNum;
   const { nav } = await import('./router.js');
   nav('order-confirm');
+  // Send ticket email (non-blocking)
+  setTimeout(() => window.sendTicket?.(), 500);
+  // Render ticket detail
+  setTimeout(() => window.renderTicketDetail?.(), 300);
   } finally {
     _placingOrder = false;
     if (btn) { btn.disabled = false; btn.textContent = 'CONFIRMAR PEDIDO'; }
+  }
+}
+
+// Handle MP return callback
+export async function handleMpReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const paymentStatus = params.get('payment');
+  const orderNum = params.get('order');
+  if (!paymentStatus || !orderNum) return;
+
+  // Clean URL (remove query params)
+  history.replaceState({ page: 'home' }, '', '/');
+
+  if (paymentStatus === 'success') {
+    // Order was already saved before redirect
+    document.getElementById('order-number').textContent = '#' + orderNum;
+    const { nav } = await import('./router.js');
+    nav('order-confirm');
+    // Try to find order in state and send ticket
+    const order = state.orders.find(o => o.id === orderNum);
+    if (order) {
+      setTimeout(() => window.renderTicketDetail?.(), 300);
+      setTimeout(() => window.sendTicket?.(), 500);
+    } else {
+      // Order might only be in Firestore — pull it
+      window.showToast?.('✅ Pago recibido — pedido #' + orderNum);
+    }
+  } else if (paymentStatus === 'failure') {
+    window.showToast?.('⚠️ El pago no se completó. Podés reintentar desde tu carrito.');
+  } else if (paymentStatus === 'pending') {
+    window.showToast?.('⏳ Pago pendiente. Te notificaremos cuando se acredite.');
   }
 }
 
@@ -425,4 +460,7 @@ export function init() {
   window.initCobranzasSection = initCobranzasSection;
   window.saveMPConfig = saveMPConfig;
   window.resetToFactory = resetToFactory;
+  window.handleMpReturn = handleMpReturn;
+  // Handle MP return on page load
+  setTimeout(() => handleMpReturn(), 200);
 }

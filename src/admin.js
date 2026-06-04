@@ -87,7 +87,10 @@ export function showAdminSection(section) {
   if (section === 'tracking') { window.initTrackingSection?.(); window.initShippingProviders?.(); }
   if (section === 'reportes') window.initReportesSection?.();
   if (section === 'categorias') window.initCatEditor?.();
-  if (section === 'apariencia') window.initAppearancePanel?.();
+  if (section === 'apariencia') {
+    window.initAppearancePanel?.();
+    window.loadEmailJsIntoForm?.();
+  }
 }
 
 export function showSectionTab(sectionId, tabName) {

@@ -115,7 +115,7 @@ export async function doRegister() {
     await updateProfile(user, { displayName: nombre + ' ' + apellido });
     const ADMIN_EMAIL = atob('YWRtaW5AeGluY28uY29t');
     if (email !== ADMIN_EMAIL) {
-      await sendEmailVerification(user, { url: 'https://www.xinco.shop/verify', handleCodeInApp: true });
+      await sendEmailVerification(user, { url: 'https://xinco.shop/verificar-email', handleCodeInApp: true });
     }
     const fullName = nombre + ' ' + apellido;
     _lastRegisteredUser = { email, name: fullName };
@@ -139,7 +139,7 @@ export async function resendVerificationEmail() {
   if (_lastRegisteredUser) {
     const sent = await sendVerificationEmail(
       _lastRegisteredUser.email, _lastRegisteredUser.name,
-      `${window.location.origin}/verify`
+      `${window.location.origin}/verificar-email`
     );
     if (sent) window.showToast?.('Email de verificación reenviado ✅ — revisá tu bandeja');
     else window.showToast?.('Error al reenviar. Revisá spam o intentá más tarde');
@@ -625,6 +625,24 @@ export async function sendPasswordReset() {
   } catch(e) { window.showToast?.('Error al enviar: ' + e.message + ' ❌'); }
 }
 
+export async function handleEmailVerification() {
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get('mode');
+  const oobCode = params.get('oobCode');
+  if (mode !== 'verifyEmail' || !oobCode) return;
+  const statusEl = document.getElementById('verify-status');
+  if (!statusEl) return;
+  try {
+    await window._fb.applyActionCode(oobCode);
+    statusEl.innerHTML = '✅ EMAIL VERIFICADO<br><span style="font-size:13px;color:#666;margin-top:8px;display:block;">Ahora podés iniciar sesión.</span>';
+    setTimeout(() => { import('./router.js').then(m => m.nav('login')); }, 3000);
+  } catch(e) {
+    let msg = 'Error al verificar el email';
+    if (e.code === 'auth/invalid-action-code') msg = 'El link ya expiró o ya fue usado';
+    statusEl.innerHTML = '❌ ' + msg;
+  }
+}
+
 export function init() {
   window.doLogin = doLogin;
   window.doRegister = doRegister;
@@ -657,4 +675,7 @@ export function init() {
   window.validateProfileField = validateProfileField;
   window.renderUserCards = renderUserCards;
   window.renderAddresses = renderAddresses;
+  window.handleEmailVerification = handleEmailVerification;
+  // Process email verification link on load
+  setTimeout(() => handleEmailVerification(), 500);
 }
