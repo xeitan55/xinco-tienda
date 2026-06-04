@@ -1277,16 +1277,8 @@ tailwind.config = {
         </div>
         <div class="admin-header-right">
           <div class="brand-sub">Panel Admin</div>
-          <div class="admin-color-btn" id="admin-color-btn" onclick="toggleColorPicker()">
-            <span class="material-symbols-outlined">palette</span>
-          </div>
-          <div class="admin-color-picker" id="admin-color-picker">
-            <button class="color-swatch active" data-color="violet" style="background:#9b87f5" onclick="setAdminColor('violet')"></button>
-            <button class="color-swatch" data-color="blue" style="background:#5b9cf5" onclick="setAdminColor('blue')"></button>
-            <button class="color-swatch" data-color="pink" style="background:#e87be8" onclick="setAdminColor('pink')"></button>
-            <button class="color-swatch" data-color="green" style="background:#5cc97a" onclick="setAdminColor('green')"></button>
-            <button class="color-swatch" data-color="gold" style="background:#e8c84a" onclick="setAdminColor('gold')"></button>
-            <button class="color-swatch" data-color="red" style="background:#f56060" onclick="setAdminColor('red')"></button>
+          <div class="admin-color-btn" id="admin-color-btn" onclick="showAdminSection('apariencia')" title="Apariencia">
+            <span class="material-symbols-outlined">settings</span>
           </div>
           <div class="admin-avatar"><span class="material-symbols-outlined">person</span></div>
         </div>
@@ -1580,10 +1572,16 @@ tailwind.config = {
                             </div>
                             <p id="hero-video-upload-pct" class="font-label-caps text-[9px] text-indigo-600 mt-1">0%</p>
                             <p id="hero-video-upload-status" class="font-label-caps text-[9px] text-indigo-400 mt-0.5"></p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+              </div>
+              <!-- Botón guardar -->
+              <div class="flex justify-end pt-2">
+                <button class="btn-violet py-3 px-8 text-[11px]" onclick="saveAppearanceToFirebase()">
+                  <span class="material-symbols-outlined text-[16px]">save</span> GUARDAR CAMBIOS
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
                     <div class="mb-4">
                       <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">EFECTO DE VIDEO</label>
                       <div id="video-effect-selector" class="flex flex-wrap gap-2">
@@ -2292,9 +2290,6 @@ tailwind.config = {
     </button>
     <button class="dock-item" onclick="showAdminSection('reportes')" data-section="REPORTES">
       <i data-lucide="bar-chart-3" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="showAdminSection('apariencia')" data-section="APARIENCIA">
-      <i data-lucide="palette" class="dock-icon"></i>
     </button>
     <div class="dock-divider"></div>
     <button class="dock-item" onclick="nav('home')" data-section="TIENDA">
