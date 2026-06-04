@@ -1989,22 +1989,50 @@ function applyBgColor(scheme) {
   _currentBgColor = scheme;
   localStorage.setItem('adminBgColor', scheme);
   const c = BG_COLORS[scheme];
-  if (!c) return;
+  let css, cssLight;
+  if (c) {
+    css = c.css; cssLight = c.cssLight;
+  } else {
+    const customMatch = scheme?.match(/^custom_#([a-f\d]{6})$/i);
+    if (customMatch) { css = '#' + customMatch[1]; cssLight = css + '99'; }
+    else return;
+  }
   const r = document.querySelector('#page-admin');
   if (!r) return;
-  r.style.setProperty('--admin-accent', c.css);
-  r.style.setProperty('--admin-accent-light', c.cssLight);
-  r.style.setProperty('--admin-accent-dim', c.css + '18');
+  r.style.setProperty('--admin-accent', css);
+  r.style.setProperty('--admin-accent-light', cssLight);
+  r.style.setProperty('--admin-accent-dim', css + '18');
   document.querySelectorAll('.color-swatch').forEach(el => el.classList.toggle('active', el.dataset.color === scheme));
   const avatar = document.querySelector('.admin-avatar');
-  if (avatar) avatar.style.background = c.css;
+  if (avatar) avatar.style.background = css;
   const iconEl = document.querySelector('.section-icon');
-  if (iconEl) iconEl.style.color = c.css;
+  if (iconEl) iconEl.style.color = css;
 }
 
 export function setAdminColor(scheme) {
   if (!BG_COLORS[scheme]) return;
   applyBgColor(scheme);
+  const picker = document.getElementById('ap-vector-color');
+  if (picker) picker.value = BG_COLORS[scheme].css;
+  restartAdminBg();
+}
+
+export function setAdminCustomColor(hex) {
+  const match = hex.match(/^#?([a-f\d]{6})$/i);
+  if (!match) return;
+  localStorage.setItem('adminBgColor', 'custom_' + hex);
+  const r = document.querySelector('#page-admin');
+  if (r) {
+    r.style.setProperty('--admin-accent', hex);
+    r.style.setProperty('--admin-accent-light', hex + '99');
+    r.style.setProperty('--admin-accent-dim', hex + '18');
+  }
+  document.querySelectorAll('.color-swatch').forEach(el => el.classList.remove('active'));
+  document.getElementById('ap-vector-color').value = hex;
+  restartAdminBg();
+}
+
+function restartAdminBg() {
   const canvas = document.getElementById('admin-bg-canvas');
   if (canvas) {
     if (_bgAnimId) { cancelAnimationFrame(_bgAnimId); _bgAnimId = null; }
@@ -2013,7 +2041,36 @@ export function setAdminColor(scheme) {
   setTimeout(() => { initAdminBg(); }, 50);
 }
 
-export function getBgColor() { return BG_COLORS[_currentBgColor] || BG_COLORS.violet; }
+export function getBgColor() {
+  if (BG_COLORS[_currentBgColor]) return BG_COLORS[_currentBgColor];
+  const customMatch = _currentBgColor?.match(/^custom_#([a-f\d]{6})$/i);
+  if (customMatch) {
+    const hex = customMatch[1];
+    const r = parseInt(hex.slice(0,2), 16);
+    const g = parseInt(hex.slice(2,4), 16);
+    const b = parseInt(hex.slice(4,6), 16);
+    const hsl = rgbToHsl(r, g, b);
+    return { label:'Personalizado', hue:[hsl.h - 20, hsl.h + 20], css:'#' + hex, cssLight: '#' + hex + '99' };
+  }
+  return BG_COLORS.violet;
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) * 60; break;
+      case g: h = ((b - r) / d + 2) * 60; break;
+      case b: h = ((r - g) / d + 4) * 60; break;
+    }
+  }
+  return { h: Math.round(h || 0), s: Math.round(s * 100), l: Math.round(l * 100) };
+}
 
 export function initAdminBg() {
   const canvas = document.getElementById('admin-bg-canvas');
@@ -2067,7 +2124,8 @@ export function initAdminBg() {
 
   function initVectors() {
     W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+    const adminPage = document.getElementById('page-admin');
+    H = canvas.height = Math.max(window.innerHeight, adminPage ? adminPage.scrollHeight : window.innerHeight);
     vectors.length = 0;
     dots.length = 0;
     for (let i = 0; i < COUNT; i++) vectors.push(createVector());
@@ -2122,8 +2180,9 @@ export function initAdminBg() {
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
+        const adminPage = document.getElementById('page-admin');
         W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
+        H = canvas.height = Math.max(window.innerHeight, adminPage ? adminPage.scrollHeight : window.innerHeight);
       }, 200);
     });
   }
