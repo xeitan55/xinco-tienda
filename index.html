@@ -300,6 +300,18 @@ tailwind.config = {
 
 
 
+  <!-- Exclusive -->
+  <section id="exclusive-section" class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary reveal" style="display:none;">
+    <div class="flex justify-between items-end mb-8">
+      <div>
+        <span class="font-label-caps text-label-caps tracking-widest block mb-2" style="color:#D4AF37;">EXCLUSIVE</span>
+        <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;color:#D4AF37;" class="uppercase">Edición limitada</h2>
+      </div>
+      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps pb-1 hover:opacity-70 transition-opacity cursor-pointer" style="color:#D4AF37;border-bottom:2px solid #D4AF37;" onclick="nav('catalog')">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
+    </div>
+    <div id="exclusive-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+  </section>
+
   <!-- Banner Promo (oculto por defecto, se muestra desde admin) -->
   <section id="promo-banner-section" class="border-b-[3px] border-primary bg-primary text-on-primary px-6 md:px-12 py-16" style="display:none;">
     <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
@@ -1417,6 +1429,12 @@ tailwind.config = {
                 <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">STOCK</label><input id="pf-stock" class="input-field" type="number" placeholder="50"/></div>
                 <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PRECIO TACHADO (opcional)</label><input id="pf-old-price" class="input-field" type="number" placeholder="20000"/></div>
                 <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BADGE (opcional)</label><input id="pf-badge" class="input-field" placeholder="NUEVO / SALE / DROP EXCLUSIVO"/></div>
+                <div class="flex items-end pb-2">
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="pf-exclusive" class="w-4 h-4 accent-[#D4AF37]"/>
+                    <span style="color:#D4AF37;font-weight:700;font-size:11px;">EXCLUSIVO</span>
+                  </label>
+                </div>
                 <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">DESCRIPCIÓN</label><textarea id="pf-desc" class="input-field" rows="2" placeholder="Descripción del producto..."></textarea></div>
               </div>
 
