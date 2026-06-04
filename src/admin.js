@@ -2099,7 +2099,7 @@ export function initAdminBg() {
       vy: d.vy * (0.6 + Math.random() * 0.6),
       char,
       size: isBig ? 120 + Math.random() * 80 : 40 + Math.random() * 80,
-      alpha: isBig ? 0.04 + Math.random() * 0.06 : 0.08 + Math.random() * 0.12,
+      alpha: isBig ? 0.15 + Math.random() * 0.15 : 0.20 + Math.random() * 0.25,
       hue,
       rotation: (Math.random() - 0.5) * 0.02,
       rot: 0,
@@ -2115,8 +2115,8 @@ export function initAdminBg() {
       x: Math.random() * W, y: Math.random() * H,
       vx: (Math.random() - 0.5) * 0.15,
       vy: (Math.random() - 0.5) * 0.15,
-      r: 1.5 + Math.random() * 3,
-      alpha: 0.06 + Math.random() * 0.08,
+      r: 2 + Math.random() * 4,
+      alpha: 0.15 + Math.random() * 0.20,
       hue,
       phase: Math.random() * Math.PI * 2,
     };
@@ -2139,7 +2139,7 @@ export function initAdminBg() {
       const pulse = 1 + Math.sin(time * 0.5 + d.phase) * 0.15;
       ctx.beginPath();
       ctx.arc(d.x, d.y, d.r * pulse, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${d.hue}, 50%, 30%, ${d.alpha})`;
+      ctx.fillStyle = `hsla(${d.hue}, 70%, 45%, ${d.alpha})`;
       ctx.fill();
       d.x += d.vx; d.y += d.vy;
       if (d.x < -10) d.x = W + 10;
@@ -2151,15 +2151,15 @@ export function initAdminBg() {
       ctx.save();
       ctx.translate(v.x, v.y);
       ctx.rotate(v.rot);
-      const glow = v.isBig ? 0.3 + Math.sin(time + v.glowPhase) * 0.15 : 0;
+      const glow = v.isBig ? 0.5 + Math.sin(time + v.glowPhase) * 0.25 : 0;
       if (glow > 0.1) {
-        ctx.shadowColor = `hsla(${v.hue}, 50%, 50%, ${glow})`;
-        ctx.shadowBlur = 20;
+        ctx.shadowColor = `hsla(${v.hue}, 70%, 50%, ${glow})`;
+        ctx.shadowBlur = 30;
       }
       ctx.font = `${v.size}px "Montserrat", sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = `hsla(${v.hue}, 50%, 30%, ${v.alpha + glow * 0.3})`;
+      ctx.fillStyle = `hsla(${v.hue}, 70%, 45%, ${v.alpha + glow * 0.35})`;
       ctx.fillText(v.char, 0, 0);
       ctx.restore();
       v.x += v.vx; v.y += v.vy;
