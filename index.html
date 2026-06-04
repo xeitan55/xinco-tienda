@@ -195,8 +195,8 @@ tailwind.config = {
         <span id="auth-label">ACCEDER</span>
         <span class="material-symbols-outlined text-[20px]">account_circle</span>
       </button>
-      <button class="relative p-1" id="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
-        <span class="material-symbols-outlined text-primary">dark_mode</span>
+      <button class="relative p-1" id="theme-toggle" onclick="toggleTheme()" title="Tema claro">
+        <span class="material-symbols-outlined text-primary">light_mode</span>
       </button>
       <button class="relative p-1" onclick="openCart()">
         <span class="material-symbols-outlined text-primary">shopping_bag</span>
@@ -352,27 +352,24 @@ tailwind.config = {
         <div>
           <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4">AYUDA</h4>
           <ul class="space-y-2">
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer">Guía de Talles</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer">Envíos</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer">Devoluciones</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer">Contacto</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="showSizeGuide()">Guía de Talles</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.showToast?.('Envíos a todo el país — consultá por WhatsApp')">Envíos</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.showToast?.('Aceptamos cambios dentro de los 30 días')">Devoluciones</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">Contacto</a></li>
           </ul>
         </div>
         <div>
           <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4">NEWSLETTER</h4>
           <p class="text-on-primary/60 text-sm mb-3" style="font-family:Inter;">Enterate primero de los drops.</p>
           <div class="flex border-2" style="border-color:var(--on-primary);">
-            <input class="bg-transparent flex-1 px-3 py-2 text-on-primary text-sm outline-none placeholder:text-on-primary/40" style="font-family:Inter;" placeholder="tu@email.com"/>
-            <button class="bg-on-primary text-primary px-4 font-label-caps text-[11px]" onclick="showToast('¡Suscripto! 🔥')">OK</button>
+            <input id="newsletter-email" class="bg-transparent flex-1 px-3 py-2 text-on-primary text-sm outline-none placeholder:text-on-primary/40" style="font-family:Inter;" placeholder="tu@email.com" autocomplete="off"/>
+            <button class="bg-on-primary text-primary px-4 font-label-caps text-[11px]" onclick="subscribeNewsletter()">OK</button>
           </div>
         </div>
       </div>
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
         <span class="font-label-caps text-label-caps text-on-primary/40">© 2025 XINCO — MAR DEL PLATA, BUENOS AIRES, ARGENTINA</span>
-        <div class="flex gap-4">
-          <span class="badge badge-outline" style="background:transparent;border-color:var(--on-primary);color:var(--on-primary);opacity:0.5;">INSTAGRAM</span>
-          <span class="badge badge-outline" style="background:transparent;border-color:var(--on-primary);color:var(--on-primary);opacity:0.5;">TIKTOK</span>
-        </div>
+        <div id="footer-social" class="flex gap-3"></div>
       </div>
     </div>
   </footer>
@@ -398,22 +395,22 @@ tailwind.config = {
             <h3 class="font-label-caps text-label-caps text-primary mb-4">CATEGORÍA</h3>
             <ul class="space-y-2" id="filter-categories">
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
-                <input type="checkbox" value="all" checked class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent" onchange="renderCatalog()"/>
+                <input type="checkbox" value="all" checked class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
                 <span>Todos</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
-                <input type="checkbox" value="remeras" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent" onchange="renderCatalog()"/>
+                <input type="checkbox" value="remeras" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
                 <span class="text-on-surface-variant group-hover:text-primary">Remeras</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
-                <input type="checkbox" value="pantalones" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent" onchange="renderCatalog()"/>
+                <input type="checkbox" value="pantalones" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
                 <span class="text-on-surface-variant group-hover:text-primary">Pantalones</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
-                <input type="checkbox" value="buzos" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent" onchange="renderCatalog()"/>
+                <input type="checkbox" value="buzos" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
                 <span class="text-on-surface-variant group-hover:text-primary">Buzos</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
-                <input type="checkbox" value="camperas" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent" onchange="renderCatalog()"/>
+                <input type="checkbox" value="camperas" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
                 <span class="text-on-surface-variant group-hover:text-primary">Camperas</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
-                <input type="checkbox" value="accesorios" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent" onchange="renderCatalog()"/>
+                <input type="checkbox" value="accesorios" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
                 <span class="text-on-surface-variant group-hover:text-primary">Accesorios</span></label></li>
             </ul>
           </div>
@@ -2203,84 +2200,168 @@ tailwind.config = {
         </div>
         <!-- ===== APARIENCIA SECTION ===== -->
         <div id="admin-section-apariencia" class="hidden space-y-5">
-          <div class="admin-card">
-            <div class="admin-card-body space-y-6">
-              <!-- Fondo Animado -->
-              <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
-                  <span class="material-symbols-outlined text-[18px]">blur_on</span> FONDO ANIMADO
-                </h3>
-                <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Partículas flotando hacia arriba en el fondo de la tienda.</p>
-                <div class="flex items-center justify-between mb-4">
-                  <span class="font-label-caps text-[11px] text-on-surface-variant/70">ACTIVAR</span>
-                  <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="ap-bg-enabled" class="sr-only admin-toggle" onchange="saveAppearance()"/>
-                    <div class="toggle-track w-11 h-6 rounded-full relative transition-all duration-200" style="background:rgba(0,0,0,0.15);"><div class="toggle-dot absolute top-[2px] left-[2px] bg-white rounded-full h-5 w-5 transition-all duration-200 shadow-sm"></div></div>
-                  </label>
+          <!-- Sub-tab bar -->
+          <div class="sub-tab-bar">
+            <button class="sub-tab-btn active" data-tab="apariencia" onclick="showSectionTab('apariencia','apariencia')">APARIENCIA</button>
+            <button class="sub-tab-btn" data-tab="social" onclick="showSectionTab('apariencia','social');loadSocialConfigFromFirebase()">SOCIAL</button>
+            <button class="sub-tab-btn" data-tab="emailjs" onclick="showSectionTab('apariencia','emailjs');loadEmailJsIntoForm()">EMAILJS</button>
+          </div>
+          <!-- Tab: Apariencia -->
+          <div class="sub-tab-content active" data-tab="apariencia">
+            <div class="admin-card">
+              <div class="admin-card-body space-y-6">
+                <!-- Tema -->
+                <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                  <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">contrast</span> TEMA DE LA TIENDA
+                  </h3>
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Elegí el estilo visual para toda la tienda.</p>
+                  <div class="flex gap-3">
+                    <label class="theme-option" onclick="setTheme('light')">
+                      <input type="radio" name="admin-theme" value="light" class="sr-only"/>
+                      <div class="theme-option-box">
+                        <div class="theme-preview" style="background:#f9f9f9;border:2px solid #000;"><span style="color:#000;font-size:16px;font-weight:700;">Aa</span></div>
+                        <span class="font-label-caps text-[10px] text-primary">CLARO</span>
+                      </div>
+                    </label>
+                    <label class="theme-option" onclick="setTheme('dark-soft')">
+                      <input type="radio" name="admin-theme" value="dark-soft" class="sr-only"/>
+                      <div class="theme-option-box">
+                        <div class="theme-preview" style="background:#f0eee9;border:2px solid #4a3f35;"><span style="color:#4a3f35;font-size:16px;font-weight:700;">Aa</span></div>
+                        <span class="font-label-caps text-[10px] text-primary">OSCURO SUAVE</span>
+                      </div>
+                    </label>
+                    <label class="theme-option" onclick="setTheme('dark')">
+                      <input type="radio" name="admin-theme" value="dark" class="sr-only"/>
+                      <div class="theme-option-box">
+                        <div class="theme-preview" style="background:#1c1c1e;border:2px solid #fff;"><span style="color:#fff;font-size:16px;font-weight:700;">Aa</span></div>
+                        <span class="font-label-caps text-[10px] text-primary">OSCURO</span>
+                      </div>
+                    </label>
+                  </div>
                 </div>
-                <div class="space-y-4">
-                  <div>
-                    <div class="flex justify-between mb-1">
-                      <span class="font-label-caps text-[10px] text-on-surface-variant/70">DENSIDAD</span>
-                      <span class="font-label-caps text-[10px] text-primary" id="ap-density-val">3</span>
-                    </div>
-                    <input type="range" id="ap-bg-density" min="1" max="6" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-density-val').textContent=this.value"/>
-                  </div>
-                  <div>
-                    <div class="flex justify-between mb-1">
-                      <span class="font-label-caps text-[10px] text-on-surface-variant/70">VELOCIDAD</span>
-                      <span class="font-label-caps text-[10px] text-primary" id="ap-speed-val">3</span>
-                    </div>
-                    <input type="range" id="ap-bg-speed" min="1" max="5" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-speed-val').textContent=this.value"/>
-                  </div>
-                </div>
-              </div>
-              <!-- Dock -->
-              <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
-                  <span class="material-symbols-outlined text-[18px]">dock_to_bottom</span> DOCK
-                </h3>
-                <div class="space-y-4">
-                  <div>
-                    <div class="flex justify-between mb-1">
-                      <span class="font-label-caps text-[10px] text-on-surface-variant/70">OPACIDAD</span>
-                      <span class="font-label-caps text-[10px] text-primary" id="ap-dock-opacity-val">50</span>
-                    </div>
-                    <input type="range" id="ap-dock-opacity" min="10" max="100" value="50" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-opacity-val').textContent=this.value"/>
-                  </div>
-                  <div class="flex items-center justify-between">
-                    <span class="font-label-caps text-[11px] text-on-surface-variant/70">AUTO-OCULTAR</span>
+                <!-- Fondo Animado -->
+                <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                  <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">blur_on</span> FONDO ANIMADO
+                  </h3>
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Partículas flotando hacia arriba en el fondo de la tienda.</p>
+                  <div class="flex items-center justify-between mb-4">
+                    <span class="font-label-caps text-[11px] text-on-surface-variant/70">ACTIVAR</span>
                     <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" id="ap-dock-autohide" class="sr-only admin-toggle" onchange="saveAppearance()"/>
+                      <input type="checkbox" id="ap-bg-enabled" class="sr-only admin-toggle" onchange="saveAppearance()"/>
                       <div class="toggle-track w-11 h-6 rounded-full relative transition-all duration-200" style="background:rgba(0,0,0,0.15);"><div class="toggle-dot absolute top-[2px] left-[2px] bg-white rounded-full h-5 w-5 transition-all duration-200 shadow-sm"></div></div>
                     </label>
                   </div>
-                  <div>
-                    <div class="flex justify-between mb-1">
-                      <span class="font-label-caps text-[10px] text-on-surface-variant/70">DEMORA EN OCULTAR (seg)</span>
-                      <span class="font-label-caps text-[10px] text-primary" id="ap-dock-delay-val">5</span>
+                  <div class="space-y-4">
+                    <div>
+                      <div class="flex justify-between mb-1">
+                        <span class="font-label-caps text-[10px] text-on-surface-variant/70">DENSIDAD</span>
+                        <span class="font-label-caps text-[10px] text-primary" id="ap-density-val">3</span>
+                      </div>
+                      <input type="range" id="ap-bg-density" min="1" max="6" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-density-val').textContent=this.value"/>
                     </div>
-                    <input type="range" id="ap-dock-delay" min="1" max="15" value="5" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-delay-val').textContent=this.value"/>
+                    <div>
+                      <div class="flex justify-between mb-1">
+                        <span class="font-label-caps text-[10px] text-on-surface-variant/70">VELOCIDAD</span>
+                        <span class="font-label-caps text-[10px] text-primary" id="ap-speed-val">3</span>
+                      </div>
+                      <input type="range" id="ap-bg-speed" min="1" max="5" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-speed-val').textContent=this.value"/>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <!-- Color de Énfasis (reuse) -->
-              <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
-                  <span class="material-symbols-outlined text-[18px]">palette</span> COLOR DE ÉNFASIS & VECTORES
-                </h3>
-                <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Color del panel y de los vectores flotantes (X Y O).</p>
-                <div class="flex gap-3 flex-wrap items-center">
-                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="violet" style="background:#9b87f5" onclick="setAdminColor('violet')"></button>
-                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="blue" style="background:#5b9cf5" onclick="setAdminColor('blue')"></button>
-                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="pink" style="background:#e87be8" onclick="setAdminColor('pink')"></button>
-                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="green" style="background:#5cc97a" onclick="setAdminColor('green')"></button>
-                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="gold" style="background:#e8c84a" onclick="setAdminColor('gold')"></button>
-                  <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="red" style="background:#f56060" onclick="setAdminColor('red')"></button>
-                  <div class="flex items-center gap-2 ml-2">
-                    <span class="font-label-caps text-[9px] text-on-surface-variant/60">PERSONALIZAR</span>
-                    <input type="color" id="ap-vector-color" value="#9b87f5" class="w-8 h-8 rounded-xl border-2 border-gray-200 cursor-pointer p-0" style="background:none;" onchange="setAdminCustomColor(this.value)"/>
+                <!-- Dock -->
+                <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                  <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">dock_to_bottom</span> DOCK
+                  </h3>
+                  <div class="space-y-4">
+                    <div>
+                      <div class="flex justify-between mb-1">
+                        <span class="font-label-caps text-[10px] text-on-surface-variant/70">OPACIDAD</span>
+                        <span class="font-label-caps text-[10px] text-primary" id="ap-dock-opacity-val">50</span>
+                      </div>
+                      <input type="range" id="ap-dock-opacity" min="10" max="100" value="50" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-opacity-val').textContent=this.value"/>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="font-label-caps text-[11px] text-on-surface-variant/70">AUTO-OCULTAR</span>
+                      <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="ap-dock-autohide" class="sr-only admin-toggle" onchange="saveAppearance()"/>
+                        <div class="toggle-track w-11 h-6 rounded-full relative transition-all duration-200" style="background:rgba(0,0,0,0.15);"><div class="toggle-dot absolute top-[2px] left-[2px] bg-white rounded-full h-5 w-5 transition-all duration-200 shadow-sm"></div></div>
+                      </label>
+                    </div>
+                    <div>
+                      <div class="flex justify-between mb-1">
+                        <span class="font-label-caps text-[10px] text-on-surface-variant/70">DEMORA EN OCULTAR (seg)</span>
+                        <span class="font-label-caps text-[10px] text-primary" id="ap-dock-delay-val">5</span>
+                      </div>
+                      <input type="range" id="ap-dock-delay" min="1" max="15" value="5" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-delay-val').textContent=this.value"/>
+                    </div>
                   </div>
+                </div>
+                <!-- Color de Énfasis -->
+                <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                  <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">palette</span> COLOR DE ÉNFASIS & VECTORES
+                  </h3>
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Color del panel y de los vectores flotantes (X Y O).</p>
+                  <div class="flex gap-3 flex-wrap items-center">
+                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="violet" style="background:#9b87f5" onclick="setAdminColor('violet')"></button>
+                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="blue" style="background:#5b9cf5" onclick="setAdminColor('blue')"></button>
+                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="pink" style="background:#e87be8" onclick="setAdminColor('pink')"></button>
+                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="green" style="background:#5cc97a" onclick="setAdminColor('green')"></button>
+                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="gold" style="background:#e8c84a" onclick="setAdminColor('gold')"></button>
+                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="red" style="background:#f56060" onclick="setAdminColor('red')"></button>
+                    <div class="flex items-center gap-2 ml-2">
+                      <span class="font-label-caps text-[9px] text-on-surface-variant/60">PERSONALIZAR</span>
+                      <input type="color" id="ap-vector-color" value="#9b87f5" class="w-8 h-8 rounded-xl border-2 border-gray-200 cursor-pointer p-0" style="background:none;" onchange="setAdminCustomColor(this.value)"/>
+                    </div>
+                  </div>
+                </div>
+                <!-- Botón guardar -->
+                <div class="flex justify-end">
+                  <button class="btn-violet px-6 py-2 text-[11px] uppercase tracking-[.2em]" onclick="saveAppearanceToFirebase()"><span class="material-symbols-outlined text-[16px]">cloud_upload</span> GUARDAR CAMBIOS EN LA NUBE</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Tab: Social -->
+          <div class="sub-tab-content" data-tab="social">
+            <div class="admin-card">
+              <div class="admin-card-body space-y-5">
+                <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">share</span> REDES SOCIALES
+                </h3>
+                <p class="font-body-md text-on-surface-variant/70 text-sm">Los links se muestran en el footer y como botón flotante de WhatsApp.</p>
+                <div class="space-y-4">
+                  <div><label class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-1">INSTAGRAM</label><input type="url" id="sn-instagram" class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-body-md" placeholder="https://instagram.com/xinco"/></div>
+                  <div><label class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-1">TIKTOK</label><input type="url" id="sn-tiktok" class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-body-md" placeholder="https://tiktok.com/@xinco"/></div>
+                  <div><label class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-1">FACEBOOK</label><input type="url" id="sn-facebook" class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-body-md" placeholder="https://facebook.com/xinco"/></div>
+                  <div><label class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-1">X (TWITTER)</label><input type="url" id="sn-twitter" class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-body-md" placeholder="https://x.com/xinco"/></div>
+                  <div><label class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-1">YOUTUBE</label><input type="url" id="sn-youtube" class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-body-md" placeholder="https://youtube.com/@xinco"/></div>
+                  <div><label class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-1">WHATSAPP (número con código de país)</label><input type="text" id="sn-whatsapp" class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-body-md" placeholder="5492231234567"/><span class="font-label-caps text-[9px] text-on-surface-variant/50">Sin + ni espacios. Ej: 5492231234567</span></div>
+                </div>
+                <div class="flex justify-end gap-3 mt-4">
+                  <button class="btn-violet px-6 py-2 text-[11px] uppercase tracking-[.2em]" onclick="saveSocialConfig()"><span class="material-symbols-outlined text-[16px]">save</span> GUARDAR</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Tab: EmailJS -->
+          <div class="sub-tab-content" data-tab="emailjs">
+            <div class="admin-card">
+              <div class="admin-card-body space-y-5">
+                <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">mail</span> EMAILJS — TICKETS DE COMPRA
+                </h3>
+                <p class="font-body-md text-on-surface-variant/70 text-sm">Configurá EmailJS para enviar tickets de compra por email. Creá un servicio en <a href="https://dashboard.emailjs.com" target="_blank" style="color:var(--admin-accent,#9b87f5);">emailjs.com</a></p>
+                <div class="space-y-4">
+                  <div><label class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-1">SERVICE ID</label><input type="text" id="ej-service-id" class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-body-md" placeholder="service_xxxxxxx"/></div>
+                  <div><label class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-1">TEMPLATE ID</label><input type="text" id="ej-template-id" class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-body-md" placeholder="template_xxxxxxx"/></div>
+                  <div><label class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-1">PUBLIC KEY</label><input type="text" id="ej-public-key" class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-body-md" placeholder="oMkYlKHW6eJXZrEkY"/></div>
+                </div>
+                <div class="flex justify-end gap-3 mt-4">
+                  <button class="btn-violet px-6 py-2 text-[11px] uppercase tracking-[.2em]" onclick="saveEmailJsConfigFromPanel()"><span class="material-symbols-outlined text-[16px]">save</span> GUARDAR</button>
                 </div>
               </div>
             </div>
@@ -2336,6 +2417,11 @@ tailwind.config = {
     </button>
   </div>
 </div>
+
+<!-- ===== WHATSAPP FLOATING BUTTON ===== -->
+<a id="whatsapp-float" href="https://wa.me/5492231234567" target="_blank" rel="noopener" class="whatsapp-float" title="Contactanos por WhatsApp" style="display:none;">
+  <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 
 <!-- ===== SIZE GUIDE MODAL ===== -->
 <div id="size-guide-modal" class="modal-overlay">
