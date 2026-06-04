@@ -115,7 +115,7 @@ export async function doRegister() {
     await updateProfile(user, { displayName: nombre + ' ' + apellido });
     const ADMIN_EMAIL = atob('YWRtaW5AeGluY28uY29t');
     if (email !== ADMIN_EMAIL) {
-      await sendEmailVerification(user, { url: 'https://xinco.shop/verificar-email', handleCodeInApp: true });
+      await sendEmailVerification(user);
     }
     const fullName = nombre + ' ' + apellido;
     _lastRegisteredUser = { email, name: fullName };
