@@ -164,15 +164,21 @@ export function init() {
   const path = window.location.pathname;
   const page = PAGE_FROM_SLUG[path];
   if (page && page !== 'home') {
-    setTimeout(() => nav(page, { replace: true }), 100);
+    // Hide home immediately to prevent flash
+    const homeEl = document.getElementById('page-home');
+    if (homeEl) { homeEl.classList.remove('active'); homeEl.style.display = 'none'; }
+    setTimeout(() => nav(page, { replace: true }), 50);
   } else if (path.startsWith('/producto/')) {
     // Product slug route — handled after boot
     const slug = path.replace('/producto/', '');
+    const homeEl = document.getElementById('page-home');
+    if (homeEl) { homeEl.classList.remove('active'); homeEl.style.display = 'none'; }
     setTimeout(() => {
       const p = (window.state?.products || []).find(pr =>
         slugify(pr.name) === slug
       );
       if (p) window.openProduct(p.id);
+      else document.getElementById('page-home').style.display = '';
     }, 200);
   } else if (path !== '/') {
     history.replaceState({ page: 'home' }, '', '/');
