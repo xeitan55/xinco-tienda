@@ -2134,6 +2134,7 @@ export function init() {
       rafId = requestAnimationFrame(() => {
         const rect = dock.getBoundingClientRect();
         const mx = e.clientX - rect.left;
+        let maxItemScale = 1;
         items.forEach(item => {
           const ir = item.getBoundingClientRect();
           const cx = ir.left + ir.width / 2 - rect.left;
@@ -2148,7 +2149,10 @@ export function init() {
             item.classList.remove('zoomed');
             item.style.removeProperty('--z-scale');
           }
+          if (scale > maxItemScale) maxItemScale = scale;
         });
+        const dockScale = 1 + (maxItemScale - 1) * 0.3;
+        dock.style.setProperty('--dock-scale', dockScale);
       });
     });
     dock.addEventListener('mouseleave', () => {
@@ -2156,6 +2160,7 @@ export function init() {
         item.classList.remove('zoomed');
         item.style.removeProperty('--z-scale');
       });
+      dock.style.removeProperty('--dock-scale');
     });
   }
   window.isAdmin = isAdmin;
