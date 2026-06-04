@@ -1290,53 +1290,53 @@ tailwind.config = {
       </header>
       <div class="admin-content">
         <!-- Dashboard Section -->
-        <div id="admin-section-dashboard" class="space-y-5">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div id="admin-section-dashboard" class="admin-dash">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             <div class="admin-card card-hover">
               <div class="admin-stat">
-                <div class="flex justify-between items-start mb-4">
-                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">VENTAS TOTALES</span>
-                  <div class="admin-stat-icon bg-black/5"><span class="material-symbols-outlined text-primary text-[20px]">payments</span></div>
+                <div class="flex justify-between items-start mb-2">
+                  <span class="font-label-caps text-on-surface-variant/60 stat-label">VENTAS TOTALES</span>
+                  <div class="admin-stat-icon bg-black/5"><span class="material-symbols-outlined text-primary">payments</span></div>
                 </div>
-                <div style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">$124.500</div>
-                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-green-600"><span class="material-symbols-outlined text-[14px]">arrow_upward</span>+14.5%</div>
+                <div class="stat-value text-primary mb-0.5">$124.500</div>
+                <div class="font-label-caps stat-delta flex items-center gap-0.5 text-green-600"><span class="material-symbols-outlined">arrow_upward</span>+14.5%</div>
               </div>
             </div>
             <div class="admin-card card-hover">
               <div class="admin-stat">
-                <div class="flex justify-between items-start mb-4">
-                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">PEDIDOS PENDIENTES</span>
-                  <div class="admin-stat-icon bg-amber-50"><span class="material-symbols-outlined text-amber-600 text-[20px]">local_shipping</span></div>
+                <div class="flex justify-between items-start mb-2">
+                  <span class="font-label-caps text-on-surface-variant/60 stat-label">PEDIDOS PENDIENTES</span>
+                  <div class="admin-stat-icon bg-amber-50"><span class="material-symbols-outlined text-amber-600">local_shipping</span></div>
                 </div>
-                <div id="admin-pending-count" style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">0</div>
-                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-amber-600"><span class="material-symbols-outlined text-[14px]">schedule</span>Necesita proceso</div>
+                <div id="admin-pending-count" class="stat-value text-primary mb-0.5">0</div>
+                <div class="font-label-caps stat-delta flex items-center gap-0.5 text-amber-600"><span class="material-symbols-outlined">schedule</span>Necesita proceso</div>
               </div>
             </div>
             <div class="admin-card card-hover">
               <div class="admin-stat">
-                <div class="flex justify-between items-start mb-4">
-                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">NUEVOS CLIENTES</span>
-                  <div class="admin-stat-icon bg-blue-50"><span class="material-symbols-outlined text-blue-600 text-[20px]">person_add</span></div>
+                <div class="flex justify-between items-start mb-2">
+                  <span class="font-label-caps text-on-surface-variant/60 stat-label">NUEVOS CLIENTES</span>
+                  <div class="admin-stat-icon bg-blue-50"><span class="material-symbols-outlined text-blue-600">person_add</span></div>
                 </div>
-                <div style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">184</div>
-                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-green-600"><span class="material-symbols-outlined text-[14px]">arrow_upward</span>+8.2%</div>
+                <div class="stat-value text-primary mb-0.5">184</div>
+                <div class="font-label-caps stat-delta flex items-center gap-0.5 text-green-600"><span class="material-symbols-outlined">arrow_upward</span>+8.2%</div>
               </div>
             </div>
             <div class="admin-card card-hover">
               <div class="admin-stat">
-                <div class="flex justify-between items-start mb-4">
-                  <span class="font-label-caps text-label-caps text-on-surface-variant/60 text-[10px]">TICKET PROMEDIO</span>
-                  <div class="admin-stat-icon bg-purple-50"><span class="material-symbols-outlined text-purple-600 text-[20px]">receipt</span></div>
+                <div class="flex justify-between items-start mb-2">
+                  <span class="font-label-caps text-on-surface-variant/60 stat-label">TICKET PROMEDIO</span>
+                  <div class="admin-stat-icon bg-purple-50"><span class="material-symbols-outlined text-purple-600">receipt</span></div>
                 </div>
-                <div style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary mb-1">$18.550</div>
-                <div class="font-label-caps text-label-caps flex items-center gap-1 text-[10px] text-on-surface-variant/60"><span class="material-symbols-outlined text-[14px]">horizontal_rule</span>Estable</div>
+                <div class="stat-value text-primary mb-0.5">$18.550</div>
+                <div class="font-label-caps stat-delta flex items-center gap-0.5 text-on-surface-variant/60"><span class="material-symbols-outlined">horizontal_rule</span>Estable</div>
               </div>
             </div>
           </div>
           <!-- Chart -->
-          <div class="admin-card">
+          <div class="admin-card admin-chart-compact">
             <div class="admin-card-header">
-              <div><h3 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">RESUMEN DE VENTAS</h3><p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">ÚLTIMOS 30 DÍAS</p></div>
+              <div><h3>RESUMEN DE VENTAS</h3><p style="font-size:8px">ÚLTIMOS 30 DÍAS</p></div>
               <div class="flex gap-1 bg-black/5 p-0.5 rounded-lg">
                 <button class="tab-btn-sm active">30D</button>
                 <button class="tab-btn-sm">90D</button>
@@ -1344,25 +1344,25 @@ tailwind.config = {
               </div>
             </div>
             <div class="admin-card-body">
-              <div class="h-44 flex items-end gap-2 pl-2">
-                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer group relative" style="height:40%"><div class="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[9px] whitespace-nowrap rounded-md">$4.2k</div></div>
-                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer group relative" style="height:65%"><div class="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[9px] whitespace-nowrap rounded-md">$6.8k</div></div>
-                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:30%"></div>
-                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:80%"></div>
-                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:55%"></div>
-                <div class="flex-1 bg-primary cursor-pointer rounded-t-lg relative" style="height:95%"><div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-2 py-1 font-label-caps text-[9px] whitespace-nowrap rounded-md">$9.5k</div></div>
-                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:70%"></div>
-                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:45%"></div>
-                <div class="flex-1 bg-secondary-container hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:85%"></div>
-                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t-lg cursor-pointer" style="height:60%"></div>
+              <div class="h-24 flex items-end gap-1 pl-1">
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t cursor-pointer group relative" style="height:40%"><div class="opacity-0 group-hover:opacity-100 absolute -top-5 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-1.5 py-0.5 font-label-caps text-[8px] whitespace-nowrap rounded" style="border-radius:4px;">$4.2k</div></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t cursor-pointer group relative" style="height:65%"><div class="opacity-0 group-hover:opacity-100 absolute -top-5 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-1.5 py-0.5 font-label-caps text-[8px] whitespace-nowrap rounded" style="border-radius:4px;">$6.8k</div></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t cursor-pointer" style="height:30%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t cursor-pointer" style="height:80%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t cursor-pointer" style="height:55%"></div>
+                <div class="flex-1 bg-primary cursor-pointer rounded-t relative" style="height:95%"><div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-1.5 py-0.5 font-label-caps text-[8px] whitespace-nowrap rounded" style="border-radius:4px;">$9.5k</div></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t cursor-pointer" style="height:70%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t cursor-pointer" style="height:45%"></div>
+                <div class="flex-1 bg-secondary-container hover:bg-primary transition-colors rounded-t cursor-pointer" style="height:85%"></div>
+                <div class="flex-1 bg-surface-variant hover:bg-primary transition-colors rounded-t cursor-pointer" style="height:60%"></div>
               </div>
             </div>
           </div>
           <!-- Recent Orders -->
           <div id="admin-recent-orders" class="admin-card">
-            <div class="admin-card-header">
-              <h3 style="font-family:Montserrat;font-size:18px;font-weight:800;" class="text-primary">ACTIVIDAD RECIENTE</h3>
-              <button class="font-label-caps text-label-caps text-secondary-container hover:text-secondary text-[10px] transition-colors" onclick="showAdminSection('orders')">VER TODO →</button>
+            <div class="admin-card-header" style="padding:10px 14px;">
+              <h3 style="font-size:13px;">ACTIVIDAD RECIENTE</h3>
+              <button class="font-label-caps text-[9px] text-secondary-container hover:text-secondary transition-colors" onclick="showAdminSection('orders')">VER TODO →</button>
             </div>
             <div id="admin-recent-table" class="overflow-x-auto"></div>
           </div>
@@ -1419,34 +1419,34 @@ tailwind.config = {
                 <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">DESCRIPCIÓN</label><textarea id="pf-desc" class="input-field" rows="2" placeholder="Descripción del producto..."></textarea></div>
               </div>
 
-              <!-- Colores disponibles -->
-              <div class="bg-[#f8f6ff] border border-indigo-100 rounded-xl p-5 mb-5">
-                <div class="flex justify-between items-center mb-3">
-                  <label class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
-                    <span class="material-symbols-outlined text-[16px]">palette</span> COLORES DISPONIBLES
-                  </label>
-                  <button class="border border-primary rounded-lg py-1.5 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="addCustomColor()">
-                    <span class="material-symbols-outlined text-[12px] align-middle">add</span> AGREGAR COLOR
-                  </button>
+              <!-- Colores + Imágenes en paralelo -->
+              <div class="admin-form-2col mb-5">
+                <div class="bg-[#f8f6ff] border border-indigo-100 rounded-xl p-5">
+                  <div class="flex justify-between items-center mb-3">
+                    <label class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                      <span class="material-symbols-outlined text-[16px]">palette</span> COLORES DISPONIBLES
+                    </label>
+                    <button class="border border-primary rounded-lg py-1.5 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="addCustomColor()">
+                      <span class="material-symbols-outlined text-[12px] align-middle">add</span> AGREGAR COLOR
+                    </button>
+                  </div>
+                  <p class="font-label-caps text-[9px] text-on-surface-variant/60 mb-4">MARCÁ LOS COLORES DISPONIBLES. HACÉ CLIC EN EL NOMBRE PARA EDITARLO.</p>
+                  <div id="pf-colors-grid" class="flex flex-wrap gap-4"></div>
                 </div>
-                <p class="font-label-caps text-[9px] text-on-surface-variant/60 mb-4">MARCÁ LOS COLORES DISPONIBLES. HACÉ CLIC EN EL NOMBRE PARA EDITARLO.</p>
-                <div id="pf-colors-grid" class="flex flex-wrap gap-4"></div>
-              </div>
-
-              <!-- 4 Imágenes del producto -->
-              <div class="bg-[#f8f6ff] border border-indigo-100 rounded-xl p-5 mb-5">
-                <div class="flex justify-between items-center mb-3">
-                  <label class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
-                    <span class="material-symbols-outlined text-[16px]">photo_library</span> IMÁGENES (HASTA 4)
-                  </label>
-                  <span class="font-label-caps text-[9px] text-on-surface-variant/60">LA PRIMERA ES LA IMAGEN PRINCIPAL</span>
+                <div class="bg-[#f8f6ff] border border-indigo-100 rounded-xl p-5">
+                  <div class="flex justify-between items-center mb-3">
+                    <label class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                      <span class="material-symbols-outlined text-[16px]">photo_library</span> IMÁGENES (HASTA 4)
+                    </label>
+                    <span class="font-label-caps text-[9px] text-on-surface-variant/60">LA PRIMERA ES LA IMAGEN PRINCIPAL</span>
+                  </div>
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3" id="pf-image-slots"></div>
+                  <div class="flex gap-2 mt-3">
+                    <input id="pf-img-url" class="input-field flex-1 py-2" placeholder="O pegá una URL de imagen y presioná AGREGAR"/>
+                    <button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="addProductImageUrl()">AGREGAR URL</button>
+                  </div>
+                  <input type="hidden" id="pf-img"/>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3" id="pf-image-slots"></div>
-                <div class="flex gap-2 mt-3">
-                  <input id="pf-img-url" class="input-field flex-1 py-2" placeholder="O pegá una URL de imagen y presioná AGREGAR"/>
-                  <button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="addProductImageUrl()">AGREGAR URL</button>
-                </div>
-                <input type="hidden" id="pf-img"/>
               </div>
 
               <div class="flex gap-3 pt-2">
@@ -1488,163 +1488,172 @@ tailwind.config = {
                 <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">PERSONALIZACIÓN DE LA TIENDA</p>
               </div>
             </div>
-            <div class="admin-card-body space-y-6">
-              <!-- Announcements -->
-              <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
-                  <span class="material-symbols-outlined text-[18px]">campaign</span> BARRRA ANUNCIOS
-                </h3>
-                <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Mensajes que se muestran en la barra superior de la tienda.</p>
-                <div id="announcement-editor-list" class="space-y-2 mb-4"></div>
-                <div class="flex gap-2">
-                  <button class="btn-outline py-2 px-4 text-[10px]" onclick="addAnnouncementMsg()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR MENSAJE</button>
-                  <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveAnnouncementBar()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR</button>
+            <div class="admin-card-body">
+              <div class="sub-tab-bar mb-5">
+                <button class="sub-tab-btn active" data-tab="anuncios" onclick="showSectionTab('banners','anuncios')">ANUNCIOS</button>
+                <button class="sub-tab-btn" data-tab="hero" onclick="showSectionTab('banners','hero')">HERO</button>
+                <button class="sub-tab-btn" data-tab="promo" onclick="showSectionTab('banners','promo')">PROMO</button>
+              </div>
+              <!-- Anuncios -->
+              <div class="sub-tab-content active space-y-6" data-tab="anuncios">
+                <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">campaign</span> BARRA ANUNCIOS
+                  </h3>
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Mensajes que se muestran en la barra superior de la tienda.</p>
+                  <div id="announcement-editor-list" class="space-y-2 mb-4"></div>
+                  <div class="flex gap-2">
+                    <button class="btn-outline py-2 px-4 text-[10px]" onclick="addAnnouncementMsg()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR MENSAJE</button>
+                    <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveAnnouncementBar()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR</button>
+                  </div>
                 </div>
               </div>
-              <!-- Hero Banner -->
-              <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
-                  <span class="material-symbols-outlined text-[18px]">photo</span> HERO PRINCIPAL
-                </h3>
-                <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Personalizá el banner principal de la portada.</p>
-                <!-- Live Preview -->
-                <div id="hero-preview" class="relative w-full overflow-hidden mb-5" style="aspect-ratio:16/9;background:var(--hero-gradient);">
-                  <img id="hero-preview-img" class="absolute inset-0 w-full h-full object-cover opacity-60" style="display:none;"/>
-                  <video id="hero-preview-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
-                  <span id="hero-preview-video-badge" class="absolute top-3 right-3 bg-indigo-600 text-white text-[8px] font-bold px-2 py-1 rounded hidden">VIDEO</span>
-                  <span id="hero-preview-badge" class="badge badge-violet mb-4" style="position:absolute;top:20px;left:20px;"></span>
-                  <div style="position:absolute;bottom:20px;left:20px;right:20px;">
-                    <div id="hero-preview-title" style="font-family:Montserrat;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;text-transform:uppercase;" class="text-white"></div>
-                    <div id="hero-preview-subtitle" class="font-body-md text-white/70 mt-2"></div>
-                  </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BADGE</label>
-                    <input id="hero-edit-badge" class="input-field" placeholder="NUEVA TEMPORADA" oninput="previewHero()"/>
-                  </div>
-                  <div>
-                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO</label>
-                    <input id="hero-edit-title" class="input-field" placeholder="XINCO" oninput="previewHero()"/>
-                  </div>
-                  <div>
-                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">SUBTÍTULO</label>
-                    <input id="hero-edit-subtitle" class="input-field" placeholder="Tu estilo, tu identidad" oninput="previewHero()"/>
-                  </div>
-                </div>
-                <!-- Image / Video Tab Buttons -->
-                <div class="flex gap-2 mb-4 border-b border-gray-200 pb-2">
-                  <button id="tab-img-btn" class="hero-media-tab active px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('img')"><span class="material-symbols-outlined text-[14px] align-middle">image</span> IMAGEN</button>
-                  <button id="tab-vid-btn" class="hero-media-tab px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('video')"><span class="material-symbols-outlined text-[14px] align-middle">videocam</span> VIDEO</button>
-                </div>
-                <!-- Image Tab -->
-                <div id="hero-tab-img">
-                  <div class="mb-4">
-                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">URL IMAGEN</label>
-                    <input id="hero-edit-img" class="input-field" placeholder="https://..." oninput="previewHeroImg()"/>
-                  </div>
-                  <!-- Animation Style -->
-                  <div class="mb-4">
-                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">ESTILO DE ANIMACIÓN</label>
-                    <div id="anim-style-selector" class="flex flex-wrap gap-2">
-                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="default" onclick="selectAnimStyle('default')">CLÁSICO</button>
-                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="glitch" onclick="selectAnimStyle('glitch')">GLITCH</button>
-                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="typewriter" onclick="selectAnimStyle('typewriter')">MÁQUINA ESCRIBIR</button>
-                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="fade" onclick="selectAnimStyle('fade')">DESVANECER</button>
-                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="slide" onclick="selectAnimStyle('slide')">DESLIZAR</button>
+              <!-- Hero -->
+              <div class="sub-tab-content space-y-6" data-tab="hero">
+                <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">photo</span> HERO PRINCIPAL
+                  </h3>
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Personalizá el banner principal de la portada.</p>
+                  <!-- Live Preview -->
+                  <div id="hero-preview" class="relative w-full overflow-hidden mb-5" style="aspect-ratio:16/9;background:var(--hero-gradient);">
+                    <img id="hero-preview-img" class="absolute inset-0 w-full h-full object-cover opacity-60" style="display:none;"/>
+                    <video id="hero-preview-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
+                    <span id="hero-preview-video-badge" class="absolute top-3 right-3 bg-indigo-600 text-white text-[8px] font-bold px-2 py-1 rounded hidden">VIDEO</span>
+                    <span id="hero-preview-badge" class="badge badge-violet mb-4" style="position:absolute;top:20px;left:20px;"></span>
+                    <div style="position:absolute;bottom:20px;left:20px;right:20px;">
+                      <div id="hero-preview-title" style="font-family:Montserrat;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;text-transform:uppercase;" class="text-white"></div>
+                      <div id="hero-preview-subtitle" class="font-body-md text-white/70 mt-2"></div>
                     </div>
                   </div>
-                </div>
-                <!-- Video Tab -->
-                <div id="hero-tab-video" class="hidden">
-                  <div class="border border-indigo-100 rounded-xl p-4 bg-[#f8f6ff] mb-4">
-                    <div class="flex items-center gap-2 mb-3">
-                      <span class="material-symbols-outlined text-[18px] text-indigo-600">videocam</span>
-                      <span class="font-label-caps text-label-caps text-indigo-800 text-[10px]">VIDEO DE FONDO</span>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BADGE</label>
+                      <input id="hero-edit-badge" class="input-field" placeholder="NUEVA TEMPORADA" oninput="previewHero()"/>
                     </div>
-                    <p class="font-body-md text-on-surface-variant/70 text-sm mb-3">Subí un video para reemplazar la imagen de fondo del hero.</p>
-                    <div class="space-y-3">
-                      <div class="flex gap-2">
-                        <input id="hero-video-url" class="input-field flex-1 py-2" placeholder="URL de video (MP4, WebM)"/>
-                        <button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="previewHeroVideo()">VISTA PREVIA</button>
+                    <div>
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO</label>
+                      <input id="hero-edit-title" class="input-field" placeholder="XINCO" oninput="previewHero()"/>
+                    </div>
+                    <div>
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">SUBTÍTULO</label>
+                      <input id="hero-edit-subtitle" class="input-field" placeholder="Tu estilo, tu identidad" oninput="previewHero()"/>
+                    </div>
+                  </div>
+                  <!-- Image / Video Tab Buttons -->
+                  <div class="flex gap-2 mb-4 border-b border-gray-200 pb-2">
+                    <button id="tab-img-btn" class="hero-media-tab active px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('img')"><span class="material-symbols-outlined text-[14px] align-middle">image</span> IMAGEN</button>
+                    <button id="tab-vid-btn" class="hero-media-tab px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('video')"><span class="material-symbols-outlined text-[14px] align-middle">videocam</span> VIDEO</button>
+                  </div>
+                  <!-- Image Tab -->
+                  <div id="hero-tab-img">
+                    <div class="mb-4">
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">URL IMAGEN</label>
+                      <input id="hero-edit-img" class="input-field" placeholder="https://..." oninput="previewHeroImg()"/>
+                    </div>
+                    <div class="mb-4">
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">ESTILO DE ANIMACIÓN</label>
+                      <div id="anim-style-selector" class="flex flex-wrap gap-2">
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="default" onclick="selectAnimStyle('default')">CLÁSICO</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="glitch" onclick="selectAnimStyle('glitch')">GLITCH</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="typewriter" onclick="selectAnimStyle('typewriter')">MÁQUINA ESCRIBIR</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="fade" onclick="selectAnimStyle('fade')">DESVANECER</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="slide" onclick="selectAnimStyle('slide')">DESLIZAR</button>
                       </div>
-                      <div id="hero-video-status" class="font-label-caps text-[9px] text-on-surface-variant/60"></div>
-                      <button class="border border-error rounded-lg py-1.5 px-3 font-label-caps text-[9px] text-error hover:bg-error hover:text-on-error transition-colors" onclick="clearHeroVideo()">LIMPIAR VIDEO</button>
-                      <div id="hero-video-url-display" class="font-body-md text-[10px] text-indigo-600 break-all"></div>
-                      <div>
-                      <div id="hero-video-dropzone" class="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition-colors" onclick="document.getElementById('hero-video-file').click()" ondragover="this.classList.add('border-indigo-500','bg-indigo-50');event.preventDefault()" ondragleave="this.classList.remove('border-indigo-500','bg-indigo-50')" ondrop="handleHeroVideoFileDrop(event)">
-                        <span class="material-symbols-outlined text-[32px] text-indigo-300">cloud_upload</span>
-                        <p class="font-body-md text-sm text-indigo-400 mt-1">Arrastrá un video o hacé clic para seleccionar</p>
-                        <p class="font-label-caps text-[9px] text-indigo-300 mt-0.5">MP4, WebM — máx 10MB</p>
+                    </div>
+                  </div>
+                  <!-- Video Tab -->
+                  <div id="hero-tab-video" class="hidden">
+                    <div class="border border-indigo-100 rounded-xl p-4 bg-[#f8f6ff] mb-4">
+                      <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-[18px] text-indigo-600">videocam</span>
+                        <span class="font-label-caps text-label-caps text-indigo-800 text-[10px]">VIDEO DE FONDO</span>
                       </div>
-                      <input type="file" id="hero-video-file" accept="video/mp4,video/webm" class="hidden" onchange="uploadHeroVideo(this.files[0])"/>
-                        <div id="hero-video-upload-progress" class="hidden mt-3">
-                          <div class="w-full bg-indigo-100 rounded-full h-2">
-                            <div id="hero-video-upload-bar" class="bg-indigo-600 h-2 rounded-full" style="width:0%"></div>
+                      <p class="font-body-md text-on-surface-variant/70 text-sm mb-3">Subí un video para reemplazar la imagen de fondo del hero.</p>
+                      <div class="space-y-3">
+                        <div class="flex gap-2">
+                          <input id="hero-video-url" class="input-field flex-1 py-2" placeholder="URL de video (MP4, WebM)"/>
+                          <button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="previewHeroVideo()">VISTA PREVIA</button>
+                        </div>
+                        <div id="hero-video-status" class="font-label-caps text-[9px] text-on-surface-variant/60"></div>
+                        <button class="border border-error rounded-lg py-1.5 px-3 font-label-caps text-[9px] text-error hover:bg-error hover:text-on-error transition-colors" onclick="clearHeroVideo()">LIMPIAR VIDEO</button>
+                        <div id="hero-video-url-display" class="font-body-md text-[10px] text-indigo-600 break-all"></div>
+                        <div>
+                        <div id="hero-video-dropzone" class="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition-colors" onclick="document.getElementById('hero-video-file').click()" ondragover="this.classList.add('border-indigo-500','bg-indigo-50');event.preventDefault()" ondragleave="this.classList.remove('border-indigo-500','bg-indigo-50')" ondrop="handleHeroVideoFileDrop(event)">
+                          <span class="material-symbols-outlined text-[32px] text-indigo-300">cloud_upload</span>
+                          <p class="font-body-md text-sm text-indigo-400 mt-1">Arrastrá un video o hacé clic para seleccionar</p>
+                          <p class="font-label-caps text-[9px] text-indigo-300 mt-0.5">MP4, WebM — máx 10MB</p>
+                        </div>
+                        <input type="file" id="hero-video-file" accept="video/mp4,video/webm" class="hidden" onchange="uploadHeroVideo(this.files[0])"/>
+                          <div id="hero-video-upload-progress" class="hidden mt-3">
+                            <div class="w-full bg-indigo-100 rounded-full h-2">
+                              <div id="hero-video-upload-bar" class="bg-indigo-600 h-2 rounded-full" style="width:0%"></div>
+                            </div>
+                            <p id="hero-video-upload-pct" class="font-label-caps text-[9px] text-indigo-600 mt-1">0%</p>
+                            <p id="hero-video-upload-status" class="font-label-caps text-[9px] text-indigo-400 mt-0.5"></p>
                           </div>
-                          <p id="hero-video-upload-pct" class="font-label-caps text-[9px] text-indigo-600 mt-1">0%</p>
-                          <p id="hero-video-upload-status" class="font-label-caps text-[9px] text-indigo-400 mt-0.5"></p>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <!-- Video Effect -->
-                  <div class="mb-4">
-                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">EFECTO DE VIDEO</label>
-                    <div id="video-effect-selector" class="flex flex-wrap gap-2">
-                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="none" onclick="selectVideoEffect('none')">NINGUNO</button>
-                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="blur" onclick="selectVideoEffect('blur')">BORROSO</button>
-                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="grayscale" onclick="selectVideoEffect('grayscale')">BLANCO Y NEGRO</button>
-                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="sepia" onclick="selectVideoEffect('sepia')">SEPIA</button>
-                      <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="contrast" onclick="selectVideoEffect('contrast')">CONTRASTE</button>
+                    <div class="mb-4">
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">EFECTO DE VIDEO</label>
+                      <div id="video-effect-selector" class="flex flex-wrap gap-2">
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="none" onclick="selectVideoEffect('none')">NINGUNO</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="blur" onclick="selectVideoEffect('blur')">BORROSO</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="grayscale" onclick="selectVideoEffect('grayscale')">BLANCO Y NEGRO</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="sepia" onclick="selectVideoEffect('sepia')">SEPIA</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="contrast" onclick="selectVideoEffect('contrast')">CONTRASTE</button>
+                      </div>
                     </div>
                   </div>
+                  <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveHeroBanner()">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR HERO
+                  </button>
                 </div>
-                <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveHeroBanner()">
-                  <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR HERO
-                </button>
               </div>
-              <!-- Promo Banner -->
-              <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
-                  <span class="material-symbols-outlined text-[18px]">local_offer</span> BANNER PROMOCIONAL
-                </h3>
-                <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Editá el banner de oferta. Solo se muestra en la home si está habilitado.</p>
-                <div class="flex items-center gap-3 mb-5 p-3 bg-surface-container-low rounded-lg">
-                  <span class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">MOSTRAR EN LA HOME</span>
-                  <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="promo-edit-enabled" class="sr-only peer" onchange="previewPromo()"/>
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-container"></div>
-                  </label>
-                </div>
-                <div class="bg-primary text-on-primary p-6 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-xl">
-                  <div>
-                    <span id="promo-preview-label" class="font-label-caps text-[10px] text-secondary-container block mb-2"></span>
-                    <div id="promo-preview-title" style="font-family:Montserrat;font-size:clamp(20px,3vw,40px);font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;"></div>
+              <!-- Promo -->
+              <div class="sub-tab-content space-y-6" data-tab="promo">
+                <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">local_offer</span> BANNER PROMOCIONAL
+                  </h3>
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Editá el banner de oferta. Solo se muestra en la home si está habilitado.</p>
+                  <div class="flex items-center gap-3 mb-5 p-3 bg-surface-container-low rounded-lg">
+                    <span class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">MOSTRAR EN LA HOME</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="promo-edit-enabled" class="sr-only peer" onchange="previewPromo()"/>
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-container"></div>
+                    </label>
                   </div>
-                  <div>
-                    <div class="border-2 border-secondary-container px-6 py-3 rounded-xl">
-                      <span id="promo-preview-code" class="font-label-caps text-label-caps text-secondary-container tracking-widest"></span>
+                  <div class="bg-primary text-on-primary p-6 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-xl">
+                    <div>
+                      <span id="promo-preview-label" class="font-label-caps text-[10px] text-secondary-container block mb-2"></span>
+                      <div id="promo-preview-title" style="font-family:Montserrat;font-size:clamp(20px,3vw,40px);font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;"></div>
+                    </div>
+                    <div>
+                      <div class="border-2 border-secondary-container px-6 py-3 rounded-xl">
+                        <span id="promo-preview-code" class="font-label-caps text-label-caps text-secondary-container tracking-widest"></span>
+                      </div>
                     </div>
                   </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ETIQUETA SUPERIOR</label>
+                      <input id="promo-edit-label" class="input-field" placeholder="OFERTA LIMITADA" oninput="previewPromo()"/>
+                    </div>
+                    <div>
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CÓDIGO DE DESCUENTO</label>
+                      <input id="promo-edit-code" class="input-field" placeholder="URBAN30" oninput="previewPromo()"/>
+                    </div>
+                    <div class="md:col-span-2">
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO OFERTA</label>
+                      <input id="promo-edit-title" class="input-field" placeholder="30% OFF EN BUZOS" oninput="previewPromo()"/>
+                    </div>
+                  </div>
+                  <button class="btn-violet py-2 px-5 text-[10px]" onclick="savePromoBanner()">
+                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y PUBLICAR PROMO
+                  </button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ETIQUETA SUPERIOR</label>
-                    <input id="promo-edit-label" class="input-field" placeholder="OFERTA LIMITADA" oninput="previewPromo()"/>
-                  </div>
-                  <div>
-                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CÓDIGO DE DESCUENTO</label>
-                    <input id="promo-edit-code" class="input-field" placeholder="URBAN30" oninput="previewPromo()"/>
-                  </div>
-                  <div class="md:col-span-2">
-                    <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO OFERTA</label>
-                    <input id="promo-edit-title" class="input-field" placeholder="30% OFF EN BUZOS" oninput="previewPromo()"/>
-                  </div>
-                </div>
-                <button class="btn-violet py-2 px-5 text-[10px]" onclick="savePromoBanner()">
-                  <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y PUBLICAR PROMO
-                </button>
               </div>
             </div>
           </div>
@@ -1743,31 +1752,38 @@ tailwind.config = {
                 <p class="font-label-caps text-[10px] text-on-surface-variant/60 mt-0.5">CONFIGURACIÓN DE MÉTODOS DE PAGO Y ESTADÍSTICAS</p>
               </div>
             </div>
-            <div class="admin-card-body space-y-6">
+            <div class="admin-card-body">
+              <div class="sub-tab-bar mb-5">
+                <button class="sub-tab-btn active" data-tab="stats" onclick="showSectionTab('cobranzas','stats')">ESTADÍSTICAS</button>
+                <button class="sub-tab-btn" data-tab="mp" onclick="showSectionTab('cobranzas','mp')">MERCADO PAGO</button>
+                <button class="sub-tab-btn" data-tab="tarjetas" onclick="showSectionTab('cobranzas','tarjetas')">TARJETAS</button>
+                <button class="sub-tab-btn" data-tab="transferencia" onclick="showSectionTab('cobranzas','transferencia')">TRANSFERENCIA</button>
+              </div>
               <!-- Stats -->
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div class="cobr-card admin-card card-hover">
-                  <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[24px]">account_balance_wallet</span></div><span class="font-label-caps text-[11px]" style="background:var(--admin-accent,#9b87f5);color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;">62%</span></div>
-                  <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">MERCADO PAGO</div>
-                  <div style="font-family:Montserrat;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$77.190</span></div>
-                  <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:#009ee3;border-radius:999px;width:62%"></div></div>
-                </div>
-                <div class="cobr-card admin-card card-hover">
-                  <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">credit_card</span></div><span class="font-label-caps text-[11px]" style="background:var(--admin-accent,#9b87f5);color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;">24%</span></div>
-                  <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">TARJETA CRÉ/DÉB</div>
-                  <div style="font-family:Montserrat;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$29.880</span></div>
-                  <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:var(--admin-accent,#9b87f5);border-radius:999px;width:24%"></div></div>
-                </div>
-                <div class="cobr-card admin-card card-hover">
-                  <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">swap_horiz</span></div><span class="font-label-caps text-[11px]" style="background:rgba(0,0,0,0.06);color:rgba(0,0,0,0.45);padding:4px 12px;border-radius:999px;font-weight:700;">14%</span></div>
-                  <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">TRANSFERENCIA</div>
-                  <div style="font-family:Montserrat;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$17.430</span></div>
-                  <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:rgba(0,0,0,0.15);border-radius:999px;width:14%"></div></div>
+              <div class="sub-tab-content active space-y-6" data-tab="stats">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  <div class="cobr-card admin-card card-hover">
+                    <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[24px]">account_balance_wallet</span></div><span class="font-label-caps text-[11px]" style="background:var(--admin-accent,#9b87f5);color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;">62%</span></div>
+                    <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">MERCADO PAGO</div>
+                    <div style="font-family:Montserrat;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$77.190</span></div>
+                    <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:#009ee3;border-radius:999px;width:62%"></div></div>
+                  </div>
+                  <div class="cobr-card admin-card card-hover">
+                    <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">credit_card</span></div><span class="font-label-caps text-[11px]" style="background:var(--admin-accent,#9b87f5);color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;">24%</span></div>
+                    <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">TARJETA CRÉ/DÉB</div>
+                    <div style="font-family:Montserrat;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$29.880</span></div>
+                    <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:var(--admin-accent,#9b87f5);border-radius:999px;width:24%"></div></div>
+                  </div>
+                  <div class="cobr-card admin-card card-hover">
+                    <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">swap_horiz</span></div><span class="font-label-caps text-[11px]" style="background:rgba(0,0,0,0.06);color:rgba(0,0,0,0.45);padding:4px 12px;border-radius:999px;font-weight:700;">14%</span></div>
+                    <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">TRANSFERENCIA</div>
+                    <div style="font-family:Montserrat;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$17.430</span></div>
+                    <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:rgba(0,0,0,0.15);border-radius:999px;width:14%"></div></div>
+                  </div>
                 </div>
               </div>
-
               <!-- MERCADO PAGO -->
-              <div class="admin-card card-hover p-5">
+              <div class="sub-tab-content space-y-5" data-tab="mp">
                 <div class="flex items-center gap-4 mb-4">
                   <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[24px]">account_balance_wallet</span></div>
                   <div class="flex-1"><h3 style="font-weight:700;font-size:13px;color:#1a1c1c;letter-spacing:0.02em;">MERCADO PAGO — VINCULAR CUENTA</h3><p style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:2px;letter-spacing:0.05em;">LOS PAGOS SE ACREDITAN DIRECTO EN TU CBU/CVU</p></div>
@@ -1809,40 +1825,42 @@ tailwind.config = {
                   <a href="https://www.mercadopago.com.ar/settings/account/credentials" target="_blank" class="btn-outline py-2.5 px-5 text-[11px]" style="border-color:var(--admin-accent,#9b87f5);color:var(--admin-accent,#9b87f5);"><span class="material-symbols-outlined text-[14px]">open_in_new</span> IR A CREDENCIALES MP</a>
                 </div>
               </div>
-
-              <!-- Tarjetas -->
-              <div class="admin-card card-hover p-5">
-                <div class="flex items-center gap-4 mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">credit_card</span></div><div><h3 style="font-weight:700;font-size:13px;color:#1a1c1c;letter-spacing:0.02em;">DÉBITO Y CRÉDITO</h3><p style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:2px;letter-spacing:0.05em;">GESTIONADAS VÍA MERCADO PAGO</p></div></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-                  <div>
-                    <label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:8px;letter-spacing:0.02em;">TARJETAS HABILITADAS</label>
-                    <div class="flex flex-wrap gap-2">
-                      <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" checked class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> VISA</label>
-                      <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" checked class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> MASTERCARD</label>
-                      <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> AMEX</label>
-                      <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" checked class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> NARANJA</label>
-                      <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> CABAL</label>
+              <!-- TARJETAS -->
+              <div class="sub-tab-content space-y-5" data-tab="tarjetas">
+                <div class="admin-card card-hover p-5">
+                  <div class="flex items-center gap-4 mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">credit_card</span></div><div><h3 style="font-weight:700;font-size:13px;color:#1a1c1c;letter-spacing:0.02em;">DÉBITO Y CRÉDITO</h3><p style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:2px;letter-spacing:0.05em;">GESTIONADAS VÍA MERCADO PAGO</p></div></div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                    <div>
+                      <label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:8px;letter-spacing:0.02em;">TARJETAS HABILITADAS</label>
+                      <div class="flex flex-wrap gap-2">
+                        <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" checked class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> VISA</label>
+                        <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" checked class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> MASTERCARD</label>
+                        <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> AMEX</label>
+                        <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" checked class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> NARANJA</label>
+                        <label class="flex items-center gap-2" style="font-size:10px;cursor:pointer;padding:10px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;color:#1a1c1c;"><input type="checkbox" class="form-checkbox" style="border:2px solid var(--admin-accent,#9b87f5);border-radius:4px;width:16px;height:16px;"/> CABAL</label>
+                      </div>
+                    </div>
+                    <div class="space-y-4">
+                      <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">RECARGO CRÉDITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="0" min="0" max="30" style="width:100px;"/><span style="font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.02em;">%</span></div></div>
+                      <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">DESCUENTO DÉBITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="5" min="0" max="30" style="width:100px;"/><span style="font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.02em;">%</span></div></div>
                     </div>
                   </div>
-                  <div class="space-y-4">
-                    <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">RECARGO CRÉDITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="0" min="0" max="30" style="width:100px;"/><span style="font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.02em;">%</span></div></div>
-                    <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">DESCUENTO DÉBITO</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="5" min="0" max="30" style="width:100px;"/><span style="font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.02em;">%</span></div></div>
-                  </div>
+                  <button class="btn-violet py-2.5 px-5 text-[11px]" onclick="showToast('Configuración de tarjetas guardada ✅')"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR CONFIG TARJETAS</button>
                 </div>
-                <button class="btn-violet py-2.5 px-5 text-[11px]" onclick="showToast('Configuración de tarjetas guardada ✅')"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR CONFIG TARJETAS</button>
               </div>
-
-              <!-- Transferencia -->
-              <div class="admin-card card-hover p-5">
-                <div class="flex items-center gap-4 mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">swap_horiz</span></div><div><h3 style="font-weight:700;font-size:13px;color:#1a1c1c;letter-spacing:0.02em;">TRANSFERENCIA BANCARIA / CBU</h3><p style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:2px;letter-spacing:0.05em;">DATOS QUE VE EL CLIENTE AL ELEGIR ESTA OPCIÓN</p></div></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
-                  <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">BANCO</label><input id="bank-name" class="input-field" placeholder="Banco Galicia / Nación"/></div>
-                  <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">TITULAR</label><input id="bank-titular" class="input-field" placeholder="Razón social"/></div>
-                  <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">CBU / CVU</label><input id="bank-cbu" class="input-field" placeholder="0000000000000000000000"/></div>
-                  <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">ALIAS</label><input id="bank-alias" class="input-field" placeholder="MI.ALIAS.BANCO"/></div>
-                  <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">DESCUENTO TRANSFERENCIA</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="10" min="0" max="50" style="width:100px;"/><span style="font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.02em;">% OFF</span></div></div>
+              <!-- TRANSFERENCIA -->
+              <div class="sub-tab-content space-y-5" data-tab="transferencia">
+                <div class="admin-card card-hover p-5">
+                  <div class="flex items-center gap-4 mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">swap_horiz</span></div><div><h3 style="font-weight:700;font-size:13px;color:#1a1c1c;letter-spacing:0.02em;">TRANSFERENCIA BANCARIA / CBU</h3><p style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:2px;letter-spacing:0.05em;">DATOS QUE VE EL CLIENTE AL ELEGIR ESTA OPCIÓN</p></div></div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                    <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">BANCO</label><input id="bank-name" class="input-field" placeholder="Banco Galicia / Nación"/></div>
+                    <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">TITULAR</label><input id="bank-titular" class="input-field" placeholder="Razón social"/></div>
+                    <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">CBU / CVU</label><input id="bank-cbu" class="input-field" placeholder="0000000000000000000000"/></div>
+                    <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">ALIAS</label><input id="bank-alias" class="input-field" placeholder="MI.ALIAS.BANCO"/></div>
+                    <div><label style="font-size:11px;color:rgba(0,0,0,0.4);display:block;margin-bottom:6px;letter-spacing:0.02em;">DESCUENTO TRANSFERENCIA</label><div class="flex gap-2 items-center"><input class="input-field" type="number" value="10" min="0" max="50" style="width:100px;"/><span style="font-size:11px;color:rgba(0,0,0,0.4);letter-spacing:0.02em;">% OFF</span></div></div>
+                  </div>
+                  <button class="btn-violet py-2.5 px-5 text-[11px]" onclick="saveBankConfig()"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR DATOS BANCARIOS</button>
                 </div>
-                <button class="btn-violet py-2.5 px-5 text-[11px]" onclick="saveBankConfig()"><span class="material-symbols-outlined text-[14px]">save</span> GUARDAR DATOS BANCARIOS</button>
               </div>
             </div>
           </div>
@@ -1858,13 +1876,19 @@ tailwind.config = {
               </div>
             </div>
             <div class="admin-card-body space-y-5">
+              <div class="sub-tab-bar mb-2">
+                <button class="sub-tab-btn active" data-tab="proveedores" onclick="showSectionTab('tracking','proveedores')">PROVEEDORES</button>
+                <button class="sub-tab-btn" data-tab="asignar" onclick="showSectionTab('tracking','asignar')">ASIGNAR</button>
+                <button class="sub-tab-btn" data-tab="consultar" onclick="showSectionTab('tracking','consultar')">CONSULTAR</button>
+              </div>
 
-              <!-- ── Configuración de proveedores ── -->
-              <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2 text-[11px]">
-                  <span class="material-symbols-outlined text-[18px]">local_shipping</span> PROVEEDORES DE ENVÍO
-                </h3>
-                <p class="font-body-md text-sm text-on-surface-variant/70 mb-5">Configurá los proveedores que aparecen en el checkout.</p>
+              <!-- Proveedores -->
+              <div class="sub-tab-content active space-y-5" data-tab="proveedores">
+                <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                  <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">local_shipping</span> PROVEEDORES DE ENVÍO
+                  </h3>
+                  <p class="font-body-md text-sm text-on-surface-variant/70 mb-5">Configurá los proveedores que aparecen en el checkout.</p>
 
             <!-- Tabs de proveedor -->
             <div class="flex mb-5 border border-gray-200 rounded-lg overflow-hidden">
@@ -2001,53 +2025,64 @@ tailwind.config = {
                 <span class="material-symbols-outlined text-[14px]">save</span> GUARDAR PROVEEDORES
               </button>
             </div>
-          </div>
+            </div> <!-- /proveedores -->
 
-          <!-- Asignar -->
-          <div class="border border-gray-100 rounded-xl p-5 bg-white">
-            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">add_box</span> ASIGNAR NÚMERO DE SEGUIMIENTO</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PEDIDO</label><select id="track-order-select" class="input-field" onchange="loadTrackingOrder(this.value)"><option value="">SELECCIONAR PEDIDO...</option></select></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">Nº DE SEGUIMIENTO</label><input id="track-number-input" class="input-field" placeholder="CX000000000AR"/></div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">SERVICIO</label><select id="track-service" class="input-field"><option value="correoarg">Correo Argentino</option><option value="andreani">Andreani</option><option value="oca">OCA</option><option value="dhl">DHL</option></select></div>
-            </div>
-            <div id="track-order-detail" class="hidden bg-gray-50 border border-gray-100 rounded-lg p-4 mb-4">
-              <div class="font-label-caps text-[10px] text-on-surface-variant/60 mb-1">DETALLE DEL PEDIDO SELECCIONADO</div>
-              <div id="track-order-info" class="font-label-caps text-label-caps text-primary"></div>
-            </div>
-            <button class="btn-primary text-[10px] py-2.5 px-5" onclick="assignTracking()"><span class="material-symbols-outlined text-[13px]">local_shipping</span> ASIGNAR Y MARCAR COMO ENVIADO</button>
-          </div>
-
-          <!-- Consultar -->
-          <div class="border border-gray-100 rounded-xl p-5 bg-white">
-            <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">search</span> CONSULTAR ESTADO DE ENVÍO</h3>
-            <div class="flex gap-3 mb-5">
-              <input id="track-search-input" class="input-field flex-1" placeholder="Ej: CX123456789AR — número de seguimiento"/>
-              <button class="btn-primary text-[10px]" onclick="consultarTracking()"><span class="material-symbols-outlined text-[13px]">search</span> CONSULTAR</button>
-            </div>
-            <div id="tracking-result" class="hidden">
-              <div class="border border-gray-200 rounded-xl p-5 bg-gray-50">
-                <div class="flex justify-between items-start mb-5">
-                  <div><div id="tr-number" class="font-label-caps text-label-caps text-primary mb-1"></div><div id="tr-service" class="font-label-caps text-[10px] text-on-surface-variant/60"></div></div>
-                  <span id="tr-status-badge" class="font-label-caps text-[9px] bg-[#5d22ff] text-white px-2.5 py-0.5 rounded-full"></span>
+            <!-- Asignar -->
+            <div class="sub-tab-content space-y-5" data-tab="asignar">
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">add_box</span> ASIGNAR NÚMERO DE SEGUIMIENTO</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">PEDIDO</label><select id="track-order-select" class="input-field" onchange="loadTrackingOrder(this.value)"><option value="">SELECCIONAR PEDIDO...</option></select></div>
+                  <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">Nº DE SEGUIMIENTO</label><input id="track-number-input" class="input-field" placeholder="CX000000000AR"/></div>
+                  <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">SERVICIO</label><select id="track-service" class="input-field"><option value="correoarg">Correo Argentino</option><option value="andreani">Andreani</option><option value="oca">OCA</option><option value="dhl">DHL</option></select></div>
                 </div>
-                <div id="tr-timeline" class="relative border-l-2 border-primary ml-4 pl-5 space-y-0"></div>
-                <div class="mt-5 pt-4 border-t border-gray-200 flex justify-between items-center flex-wrap gap-3">
-                  <span class="font-label-caps text-[10px] text-on-surface-variant/60">Ver en el sitio oficial</span>
-                  <a id="tr-official-link" href="#" target="_blank" class="btn-outline py-2 px-4 text-[10px]">VER TRACKING OFICIAL <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>
+                <div id="track-order-detail" class="hidden bg-gray-50 border border-gray-100 rounded-lg p-4 mb-4">
+                  <div class="font-label-caps text-[10px] text-on-surface-variant/60 mb-1">DETALLE DEL PEDIDO SELECCIONADO</div>
+                  <div id="track-order-info" class="font-label-caps text-label-caps text-primary"></div>
                 </div>
+                <button class="btn-primary text-[10px] py-2.5 px-5" onclick="assignTracking()"><span class="material-symbols-outlined text-[13px]">local_shipping</span> ASIGNAR Y MARCAR COMO ENVIADO</button>
+              </div>
+              <!-- Tabla envíos -->
+              <div class="border border-gray-100 rounded-xl bg-white overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
+                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">inventory</span> PEDIDOS CON SEGUIMIENTO</h3>
+                  <span id="tracking-count" class="font-label-caps text-[10px] text-on-surface-variant/60"></span>
+                </div>
+                <div id="tracking-list" class="overflow-x-auto min-h-[80px]"></div>
               </div>
             </div>
-          </div>
 
-          <!-- Tabla envíos -->
-          <div class="border border-gray-100 rounded-xl bg-white overflow-hidden">
-            <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
-              <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">inventory</span> PEDIDOS CON SEGUIMIENTO</h3>
-              <span id="tracking-count" class="font-label-caps text-[10px] text-on-surface-variant/60"></span>
+            <!-- Consultar -->
+            <div class="sub-tab-content space-y-5" data-tab="consultar">
+              <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">search</span> CONSULTAR ESTADO DE ENVÍO</h3>
+                <div class="flex gap-3 mb-5">
+                  <input id="track-search-input" class="input-field flex-1" placeholder="Ej: CX123456789AR — número de seguimiento"/>
+                  <button class="btn-primary text-[10px]" onclick="consultarTracking()"><span class="material-symbols-outlined text-[13px]">search</span> CONSULTAR</button>
+                </div>
+                <div id="tracking-result" class="hidden">
+                  <div class="border border-gray-200 rounded-xl p-5 bg-gray-50">
+                    <div class="flex justify-between items-start mb-5">
+                      <div><div id="tr-number" class="font-label-caps text-label-caps text-primary mb-1"></div><div id="tr-service" class="font-label-caps text-[10px] text-on-surface-variant/60"></div></div>
+                      <span id="tr-status-badge" class="font-label-caps text-[9px] bg-[#5d22ff] text-white px-2.5 py-0.5 rounded-full"></span>
+                    </div>
+                    <div id="tr-timeline" class="relative border-l-2 border-primary ml-4 pl-5 space-y-0"></div>
+                    <div class="mt-5 pt-4 border-t border-gray-200 flex justify-between items-center flex-wrap gap-3">
+                      <span class="font-label-caps text-[10px] text-on-surface-variant/60">Ver en el sitio oficial</span>
+                      <a id="tr-official-link" href="#" target="_blank" class="btn-outline py-2 px-4 text-[10px]">VER TRACKING OFICIAL <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Tabla envíos -->
+              <div class="border border-gray-100 rounded-xl bg-white overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 flex justify-between items-center">
+                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]"><span class="material-symbols-outlined text-[18px]">inventory</span> PEDIDOS CON SEGUIMIENTO</h3>
+                  <span class="font-label-caps text-[10px] text-on-surface-variant/60"></span>
+                </div>
+                <div class="overflow-x-auto min-h-[80px]"><div id="tracking-list-2"></div></div>
+              </div>
             </div>
-            <div id="tracking-list" class="overflow-x-auto min-h-[80px]"></div>
-          </div>
             </div>
           </div>
         </div>
@@ -2193,48 +2228,48 @@ tailwind.config = {
   </div>
   <!-- Admin Dock -->
   <div class="admin-dock" id="admin-dock">
-    <button class="dock-item" onclick="showAdminSection('dashboard')" data-section="TABLERO">
-      <i data-lucide="layout-dashboard" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="showAdminSection('orders')" data-section="PEDIDOS">
-      <i data-lucide="shopping-bag" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="showAdminSection('customers')" data-section="CLIENTES">
-      <i data-lucide="users" class="dock-icon"></i>
-    </button>
-    <div class="dock-divider"></div>
-    <button class="dock-item" onclick="showAdminSection('products')" data-section="PRODUCTOS">
-      <i data-lucide="package" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="showAdminSection('banners')" data-section="BANNERS">
-      <i data-lucide="image" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="showAdminSection('categorias')" data-section="CATEGORÍAS">
-      <i data-lucide="grid-3x3" class="dock-icon"></i>
-    </button>
-    <div class="dock-divider"></div>
-    <button class="dock-item" onclick="showAdminSection('cobranzas')" data-section="COBRANZAS">
-      <i data-lucide="credit-card" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="showAdminSection('tracking')" data-section="ENVÍOS">
-      <i data-lucide="truck" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="showAdminSection('cupones')" data-section="CUPONES">
-      <i data-lucide="percent" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="showAdminSection('reportes')" data-section="REPORTES">
-      <i data-lucide="bar-chart-3" class="dock-icon"></i>
-    </button>
-    <div class="dock-divider"></div>
-    <button class="dock-item" onclick="nav('home')" data-section="TIENDA">
-      <i data-lucide="store" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="resetToFactory()" data-section="RESETEAR">
-      <i data-lucide="refresh-cw" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="doLogout()" data-section="SALIR">
-      <i data-lucide="log-out" class="dock-icon"></i>
-    </button>
+    <div class="dock-group">
+      <span class="dock-group-label">PANEL</span>
+      <div class="dock-group-items">
+        <button class="dock-item" onclick="showAdminSection('dashboard')" data-section="TABLERO"><i data-lucide="layout-dashboard" class="dock-icon"></i></button>
+      </div>
+    </div>
+    <div class="dock-divider-v"></div>
+    <div class="dock-group">
+      <span class="dock-group-label">PEDIDOS</span>
+      <div class="dock-group-items">
+        <button class="dock-item" onclick="showAdminSection('orders')" data-section="PEDIDOS"><i data-lucide="shopping-bag" class="dock-icon"></i></button>
+        <button class="dock-item" onclick="showAdminSection('customers')" data-section="CLIENTES"><i data-lucide="users" class="dock-icon"></i></button>
+        <button class="dock-item" onclick="showAdminSection('tracking')" data-section="ENVÍOS"><i data-lucide="truck" class="dock-icon"></i></button>
+      </div>
+    </div>
+    <div class="dock-divider-v"></div>
+    <div class="dock-group">
+      <span class="dock-group-label">PRODUCTOS</span>
+      <div class="dock-group-items">
+        <button class="dock-item" onclick="showAdminSection('products')" data-section="PRODUCTOS"><i data-lucide="package" class="dock-icon"></i></button>
+        <button class="dock-item" onclick="showAdminSection('categorias')" data-section="CATEGORÍAS"><i data-lucide="grid-3x3" class="dock-icon"></i></button>
+        <button class="dock-item" onclick="showAdminSection('banners')" data-section="BANNERS"><i data-lucide="image" class="dock-icon"></i></button>
+      </div>
+    </div>
+    <div class="dock-divider-v"></div>
+    <div class="dock-group">
+      <span class="dock-group-label">FINANZAS</span>
+      <div class="dock-group-items">
+        <button class="dock-item" onclick="showAdminSection('cobranzas')" data-section="COBRANZAS"><i data-lucide="credit-card" class="dock-icon"></i></button>
+        <button class="dock-item" onclick="showAdminSection('cupones')" data-section="CUPONES"><i data-lucide="percent" class="dock-icon"></i></button>
+        <button class="dock-item" onclick="showAdminSection('reportes')" data-section="REPORTES"><i data-lucide="bar-chart-3" class="dock-icon"></i></button>
+      </div>
+    </div>
+    <div class="dock-divider-v"></div>
+    <div class="dock-group">
+      <span class="dock-group-label">TIENDA</span>
+      <div class="dock-group-items">
+        <button class="dock-item" onclick="nav('home')" data-section="TIENDA"><i data-lucide="store" class="dock-icon"></i></button>
+        <button class="dock-item" onclick="resetToFactory()" data-section="RESETEAR"><i data-lucide="refresh-cw" class="dock-icon"></i></button>
+        <button class="dock-item" onclick="doLogout()" data-section="SALIR"><i data-lucide="log-out" class="dock-icon"></i></button>
+      </div>
+    </div>
   </div>
 </div>
 
