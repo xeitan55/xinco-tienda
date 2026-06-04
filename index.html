@@ -119,6 +119,7 @@ tailwind.config = {
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">CATÁLOGO</a>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">COLECCIONES</a>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">NEW DROPS</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;color:#D4AF37;" onclick="filterCatalog('exclusive');closeMobileMenu()">EXCLUSIVE</a>
 </div>
 
 <!-- ===== SEARCH OVERLAY ===== -->
@@ -209,6 +210,7 @@ tailwind.config = {
     <a class="nav-link" id="nav-catalog" onclick="nav('catalog')">CATÁLOGO</a>
     <a class="nav-link" id="nav-accesorios" onclick="filterCatalog('accesorios')">ACCESORIOS</a>
     <a class="nav-link" style="color:#5d22ff;" id="nav-newdrops" onclick="filterCatalog('newdrops')">NEW DROPS</a>
+    <a class="nav-link" style="color:#D4AF37;" id="nav-exclusive" onclick="filterCatalog('exclusive')">EXCLUSIVE</a>
   </nav>
 </header>
 
@@ -344,6 +346,7 @@ tailwind.config = {
             <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('newdrops')">New Drops</a></li>
             <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('buzos')">Buzos</a></li>
             <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('remeras')">Remeras</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('exclusive')" style="color:#D4AF37;">EXCLUSIVE</a></li>
           </ul>
         </div>
         <div>
