@@ -93,6 +93,17 @@ export function showAdminSection(section) {
   if (section === 'categorias') window.initCatEditor?.();
 }
 
+export function showSectionTab(sectionId, tabName) {
+  const container = document.getElementById('admin-section-' + sectionId);
+  if (!container) return;
+  container.querySelectorAll('.sub-tab-content').forEach(el => el.classList.remove('active'));
+  container.querySelectorAll('.sub-tab-btn').forEach(el => el.classList.remove('active'));
+  const target = container.querySelector('.sub-tab-content[data-tab="' + tabName + '"]');
+  if (target) target.classList.add('active');
+  const btn = container.querySelector('.sub-tab-btn[data-tab="' + tabName + '"]');
+  if (btn) btn.classList.add('active');
+}
+
 export function renderAdminDashboard() {
   const total = state.orders.reduce((s,o) => s + o.total, 0);
   const totalProd = state.products.length;
@@ -2151,6 +2162,7 @@ export function init() {
   window.renderAdmin = renderAdmin;
   window.adminNav = adminNav;
   window.showAdminSection = showAdminSection;
+  window.showSectionTab = showSectionTab;
   window.showProductForm = showProductForm;
   window.hideProductForm = hideProductForm;
   window.saveProduct = saveProduct;
