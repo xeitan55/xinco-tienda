@@ -27,6 +27,8 @@ export async function nav(page) {
     stitchEl.style.display = hideHeader ? 'none' : '';
     if (!hideHeader) setTimeout(() => { try { window.updateStitchClip?.(); } catch(e) {} }, 50);
   }
+  const bgCanvas = document.getElementById('bg-canvas');
+  if (bgCanvas) bgCanvas.style.display = hideHeader ? 'none' : '';
 
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   if (document.getElementById('nav-'+page)) document.getElementById('nav-'+page).classList.add('active');

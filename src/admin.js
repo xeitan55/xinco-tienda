@@ -48,7 +48,7 @@ export function adminNav(section) {
 }
 
 export function showAdminSection(section) {
-  const allSections = ['dashboard','orders','products','inventory','customers','banners','categorias','cupones','tracking','reportes','cobranzas'];
+  const allSections = ['dashboard','orders','products','inventory','customers','banners','categorias','cupones','tracking','reportes','cobranzas','apariencia'];
   allSections.forEach(s => {
     const el = document.getElementById('admin-section-' + s);
     if (!el) return;
@@ -68,18 +68,18 @@ export function showAdminSection(section) {
   });
   const titles = { dashboard:'TABLERO', orders:'PEDIDOS', products:'PRODUCTOS', inventory:'INVENTARIO',
     customers:'CLIENTES', cupones:'CUPONES', banners:'BANNERS', categorias:'CATEGORÍAS',
-    tracking:'ENVÍOS', reportes:'REPORTES', cobranzas:'COBRANZAS' };
+    tracking:'ENVÍOS', reportes:'REPORTES', cobranzas:'COBRANZAS', apariencia:'APARIENCIA' };
   const subs = { dashboard:'Vista general del negocio', orders:'Lista completa de pedidos', products:'Crear y editar productos', inventory:'Stock y talles',
     customers:'Información de clientes', cupones:'Códigos de descuento', banners:'Slider principal, hero y promos', categorias:'Imágenes de categorías en home',
-    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'Mercado Pago, tarjetas y transferencia' };
-  const icons = { dashboard:'layout-dashboard', orders:'shopping-bag', products:'package', customers:'users',
-    cupones:'percent', banners:'image', categorias:'grid-3x3', tracking:'truck', reportes:'bar-chart-3', cobranzas:'credit-card' };
+    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'Mercado Pago, tarjetas y transferencia', apariencia:'Fondo animado, dock y colores' };
+  const icons = { dashboard:'dashboard', orders:'shopping_bag', products:'inventory_2', customers:'group',
+    cupones:'percent', banners:'image', categorias:'grid_view', tracking:'local_shipping', reportes:'bar_chart', cobranzas:'credit_card', apariencia:'palette' };
   const title = document.getElementById('admin-section-title');
   if (title) { title.style.opacity = '0'; title.style.transform = 'translateY(-4px)'; setTimeout(() => { title.textContent = titles[section] || section.toUpperCase(); title.style.transition = 'all 0.25s cubic-bezier(0.16,1,0.3,1)'; title.style.opacity = '1'; title.style.transform = 'translateY(0)'; }, 40); }
   const sub = document.getElementById('admin-section-sub');
   if (sub) sub.textContent = subs[section] || '';
   const iconEl = document.getElementById('admin-section-icon');
-  if (iconEl) { iconEl.style.opacity = '0'; iconEl.style.transform = 'scale(0.8)'; setTimeout(() => { const iconName = icons[section] || 'layout-dashboard'; iconEl.setAttribute('data-lucide', iconName); if (window.lucide) lucide.createIcons?.({ attrs: { class: 'section-icon' } }); iconEl.style.transition = 'all 0.3s cubic-bezier(0.16,1,0.3,1)'; iconEl.style.opacity = '1'; iconEl.style.transform = 'scale(1)'; }, 40); }
+  if (iconEl) { iconEl.style.opacity = '0'; iconEl.style.transform = 'scale(0.8)'; setTimeout(() => { iconEl.textContent = icons[section] || 'dashboard'; iconEl.style.transition = 'all 0.3s cubic-bezier(0.16,1,0.3,1)'; iconEl.style.opacity = '1'; iconEl.style.transform = 'scale(1)'; }, 40); }
   if (section === 'inventory') initInventoryChart();
   if (section === 'cobranzas') window.initCobranzasSection?.();
   if (section === 'cupones') showAdminCouponTab?.('active');
@@ -87,6 +87,7 @@ export function showAdminSection(section) {
   if (section === 'tracking') { window.initTrackingSection?.(); window.initShippingProviders?.(); }
   if (section === 'reportes') window.initReportesSection?.();
   if (section === 'categorias') window.initCatEditor?.();
+  if (section === 'apariencia') window.initAppearancePanel?.();
 }
 
 export function showSectionTab(sectionId, tabName) {
@@ -2128,6 +2129,129 @@ export function initAdminBg() {
   }
 }
 
+// ===== PAGE BACKGROUND ANIMATION (antigravity particles) =====
+let _pageBgAnimId = null;
+export function initPageBg() {
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], cfg = loadAppearance();
+  const BASE_COUNT = 25;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const scheme = getBgColor();
+  const hue = (scheme.hue[0] + scheme.hue[1]) / 2;
+
+  function createParticle() {
+    const size = 2 + Math.random() * 4;
+    return {
+      x: Math.random() * W, y: H + Math.random() * 40,
+      vx: (Math.random() - 0.5) * 0.15,
+      vy: -(0.3 + Math.random() * 0.5) * (cfg.bgSpeed / 3),
+      r: size,
+      alpha: 0.04 + Math.random() * 0.08,
+      hue: hue + (Math.random() - 0.5) * 40,
+      phase: Math.random() * Math.PI * 2,
+    };
+  }
+
+  function initParticles() {
+    const count = Math.round(BASE_COUNT * cfg.bgDensity);
+    particles = [];
+    for (let i = 0; i < count; i++) particles.push(createParticle());
+  }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, W, H);
+    for (const p of particles) {
+      const pulse = 1 + Math.sin(time * 0.001 + p.phase) * 0.2;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * pulse, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue}, 40%, 50%, ${p.alpha})`;
+      ctx.fill();
+      p.x += p.vx + Math.sin(time * 0.0005 + p.phase) * 0.1;
+      p.y += p.vy;
+      if (p.y < -20) { p.y = H + 10; p.x = Math.random() * W; }
+      if (p.x < -20 || p.x > W + 20) p.x = Math.random() * W;
+    }
+    _pageBgAnimId = requestAnimationFrame(draw);
+  }
+
+  initParticles();
+  draw(0);
+}
+
+export function stopPageBg() {
+  if (_pageBgAnimId) { cancelAnimationFrame(_pageBgAnimId); _pageBgAnimId = null; }
+}
+
+// ===== APPEARANCE SETTINGS =====
+const APP_KEY = 'xincoAppearance';
+
+export function loadAppearance() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(APP_KEY));
+    if (saved) return saved;
+  } catch(e) {}
+  return { bgEnabled: true, bgDensity: 3, bgSpeed: 3, dockOpacity: 50, dockAutohide: true, dockDelay: 5 };
+}
+
+export function saveAppearance() {
+  const cfg = {
+    bgEnabled: document.getElementById('ap-bg-enabled')?.checked ?? true,
+    bgDensity: parseInt(document.getElementById('ap-bg-density')?.value || '3'),
+    bgSpeed: parseInt(document.getElementById('ap-bg-speed')?.value || '3'),
+    dockOpacity: parseInt(document.getElementById('ap-dock-opacity')?.value || '50'),
+    dockAutohide: document.getElementById('ap-dock-autohide')?.checked ?? true,
+    dockDelay: parseInt(document.getElementById('ap-dock-delay')?.value || '5'),
+  };
+  localStorage.setItem(APP_KEY, JSON.stringify(cfg));
+  applyAppearance(cfg);
+}
+
+export function applyAppearance(cfg) {
+  const dock = document.getElementById('admin-dock');
+  if (dock) {
+    const opacity = (cfg.dockOpacity || 50) / 100;
+    dock.style.setProperty('--dock-bg-opacity', opacity);
+    dock.style.background = `rgba(255,255,255,${opacity * 0.5})`;
+  }
+  const canvas = document.getElementById('bg-canvas');
+  if (canvas) {
+    if (cfg.bgEnabled) {
+      canvas.style.display = '';
+      stopPageBg();
+      initPageBg();
+    } else {
+      canvas.style.display = 'none';
+      stopPageBg();
+    }
+  }
+  window._appearanceCfg = cfg;
+}
+
+export function initAppearancePanel() {
+  const cfg = loadAppearance();
+  const setVal = (id, val) => { const el = document.getElementById(id); if (el) { if (el.type === 'checkbox') el.checked = val; else el.value = val; } };
+  setVal('ap-bg-enabled', cfg.bgEnabled);
+  setVal('ap-bg-density', cfg.bgDensity);
+  document.getElementById('ap-density-val').textContent = cfg.bgDensity;
+  setVal('ap-bg-speed', cfg.bgSpeed);
+  document.getElementById('ap-speed-val').textContent = cfg.bgSpeed;
+  setVal('ap-dock-opacity', cfg.dockOpacity);
+  document.getElementById('ap-dock-opacity-val').textContent = cfg.dockOpacity;
+  setVal('ap-dock-autohide', cfg.dockAutohide);
+  setVal('ap-dock-delay', cfg.dockDelay);
+  document.getElementById('ap-dock-delay-val').textContent = cfg.dockDelay;
+  applyAppearance(cfg);
+}
+
 export function init() {
   applyBgColor(_currentBgColor);
   initAdminBg();
@@ -2164,23 +2288,25 @@ export function init() {
         item.style.removeProperty('--z-scale');
       });
     });
-    // Auto-hide dock after 5s, show on mouse near bottom
+    // Auto-hide dock (configurable)
     let dockTimer;
     const DOCK_ZONE = 60;
+    function getDockDelay() { return (window._appearanceCfg?.dockDelay || 5) * 1000; }
     function showDock() {
       dock.classList.remove('dock-hidden');
       clearTimeout(dockTimer);
-      dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), 5000);
+      if (window._appearanceCfg?.dockAutohide !== false) dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), getDockDelay());
     }
     function initDockHide() {
       clearTimeout(dockTimer);
-      dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), 5000);
+      if (window._appearanceCfg?.dockAutohide !== false) dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), getDockDelay());
+      else dock.classList.remove('dock-hidden');
     }
     document.addEventListener('mousemove', (e) => {
       if (e.clientY > window.innerHeight - DOCK_ZONE) showDock();
     });
     dock.addEventListener('mouseenter', () => { clearTimeout(dockTimer); });
-    dock.addEventListener('mouseleave', () => { dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), 5000); });
+    dock.addEventListener('mouseleave', () => { if (window._appearanceCfg?.dockAutohide !== false) dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), getDockDelay()); });
     dock.addEventListener('click', () => showDock());
     initDockHide();
   }
@@ -2296,6 +2422,13 @@ export function init() {
   window.saveAdminCatImg = saveAdminCatImg;
   window.toggleColorPicker = toggleColorPicker;
   window.setAdminColor = setAdminColor;
+  window.initAppearancePanel = initAppearancePanel;
+  window.saveAppearance = saveAppearance;
   window._adminBgColor = _currentBgColor;
+  const cfg = loadAppearance();
+  window._appearanceCfg = cfg;
+  applyAppearance(cfg);
+  initPageBg();
   try { lucide?.createIcons(); } catch(e) {}
+  showAdminSection('dashboard');
 }
