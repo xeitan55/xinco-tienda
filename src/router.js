@@ -56,6 +56,10 @@ export async function nav(page, opts) {
 
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   if (document.getElementById('nav-'+page)) document.getElementById('nav-'+page).classList.add('active');
+  if (page === 'catalog' && state._tagFilter === 'exclusive') {
+    const el = document.getElementById('nav-exclusive');
+    if (el) el.classList.add('active');
+  }
 
   const { renderHomeProducts, renderExclusiveProducts, renderCatalog } = await import('./products.js');
   const { renderCartPage } = await import('./cart.js');
@@ -116,12 +120,13 @@ export async function handleAuthBtn() {
 }
 
 export function filterCatalog(tag) {
-  state._tagFilter = ['newdrops','stylo','esenciales'].includes(tag) ? tag : null;
+  state._tagFilter = ['newdrops','stylo','esenciales','exclusive'].includes(tag) ? tag : null;
   state.filterCat = ['remeras','pantalones','buzos','camperas','accesorios'].includes(tag) ? [tag] : [];
   document.querySelectorAll('.filter-cat').forEach(cb => {
     cb.checked = state.filterCat.length > 0 ? cb.value === tag : cb.value === 'all';
   });
-  document.getElementById('catalog-title').textContent = tag === 'newdrops' ? 'NEW DROPS' : tag === 'stylo' ? 'STYLO' : tag === 'esenciales' ? 'ESENCIALES' : tag.toUpperCase();
+  const titles = { newdrops:'NEW DROPS', stylo:'STYLO', esenciales:'ESENCIALES', exclusive:'EXCLUSIVE' };
+  document.getElementById('catalog-title').textContent = titles[tag] || tag.toUpperCase();
   state._catFilterNav = true;
   nav('catalog');
 }

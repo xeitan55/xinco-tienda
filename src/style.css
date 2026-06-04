@@ -260,6 +260,7 @@
   .badge-outline { background: var(--on-primary); border: 2px solid var(--primary); color: var(--primary); }
   .nav-link { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; color: var(--on-surface-variant); cursor: pointer; transition: color 0.2s; padding-bottom: 4px; }
   .nav-link:hover, .nav-link.active { color: #000; border-bottom: 3px solid #000; }
+  #nav-exclusive.active { color: #D4AF37 !important; border-bottom: 3px solid #D4AF37; }
   .card-hover { transition: all 0.2s; cursor: pointer; }
   .card-hover:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 #000; }
   #page-admin .card-hover:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); transform: translateY(-2px); }
@@ -468,6 +469,9 @@
   #product-overlay .product-close-btn:hover {
     background: #000;
     color: #fff;
+  }
+  #product-content {
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
   #review-stars .star-rating { transition: color 0.15s; }
   .color-swatch { width:32px; height:32px; border-radius:50%; border:3px solid transparent; cursor:pointer; transition:all 0.15s; position:relative; }

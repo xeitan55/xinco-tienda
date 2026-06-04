@@ -395,7 +395,8 @@ export async function saveProduct() {
     images: normalizedImages,
     img: firstImgUrl,
     stock,
-    tags: [], updatedAt: new Date().toISOString()
+    tags: exclusive ? ['exclusive'] : [],
+    updatedAt: new Date().toISOString()
   };
   const btn = document.querySelector('#product-form-container .btn-primary');
   if (btn) { btn.textContent = 'GUARDANDO...'; btn.disabled = true; }
