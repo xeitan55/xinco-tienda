@@ -164,7 +164,12 @@ export async function openProduct(id) {
   document.getElementById('size-selector').innerHTML = (p.sizes||['S','M','L','XL']).map(s => `
     <button class="size-btn" onclick="selectSize('${s}')">${s}</button>`).join('');
 
-  const related = state.products.filter(pr => String(pr.id) !== String(p.id) && pr.cat === p.cat).slice(0,4);
+  let related = state.products.filter(pr => String(pr.id) !== String(p.id) && pr.cat === p.cat);
+  if (related.length === 0) {
+    related = state.products.filter(pr => String(pr.id) !== String(p.id)).slice(0,4);
+  } else {
+    related = related.slice(0,4);
+  }
   document.getElementById('related-products').innerHTML = related.map(r => renderProductCard(r)).join('');
 
   if (isAlreadyOpen) {
