@@ -219,9 +219,9 @@
 
   #page-admin .btn-outline:hover { background: var(--admin-accent); border-color: var(--admin-accent); color: #fff; }
 
-  .btn-violet { background: #5d22ff; color: #fff; border: 3px solid #5d22ff; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.08em; font-weight: 700; text-transform: uppercase; padding: 15px 30px; cursor: pointer; transition: all 0.2s cubic-bezier(0.22,1,0.36,1); display: inline-flex; align-items: center; gap: 8px; border-radius: 14px; }
+  .btn-violet { background: var(--admin-accent, #5d22ff); color: #fff; border: 3px solid var(--admin-accent, #5d22ff); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.08em; font-weight: 700; text-transform: uppercase; padding: 15px 30px; cursor: pointer; transition: all 0.2s cubic-bezier(0.22,1,0.36,1); display: inline-flex; align-items: center; gap: 8px; border-radius: 14px; }
 
-  .btn-violet:hover { background: #4500d1; border-color: #4500d1; }
+  .btn-violet:hover { background: var(--admin-accent-light, #4500d1); border-color: var(--admin-accent-light, #4500d1); }
   .btn-violet:active { transform: scale(0.96); }
 
   .btn-outline { background: transparent; color: var(--primary); border: 3px solid var(--primary); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.08em; font-weight: 700; text-transform: uppercase; padding: 15px 30px; cursor: pointer; transition: all 0.2s cubic-bezier(0.22,1,0.36,1); display: inline-flex; align-items: center; gap: 8px; border-radius: 14px; }

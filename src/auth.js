@@ -141,7 +141,7 @@ export async function resendVerificationEmail() {
   if (fbAuth?.currentUser && !fbAuth.currentUser.emailVerified) {
     try {
       const { sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
-      await sendEmailVerification(fbAuth.currentUser);
+      await sendEmailVerification(fbAuth.currentUser, { url: 'https://xinco.shop/verificar-email' });
       window.showToast?.('✅ Email de verificación reenviado — revisá tu bandeja');
     } catch(e) {
       console.error('resendVerificationEmail:', e);
@@ -155,7 +155,7 @@ export async function resendVerificationEmail() {
       const { sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
       const user = fbAuth?.currentUser;
       if (user) {
-        await sendEmailVerification(user);
+      await sendEmailVerification(user, { url: 'https://xinco.shop/verificar-email' });
         window.showToast?.('✅ Email de verificación reenviado');
         return;
       }
@@ -642,21 +642,37 @@ export async function sendPasswordReset() {
 }
 
 export async function handleEmailVerification() {
+  const statusEl = document.getElementById('verify-status');
+  if (!statusEl) return;
+
   const params = new URLSearchParams(window.location.search);
   const mode = params.get('mode');
   const oobCode = params.get('oobCode');
-  if (mode !== 'verifyEmail' || !oobCode) return;
-  const statusEl = document.getElementById('verify-status');
-  if (!statusEl) return;
-  try {
-    await window._fb.applyActionCode(oobCode);
-    statusEl.innerHTML = '✅ EMAIL VERIFICADO<br><span style="font-size:13px;color:#666;margin-top:8px;display:block;">Ahora podés iniciar sesión.</span>';
-    setTimeout(() => { import('./router.js').then(m => m.nav('login')); }, 3000);
-  } catch(e) {
-    let msg = 'Error al verificar el email';
-    if (e.code === 'auth/invalid-action-code') msg = 'El link ya expiró o ya fue usado';
-    statusEl.innerHTML = '❌ ' + msg;
+
+  // Case 1: Direct oobCode from handleCodeInApp — process it
+  if (mode === 'verifyEmail' && oobCode) {
+    try {
+      await window._fb.applyActionCode(oobCode);
+      statusEl.innerHTML = '✅ EMAIL VERIFICADO<br><span style="font-size:13px;color:#666;margin-top:8px;display:block;">Ahora podés iniciar sesión.</span>';
+      setTimeout(() => { import('./router.js').then(m => m.nav('login')); }, 3000);
+      return;
+    } catch(e) {
+      let msg = 'Error al verificar';
+      if (e.code === 'auth/invalid-action-code') msg = 'El link ya expiró o ya fue usado';
+      statusEl.innerHTML = '❌ ' + msg;
+      return;
+    }
   }
+
+  // Case 2: Redirect after Firebase Auth handler processed verification
+  if (window.location.pathname === '/verificar-email') {
+    statusEl.innerHTML = '✅ EMAIL VERIFICADO<br><span style="font-size:13px;color:#666;margin-top:8px;display:block;">Ya podés iniciar sesión.</span>';
+    setTimeout(() => { import('./router.js').then(m => m.nav('login')); }, 3000);
+    return;
+  }
+
+  // Case 3: Not a verification page
+  statusEl.innerHTML = 'VERIFICANDO...';
 }
 
 export function init() {

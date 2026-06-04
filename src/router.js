@@ -205,7 +205,7 @@ export function init() {
       btn.style.outline = '';
     } else {
       btn.classList.add('selected');
-      btn.style.outline = '3px solid #5d22ff';
+      btn.style.outline = '3px solid var(--admin-accent, #5d22ff)';
       btn.style.outlineOffset = '2px';
     }
     import('./products.js').then(m => m.renderCatalog());

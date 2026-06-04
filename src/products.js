@@ -141,7 +141,7 @@ export async function openProduct(id) {
       <button class="color-swatch ${selected?'selected':''}" style="background:${hex};${border}" onclick="selectColor('${cid}')" title="${lbl}">
         ${selected ? `<span style="color:${['blanco','beige','amarillo'].includes(cid)?'#000':'#fff'};font-size:14px;">✓</span>` : ''}
       </button>
-      ${hasImg ? `<span style="position:absolute;top:-3px;right:-3px;width:9px;height:9px;background:#5d22ff;border-radius:50%;border:1px solid #fff;" title="Tiene foto"></span>` : ''}
+      ${hasImg ? `<span style="position:absolute;top:-3px;right:-3px;width:9px;height:9px;background:var(--admin-accent,#5d22ff);border-radius:50%;border:1px solid #fff;" title="Tiene foto"></span>` : ''}
       <span class="font-label-caps text-[9px] text-on-surface-variant">${lbl}</span>
     </div>`;
   }).join('');
@@ -274,7 +274,7 @@ export function selectColor(c) {
         <button class="color-swatch ${selected?'selected':''}" style="background:${hex};${border}" onclick="selectColor('${cid}')" title="${lbl}">
           ${selected?`<span style="color:${['blanco','beige','amarillo'].includes(cid)?'#000':'#fff'};font-size:14px;">✓</span>`:''}
         </button>
-        ${hasImg ? '<span style="position:absolute;bottom:-4px;right:-2px;width:8px;height:8px;background:#5d22ff;border-radius:50%;border:1px solid #fff;" title="Tiene foto"></span>' : ''}
+        ${hasImg ? '<span style="position:absolute;bottom:-4px;right:-2px;width:8px;height:8px;background:var(--admin-accent,#5d22ff);border-radius:50%;border:1px solid #fff;" title="Tiene foto"></span>' : ''}
         <span class="font-label-caps text-[9px] text-on-surface-variant">${lbl}</span>
       </div>`;
     }).join('');

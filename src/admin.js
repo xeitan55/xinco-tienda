@@ -532,7 +532,8 @@ export function initInventoryChart() {
   ctx.clearRect(0, 0, width, height);
   const max = Math.max(...data, 1);
   const barW = Math.min(40, (width - 40) / data.length - 4);
-  const colors = ['#5d22ff','#003ecf','#2d5f2e','#031b46','#b3261e','#333333','#5d22ff','#003ecf','#2d5f2e','#031b46'];
+  const accent = getComputedStyle(document.querySelector('#page-admin')).getPropertyValue('--admin-accent').trim() || '#5d22ff';
+  const colors = [accent,'#003ecf','#2d5f2e','#031b46','#b3261e','#333333',accent,'#003ecf','#2d5f2e','#031b46'];
   data.forEach((v, i) => {
     const x = 20 + i * (barW + 6);
     const h = (v / max) * (height - 60);
@@ -1446,7 +1447,7 @@ export async function uploadHeroImage(file) {
   progress.classList.remove('hidden');
   result.classList.add('hidden');
   bar.style.width = '0%';
-  bar.style.background = '#5d22ff';
+      bar.style.background = 'var(--admin-accent)';
   status.textContent = 'SUBIENDO...';
   const reader = new FileReader();
   reader.onload = (ev) => { document.getElementById('hero-preview-img').src = ev.target.result; };
@@ -1952,6 +1953,7 @@ export function printReport() {
   const now = new Date().toLocaleDateString('es-AR', {day:'2-digit', month:'long', year:'numeric'});
   const content = buildReportHTML(tipo, orders);
   const tipoLabels = {ventas:'Resumen de Ventas', clientes:'Datos de Clientes', pedido:'Comprobante de Pedido', completo:'Reporte Completo'};
+  const accentColor = getComputedStyle(document.querySelector('#page-admin')).getPropertyValue('--admin-accent').trim() || '#5d22ff';
   const printWin = window.open('', '_blank', 'width=900,height=700');
   printWin.document.write(`<!DOCTYPE html>
 <html lang="es">
@@ -1963,7 +1965,7 @@ table{border-collapse:collapse}.page-break{page-break-before:always}</style></he
 <div class="no-print" style="background:#000;color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:11px;">
   <span>XINCO — ${tipoLabels[tipo].toUpperCase()} — ${now} — ${orders.length} PEDIDO${orders.length!==1?'S':''}</span>
   <div style="display:flex;gap:8px;">
-    <button onclick="window.print()" style="background:#5d22ff;color:#fff;border:none;padding:8px 20px;font-family:monospace;font-size:11px;font-weight:bold;cursor:pointer;text-transform:uppercase;">▶ IMPRIMIR / PDF</button>
+    <button onclick="window.print()" style="background:${accentColor};color:#fff;border:none;padding:8px 20px;font-family:monospace;font-size:11px;font-weight:bold;cursor:pointer;text-transform:uppercase;">▶ IMPRIMIR / PDF</button>
     <button onclick="window.close()" style="background:#fff;color:#000;border:2px solid #fff;padding:8px 16px;font-family:monospace;font-size:11px;font-weight:bold;cursor:pointer;">✕ CERRAR</button>
   </div>
 </div>
@@ -2099,7 +2101,7 @@ export function initAdminBg() {
       vy: d.vy * (0.6 + Math.random() * 0.6),
       char,
       size: isBig ? 120 + Math.random() * 80 : 40 + Math.random() * 80,
-      alpha: isBig ? 0.15 + Math.random() * 0.15 : 0.20 + Math.random() * 0.25,
+      alpha: isBig ? 0.25 + Math.random() * 0.25 : 0.35 + Math.random() * 0.35,
       hue,
       rotation: (Math.random() - 0.5) * 0.02,
       rot: 0,
@@ -2115,8 +2117,8 @@ export function initAdminBg() {
       x: Math.random() * W, y: Math.random() * H,
       vx: (Math.random() - 0.5) * 0.15,
       vy: (Math.random() - 0.5) * 0.15,
-      r: 2 + Math.random() * 4,
-      alpha: 0.15 + Math.random() * 0.20,
+      r: 3 + Math.random() * 5,
+      alpha: 0.30 + Math.random() * 0.30,
       hue,
       phase: Math.random() * Math.PI * 2,
     };
@@ -2139,7 +2141,7 @@ export function initAdminBg() {
       const pulse = 1 + Math.sin(time * 0.5 + d.phase) * 0.15;
       ctx.beginPath();
       ctx.arc(d.x, d.y, d.r * pulse, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${d.hue}, 70%, 45%, ${d.alpha})`;
+      ctx.fillStyle = `hsla(${d.hue}, 80%, 50%, ${d.alpha})`;
       ctx.fill();
       d.x += d.vx; d.y += d.vy;
       if (d.x < -10) d.x = W + 10;
@@ -2159,7 +2161,7 @@ export function initAdminBg() {
       ctx.font = `${v.size}px "Montserrat", sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = `hsla(${v.hue}, 70%, 45%, ${v.alpha + glow * 0.35})`;
+      ctx.fillStyle = `hsla(${v.hue}, 80%, 50%, ${v.alpha + glow * 0.4})`;
       ctx.fillText(v.char, 0, 0);
       ctx.restore();
       v.x += v.vx; v.y += v.vy;

@@ -57,7 +57,7 @@ export function handleSearch(q) {
       </div>
       <div class="p-3">
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;font-weight:700;color:#000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5d22ff;margin-top:4px;">${window.fmtPrice?.(p.price) || '$' + p.price}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--admin-accent,#5d22ff);margin-top:4px;">${window.fmtPrice?.(p.price) || '$' + p.price}</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(0,0,0,0.35);margin-top:2px;text-transform:uppercase;">${p.cat}</div>
       </div>
     </div>`).join('');
