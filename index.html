@@ -2228,48 +2228,48 @@ tailwind.config = {
   </div>
   <!-- Admin Dock -->
   <div class="admin-dock" id="admin-dock">
-    <div class="dock-group">
-      <span class="dock-group-label">PANEL</span>
-      <div class="dock-group-items">
-        <button class="dock-item" onclick="showAdminSection('dashboard')" data-section="TABLERO"><i data-lucide="layout-dashboard" class="dock-icon"></i></button>
-      </div>
-    </div>
-    <div class="dock-divider-v"></div>
-    <div class="dock-group">
-      <span class="dock-group-label">PEDIDOS</span>
-      <div class="dock-group-items">
-        <button class="dock-item" onclick="showAdminSection('orders')" data-section="PEDIDOS"><i data-lucide="shopping-bag" class="dock-icon"></i></button>
-        <button class="dock-item" onclick="showAdminSection('customers')" data-section="CLIENTES"><i data-lucide="users" class="dock-icon"></i></button>
-        <button class="dock-item" onclick="showAdminSection('tracking')" data-section="ENVÍOS"><i data-lucide="truck" class="dock-icon"></i></button>
-      </div>
-    </div>
-    <div class="dock-divider-v"></div>
-    <div class="dock-group">
-      <span class="dock-group-label">PRODUCTOS</span>
-      <div class="dock-group-items">
-        <button class="dock-item" onclick="showAdminSection('products')" data-section="PRODUCTOS"><i data-lucide="package" class="dock-icon"></i></button>
-        <button class="dock-item" onclick="showAdminSection('categorias')" data-section="CATEGORÍAS"><i data-lucide="grid-3x3" class="dock-icon"></i></button>
-        <button class="dock-item" onclick="showAdminSection('banners')" data-section="BANNERS"><i data-lucide="image" class="dock-icon"></i></button>
-      </div>
-    </div>
-    <div class="dock-divider-v"></div>
-    <div class="dock-group">
-      <span class="dock-group-label">FINANZAS</span>
-      <div class="dock-group-items">
-        <button class="dock-item" onclick="showAdminSection('cobranzas')" data-section="COBRANZAS"><i data-lucide="credit-card" class="dock-icon"></i></button>
-        <button class="dock-item" onclick="showAdminSection('cupones')" data-section="CUPONES"><i data-lucide="percent" class="dock-icon"></i></button>
-        <button class="dock-item" onclick="showAdminSection('reportes')" data-section="REPORTES"><i data-lucide="bar-chart-3" class="dock-icon"></i></button>
-      </div>
-    </div>
-    <div class="dock-divider-v"></div>
-    <div class="dock-group">
-      <span class="dock-group-label">TIENDA</span>
-      <div class="dock-group-items">
-        <button class="dock-item" onclick="nav('home')" data-section="TIENDA"><i data-lucide="store" class="dock-icon"></i></button>
-        <button class="dock-item" onclick="resetToFactory()" data-section="RESETEAR"><i data-lucide="refresh-cw" class="dock-icon"></i></button>
-        <button class="dock-item" onclick="doLogout()" data-section="SALIR"><i data-lucide="log-out" class="dock-icon"></i></button>
-      </div>
-    </div>
+    <button class="dock-item" onclick="showAdminSection('dashboard')" data-section="TABLERO">
+      <i data-lucide="layout-dashboard" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('orders')" data-section="PEDIDOS">
+      <i data-lucide="shopping-bag" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('customers')" data-section="CLIENTES">
+      <i data-lucide="users" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('tracking')" data-section="ENVÍOS">
+      <i data-lucide="truck" class="dock-icon"></i>
+    </button>
+    <div class="dock-divider"></div>
+    <button class="dock-item" onclick="showAdminSection('products')" data-section="PRODUCTOS">
+      <i data-lucide="package" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('categorias')" data-section="CATEGORÍAS">
+      <i data-lucide="grid-3x3" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('banners')" data-section="BANNERS">
+      <i data-lucide="image" class="dock-icon"></i>
+    </button>
+    <div class="dock-divider"></div>
+    <button class="dock-item" onclick="showAdminSection('cobranzas')" data-section="COBRANZAS">
+      <i data-lucide="credit-card" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('cupones')" data-section="CUPONES">
+      <i data-lucide="percent" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="showAdminSection('reportes')" data-section="REPORTES">
+      <i data-lucide="bar-chart-3" class="dock-icon"></i>
+    </button>
+    <div class="dock-divider"></div>
+    <button class="dock-item" onclick="nav('home')" data-section="TIENDA">
+      <i data-lucide="store" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="resetToFactory()" data-section="RESETEAR">
+      <i data-lucide="refresh-cw" class="dock-icon"></i>
+    </button>
+    <button class="dock-item" onclick="doLogout()" data-section="SALIR">
+      <i data-lucide="log-out" class="dock-icon"></i>
+    </button>
   </div>
 </div>
 
