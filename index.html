@@ -1238,21 +1238,17 @@ tailwind.config = {
 <!-- PAGE: ORDER CONFIRMATION              -->
 <!-- ===================================== -->
 <div id="page-order-confirm" class="page">
+  ...
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: EMAIL VERIFICATION              -->
+<!-- ===================================== -->
+<div id="page-verify" class="page">
   <div class="min-h-screen flex items-center justify-center px-6 py-16">
-    <div class="max-w-lg w-full text-center">
-      <div class="w-20 h-20 bg-primary flex items-center justify-center mx-auto mb-6">
-        <span class="material-symbols-outlined text-white text-[48px]">check</span>
-      </div>
-      <h1 style="font-family:Montserrat;font-size:clamp(28px,5vw,56px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-4">¡PEDIDO<br>CONFIRMADO!</h1>
-      <p class="font-body-lg text-on-surface-variant mb-3">Tu número de pedido es:</p>
-      <div class="inline-block border-[3px] border-secondary-container px-8 py-4 mb-6">
-        <span id="order-number" class="font-label-caps text-label-caps text-secondary-container text-lg tracking-widest"></span>
-      </div>
-      <p class="font-body-md text-on-surface-variant mb-8">Recibirás un email de confirmación con los detalles de tu pedido y el tracking de envío.</p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button class="btn-primary" onclick="nav('account')">MIS PEDIDOS</button>
-        <button class="btn-outline" onclick="nav('catalog')">SEGUIR COMPRANDO</button>
-      </div>
+    <div class="max-w-md w-full text-center">
+      <div id="verify-status" class="font-label-caps text-xl">VERIFICANDO...</div>
     </div>
   </div>
 </div>
