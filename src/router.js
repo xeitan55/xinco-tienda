@@ -62,7 +62,25 @@ export async function nav(page, opts) {
   const { renderCheckoutPage } = await import('./checkout.js');
 
   if (page === 'home') renderHomeProducts();
-  if (page === 'catalog') renderCatalog();
+  if (page === 'catalog') {
+    if (!state._catFilterNav) {
+      state.filterCat = [];
+      state._tagFilter = null;
+      document.querySelectorAll('.filter-cat').forEach(c => { c.checked = c.value === 'all'; });
+      document.querySelectorAll('.filter-size').forEach(b => b.classList.remove('selected'));
+      document.querySelectorAll('.filter-color').forEach(b => b.style.outline = '');
+      const priceEl = document.getElementById('price-range');
+      if (priceEl) priceEl.value = 200000;
+      const labelEl = document.getElementById('price-label');
+      if (labelEl) labelEl.textContent = '$200.000';
+      const sortEl = document.getElementById('sort-select');
+      if (sortEl) sortEl.value = 'default';
+      const titleEl = document.getElementById('catalog-title');
+      if (titleEl) titleEl.textContent = 'TODOS LOS ITEMS';
+    }
+    state._catFilterNav = false;
+    renderCatalog();
+  }
   if (page === 'cart') renderCartPage();
   if (page === 'checkout') renderCheckoutPage();
   if (page === 'account') { const { renderAccountPage } = await import('./auth.js'); renderAccountPage(); }
@@ -99,18 +117,12 @@ export async function handleAuthBtn() {
 
 export function filterCatalog(tag) {
   state._tagFilter = ['newdrops','stylo','esenciales'].includes(tag) ? tag : null;
-  state.filterCat = [];
-  if (['remeras','pantalones','buzos','camperas','accesorios'].includes(tag)) {
-    state.filterCat = [tag];
-    document.querySelectorAll('.filter-cat').forEach(cb => {
-      cb.checked = cb.value === tag;
-    });
-  } else {
-    document.querySelectorAll('.filter-cat').forEach(cb => {
-      cb.checked = cb.value === 'all';
-    });
-  }
+  state.filterCat = ['remeras','pantalones','buzos','camperas','accesorios'].includes(tag) ? [tag] : [];
+  document.querySelectorAll('.filter-cat').forEach(cb => {
+    cb.checked = state.filterCat.length > 0 ? cb.value === tag : cb.value === 'all';
+  });
   document.getElementById('catalog-title').textContent = tag === 'newdrops' ? 'NEW DROPS' : tag === 'stylo' ? 'STYLO' : tag === 'esenciales' ? 'ESENCIALES' : tag.toUpperCase();
+  state._catFilterNav = true;
   nav('catalog');
 }
 
