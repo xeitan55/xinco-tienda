@@ -1986,20 +1986,10 @@ function applyBgColor(scheme) {
   r.style.setProperty('--admin-accent-light', c.cssLight);
   r.style.setProperty('--admin-accent-dim', c.css + '18');
   document.querySelectorAll('.color-swatch').forEach(el => el.classList.toggle('active', el.dataset.color === scheme));
-  document.getElementById('admin-color-picker')?.classList.remove('open');
-  document.getElementById('admin-color-btn')?.classList.remove('active');
   const avatar = document.querySelector('.admin-avatar');
   if (avatar) avatar.style.background = c.css;
   const iconEl = document.querySelector('.section-icon');
   if (iconEl) iconEl.style.color = c.css;
-}
-
-export function toggleColorPicker() {
-  const picker = document.getElementById('admin-color-picker');
-  const btn = document.getElementById('admin-color-btn');
-  if (!picker) return;
-  const open = picker.classList.toggle('open');
-  if (btn) btn.classList.toggle('active', open);
 }
 
 export function setAdminColor(scheme) {
@@ -2216,6 +2206,24 @@ export function saveAppearance() {
   applyAppearance(cfg);
 }
 
+export async function saveAppearanceToFirebase() {
+  saveAppearance();
+  const cfg = loadAppearance();
+  const ready = await window.waitForFirebase();
+  if (!ready || !window._fb || !window.fbDb) {
+    window.showToast?.('⚠️ Sin conexión — guardado solo localmente');
+    return;
+  }
+  try {
+    const { doc, setDoc } = window._fb;
+    await setDoc(doc(window.fbDb, 'config', 'apariencia'), cfg, { merge: true });
+    window.showToast?.('✅ Configuración guardada en la nube');
+  } catch(e) {
+    console.error('saveAppearanceToFirebase error:', e);
+    window.showToast?.('⚠️ Error al guardar en la nube');
+  }
+}
+
 export function applyAppearance(cfg) {
   const dock = document.getElementById('admin-dock');
   if (dock) {
@@ -2238,19 +2246,47 @@ export function applyAppearance(cfg) {
 }
 
 export function initAppearancePanel() {
-  const cfg = loadAppearance();
-  const setVal = (id, val) => { const el = document.getElementById(id); if (el) { if (el.type === 'checkbox') el.checked = val; else el.value = val; } };
-  setVal('ap-bg-enabled', cfg.bgEnabled);
-  setVal('ap-bg-density', cfg.bgDensity);
-  document.getElementById('ap-density-val').textContent = cfg.bgDensity;
-  setVal('ap-bg-speed', cfg.bgSpeed);
-  document.getElementById('ap-speed-val').textContent = cfg.bgSpeed;
-  setVal('ap-dock-opacity', cfg.dockOpacity);
-  document.getElementById('ap-dock-opacity-val').textContent = cfg.dockOpacity;
-  setVal('ap-dock-autohide', cfg.dockAutohide);
-  setVal('ap-dock-delay', cfg.dockDelay);
-  document.getElementById('ap-dock-delay-val').textContent = cfg.dockDelay;
-  applyAppearance(cfg);
+  // Try Firebase first
+  (async () => {
+    const ready = await window.waitForFirebase();
+    if (ready && window._fb && window.fbDb) {
+      try {
+        const { doc, getDoc } = window._fb;
+        const snap = await getDoc(doc(window.fbDb, 'config', 'apariencia'));
+        if (snap.exists()) {
+          const fbCfg = snap.data();
+          localStorage.setItem(APP_KEY, JSON.stringify(fbCfg));
+          const setVal = (id, val) => { const el = document.getElementById(id); if (el) { if (el.type === 'checkbox') el.checked = val; else el.value = val; } };
+          setVal('ap-bg-enabled', fbCfg.bgEnabled);
+          setVal('ap-bg-density', fbCfg.bgDensity);
+          document.getElementById('ap-density-val').textContent = fbCfg.bgDensity;
+          setVal('ap-bg-speed', fbCfg.bgSpeed);
+          document.getElementById('ap-speed-val').textContent = fbCfg.bgSpeed;
+          setVal('ap-dock-opacity', fbCfg.dockOpacity);
+          document.getElementById('ap-dock-opacity-val').textContent = fbCfg.dockOpacity;
+          setVal('ap-dock-autohide', fbCfg.dockAutohide);
+          setVal('ap-dock-delay', fbCfg.dockDelay);
+          document.getElementById('ap-dock-delay-val').textContent = fbCfg.dockDelay;
+          applyAppearance(fbCfg);
+          return;
+        }
+      } catch(e) { console.warn('initAppearancePanel: Firebase fallback:', e.message); }
+    }
+    // Fallback to localStorage
+    const cfg = loadAppearance();
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el) { if (el.type === 'checkbox') el.checked = val; else el.value = val; } };
+    setVal('ap-bg-enabled', cfg.bgEnabled);
+    setVal('ap-bg-density', cfg.bgDensity);
+    document.getElementById('ap-density-val').textContent = cfg.bgDensity;
+    setVal('ap-bg-speed', cfg.bgSpeed);
+    document.getElementById('ap-speed-val').textContent = cfg.bgSpeed;
+    setVal('ap-dock-opacity', cfg.dockOpacity);
+    document.getElementById('ap-dock-opacity-val').textContent = cfg.dockOpacity;
+    setVal('ap-dock-autohide', cfg.dockAutohide);
+    setVal('ap-dock-delay', cfg.dockDelay);
+    document.getElementById('ap-dock-delay-val').textContent = cfg.dockDelay;
+    applyAppearance(cfg);
+  })();
 }
 
 export function init() {
@@ -2421,10 +2457,10 @@ export function init() {
   window.initCatEditor = initCatEditor;
   window.uploadAdminCatImg = uploadAdminCatImg;
   window.saveAdminCatImg = saveAdminCatImg;
-  window.toggleColorPicker = toggleColorPicker;
   window.setAdminColor = setAdminColor;
   window.initAppearancePanel = initAppearancePanel;
   window.saveAppearance = saveAppearance;
+  window.saveAppearanceToFirebase = saveAppearanceToFirebase;
   window._adminBgColor = _currentBgColor;
   const cfg = loadAppearance();
   window._appearanceCfg = cfg;
