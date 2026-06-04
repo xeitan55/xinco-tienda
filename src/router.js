@@ -55,10 +55,13 @@ export async function nav(page, opts) {
   if (bgCanvas) bgCanvas.style.display = hideHeader ? 'none' : '';
 
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-  if (document.getElementById('nav-'+page)) document.getElementById('nav-'+page).classList.add('active');
-  if (page === 'catalog' && state._tagFilter === 'exclusive') {
-    const el = document.getElementById('nav-exclusive');
+  if (page === 'catalog' && state._tagFilter) {
+    const navId = 'nav-' + state._tagFilter;
+    const el = document.getElementById(navId);
     if (el) el.classList.add('active');
+    else if (document.getElementById('nav-'+page)) document.getElementById('nav-'+page).classList.add('active');
+  } else {
+    if (document.getElementById('nav-'+page)) document.getElementById('nav-'+page).classList.add('active');
   }
 
   const { renderHomeProducts, renderExclusiveProducts, renderCatalog } = await import('./products.js');
@@ -152,22 +155,38 @@ export function init() {
   window.resetFilters = resetFilters;
   window.slugify = slugify;
   window.closeMobileMenu = () => {
-    document.getElementById('mobile-menu').classList.remove('open');
+    document.getElementById('mobile-menu')?.classList.remove('open');
     document.body.style.overflow = '';
   };
   window.openMobileMenu = () => {
-    document.getElementById('mobile-menu').classList.add('open');
+    document.getElementById('mobile-menu')?.classList.add('open');
     document.body.style.overflow = 'hidden';
   };
+  // Close overlays on backdrop click
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('mobile-menu');
+    if (menu && menu.classList.contains('open') && e.target === menu) {
+      window.closeMobileMenu();
+    }
+  });
+  // ESC key closes overlays
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      window.closeSearch?.();
+      window.closeMobileMenu?.();
+      const po = document.getElementById('product-overlay');
+      if (po?.classList.contains('open')) window.closeProductOverlay?.();
+    }
+  });
 
   // Browser back/forward
   window.addEventListener('popstate', (e) => {
     const page = e.state?.page;
-    // Close product overlay if open
     const overlay = document.getElementById('product-overlay');
     if (overlay?.classList.contains('open')) {
       overlay.classList.remove('open');
       document.body.style.overflow = '';
+      import('./products.js').then(m => m.clearPreProductPage());
     }
     if (page && page !== 'product') {
       nav(page, { replace: true });

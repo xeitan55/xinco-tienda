@@ -71,7 +71,7 @@ export function showAdminSection(section) {
     tracking:'ENVÍOS', reportes:'REPORTES', cobranzas:'COBRANZAS', apariencia:'APARIENCIA' };
   const subs = { dashboard:'Vista general del negocio', orders:'Lista completa de pedidos', products:'Crear y editar productos', inventory:'Stock y talles',
     customers:'Información de clientes', cupones:'Códigos de descuento', banners:'Slider principal, hero y promos', categorias:'Imágenes de categorías en home',
-    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'Mercado Pago, tarjetas y transferencia', apariencia:'Fondo animado, dock y colores' };
+    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'MP, tarjetas y transferencia', apariencia:'Tema, redes, EmailJS y colores' };
   const icons = { dashboard:'dashboard', orders:'shopping_bag', products:'inventory_2', customers:'group',
     cupones:'percent', banners:'image', categorias:'grid_view', tracking:'local_shipping', reportes:'bar_chart', cobranzas:'credit_card', apariencia:'palette' };
   const title = document.getElementById('admin-section-title');
@@ -90,6 +90,7 @@ export function showAdminSection(section) {
   if (section === 'apariencia') {
     window.initAppearancePanel?.();
     window.loadEmailJsIntoForm?.();
+    loadSocialConfigFromFirebase();
   }
 }
 
@@ -2267,11 +2268,12 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { bgEnabled: true, bgDensity: 3, bgSpeed: 3, dockOpacity: 50, dockAutohide: true, dockDelay: 5 };
+  return { theme: 'light', bgEnabled: true, bgDensity: 3, bgSpeed: 3, dockOpacity: 50, dockAutohide: true, dockDelay: 5 };
 }
 
 export function saveAppearance() {
   const cfg = {
+    theme: window.getTheme?.() || 'light',
     bgEnabled: document.getElementById('ap-bg-enabled')?.checked ?? true,
     bgDensity: parseInt(document.getElementById('ap-bg-density')?.value || '3'),
     bgSpeed: parseInt(document.getElementById('ap-bg-speed')?.value || '3'),
@@ -2302,6 +2304,7 @@ export async function saveAppearanceToFirebase() {
 }
 
 export function applyAppearance(cfg) {
+  if (cfg.theme && window.setTheme) window.setTheme(cfg.theme);
   const dock = document.getElementById('admin-dock');
   if (dock) {
     const opacity = (cfg.dockOpacity || 50) / 100;
@@ -2344,6 +2347,7 @@ export function initAppearancePanel() {
           setVal('ap-dock-autohide', fbCfg.dockAutohide);
           setVal('ap-dock-delay', fbCfg.dockDelay);
           document.getElementById('ap-dock-delay-val').textContent = fbCfg.dockDelay;
+          if (fbCfg.theme && window.setTheme) window.setTheme(fbCfg.theme);
           applyAppearance(fbCfg);
           return;
         }
@@ -2364,6 +2368,133 @@ export function initAppearancePanel() {
     document.getElementById('ap-dock-delay-val').textContent = cfg.dockDelay;
     applyAppearance(cfg);
   })();
+}
+
+// ===== SOCIAL MEDIA CONFIG =====
+const SOCIAL_KEY = 'xinco_social';
+
+function loadSocialConfig() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SOCIAL_KEY));
+    if (saved) return saved;
+  } catch(e) {}
+  return { instagram:'', tiktok:'', facebook:'', twitter:'', youtube:'', whatsapp:'' };
+}
+
+export function saveSocialConfig() {
+  const cfg = {
+    instagram: document.getElementById('sn-instagram')?.value.trim() || '',
+    tiktok: document.getElementById('sn-tiktok')?.value.trim() || '',
+    facebook: document.getElementById('sn-facebook')?.value.trim() || '',
+    twitter: document.getElementById('sn-twitter')?.value.trim() || '',
+    youtube: document.getElementById('sn-youtube')?.value.trim() || '',
+    whatsapp: document.getElementById('sn-whatsapp')?.value.trim() || '',
+  };
+  localStorage.setItem(SOCIAL_KEY, JSON.stringify(cfg));
+  (async () => {
+    const ready = await window.waitForFirebase();
+    if (!ready || !window._fb || !window.fbDb) { window.showToast?.('⚠️ Sin conexión — guardado solo localmente'); return; }
+    try {
+      const { doc, setDoc } = window._fb;
+      await setDoc(doc(window.fbDb, 'config', 'social'), cfg, { merge: true });
+      window.showToast?.('✅ Redes sociales guardadas en la nube');
+    } catch(e) { console.error(e); window.showToast?.('⚠️ Error al guardar en la nube'); }
+  })();
+  renderFooterSocial(cfg);
+  renderWhatsAppButton(cfg);
+}
+
+export function loadSocialConfigFromFirebase() {
+  (async () => {
+    const ready = await window.waitForFirebase();
+    if (!ready || !window._fb || !window.fbDb) {
+      const cfg = loadSocialConfig();
+      renderFooterSocial(cfg);
+      renderWhatsAppButton(cfg);
+      return;
+    }
+    try {
+      const { doc, getDoc } = window._fb;
+      const snap = await getDoc(doc(window.fbDb, 'config', 'social'));
+      if (snap.exists()) {
+        const cfg = snap.data();
+        localStorage.setItem(SOCIAL_KEY, JSON.stringify(cfg));
+        const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+        set('sn-instagram', cfg.instagram);
+        set('sn-tiktok', cfg.tiktok);
+        set('sn-facebook', cfg.facebook);
+        set('sn-twitter', cfg.twitter);
+        set('sn-youtube', cfg.youtube);
+        set('sn-whatsapp', cfg.whatsapp);
+        renderFooterSocial(cfg);
+        renderWhatsAppButton(cfg);
+        return;
+      }
+    } catch(e) { console.warn('loadSocialConfig firebase:', e); }
+    const cfg = loadSocialConfig();
+    renderFooterSocial(cfg);
+    renderWhatsAppButton(cfg);
+  })();
+}
+
+function renderFooterSocial(cfg) {
+  const container = document.getElementById('footer-social');
+  if (!container) return;
+  const links = [];
+  if (cfg.instagram) links.push({ label:'INSTAGRAM', url:cfg.instagram, icon:'instagram' });
+  if (cfg.tiktok) links.push({ label:'TIKTOK', url:cfg.tiktok, icon:'tiktok' });
+  if (cfg.facebook) links.push({ label:'FACEBOOK', url:cfg.facebook, icon:'facebook' });
+  if (cfg.twitter) links.push({ label:'X', url:cfg.twitter, icon:'x' });
+  if (cfg.youtube) links.push({ label:'YOUTUBE', url:cfg.youtube, icon:'youtube' });
+  if (links.length === 0) {
+    container.innerHTML = '<span class="font-label-caps text-[10px] text-on-primary/30">— SIN REDES CONFIGURADAS —</span>';
+    return;
+  }
+  container.innerHTML = links.map(l =>
+    `<a href="${l.url}" target="_blank" rel="noopener" class="badge badge-outline" style="background:transparent;border-color:var(--on-primary);color:var(--on-primary);text-decoration:none;">${l.label}</a>`
+  ).join('');
+}
+
+function renderWhatsAppButton(cfg) {
+  const btn = document.getElementById('whatsapp-float');
+  if (!btn) return;
+  if (cfg.whatsapp) {
+    btn.href = `https://wa.me/${cfg.whatsapp.replace(/[^0-9]/g,'')}`;
+    btn.style.display = 'flex';
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+// ===== NEWSLETTER =====
+export function subscribeNewsletter() {
+  const input = document.getElementById('newsletter-email');
+  if (!input) return;
+  const email = input.value.trim();
+  if (!email || !email.includes('@')) { window.showToast?.('Ingresá un email válido'); return; }
+  (async () => {
+    const ready = await window.waitForFirebase();
+    if (!ready || !window._fb || !window.fbDb) {
+      window.showToast?.('⚠️ Sin conexión — intentá más tarde');
+      return;
+    }
+    try {
+      const { doc, setDoc, collection } = window._fb;
+      await setDoc(doc(collection(window.fbDb, 'suscriptores'), email.replace(/[.#$]/g,'_')), { email, date: new Date().toISOString() });
+      window.showToast?.('✅ ¡Suscripto exitosamente!');
+      input.value = '';
+    } catch(e) {
+      console.error(e);
+      window.showToast?.('⚠️ Error al suscribir');
+    }
+  })();
+}
+
+// ===== INIT THEME RADIO IN ADMIN =====
+export function initAdminThemeSelector() {
+  const current = window.getTheme?.() || 'light';
+  const radio = document.querySelector(`input[name="admin-theme"][value="${current}"]`);
+  if (radio) radio.checked = true;
 }
 
 export function init() {
@@ -2538,10 +2669,15 @@ export function init() {
   window.initAppearancePanel = initAppearancePanel;
   window.saveAppearance = saveAppearance;
   window.saveAppearanceToFirebase = saveAppearanceToFirebase;
+  window.saveSocialConfig = saveSocialConfig;
+  window.subscribeNewsletter = subscribeNewsletter;
+  window.loadSocialConfigFromFirebase = loadSocialConfigFromFirebase;
   window._adminBgColor = _currentBgColor;
   const cfg = loadAppearance();
   window._appearanceCfg = cfg;
   applyAppearance(cfg);
+  loadSocialConfigFromFirebase();
+  initAdminThemeSelector();
   try { lucide?.createIcons(); } catch(e) {}
   showAdminSection('dashboard');
 }
