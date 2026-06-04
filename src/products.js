@@ -86,6 +86,19 @@ export async function openProduct(id) {
   const { loadReviews } = await import('./reviews.js');
   const p = state.products.find(pr => String(pr.id) === String(id));
   if (!p) return;
+
+  const overlay = document.getElementById('product-overlay');
+  const isAlreadyOpen = overlay?.classList.contains('open');
+  if (isAlreadyOpen) {
+    const content = document.getElementById('product-content');
+    if (content) {
+      content.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+      content.style.opacity = '0';
+      content.style.transform = 'translateY(8px)';
+      await new Promise(r => setTimeout(r, 200));
+    }
+  }
+
   state.currentProduct = p;
   state.selectedSize = null;
   state.selectedColor = (p.colors && p.colors[0]) || 'negro';
@@ -153,22 +166,41 @@ export async function openProduct(id) {
 
   const related = state.products.filter(pr => String(pr.id) !== String(p.id) && pr.cat === p.cat).slice(0,4);
   document.getElementById('related-products').innerHTML = related.map(r => renderProductCard(r)).join('');
-  document.getElementById('product-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+
+  if (isAlreadyOpen) {
+    const content = document.getElementById('product-content');
+    if (content) {
+      requestAnimationFrame(() => {
+        content.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        content.style.opacity = '1';
+        content.style.transform = 'translateY(0)';
+      });
+    }
+  } else {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
   setTimeout(() => { try { initProductZoom(); } catch(e) {} }, 50);
   setTimeout(() => { try { loadReviews(p.id); } catch(e) {} }, 100);
 
   // Update URL to product slug
   const { slugify } = await import('./router.js');
   const slug = slugify(p.name);
-  history.pushState({ page: 'product', productId: p.id }, '', '/producto/' + slug);
+  if (!_preProductPage) _preProductPage = state.currentPage;
+  history.replaceState({ page: 'product', productId: p.id }, '', '/producto/' + slug);
 }
+
+let _preProductPage = null;
 
 export function closeProductOverlay() {
   document.getElementById('product-overlay').classList.remove('open');
   document.body.style.overflow = '';
-  // Return to previous page in history
-  if (history.state?.page === 'product') history.back();
+  const page = _preProductPage || 'home';
+  _preProductPage = null;
+  const SLUG_MAP = { home:'/', catalog:'/catalogo', cart:'/carrito', checkout:'/checkout', login:'/login', register:'/registro', account:'/cuenta', admin:'/admin', 'order-confirm':'/confirmacion' };
+  history.replaceState({ page }, '', SLUG_MAP[page] || '/' + page);
+  import('./router.js').then(m => m.nav(page, { replace: true }));
 }
 
 export function swapProductImage(url, thumbEl) {

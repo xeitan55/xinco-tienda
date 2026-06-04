@@ -145,15 +145,13 @@ export function init() {
   // Browser back/forward
   window.addEventListener('popstate', (e) => {
     const page = e.state?.page;
-    if (page === 'product' && e.state?.productId) {
-      window.openProduct(e.state.productId);
-    } else if (page && page !== 'product') {
-      // Close product overlay if open
-      const overlay = document.getElementById('product-overlay');
-      if (overlay?.classList.contains('open')) {
-        overlay.classList.remove('open');
-        document.body.style.overflow = '';
-      }
+    // Close product overlay if open
+    const overlay = document.getElementById('product-overlay');
+    if (overlay?.classList.contains('open')) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    if (page && page !== 'product') {
       nav(page, { replace: true });
     } else if (!page) {
       nav('home', { replace: true });
