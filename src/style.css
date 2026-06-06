@@ -227,7 +227,7 @@
   html.dark #product-overlay .product-close-btn:hover { background: #fff; color: #000; }
   html.dark #page-admin .input-field { background: rgba(255,255,255,0.05); border-color: var(--admin-accent); color: rgba(255,255,255,0.85); }
   html.dark .modal-overlay { background: rgba(0,0,0,0.7); }
-  html.dark .admin-card { background: rgba(0,0,0,0.25) !important; backdrop-filter: blur(12px) !important; border-color: rgba(255,255,255,0.1) !important; }
+  html.dark .admin-card { background: rgba(0,0,0,0.15) !important; backdrop-filter: blur(12px) !important; border-color: rgba(255,255,255,0.08) !important; }
   html.dark .admin-card-header { border-color: rgba(155,135,245,0.08) !important; }
   html.dark .img-slot { border-color: var(--outline-variant) !important; background: var(--surface-container-low) !important; }
   html.dark .img-slot:hover { border-color: var(--primary) !important; background: var(--surface-container) !important; }
@@ -345,7 +345,8 @@
   @keyframes dockPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 .dock-style-option { border-color: transparent; }
 .dock-style-option:has(input:checked) { border-color: var(--admin-accent, #9b87f5) !important; background: color-mix(in srgb, var(--admin-accent, #9b87f5) 8%, transparent); }
-  #page-admin { position: relative; --admin-accent: #9b87f5; --admin-accent-light: #c4b5fd; --admin-accent-dim: #9b87f518; }
+  #page-admin { position: relative; --admin-accent: #9b87f5; --admin-accent-light: #c4b5fd; --admin-accent-dim: #9b87f518; background: transparent !important; }
+  html.dark #page-admin { background: transparent !important; }
   #admin-bg-video { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; object-fit: cover; opacity: 0; animation: adminBgFadeIn 1s ease-out 0.3s forwards; }
   @keyframes adminBgFadeIn { from { opacity: 0; } to { opacity: 0.5; } }
   #page-admin main { padding-bottom: 110px; }
