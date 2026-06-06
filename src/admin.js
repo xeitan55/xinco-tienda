@@ -2120,6 +2120,24 @@ export function setAdminBgVideo(url) {
   video.play().catch(() => {});
 }
 
+export function uploadAdminBgVideo(slot, file) {
+  if (!file) return;
+  window.showToast?.('Subiendo video...');
+  uploadToCloudinary(file,
+    (pct) => {},
+    (url) => {
+      document.getElementById('ap-bg-video-' + slot).value = url;
+      const label = document.getElementById('ap-bg-video-' + slot + '-label');
+      if (label) label.textContent = url.split('/').pop().substring(0, 30) + '...';
+      setAdminBgVideo(url);
+      saveAppearance();
+      window.showToast?.('✅ Video de fondo subido');
+    },
+    (err) => { window.showToast?.('❌ ' + err); },
+    'video'
+  );
+}
+
 // ===== PAGE BACKGROUND ANIMATION (antigravity particles) =====
 let _pageBgAnimId = null;
 export function initPageBg() {
@@ -2277,10 +2295,13 @@ export function initAppearancePanel() {
           const styleRadio = document.querySelector(`input[name="dock-style"][value="${fbCfg.dockStyle || 'blur'}"]`);
           if (styleRadio) styleRadio.checked = true;
           if (fbCfg.theme && window.setTheme) window.setTheme(fbCfg.theme);
-          setVal('ap-bg-video-1', fbCfg.bgVideo1 || '');
-          setVal('ap-bg-video-2', fbCfg.bgVideo2 || '');
-          setVal('ap-bg-video-3', fbCfg.bgVideo3 || '');
-          setVal('ap-bg-video-4', fbCfg.bgVideo4 || '');
+          for (let i = 1; i <= 4; i++) {
+            const url = fbCfg['bgVideo' + i] || '';
+            const el = document.getElementById('ap-bg-video-' + i);
+            if (el) el.value = url;
+            const label = document.getElementById('ap-bg-video-' + i + '-label');
+            if (label) label.textContent = url ? url.split('/').pop().substring(0, 30) + '...' : 'Ninguno';
+          }
           applyAppearance(fbCfg);
           return;
         }
@@ -2298,10 +2319,13 @@ export function initAppearancePanel() {
     document.getElementById('ap-dock-width-val').textContent = cfg.dockWidth;
     const styleRadio = document.querySelector(`input[name="dock-style"][value="${cfg.dockStyle || 'blur'}"]`);
     if (styleRadio) styleRadio.checked = true;
-    setVal('ap-bg-video-1', cfg.bgVideo1 || '');
-    setVal('ap-bg-video-2', cfg.bgVideo2 || '');
-    setVal('ap-bg-video-3', cfg.bgVideo3 || '');
-    setVal('ap-bg-video-4', cfg.bgVideo4 || '');
+    for (let i = 1; i <= 4; i++) {
+      const url = cfg['bgVideo' + i] || '';
+      const el = document.getElementById('ap-bg-video-' + i);
+      if (el) el.value = url;
+      const label = document.getElementById('ap-bg-video-' + i + '-label');
+      if (label) label.textContent = url ? url.split('/').pop().substring(0, 30) + '...' : 'Ninguno';
+    }
     applyAppearance(cfg);
   })();
 }
@@ -2609,6 +2633,7 @@ export function init() {
   window.saveAdminCatImg = saveAdminCatImg;
   window.setAdminColor = setAdminColor;
   window.setAdminBgVideo = setAdminBgVideo;
+  window.uploadAdminBgVideo = uploadAdminBgVideo;
   window.initAppearancePanel = initAppearancePanel;
   window.saveAppearance = saveAppearance;
   window.saveAppearanceToFirebase = saveAppearanceToFirebase;
