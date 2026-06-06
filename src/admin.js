@@ -539,7 +539,8 @@ export function initInventoryChart() {
   ctx.clearRect(0, 0, width, height);
   const max = Math.max(...data, 1);
   const barW = Math.min(40, (width - 40) / data.length - 4);
-  const accent = getComputedStyle(document.querySelector('#page-admin')).getPropertyValue('--admin-accent').trim() || '#5d22ff';
+  const adminEl = document.querySelector('#page-admin');
+  const accent = adminEl ? getComputedStyle(adminEl).getPropertyValue('--admin-accent').trim() : '#5d22ff';
   const colors = [accent,'#003ecf','#2d5f2e','#031b46','#b3261e','#333333',accent,'#003ecf','#2d5f2e','#031b46'];
   data.forEach((v, i) => {
     const x = 20 + i * (barW + 6);
@@ -2524,8 +2525,8 @@ export function subscribeNewsletter() {
       return;
     }
     try {
-    const { doc, setDoc } = window._fb;
-      await setDoc(doc(collection(window.fbDb, 'suscriptores'), email.replace(/[.#$]/g,'_')), { email, date: new Date().toISOString() });
+      const { doc, setDoc, collection } = window._fb;
+      await setDoc(doc(collection(fbDb, 'suscriptores'), email.replace(/[.#$]/g,'_')), { email, date: new Date().toISOString() });
       window.showToast?.('✅ ¡Suscripto exitosamente!');
       input.value = '';
     } catch(e) {

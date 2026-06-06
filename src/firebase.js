@@ -46,14 +46,20 @@ async function initFirebase() {
     window.fbAuth = fbAuth;
     window._fb = { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, applyActionCode, checkActionCode, sendEmailVerification };
 
-    onAuthStateChanged(fbAuth, async user => {
+    onAuthStateChanged(fbAuth, user => {
       state.user = user;
-      const { updateAuthUI } = await import('./auth.js');
-      await updateAuthUI();
-      if (user && state.currentPage === 'login') {
-        const { isAdmin } = await import('./admin.js');
-        if (await isAdmin()) { const { nav } = await import('./router.js'); nav('admin'); }
-      }
+      (async () => {
+        try {
+          const { updateAuthUI } = await import('./auth.js');
+          await updateAuthUI();
+          if (user && state.currentPage === 'login') {
+            const { isAdmin } = await import('./admin.js');
+            if (await isAdmin()) { const { nav } = await import('./router.js'); await nav('admin'); }
+          }
+        } catch(e) {
+          console.error('onAuthStateChanged error:', e);
+        }
+      })();
     });
 
     if (_fbReadyResolve) _fbReadyResolve();
@@ -248,6 +254,7 @@ async function fbLogoutUser() {
 }
 
 let retryCount = 0;
+const MAX_BOOT_RETRIES = 10;
 let _bootResolved = false;
 
 async function bootFromFirebase() {
@@ -275,6 +282,11 @@ async function bootFromFirebase() {
     console.error('bootFromFirebase: error (intento ' + retryCount + '):', e.message);
     if (retryCount === 0) _bootResolved = true;
     retryCount++;
+    if (retryCount >= MAX_BOOT_RETRIES) {
+      console.error('bootFromFirebase: se alcanzó el máximo de reintentos (' + MAX_BOOT_RETRIES + ')');
+      window.dismissSplash?.();
+      return;
+    }
     const hp = document.getElementById('home-products');
     if (hp) hp.innerHTML = '<div class="col-span-4" style="text-align:center;padding:60px;"><p style="font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:0.1em;color:#ba1a1a;">ERROR DE CONEXION</p><p style="font-family:JetBrains Mono,monospace;font-size:10px;color:#4c4546;margin-top:8px;">Reintentando en ' + Math.min(retryCount * 3, 15) + ' segundos...</p></div>';
     window.dismissSplash?.();

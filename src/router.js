@@ -115,10 +115,10 @@ export async function nav(page, opts) {
 export async function handleAuthBtn() {
   if (state.user) {
     const { isAdmin } = await import('./admin.js');
-    if (await isAdmin()) nav('admin');
-    else nav('account');
+    if (await isAdmin()) await nav('admin');
+    else await nav('account');
   } else {
-    nav('login');
+    await nav('login');
   }
 }
 
@@ -131,7 +131,7 @@ export function filterCatalog(tag) {
   const titles = { newdrops:'NEW DROPS', stylo:'STYLO', esenciales:'ESENCIALES', exclusive:'EXCLUSIVE' };
   document.getElementById('catalog-title').textContent = titles[tag] || tag.toUpperCase();
   state._catFilterNav = true;
-  nav('catalog');
+  await nav('catalog');
 }
 
 export async function resetFilters() {

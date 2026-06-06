@@ -1,4 +1,4 @@
-import { state, _bootResolved } from './firebase.js';
+import { _bootResolved } from './firebase.js';
 
 const SPLASH_MIN_MS = 2400;
 const SPLASH_MAX_MS = 8000;
@@ -29,13 +29,13 @@ export function preloadImage(url) {
   });
 }
 
+let _toastTimer;
 export function showToast(msg) {
-  let toastTimer;
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 export function initScrollReveal() {

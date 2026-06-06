@@ -162,7 +162,7 @@ export async function updateAuthUI() {
   const { isAdmin } = await import('./admin.js');
   const admin = await isAdmin();
   if (state.user) {
-    if (label) label.textContent = admin ? 'ADMIN' : (state.user.displayName || state.user.name || state.user.email.split('@')[0]).split(' ')[0].toUpperCase();
+    if (label) label.textContent = admin ? 'ADMIN' : (state.user.displayName || state.user.name || state.user.email?.split('@')[0] || 'USUARIO').split(' ')[0].toUpperCase();
   } else {
     if (label) label.textContent = 'ACCEDER';
   }

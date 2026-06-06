@@ -234,6 +234,9 @@ export async function placeOrder() {
   setTimeout(() => window.sendTicket?.(), 500);
   // Render ticket detail
   setTimeout(() => window.renderTicketDetail?.(), 300);
+  } catch(e) {
+    console.error('placeOrder error:', e);
+    window.showToast?.('Error al procesar el pedido ❌');
   } finally {
     _placingOrder = false;
     if (btn) { btn.disabled = false; btn.textContent = 'CONFIRMAR PEDIDO'; }

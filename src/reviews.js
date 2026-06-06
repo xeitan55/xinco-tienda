@@ -1,5 +1,4 @@
 import { state, fbDb } from './firebase.js';
-import { AVAILABLE_COLORS } from './state.js';
 
 let _reviewRating = 0;
 let _reviewProductId = null;
