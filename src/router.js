@@ -122,7 +122,7 @@ export async function handleAuthBtn() {
   }
 }
 
-export function filterCatalog(tag) {
+export async function filterCatalog(tag) {
   state._tagFilter = ['newdrops','stylo','esenciales','exclusive'].includes(tag) ? tag : null;
   state.filterCat = ['remeras','pantalones','buzos','camperas','accesorios'].includes(tag) ? [tag] : [];
   document.querySelectorAll('.filter-cat').forEach(cb => {
