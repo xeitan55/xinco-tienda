@@ -2297,6 +2297,13 @@ tailwind.config = {
                       </div>
                       <input type="range" id="ap-dock-delay" min="1" max="15" value="5" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-delay-val').textContent=this.value"/>
                     </div>
+                    <div>
+                      <div class="flex justify-between mb-1">
+                        <span class="font-label-caps text-[10px] text-on-surface-variant/70">ANCHO</span>
+                        <span class="font-label-caps text-[10px] text-primary" id="ap-dock-width-val">18</span>
+                      </div>
+                      <input type="range" id="ap-dock-width" min="8" max="48" value="18" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-width-val').textContent=this.value"/>
+                    </div>
                   </div>
                 </div>
                 <!-- Color de Énfasis -->

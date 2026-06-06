@@ -2302,7 +2302,7 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', bgEnabled: true, bgDensity: 3, bgSpeed: 3, dockOpacity: 50, dockAutohide: true, dockDelay: 5 };
+  return { theme: 'light', bgEnabled: true, bgDensity: 3, bgSpeed: 3, dockOpacity: 50, dockAutohide: true, dockDelay: 5, dockWidth: 18 };
 }
 
 export function saveAppearance() {
@@ -2314,6 +2314,7 @@ export function saveAppearance() {
     dockOpacity: parseInt(document.getElementById('ap-dock-opacity')?.value || '50'),
     dockAutohide: document.getElementById('ap-dock-autohide')?.checked ?? true,
     dockDelay: parseInt(document.getElementById('ap-dock-delay')?.value || '5'),
+    dockWidth: parseInt(document.getElementById('ap-dock-width')?.value || '18'),
   };
   localStorage.setItem(APP_KEY, JSON.stringify(cfg));
   applyAppearance(cfg);
@@ -2350,6 +2351,8 @@ export function applyAppearance(cfg) {
     const opacity = (cfg.dockOpacity || 50) / 100;
     dock.style.setProperty('--dock-bg-opacity', opacity);
     dock.style.background = `rgba(255,255,255,${opacity * 0.5})`;
+    const w = cfg.dockWidth || 18;
+    dock.style.setProperty('--dock-width', w + 'px');
   }
   const canvas = document.getElementById('bg-canvas');
   if (canvas) {
@@ -2387,6 +2390,8 @@ export function initAppearancePanel() {
           setVal('ap-dock-autohide', fbCfg.dockAutohide);
           setVal('ap-dock-delay', fbCfg.dockDelay);
           document.getElementById('ap-dock-delay-val').textContent = fbCfg.dockDelay;
+          setVal('ap-dock-width', fbCfg.dockWidth);
+          document.getElementById('ap-dock-width-val').textContent = fbCfg.dockWidth;
           if (fbCfg.theme && window.setTheme) window.setTheme(fbCfg.theme);
           applyAppearance(fbCfg);
           return;
@@ -2406,6 +2411,8 @@ export function initAppearancePanel() {
     setVal('ap-dock-autohide', cfg.dockAutohide);
     setVal('ap-dock-delay', cfg.dockDelay);
     document.getElementById('ap-dock-delay-val').textContent = cfg.dockDelay;
+    setVal('ap-dock-width', cfg.dockWidth);
+    document.getElementById('ap-dock-width-val').textContent = cfg.dockWidth;
     applyAppearance(cfg);
   })();
 }
