@@ -1,6 +1,7 @@
 import { state } from './state.js';
 
 export function openSearch() {
+  if (document.getElementById('page-admin')?.classList.contains('active')) return;
   document.getElementById('search-overlay').classList.add('open');
   document.getElementById('search-results').innerHTML = '';
   document.getElementById('search-empty').classList.add('hidden');
@@ -11,6 +12,8 @@ export function openSearch() {
 export function closeSearch() {
   document.getElementById('search-overlay').classList.remove('open');
   document.getElementById('search-input').value = '';
+  const hs = document.getElementById('header-search');
+  if (hs) hs.value = '';
   document.getElementById('search-results').innerHTML = '';
   document.getElementById('search-empty').classList.add('hidden');
   document.getElementById('search-clear').classList.add('hidden');

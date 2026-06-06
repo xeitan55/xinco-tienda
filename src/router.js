@@ -92,6 +92,7 @@ export async function nav(page, opts) {
   if (page === 'checkout') renderCheckoutPage();
   if (page === 'account') { const { renderAccountPage } = await import('./auth.js'); renderAccountPage(); }
   if (page === 'admin') {
+    window.closeSearch?.();
     const { renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers, renderAdminCupones, renderAdminTracking, renderAdminReports, renderAdminCatEditor } = await import('./admin.js');
     [renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers, renderAdminCupones, renderAdminTracking, renderAdminReports, renderAdminCatEditor].forEach(fn => { try { fn(); } catch(e) { console.error(e); } });
   }

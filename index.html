@@ -143,7 +143,7 @@ tailwind.config = {
         class="w-full bg-transparent border-none pl-14 pr-5 py-4 outline-none placeholder:text-black/30"
         style="font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:0.05em;color:#000;"
         placeholder="NOMBRE, CATEGORÍA, SKU..."
-        autocomplete="off"
+        autocomplete="new-password"
         oninput="handleSearch(this.value)"
       />
       <div id="search-clear" class="hidden absolute right-4 cursor-pointer text-black/40 hover:text-black" onclick="clearSearch()">
@@ -181,7 +181,7 @@ tailwind.config = {
       <button class="md:hidden p-1" onclick="openMobileMenu()"><span class="material-symbols-outlined">menu</span></button>
       <div class="hidden md:flex relative w-full max-w-xs border-2 border-primary group focus-within:border-secondary rounded-full">
         <span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-primary group-focus-within:text-secondary text-[20px]">search</span>
-        <input class="w-full bg-transparent border-none pl-9 pr-3 py-2 font-label-caps text-label-caps focus:ring-0 placeholder:text-on-surface-variant outline-none" placeholder="BUSCAR..." type="text" onfocus="openSearch()" id="header-search"/>
+        <input class="w-full bg-transparent border-none pl-9 pr-3 py-2 font-label-caps text-label-caps focus:ring-0 placeholder:text-on-surface-variant outline-none" placeholder="BUSCAR..." type="text" onfocus="openSearch()" id="header-search" autocomplete="off"/>
       </div>
     </div>
     <!-- Center: Logo -->
@@ -1281,7 +1281,7 @@ tailwind.config = {
 <!-- PAGE: ADMIN (full panel)              -->
 <!-- ===================================== -->
 <div id="page-admin" class="page">
-  <canvas id="admin-bg-canvas"></canvas>
+  <video id="admin-bg-video" autoplay muted loop playsinline></video>
   <div class="flex min-h-screen">
       <main class="flex-1 overflow-auto" style="background:rgba(245,245,247,0.85);">
       <header class="admin-header">
@@ -1297,7 +1297,7 @@ tailwind.config = {
         </div>
         <div class="admin-header-right">
           <div class="brand-sub">Panel Admin</div>
-          <div class="admin-color-btn" id="admin-color-btn" onclick="showAdminSection('apariencia')" title="Apariencia">
+          <div class="admin-color-btn" id="admin-color-btn" onclick="event.stopPropagation();showAdminSection('apariencia')" title="Apariencia">
             <span class="material-symbols-outlined">settings</span>
           </div>
           <div class="admin-avatar"><span class="material-symbols-outlined">person</span></div>
@@ -2240,33 +2240,43 @@ tailwind.config = {
                     </label>
                   </div>
                 </div>
-                <!-- Fondo Animado -->
+                <!-- Fondo de Video -->
                 <div class="border border-gray-100 rounded-xl p-5 bg-white">
                   <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
-                    <span class="material-symbols-outlined text-[18px]">blur_on</span> FONDO ANIMADO
+                    <span class="material-symbols-outlined text-[18px]">videocam</span> FONDO DE VIDEO
                   </h3>
-                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Partículas flotando hacia arriba en el fondo de la tienda.</p>
-                  <div class="flex items-center justify-between mb-4">
-                    <span class="font-label-caps text-[11px] text-on-surface-variant/70">ACTIVAR</span>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" id="ap-bg-enabled" class="sr-only admin-toggle" onchange="saveAppearance()"/>
-                      <div class="toggle-track w-11 h-6 rounded-full relative transition-all duration-200" style="background:rgba(0,0,0,0.15);"><div class="toggle-dot absolute top-[2px] left-[2px] bg-white rounded-full h-5 w-5 transition-all duration-200 shadow-sm"></div></div>
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Elegí un video de fondo para el panel de administración.</p>
+                  <div class="grid grid-cols-2 gap-2 mb-4">
+                    <label class="bg-video-option flex flex-col items-center cursor-pointer p-3 rounded-lg border-2 transition-all" style="border-color:var(--admin-accent,#9b87f5);" onclick="this.querySelector('input').checked=true;setAdminBgVideo('https://cdn.pixabay.com/video/2023/09/10/180275-866663962_large.mp4')">
+                      <input type="radio" name="bg-video" value="https://cdn.pixabay.com/video/2023/09/10/180275-866663962_large.mp4" class="sr-only"/>
+                      <span class="material-symbols-outlined text-[24px] mb-1" style="color:var(--admin-accent,#9b87f5);">auto_awesome</span>
+                      <span class="font-label-caps text-[9px] text-primary">NEBULOSA</span>
+                    </label>
+                    <label class="bg-video-option flex flex-col items-center cursor-pointer p-3 rounded-lg border-2 transition-all" style="border-color:transparent;" onclick="this.querySelector('input').checked=true;setAdminBgVideo('https://cdn.pixabay.com/video/2021/12/06/102193-612936815_large.mp4')">
+                      <input type="radio" name="bg-video" value="https://cdn.pixabay.com/video/2021/12/06/102193-612936815_large.mp4" class="sr-only"/>
+                      <span class="material-symbols-outlined text-[24px] mb-1" style="color:var(--admin-accent,#9b87f5);">grain</span>
+                      <span class="font-label-caps text-[9px] text-primary">PARTÍCULAS</span>
+                    </label>
+                    <label class="bg-video-option flex flex-col items-center cursor-pointer p-3 rounded-lg border-2 transition-all" style="border-color:transparent;" onclick="this.querySelector('input').checked=true;setAdminBgVideo('https://cdn.pixabay.com/video/2020/04/10/35476-426918128_large.mp4')">
+                      <input type="radio" name="bg-video" value="https://cdn.pixabay.com/video/2020/04/10/35476-426918128_large.mp4" class="sr-only"/>
+                      <span class="material-symbols-outlined text-[24px] mb-1" style="color:var(--admin-accent,#9b87f5);">nightlight</span>
+                      <span class="font-label-caps text-[9px] text-primary">CIUDAD</span>
+                    </label>
+                    <label class="bg-video-option flex flex-col items-center cursor-pointer p-3 rounded-lg border-2 transition-all" style="border-color:transparent;" onclick="this.querySelector('input').checked=true;setAdminBgVideo('https://cdn.pixabay.com/video/2023/07/25/170822-847336374_large.mp4')">
+                      <input type="radio" name="bg-video" value="https://cdn.pixabay.com/video/2023/07/25/170822-847336374_large.mp4" class="sr-only"/>
+                      <span class="material-symbols-outlined text-[24px] mb-1" style="color:var(--admin-accent,#9b87f5);">blur_on</span>
+                      <span class="font-label-caps text-[9px] text-primary">ABSTRACTO</span>
                     </label>
                   </div>
-                  <div class="space-y-4">
-                    <div>
-                      <div class="flex justify-between mb-1">
-                        <span class="font-label-caps text-[10px] text-on-surface-variant/70">DENSIDAD</span>
-                        <span class="font-label-caps text-[10px] text-primary" id="ap-density-val">3</span>
-                      </div>
-                      <input type="range" id="ap-bg-density" min="1" max="6" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-density-val').textContent=this.value;saveAppearance()"/>
-                    </div>
-                    <div>
-                      <div class="flex justify-between mb-1">
-                        <span class="font-label-caps text-[10px] text-on-surface-variant/70">VELOCIDAD</span>
-                        <span class="font-label-caps text-[10px] text-primary" id="ap-speed-val">3</span>
-                      </div>
-                      <input type="range" id="ap-bg-speed" min="1" max="5" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-speed-val').textContent=this.value;saveAppearance()"/>
+                  <div>
+                    <label class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-1">O URL PERSONALIZADA</label>
+                    <div class="flex gap-2">
+                      <input type="url" id="ap-bg-video-url" class="flex-1 border-2 border-gray-200 rounded-lg px-3 py-2 text-sm font-body-md" placeholder="https://ejemplo.com/video.mp4" onchange="if(this.value.trim()){setAdminBgVideo(this.value.trim())}"/>
+                      <label class="btn-violet px-3 py-2 text-[10px] cursor-pointer flex items-center gap-1" style="white-space:nowrap;">
+                        <span class="material-symbols-outlined text-[16px]">upload</span>
+                        SUBIR
+                        <input type="file" accept="video/mp4,video/webm" class="hidden" onchange="const f=this.files[0];if(f){const u=URL.createObjectURL(f);document.getElementById('ap-bg-video-url').value=u;setAdminBgVideo(u)}"/>
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -2331,7 +2341,7 @@ tailwind.config = {
                   <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
                     <span class="material-symbols-outlined text-[18px]">palette</span> COLOR DE ÉNFASIS & VECTORES
                   </h3>
-                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Color del panel y de los vectores flotantes (X Y O).</p>
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Color de acento del panel de administración.</p>
                   <div class="flex gap-3 flex-wrap items-center">
                     <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="violet" style="background:#9b87f5" onclick="setAdminColor('violet')"></button>
                     <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="blue" style="background:#5b9cf5" onclick="setAdminColor('blue')"></button>

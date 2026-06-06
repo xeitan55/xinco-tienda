@@ -71,7 +71,7 @@ export function showAdminSection(section) {
     tracking:'ENVÍOS', reportes:'REPORTES', cobranzas:'COBRANZAS', apariencia:'APARIENCIA' };
   const subs = { dashboard:'Vista general del negocio', orders:'Lista completa de pedidos', products:'Crear y editar productos', inventory:'Stock y talles',
     customers:'Información de clientes', cupones:'Códigos de descuento', banners:'Slider principal, hero y promos', categorias:'Imágenes de categorías en home',
-    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'MP, tarjetas y transferencia', apariencia:'Tema, redes, EmailJS y colores' };
+    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'MP, tarjetas y transferencia',     apariencia:'Tema, video de fondo, dock, redes y EmailJS' };
   const icons = { dashboard:'dashboard', orders:'shopping_bag', products:'inventory_2', customers:'group',
     cupones:'percent', banners:'image', categorias:'grid_view', tracking:'local_shipping', reportes:'bar_chart', cobranzas:'credit_card', apariencia:'palette' };
   const title = document.getElementById('admin-section-title');
@@ -2026,7 +2026,7 @@ export const BG_COLORS = {
   red: { label:'Rojo', hue:[0,30], css:'#f56060', cssLight:'#f59090' }
 };
 let _currentBgColor = localStorage.getItem('adminBgColor') || 'violet';
-let _bgAnimId = null;
+
 
 function applyBgColor(scheme) {
   _currentBgColor = scheme;
@@ -2057,31 +2057,6 @@ export function setAdminColor(scheme) {
   applyBgColor(scheme);
   const picker = document.getElementById('ap-vector-color');
   if (picker) picker.value = BG_COLORS[scheme].css;
-  restartAdminBg();
-}
-
-export function setAdminCustomColor(hex) {
-  const match = hex.match(/^#?([a-f\d]{6})$/i);
-  if (!match) return;
-  localStorage.setItem('adminBgColor', 'custom_' + hex);
-  const r = document.querySelector('#page-admin');
-  if (r) {
-    r.style.setProperty('--admin-accent', hex);
-    r.style.setProperty('--admin-accent-light', hex + '99');
-    r.style.setProperty('--admin-accent-dim', hex + '18');
-  }
-  document.querySelectorAll('.color-swatch').forEach(el => el.classList.remove('active'));
-  document.getElementById('ap-vector-color').value = hex;
-  restartAdminBg();
-}
-
-function restartAdminBg() {
-  const canvas = document.getElementById('admin-bg-canvas');
-  if (canvas) {
-    if (_bgAnimId) { cancelAnimationFrame(_bgAnimId); _bgAnimId = null; }
-    canvas._bgInit = false;
-  }
-  setTimeout(() => { initAdminBg(); }, 50);
 }
 
 export function getBgColor() {
@@ -2115,118 +2090,50 @@ function rgbToHsl(r, g, b) {
   return { h: Math.round(h || 0), s: Math.round(s * 100), l: Math.round(l * 100) };
 }
 
+export function setAdminCustomColor(hex) {
+  const match = hex.match(/^#?([a-f\d]{6})$/i);
+  if (!match) return;
+  localStorage.setItem('adminBgColor', 'custom_' + hex);
+  const r = document.querySelector('#page-admin');
+  if (r) {
+    r.style.setProperty('--admin-accent', hex);
+    r.style.setProperty('--admin-accent-light', hex + '99');
+    r.style.setProperty('--admin-accent-dim', hex + '18');
+  }
+  document.querySelectorAll('.color-swatch').forEach(el => el.classList.remove('active'));
+  document.getElementById('ap-vector-color').value = hex;
+}
+
+// ===== ADMIN VIDEO BACKGROUND =====
+const VIDEO_PRESETS = [
+  { id: 'nebula', label: 'Nebulosa', url: 'https://cdn.pixabay.com/video/2023/09/10/180275-866663962_large.mp4' },
+  { id: 'particles', label: 'Partículas', url: 'https://cdn.pixabay.com/video/2021/12/06/102193-612936815_large.mp4' },
+  { id: 'city', label: 'Ciudad nocturna', url: 'https://cdn.pixabay.com/video/2020/04/10/35476-426918128_large.mp4' },
+  { id: 'abstract', label: 'Abstracto', url: 'https://cdn.pixabay.com/video/2023/07/25/170822-847336374_large.mp4' },
+];
+  { id: 'nebula', label: 'Nebulosa', url: 'https://cdn.pixabay.com/video/2023/09/10/180275-866663962_large.mp4' },
+  { id: 'particles', label: 'Partículas', url: 'https://cdn.pixabay.com/video/2021/12/06/102193-612936815_large.mp4' },
+  { id: 'city', label: 'Ciudad nocturna', url: 'https://cdn.pixabay.com/video/2020/04/10/35476-426918128_large.mp4' },
+  { id: 'abstract', label: 'Abstracto', url: 'https://cdn.pixabay.com/video/2023/07/25/170822-847336374_large.mp4' },
+];
+
 export function initAdminBg() {
-  const canvas = document.getElementById('admin-bg-canvas');
-  if (!canvas || canvas._bgInit) return;
-  canvas._bgInit = true;
-  const ctx = canvas.getContext('2d');
-  let W, H;
-  let speedMul = loadAppearance().bgSpeed / 3;
-  let densityMul = loadAppearance().bgDensity;
+  const video = document.getElementById('admin-bg-video');
+  if (!video) return;
+  const cfg = loadAppearance();
+  const src = cfg.bgVideo || VIDEO_PRESETS[0].url;
+  video.src = src;
+  video.play().catch(() => {});
+}
 
-  const scheme = getBgColor();
-  const hue = (scheme.hue[0] + scheme.hue[1]) / 2;
-
-  const waves = [];
-  function initWaves() {
-    waves.length = 0;
-    const s = Math.max(0.5, speedMul);
-    waves.push({ amp: 28 + Math.random() * 8, freq: 0.006, speed: 0.15 * s, offY: 0.55, alpha: 0.06, hueOff: -20 });
-    waves.push({ amp: 18 + Math.random() * 6, freq: 0.009, speed: 0.22 * s, offY: 0.62, alpha: 0.10, hueOff: 0 });
-    waves.push({ amp: 35 + Math.random() * 10, freq: 0.004, speed: 0.10 * s, offY: 0.48, alpha: 0.04, hueOff: 15 });
-    waves.push({ amp: 12 + Math.random() * 5, freq: 0.012, speed: 0.30 * s, offY: 0.70, alpha: 0.08, hueOff: 30 });
-    waves.push({ amp: 22 + Math.random() * 7, freq: 0.007, speed: 0.18 * s, offY: 0.50, alpha: 0.05, hueOff: -10 });
-  }
-
-  let dust = [];
-  function initDust() {
-    dust = [];
-    const count = Math.round(10 * (densityMul || 3));
-    for (let i = 0; i < count; i++) {
-      dust.push({
-        x: Math.random() * W, y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.15,
-        vy: -(0.1 + Math.random() * 0.2) * speedMul,
-        r: 1 + Math.random() * 2,
-        alpha: 0.02 + Math.random() * 0.06,
-        phase: Math.random() * Math.PI * 2,
-      });
-    }
-  }
-
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    const adminPage = document.getElementById('page-admin');
-    H = canvas.height = Math.max(window.innerHeight, adminPage ? adminPage.scrollHeight : window.innerHeight);
-    initWaves();
-    initDust();
-  }
-
-  let t = 0;
-  function draw() {
-    t += 0.02;
-    ctx.clearRect(0, 0, W, H);
-    // Dark gradient
-    const grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, `hsla(${hue}, 20%, 6%, 1)`);
-    grad.addColorStop(0.5, `hsla(${hue}, 15%, 8%, 1)`);
-    grad.addColorStop(1, `hsla(${hue}, 20%, 5%, 1)`);
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
-
-    // Waves
-    for (const w of waves) {
-      ctx.beginPath();
-      const baseY = H * w.offY;
-      ctx.moveTo(0, H);
-      for (let x = 0; x <= W; x += 2) {
-        const y = baseY + Math.sin(x * w.freq + t * w.speed) * w.amp
-          + Math.sin(x * w.freq * 1.7 + t * w.speed * 0.6) * (w.amp * 0.4);
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(W, H);
-      ctx.closePath();
-      ctx.fillStyle = `hsla(${hue + w.hueOff}, 45%, 55%, ${w.alpha})`;
-      ctx.fill();
-    }
-
-    // Glow lines
-    for (const w of waves) {
-      ctx.beginPath();
-      const baseY = H * w.offY;
-      ctx.moveTo(0, baseY + Math.sin(0 + t * w.speed) * w.amp);
-      for (let x = 0; x <= W; x += 3) {
-        const y = baseY + Math.sin(x * w.freq + t * w.speed) * w.amp
-          + Math.sin(x * w.freq * 1.7 + t * w.speed * 0.6) * (w.amp * 0.4);
-        ctx.lineTo(x, y);
-      }
-      ctx.strokeStyle = `hsla(${hue + w.hueOff + 10}, 60%, 65%, ${w.alpha * 0.5})`;
-      ctx.lineWidth = 1.5;
-      ctx.shadowColor = `hsla(${hue}, 60%, 60%, ${w.alpha * 0.4})`;
-      ctx.shadowBlur = 20;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-    }
-
-    // Dust
-    for (const p of dust) {
-      const pulse = 1 + Math.sin(t * 0.05 + p.phase) * 0.3;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * pulse, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${hue}, 30%, 50%, ${p.alpha})`;
-      ctx.fill();
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.y < -20) { p.y = H + 10; p.x = Math.random() * W; }
-      if (p.x < -20 || p.x > W + 20) p.x = Math.random() * W;
-    }
-
-    _bgAnimId = requestAnimationFrame(draw);
-  }
-
-  resize();
-  window.addEventListener('resize', resize);
-  draw();
+export function setAdminBgVideo(url) {
+  const video = document.getElementById('admin-bg-video');
+  if (!video) return;
+  video.src = url;
+  video.play().catch(() => {});
+  const cfg = loadAppearance();
+  cfg.bgVideo = url;
+  localStorage.setItem(APP_KEY, JSON.stringify(cfg));
 }
 
 // ===== PAGE BACKGROUND ANIMATION (antigravity particles) =====
@@ -2236,7 +2143,7 @@ export function initPageBg() {
   if (!canvas) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ctx = canvas.getContext('2d');
-  let W, H, particles = [], cfg = loadAppearance();
+  let W, H, particles = [];
   const BASE_COUNT = 25;
 
   function resize() {
@@ -2254,7 +2161,7 @@ export function initPageBg() {
     return {
       x: Math.random() * W, y: H + Math.random() * 40,
       vx: (Math.random() - 0.5) * 0.15,
-      vy: -(0.3 + Math.random() * 0.5) * (cfg.bgSpeed / 3),
+      vy: -(0.3 + Math.random() * 0.5),
       r: size,
       alpha: 0.06 + Math.random() * 0.12,
       hue: hue + (Math.random() - 0.5) * 40,
@@ -2263,9 +2170,8 @@ export function initPageBg() {
   }
 
   function initParticles() {
-    const count = Math.round(BASE_COUNT * cfg.bgDensity);
     particles = [];
-    for (let i = 0; i < count; i++) particles.push(createParticle());
+    for (let i = 0; i < BASE_COUNT; i++) particles.push(createParticle());
   }
 
   function draw(time) {
@@ -2300,20 +2206,19 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', bgEnabled: true, bgDensity: 3, bgSpeed: 3, dockOpacity: 50, dockAutohide: true, dockDelay: 5, dockWidth: 18, dockStyle: 'blur' };
+  return { theme: 'light', dockOpacity: 50, dockAutohide: true, dockDelay: 5, dockWidth: 18, dockStyle: 'blur', bgVideo: '' };
 }
 
 export function saveAppearance() {
+  const radio = document.querySelector('input[name="bg-video"]:checked');
   const cfg = {
     theme: window.getTheme?.() || 'light',
-    bgEnabled: document.getElementById('ap-bg-enabled')?.checked ?? true,
-    bgDensity: parseInt(document.getElementById('ap-bg-density')?.value || '3'),
-    bgSpeed: parseInt(document.getElementById('ap-bg-speed')?.value || '3'),
     dockOpacity: parseInt(document.getElementById('ap-dock-opacity')?.value || '50'),
     dockAutohide: document.getElementById('ap-dock-autohide')?.checked ?? true,
     dockDelay: parseInt(document.getElementById('ap-dock-delay')?.value || '5'),
     dockWidth: parseInt(document.getElementById('ap-dock-width')?.value || '18'),
     dockStyle: document.querySelector('input[name="dock-style"]:checked')?.value || 'blur',
+    bgVideo: document.getElementById('ap-bg-video-url')?.value.trim() || radio?.value || '',
   };
   localStorage.setItem(APP_KEY, JSON.stringify(cfg));
   applyAppearance(cfg);
@@ -2355,16 +2260,10 @@ export function applyAppearance(cfg) {
     dock.classList.remove('dock-blur', 'dock-acrylic', 'dock-colored');
     dock.classList.add('dock-' + (cfg.dockStyle || 'blur'));
   }
-  const canvas = document.getElementById('bg-canvas');
-  if (canvas) {
-    if (cfg.bgEnabled) {
-      canvas.style.display = '';
-      stopPageBg();
-      initPageBg();
-    } else {
-      canvas.style.display = 'none';
-      stopPageBg();
-    }
+  const video = document.getElementById('admin-bg-video');
+  if (video && cfg.bgVideo) {
+    video.src = cfg.bgVideo;
+    video.play().catch(() => {});
   }
   window._appearanceCfg = cfg;
 }
@@ -2381,11 +2280,6 @@ export function initAppearancePanel() {
           const fbCfg = snap.data();
           localStorage.setItem(APP_KEY, JSON.stringify(fbCfg));
           const setVal = (id, val) => { const el = document.getElementById(id); if (el) { if (el.type === 'checkbox') el.checked = val; else el.value = val; } };
-          setVal('ap-bg-enabled', fbCfg.bgEnabled);
-          setVal('ap-bg-density', fbCfg.bgDensity);
-          document.getElementById('ap-density-val').textContent = fbCfg.bgDensity;
-          setVal('ap-bg-speed', fbCfg.bgSpeed);
-          document.getElementById('ap-speed-val').textContent = fbCfg.bgSpeed;
           setVal('ap-dock-opacity', fbCfg.dockOpacity);
           document.getElementById('ap-dock-opacity-val').textContent = fbCfg.dockOpacity;
           setVal('ap-dock-autohide', fbCfg.dockAutohide);
@@ -2396,6 +2290,11 @@ export function initAppearancePanel() {
           const styleRadio = document.querySelector(`input[name="dock-style"][value="${fbCfg.dockStyle || 'blur'}"]`);
           if (styleRadio) styleRadio.checked = true;
           if (fbCfg.theme && window.setTheme) window.setTheme(fbCfg.theme);
+          if (fbCfg.bgVideo) {
+            const radio = document.querySelector(`input[name="bg-video"][value="${fbCfg.bgVideo}"]`);
+            if (radio) radio.checked = true;
+            document.getElementById('ap-bg-video-url').value = fbCfg.bgVideo;
+          }
           applyAppearance(fbCfg);
           return;
         }
@@ -2404,11 +2303,6 @@ export function initAppearancePanel() {
     // Fallback to localStorage
     const cfg = loadAppearance();
     const setVal = (id, val) => { const el = document.getElementById(id); if (el) { if (el.type === 'checkbox') el.checked = val; else el.value = val; } };
-    setVal('ap-bg-enabled', cfg.bgEnabled);
-    setVal('ap-bg-density', cfg.bgDensity);
-    document.getElementById('ap-density-val').textContent = cfg.bgDensity;
-    setVal('ap-bg-speed', cfg.bgSpeed);
-    document.getElementById('ap-speed-val').textContent = cfg.bgSpeed;
     setVal('ap-dock-opacity', cfg.dockOpacity);
     document.getElementById('ap-dock-opacity-val').textContent = cfg.dockOpacity;
     setVal('ap-dock-autohide', cfg.dockAutohide);
@@ -2418,6 +2312,11 @@ export function initAppearancePanel() {
     document.getElementById('ap-dock-width-val').textContent = cfg.dockWidth;
     const styleRadio = document.querySelector(`input[name="dock-style"][value="${cfg.dockStyle || 'blur'}"]`);
     if (styleRadio) styleRadio.checked = true;
+    if (cfg.bgVideo) {
+      const videoRadio = document.querySelector(`input[name="bg-video"][value="${cfg.bgVideo}"]`);
+      if (videoRadio) videoRadio.checked = true;
+      document.getElementById('ap-bg-video-url').value = cfg.bgVideo;
+    }
     applyAppearance(cfg);
   })();
 }
@@ -2724,6 +2623,7 @@ export function init() {
   window.uploadAdminCatImg = uploadAdminCatImg;
   window.saveAdminCatImg = saveAdminCatImg;
   window.setAdminColor = setAdminColor;
+  window.setAdminBgVideo = setAdminBgVideo;
   window.initAppearancePanel = initAppearancePanel;
   window.saveAppearance = saveAppearance;
   window.saveAppearanceToFirebase = saveAppearanceToFirebase;
