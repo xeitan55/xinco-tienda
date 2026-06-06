@@ -221,6 +221,10 @@ export async function placeOrder() {
   state.cart = [];
   window.updateCartCount?.();
   window.persistAll?.();
+  ['card-number','card-expiry','card-cvv-input','card-holder'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
   const { fbSaveOrderRemote } = await import('./firebase.js');
   fbSaveOrderRemote(newOrder).catch(e => console.error('Firebase order sync error:', e));
   document.getElementById('order-number').textContent = '#' + orderNum;
@@ -331,6 +335,10 @@ export async function saveShippingProviders() {
 }
 
 export async function loadShippingProviders() {
+  if (window._shippingProviders) {
+    shippingProviders = window._shippingProviders;
+    return;
+  }
   try {
     const { waitForFirebase } = await import('./firebase.js');
     const ready = await waitForFirebase();
@@ -391,19 +399,24 @@ export async function initCobranzasSection() {
   if (statEls[0]) statEls[0].textContent = window.fmtPrice?.(mpTotal) || '$' + mpTotal;
   if (statEls[1]) statEls[1].textContent = window.fmtPrice?.(cardTotal) || '$' + cardTotal;
   if (statEls[2]) statEls[2].textContent = window.fmtPrice?.(transTotal) || '$' + transTotal;
-  try {
-    const { waitForFirebase } = await import('./firebase.js');
-    const ready = await waitForFirebase();
-    if (!ready) return;
-    const { doc, getDoc } = window._fb;
-    const snap = await getDoc(doc(fbDb, 'config', 'bank'));
-    if (snap.exists()) {
-      const d = snap.data();
-      const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
-      set('bank-name', d.name); set('bank-titular', d.titular); set('bank-cbu', d.cbu); set('bank-alias', d.alias);
+
+  let bankData = window._bankConfig;
+  if (!bankData) {
+    try {
+      const { waitForFirebase } = await import('./firebase.js');
+      const ready = await waitForFirebase();
+      if (!ready) return;
+      const { doc, getDoc } = window._fb;
+      const snap = await getDoc(doc(fbDb, 'config', 'bank'));
+      if (snap.exists()) bankData = snap.data();
+    } catch(e) {
+      console.warn('initCobranzasSection:', e);
     }
-  } catch(e) {
-    console.warn('initCobranzasSection:', e);
+  }
+  if (bankData) {
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+    set('bank-name', bankData.name); set('bank-titular', bankData.titular);
+    set('bank-cbu', bankData.cbu); set('bank-alias', bankData.alias);
   }
 }
 

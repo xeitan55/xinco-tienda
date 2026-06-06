@@ -1,4 +1,4 @@
-import { state, bannerState, DB_KEYS } from './state.js';
+import { state, bannerState, DB_KEYS, PRODUCTS } from './state.js';
 
 const FB_CONFIG = {
   apiKey: "AIzaSyCHmbuWJM-vYeFm4WUXMTp716Kci26sr2w",
@@ -12,8 +12,6 @@ const FB_CONFIG = {
 let fbApp, fbDb, fbAuth;
 let _fbReadyResolve;
 const fbReady = new Promise(resolve => { _fbReadyResolve = resolve; });
-let _lastCartSnapshot = JSON.stringify(state.cart);
-
 function dbSave(key, data) {
   try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) { console.warn('localStorage error', e); }
 }
@@ -93,7 +91,8 @@ function normalizeProduct(data) {
 async function seedFirebaseProducts() {
   if (!fbDb || !window._fb) return;
   const { doc, setDoc } = window._fb;
-  for (const p of state.products) {
+  const seedData = PRODUCTS.length > 0 ? PRODUCTS : [{ id:'placeholder', name:'Agregá tu primer producto', price:0, cat:'remeras', badge:null, desc:'', sizes:['M'], colors:['negro'], stock:0, sku:'XNC-000', rating:0, reviews:0, img:'', images:[], tags:[] }];
+  for (const p of seedData) {
     try { await setDoc(doc(fbDb, 'products', String(p.id)), p); } catch(e) { console.error('Error sembrando producto en Firestore:', e); }
   }
 }
@@ -136,6 +135,42 @@ async function syncFromFirebase() {
     }
   } catch(e) {
     console.warn('syncFromFirebase: no se pudieron cargar cupones:', e.message);
+  }
+
+  try {
+    const mpSnap = await getDoc(doc(fbDb, 'config', 'mercadopago'));
+    if (mpSnap.exists()) {
+      state.mpConfig = mpSnap.data();
+    }
+  } catch(e) {
+    console.warn('syncFromFirebase: no se pudo cargar config MP:', e.message);
+  }
+
+  try {
+    const orderSnap = await getDocs(query(collection(fbDb, 'orders'), orderBy('createdAt', 'desc')));
+    if (!orderSnap.empty) {
+      state.orders = orderSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    }
+  } catch(e) {
+    console.warn('syncFromFirebase: no se pudieron cargar órdenes:', e.message);
+  }
+
+  try {
+    const shipSnap = await getDoc(doc(fbDb, 'config', 'shipping'));
+    if (shipSnap.exists()) {
+      window._shippingProviders = shipSnap.data().providers || [];
+    }
+  } catch(e) {
+    console.warn('syncFromFirebase: no se pudieron cargar envíos:', e.message);
+  }
+
+  try {
+    const bankSnap = await getDoc(doc(fbDb, 'config', 'bank'));
+    if (bankSnap.exists()) {
+      window._bankConfig = bankSnap.data();
+    }
+  } catch(e) {
+    console.warn('syncFromFirebase: no se pudo cargar config bancaria:', e.message);
   }
 }
 

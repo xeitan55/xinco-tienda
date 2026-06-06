@@ -1,5 +1,5 @@
 import { state, fbDb } from './firebase.js';
-import { bannerState, PRODUCTS, CUSTOMERS, AVAILABLE_COLORS, CLOUDINARY, DB_KEYS } from './state.js';
+import { bannerState, AVAILABLE_COLORS, CLOUDINARY, DB_KEYS } from './state.js';
 
 let _catImages = {};
 let pfImages = [];
@@ -109,7 +109,7 @@ export function renderAdminDashboard() {
   const total = state.orders.reduce((s,o) => s + o.total, 0);
   const totalProd = state.products.length;
   const pendingOrders = state.orders.filter(o => o.status === 'pending').length;
-  const totalClients = CUSTOMERS.length;
+  const totalClients = window._cachedCustomers?.length || state.orders.reduce((acc, o) => { if (o.email && !acc.includes(o.email)) acc.push(o.email); return acc; }, []).length || 0;
   const elRevenue = document.getElementById('ad-total-revenue');
   if (elRevenue) elRevenue.textContent = window.fmtPrice?.(total) || '$' + total;
   const elPending = document.getElementById('ad-pending-orders') || document.getElementById('admin-pending-count');
@@ -557,14 +557,47 @@ export function initInventoryChart() {
 }
 
 // Customers
-export function renderAdminCustomers() {
+export async function renderAdminCustomers() {
   const container = document.getElementById('admin-customers-table');
   if (!container) return;
+
+  let customers = window._cachedCustomers;
+  if (!customers) {
+    try {
+      const { waitForFirebase, fbDb } = await import('./firebase.js');
+      const ready = await waitForFirebase();
+      if (ready && window._fb) {
+        const { collection, getDocs } = window._fb;
+        const snap = await getDocs(collection(fbDb, 'users'));
+        customers = snap.docs.map((d, i) => {
+          const data = d.data();
+          const userOrders = state.orders.filter(o => o.email === data.email);
+          return {
+            id: i + 1,
+            name: data.displayName || data.email?.split('@')[0] || 'Sin nombre',
+            email: data.email || d.id,
+            orders: userOrders.length,
+            total: userOrders.reduce((s, o) => s + o.total, 0),
+            date: data.updatedAt ? new Date(data.updatedAt).toLocaleDateString('es-AR', { month: 'short', year: 'numeric' }) : '-'
+          };
+        });
+        window._cachedCustomers = customers;
+      }
+    } catch(e) {
+      console.warn('renderAdminCustomers: error cargando de Firestore:', e);
+    }
+  }
+
+  if (!customers || customers.length === 0) {
+    container.innerHTML = '<div class="text-center py-8 text-on-surface-variant font-body-md">No hay clientes registrados aún</div>';
+    return;
+  }
+
   container.innerHTML = `<table class="w-full text-left">
     <thead><tr class="border-b-2 border-outline-variant font-label-caps text-[10px] text-on-surface-variant/60">
       <th class="py-3 px-4">#</th><th class="py-3 px-4">NOMBRE</th><th class="py-3 px-4">EMAIL</th><th class="py-3 px-4">PEDIDOS</th><th class="py-3 px-4">TOTAL</th><th class="py-3 px-4">FECHA</th>
     </tr></thead><tbody>
-    ${CUSTOMERS.map(c => `
+    ${customers.map(c => `
     <tr class="border-b border-outline-variant hover:bg-surface-container-low transition-all">
       <td class="py-3 px-4 font-label-caps text-[10px]">#${c.id}</td>
       <td class="py-3 px-4 font-body-md text-sm">${c.name}</td>
@@ -611,7 +644,7 @@ export async function createCoupon() {
   const data = {
     code, type,
     value: disc,
-    minPurchase, maxUses, expiresAt: exp, enabled: true, usedCount: 0,
+    minPurchase: min, maxUses, expiresAt: exp, enabled: true, usedCount: 0,
   };
   state.coupons.push(data);
   const { waitForFirebase } = await import('./firebase.js');
@@ -2294,12 +2327,18 @@ export async function saveAppearanceToFirebase() {
     return;
   }
   try {
-    const { doc, setDoc } = window._fb;
+    const { doc, setDoc, collection } = window._fb;
+    // Write a test document to check connectivity first
     await setDoc(doc(window.fbDb, 'config', 'apariencia'), cfg, { merge: true });
     window.showToast?.('✅ Configuración guardada en la nube');
   } catch(e) {
     console.error('saveAppearanceToFirebase error:', e);
-    window.showToast?.('⚠️ Error al guardar en la nube');
+    const msg = e.code === 'permission-denied'
+      ? '⚠️ Permiso denegado — configurá las reglas de seguridad en Firebase Console'
+      : e.code === 'unavailable'
+        ? '⚠️ Firebase no disponible — revisá tu conexión'
+        : `⚠️ Error: ${e.code || e.message}`;
+    window.showToast?.(msg);
   }
 }
 
@@ -2398,7 +2437,13 @@ export function saveSocialConfig() {
       const { doc, setDoc } = window._fb;
       await setDoc(doc(window.fbDb, 'config', 'social'), cfg, { merge: true });
       window.showToast?.('✅ Redes sociales guardadas en la nube');
-    } catch(e) { console.error(e); window.showToast?.('⚠️ Error al guardar en la nube'); }
+    } catch(e) {
+      console.error('saveSocialConfig error:', e);
+      const msg = e.code === 'permission-denied'
+        ? '⚠️ Permiso denegado — revisá reglas de Firebase'
+        : `⚠️ Error: ${e.code || e.message}`;
+      window.showToast?.(msg);
+    }
   })();
   renderFooterSocial(cfg);
   renderWhatsAppButton(cfg);
@@ -2479,7 +2524,7 @@ export function subscribeNewsletter() {
       return;
     }
     try {
-      const { doc, setDoc, collection } = window._fb;
+    const { doc, setDoc } = window._fb;
       await setDoc(doc(collection(window.fbDb, 'suscriptores'), email.replace(/[.#$]/g,'_')), { email, date: new Date().toISOString() });
       window.showToast?.('✅ ¡Suscripto exitosamente!');
       input.value = '';

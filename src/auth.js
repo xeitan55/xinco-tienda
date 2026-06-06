@@ -1,5 +1,4 @@
 import { state, fbDb, fbAuth, fbLoginUser, fbLogoutUser } from './firebase.js';
-import { EMAILJS } from './state.js';
 
 let _lastRegisteredUser = null;
 
@@ -58,21 +57,6 @@ export async function doLogin() {
     if (e.message === 'Firebase no disponible') msg = 'ERROR DE CONEXIÓN — RECARGÁ LA PÁGINA';
     if (err) { err.textContent = msg; err.classList.remove('hidden'); }
     window.showToast?.(msg + ' ❌');
-  }
-}
-
-export async function sendVerificationEmail(toEmail, toName, verificationLink) {
-  try {
-    await emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, {
-      to_email: toEmail, to_name: toName,
-      verification_link: verificationLink,
-      from_name: 'XINCO Tienda',
-      reply_to: 'noreply@xinco.com.ar',
-    });
-    return true;
-  } catch(e) {
-    console.error('EmailJS error:', e);
-    return false;
   }
 }
 
@@ -484,7 +468,8 @@ export function validateCardField() {
 }
 
 export async function saveCard() {
-  const num = document.getElementById('card-num')?.value.replace(/\s/g,'');
+  const numEl = document.getElementById('card-num');
+  const num = numEl?.value.replace(/\s/g,'');
   const exp = document.getElementById('card-exp')?.value.trim();
   const name = document.getElementById('card-name')?.value.trim();
   const err = document.getElementById('card-err');
@@ -496,7 +481,10 @@ export async function saveCard() {
   if (err) err.classList.add('hidden');
   const masked = '**** **** **** ' + num.slice(-4);
   const brand = num[0]==='4'?'VISA':num[0]==='5'?'MASTERCARD':num.startsWith('34')||num.startsWith('37')?'AMEX':'TARJETA';
-  const card = { masked, brand, exp, name, last4: num.slice(-4), addedAt: new Date().toISOString() };
+  if (numEl) numEl.value = '';
+  const expEl = document.getElementById('card-exp');
+  if (expEl) expEl.value = '';
+  const card = { masked, brand, exp, name, addedAt: new Date().toISOString() };
   if (!state.user) return;
   if (!state.user.cards) state.user.cards = [];
   state.user.cards.push(card);
@@ -616,7 +604,7 @@ export async function changeUserEmail() {
     const { reauthenticateWithCredential, EmailAuthProvider, verifyBeforeUpdateEmail } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
     const cred = EmailAuthProvider.credential(state.user.email, pass);
     await reauthenticateWithCredential(fbAuth.currentUser, cred);
-    await verifyBeforeUpdateEmail(fbAuth.currentUser, newEmail);
+    await verifyBeforeUpdateEmail(fbAuth.currentUser, newEmail, { url: 'https://xinco.shop/verificar-email' });
     if (msgEl) { msgEl.textContent = `✅ EMAIL DE VERIFICACIÓN ENVIADO A ${newEmail.toUpperCase()} — VERIFICÁ PARA APLICAR EL CAMBIO`; msgEl.classList.remove('hidden'); }
     document.getElementById('acc-email-new').value = '';
     document.getElementById('acc-email-pass').value = '';

@@ -61,8 +61,8 @@ let state = {
   filterColors: [],
   filterPrice: 200000,
   sortOrder: 'default',
-  products: [...PRODUCTS],
-  orders: [...ORDERS],
+  products: [],
+  orders: [],
   coupons: [],
   adminSection: 'dashboard'
 };

@@ -208,6 +208,10 @@ export async function openProduct(id) {
 
 let _preProductPage = null;
 
+export function clearPreProductPage() {
+  _preProductPage = null;
+}
+
 export function closeProductOverlay() {
   document.getElementById('product-overlay').classList.remove('open');
   document.body.style.overflow = '';
