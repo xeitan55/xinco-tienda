@@ -2120,8 +2120,114 @@ export function initAdminBg() {
   if (!canvas || canvas._bgInit) return;
   canvas._bgInit = true;
   const ctx = canvas.getContext('2d');
-  let W, H, time = 0;
-  const CHARS = ['X', 'Y', 'O'];
+  let W, H;
+  let speedMul = loadAppearance().bgSpeed / 3;
+  let densityMul = loadAppearance().bgDensity;
+
+  const scheme = getBgColor();
+  const hue = (scheme.hue[0] + scheme.hue[1]) / 2;
+
+  const waves = [];
+  function initWaves() {
+    waves.length = 0;
+    const s = Math.max(0.5, speedMul);
+    waves.push({ amp: 28 + Math.random() * 8, freq: 0.006, speed: 0.15 * s, offY: 0.55, alpha: 0.06, hueOff: -20 });
+    waves.push({ amp: 18 + Math.random() * 6, freq: 0.009, speed: 0.22 * s, offY: 0.62, alpha: 0.10, hueOff: 0 });
+    waves.push({ amp: 35 + Math.random() * 10, freq: 0.004, speed: 0.10 * s, offY: 0.48, alpha: 0.04, hueOff: 15 });
+    waves.push({ amp: 12 + Math.random() * 5, freq: 0.012, speed: 0.30 * s, offY: 0.70, alpha: 0.08, hueOff: 30 });
+    waves.push({ amp: 22 + Math.random() * 7, freq: 0.007, speed: 0.18 * s, offY: 0.50, alpha: 0.05, hueOff: -10 });
+  }
+
+  let dust = [];
+  function initDust() {
+    dust = [];
+    const count = Math.round(10 * (densityMul || 3));
+    for (let i = 0; i < count; i++) {
+      dust.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: -(0.1 + Math.random() * 0.2) * speedMul,
+        r: 1 + Math.random() * 2,
+        alpha: 0.02 + Math.random() * 0.06,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    const adminPage = document.getElementById('page-admin');
+    H = canvas.height = Math.max(window.innerHeight, adminPage ? adminPage.scrollHeight : window.innerHeight);
+    initWaves();
+    initDust();
+  }
+
+  let t = 0;
+  function draw() {
+    t += 0.02;
+    ctx.clearRect(0, 0, W, H);
+    // Dark gradient
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, `hsla(${hue}, 20%, 6%, 1)`);
+    grad.addColorStop(0.5, `hsla(${hue}, 15%, 8%, 1)`);
+    grad.addColorStop(1, `hsla(${hue}, 20%, 5%, 1)`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Waves
+    for (const w of waves) {
+      ctx.beginPath();
+      const baseY = H * w.offY;
+      ctx.moveTo(0, H);
+      for (let x = 0; x <= W; x += 2) {
+        const y = baseY + Math.sin(x * w.freq + t * w.speed) * w.amp
+          + Math.sin(x * w.freq * 1.7 + t * w.speed * 0.6) * (w.amp * 0.4);
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(W, H);
+      ctx.closePath();
+      ctx.fillStyle = `hsla(${hue + w.hueOff}, 45%, 55%, ${w.alpha})`;
+      ctx.fill();
+    }
+
+    // Glow lines
+    for (const w of waves) {
+      ctx.beginPath();
+      const baseY = H * w.offY;
+      ctx.moveTo(0, baseY + Math.sin(0 + t * w.speed) * w.amp);
+      for (let x = 0; x <= W; x += 3) {
+        const y = baseY + Math.sin(x * w.freq + t * w.speed) * w.amp
+          + Math.sin(x * w.freq * 1.7 + t * w.speed * 0.6) * (w.amp * 0.4);
+        ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `hsla(${hue + w.hueOff + 10}, 60%, 65%, ${w.alpha * 0.5})`;
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = `hsla(${hue}, 60%, 60%, ${w.alpha * 0.4})`;
+      ctx.shadowBlur = 20;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
+    // Dust
+    for (const p of dust) {
+      const pulse = 1 + Math.sin(t * 0.05 + p.phase) * 0.3;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * pulse, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${hue}, 30%, 50%, ${p.alpha})`;
+      ctx.fill();
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.y < -20) { p.y = H + 10; p.x = Math.random() * W; }
+      if (p.x < -20 || p.x > W + 20) p.x = Math.random() * W;
+    }
+
+    _bgAnimId = requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  draw();
+}
   const COUNT = 20;
   const DOTS = 40;
   const vectors = [];
