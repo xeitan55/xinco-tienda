@@ -8,14 +8,16 @@
     {
       "src": "/api/(.*)",
       "dest": "/api/$1"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/verify",
+      "destination": "/verify.html"
     },
     {
-      "src": "/verify",
-      "dest": "/verify.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
