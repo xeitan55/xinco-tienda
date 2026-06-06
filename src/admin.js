@@ -2111,11 +2111,6 @@ const VIDEO_PRESETS = [
   { id: 'city', label: 'Ciudad nocturna', url: 'https://cdn.pixabay.com/video/2020/04/10/35476-426918128_large.mp4' },
   { id: 'abstract', label: 'Abstracto', url: 'https://cdn.pixabay.com/video/2023/07/25/170822-847336374_large.mp4' },
 ];
-  { id: 'nebula', label: 'Nebulosa', url: 'https://cdn.pixabay.com/video/2023/09/10/180275-866663962_large.mp4' },
-  { id: 'particles', label: 'Partículas', url: 'https://cdn.pixabay.com/video/2021/12/06/102193-612936815_large.mp4' },
-  { id: 'city', label: 'Ciudad nocturna', url: 'https://cdn.pixabay.com/video/2020/04/10/35476-426918128_large.mp4' },
-  { id: 'abstract', label: 'Abstracto', url: 'https://cdn.pixabay.com/video/2023/07/25/170822-847336374_large.mp4' },
-];
 
 export function initAdminBg() {
   const video = document.getElementById('admin-bg-video');
