@@ -2216,22 +2216,22 @@ tailwind.config = {
                     <span class="material-symbols-outlined text-[18px]">contrast</span> TEMA DE LA TIENDA
                   </h3>
                   <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Elegí el estilo visual para toda la tienda.</p>
-                  <div class="flex gap-3">
-                    <label class="theme-option" onclick="setTheme('light')">
+                    <div class="flex gap-3">
+                    <label class="theme-option" onclick="setTheme('light');setTimeout(saveAppearance,50)">
                       <input type="radio" name="admin-theme" value="light" class="sr-only"/>
                       <div class="theme-option-box">
                         <div class="theme-preview" style="background:#f9f9f9;border:2px solid #000;"><span style="color:#000;font-size:16px;font-weight:700;">Aa</span></div>
                         <span class="font-label-caps text-[10px] text-primary">CLARO</span>
                       </div>
                     </label>
-                    <label class="theme-option" onclick="setTheme('dark-soft')">
+                    <label class="theme-option" onclick="setTheme('dark-soft');setTimeout(saveAppearance,50)">
                       <input type="radio" name="admin-theme" value="dark-soft" class="sr-only"/>
                       <div class="theme-option-box">
                         <div class="theme-preview" style="background:#f0eee9;border:2px solid #4a3f35;"><span style="color:#4a3f35;font-size:16px;font-weight:700;">Aa</span></div>
                         <span class="font-label-caps text-[10px] text-primary">OSCURO SUAVE</span>
                       </div>
                     </label>
-                    <label class="theme-option" onclick="setTheme('dark')">
+                    <label class="theme-option" onclick="setTheme('dark');setTimeout(saveAppearance,50)">
                       <input type="radio" name="admin-theme" value="dark" class="sr-only"/>
                       <div class="theme-option-box">
                         <div class="theme-preview" style="background:#1c1c1e;border:2px solid #fff;"><span style="color:#fff;font-size:16px;font-weight:700;">Aa</span></div>
