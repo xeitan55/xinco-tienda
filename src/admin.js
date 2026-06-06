@@ -2105,20 +2105,12 @@ export function setAdminCustomColor(hex) {
 }
 
 // ===== ADMIN VIDEO BACKGROUND =====
-const VIDEO_PRESETS = [
-  { id: 'nebula', label: 'Nebulosa', url: 'https://cdn.pixabay.com/video/2023/09/10/180275-866663962_large.mp4' },
-  { id: 'particles', label: 'Partículas', url: 'https://cdn.pixabay.com/video/2021/12/06/102193-612936815_large.mp4' },
-  { id: 'city', label: 'Ciudad nocturna', url: 'https://cdn.pixabay.com/video/2020/04/10/35476-426918128_large.mp4' },
-  { id: 'abstract', label: 'Abstracto', url: 'https://cdn.pixabay.com/video/2023/07/25/170822-847336374_large.mp4' },
-];
-
 export function initAdminBg() {
   const video = document.getElementById('admin-bg-video');
   if (!video) return;
   const cfg = loadAppearance();
-  const src = cfg.bgVideo || VIDEO_PRESETS[0].url;
-  video.src = src;
-  video.play().catch(() => {});
+  const src = cfg.bgVideo1 || cfg.bgVideo2 || cfg.bgVideo3 || cfg.bgVideo4 || '';
+  if (src) { video.src = src; video.play().catch(() => {}); }
 }
 
 export function setAdminBgVideo(url) {
@@ -2126,9 +2118,6 @@ export function setAdminBgVideo(url) {
   if (!video) return;
   video.src = url;
   video.play().catch(() => {});
-  const cfg = loadAppearance();
-  cfg.bgVideo = url;
-  localStorage.setItem(APP_KEY, JSON.stringify(cfg));
 }
 
 // ===== PAGE BACKGROUND ANIMATION (antigravity particles) =====
@@ -2201,11 +2190,10 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', dockOpacity: 50, dockAutohide: true, dockDelay: 5, dockWidth: 18, dockStyle: 'blur', bgVideo: '' };
+  return { theme: 'light', dockOpacity: 50, dockAutohide: true, dockDelay: 5, dockWidth: 18, dockStyle: 'blur', bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
 }
 
 export function saveAppearance() {
-  const radio = document.querySelector('input[name="bg-video"]:checked');
   const cfg = {
     theme: window.getTheme?.() || 'light',
     dockOpacity: parseInt(document.getElementById('ap-dock-opacity')?.value || '50'),
@@ -2213,7 +2201,10 @@ export function saveAppearance() {
     dockDelay: parseInt(document.getElementById('ap-dock-delay')?.value || '5'),
     dockWidth: parseInt(document.getElementById('ap-dock-width')?.value || '18'),
     dockStyle: document.querySelector('input[name="dock-style"]:checked')?.value || 'blur',
-    bgVideo: document.getElementById('ap-bg-video-url')?.value.trim() || radio?.value || '',
+    bgVideo1: document.getElementById('ap-bg-video-1')?.value.trim() || '',
+    bgVideo2: document.getElementById('ap-bg-video-2')?.value.trim() || '',
+    bgVideo3: document.getElementById('ap-bg-video-3')?.value.trim() || '',
+    bgVideo4: document.getElementById('ap-bg-video-4')?.value.trim() || '',
   };
   localStorage.setItem(APP_KEY, JSON.stringify(cfg));
   applyAppearance(cfg);
@@ -2256,8 +2247,9 @@ export function applyAppearance(cfg) {
     dock.classList.add('dock-' + (cfg.dockStyle || 'blur'));
   }
   const video = document.getElementById('admin-bg-video');
-  if (video && cfg.bgVideo) {
-    video.src = cfg.bgVideo;
+  const src = cfg.bgVideo1 || cfg.bgVideo2 || cfg.bgVideo3 || cfg.bgVideo4 || '';
+  if (video && src) {
+    video.src = src;
     video.play().catch(() => {});
   }
   window._appearanceCfg = cfg;
@@ -2285,11 +2277,10 @@ export function initAppearancePanel() {
           const styleRadio = document.querySelector(`input[name="dock-style"][value="${fbCfg.dockStyle || 'blur'}"]`);
           if (styleRadio) styleRadio.checked = true;
           if (fbCfg.theme && window.setTheme) window.setTheme(fbCfg.theme);
-          if (fbCfg.bgVideo) {
-            const radio = document.querySelector(`input[name="bg-video"][value="${fbCfg.bgVideo}"]`);
-            if (radio) radio.checked = true;
-            document.getElementById('ap-bg-video-url').value = fbCfg.bgVideo;
-          }
+          setVal('ap-bg-video-1', fbCfg.bgVideo1 || '');
+          setVal('ap-bg-video-2', fbCfg.bgVideo2 || '');
+          setVal('ap-bg-video-3', fbCfg.bgVideo3 || '');
+          setVal('ap-bg-video-4', fbCfg.bgVideo4 || '');
           applyAppearance(fbCfg);
           return;
         }
@@ -2307,11 +2298,10 @@ export function initAppearancePanel() {
     document.getElementById('ap-dock-width-val').textContent = cfg.dockWidth;
     const styleRadio = document.querySelector(`input[name="dock-style"][value="${cfg.dockStyle || 'blur'}"]`);
     if (styleRadio) styleRadio.checked = true;
-    if (cfg.bgVideo) {
-      const videoRadio = document.querySelector(`input[name="bg-video"][value="${cfg.bgVideo}"]`);
-      if (videoRadio) videoRadio.checked = true;
-      document.getElementById('ap-bg-video-url').value = cfg.bgVideo;
-    }
+    setVal('ap-bg-video-1', cfg.bgVideo1 || '');
+    setVal('ap-bg-video-2', cfg.bgVideo2 || '');
+    setVal('ap-bg-video-3', cfg.bgVideo3 || '');
+    setVal('ap-bg-video-4', cfg.bgVideo4 || '');
     applyAppearance(cfg);
   })();
 }
