@@ -2213,29 +2213,22 @@ tailwind.config = {
                 <!-- Tema -->
                 <div class="border border-white/20 rounded-xl p-5" style="background:rgba(255,255,255,0.15);backdrop-filter:blur(12px);">
                   <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
-                    <span class="material-symbols-outlined text-[18px]">contrast</span> TEMA DE LA TIENDA
+                    <span class="material-symbols-outlined text-[18px]">contrast</span> TEMA DEL PANEL
                   </h3>
-                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Elegí el estilo visual para toda la tienda.</p>
-                    <div class="flex gap-3">
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Elegí el estilo del panel de administración.</p>
+                  <div class="flex gap-3">
                     <label class="theme-option" onclick="setTheme('light');setTimeout(saveAppearance,50)">
                       <input type="radio" name="admin-theme" value="light" class="sr-only"/>
                       <div class="theme-option-box">
-                        <div class="theme-preview" style="background:#f9f9f9;border:2px solid #000;"><span style="color:#000;font-size:16px;font-weight:700;">Aa</span></div>
-                        <span class="font-label-caps text-[10px] text-primary">CLARO</span>
-                      </div>
-                    </label>
-                    <label class="theme-option" onclick="setTheme('dark-soft');setTimeout(saveAppearance,50)">
-                      <input type="radio" name="admin-theme" value="dark-soft" class="sr-only"/>
-                      <div class="theme-option-box">
-                        <div class="theme-preview" style="background:#f0eee9;border:2px solid #4a3f35;"><span style="color:#4a3f35;font-size:16px;font-weight:700;">Aa</span></div>
-                        <span class="font-label-caps text-[10px] text-primary">OSCURO SUAVE</span>
+                        <div class="theme-preview" style="background:rgba(255,255,255,0.3);border:2px solid var(--admin-accent,#9b87f5);backdrop-filter:blur(4px);"><span style="color:#1a1c1c;font-size:16px;font-weight:700;">Aa</span></div>
+                        <span class="font-label-caps text-[10px] text-primary">TRANSPARENTE</span>
                       </div>
                     </label>
                     <label class="theme-option" onclick="setTheme('dark');setTimeout(saveAppearance,50)">
                       <input type="radio" name="admin-theme" value="dark" class="sr-only"/>
                       <div class="theme-option-box">
-                        <div class="theme-preview" style="background:#1c1c1e;border:2px solid #fff;"><span style="color:#fff;font-size:16px;font-weight:700;">Aa</span></div>
-                        <span class="font-label-caps text-[10px] text-primary">OSCURO</span>
+                        <div class="theme-preview" style="background:rgba(0,0,0,0.3);border:2px solid #fff;backdrop-filter:blur(4px);"><span style="color:#fff;font-size:16px;font-weight:700;">Aa</span></div>
+                        <span class="font-label-caps text-[10px] text-primary">TRANSPARENTE OSCURO</span>
                       </div>
                     </label>
                   </div>

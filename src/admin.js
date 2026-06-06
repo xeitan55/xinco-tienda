@@ -71,7 +71,7 @@ export function showAdminSection(section) {
     tracking:'ENVÍOS', reportes:'REPORTES', cobranzas:'COBRANZAS', apariencia:'APARIENCIA' };
   const subs = { dashboard:'Vista general del negocio', orders:'Lista completa de pedidos', products:'Crear y editar productos', inventory:'Stock y talles',
     customers:'Información de clientes', cupones:'Códigos de descuento', banners:'Slider principal, hero y promos', categorias:'Imágenes de categorías en home',
-    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'MP, tarjetas y transferencia',     apariencia:'Tema, video de fondo, dock, redes y EmailJS' };
+    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'MP, tarjetas y transferencia',     apariencia:'Tema del panel, video de fondo, dock, redes y EmailJS' };
   const icons = { dashboard:'dashboard', orders:'shopping_bag', products:'inventory_2', customers:'group',
     cupones:'percent', banners:'image', categorias:'grid_view', tracking:'local_shipping', reportes:'bar_chart', cobranzas:'credit_card', apariencia:'palette' };
   const title = document.getElementById('admin-section-title');
@@ -2459,8 +2459,10 @@ export function subscribeNewsletter() {
 // ===== INIT THEME RADIO IN ADMIN =====
 export function initAdminThemeSelector() {
   const current = window.getTheme?.() || 'light';
-  const radio = document.querySelector(`input[name="admin-theme"][value="${current}"]`);
+  const theme = current === 'dark-soft' ? 'dark' : current;
+  const radio = document.querySelector(`input[name="admin-theme"][value="${theme}"]`);
   if (radio) radio.checked = true;
+  if (current === 'dark-soft') { window.setTheme?.('dark'); saveAppearance(); }
 }
 
 export function init() {
