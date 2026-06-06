@@ -2259,14 +2259,14 @@ tailwind.config = {
                         <span class="font-label-caps text-[10px] text-on-surface-variant/70">DENSIDAD</span>
                         <span class="font-label-caps text-[10px] text-primary" id="ap-density-val">3</span>
                       </div>
-                      <input type="range" id="ap-bg-density" min="1" max="6" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-density-val').textContent=this.value"/>
+                      <input type="range" id="ap-bg-density" min="1" max="6" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-density-val').textContent=this.value;saveAppearance()"/>
                     </div>
                     <div>
                       <div class="flex justify-between mb-1">
                         <span class="font-label-caps text-[10px] text-on-surface-variant/70">VELOCIDAD</span>
                         <span class="font-label-caps text-[10px] text-primary" id="ap-speed-val">3</span>
                       </div>
-                      <input type="range" id="ap-bg-speed" min="1" max="5" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-speed-val').textContent=this.value"/>
+                      <input type="range" id="ap-bg-speed" min="1" max="5" value="3" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-speed-val').textContent=this.value;saveAppearance()"/>
                     </div>
                   </div>
                 </div>
@@ -2281,7 +2281,7 @@ tailwind.config = {
                         <span class="font-label-caps text-[10px] text-on-surface-variant/70">OPACIDAD</span>
                         <span class="font-label-caps text-[10px] text-primary" id="ap-dock-opacity-val">50</span>
                       </div>
-                      <input type="range" id="ap-dock-opacity" min="10" max="100" value="50" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-opacity-val').textContent=this.value"/>
+                      <input type="range" id="ap-dock-opacity" min="10" max="100" value="50" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-dock-opacity-val').textContent=this.value;saveAppearance()"/>
                     </div>
                     <div class="flex items-center justify-between">
                       <span class="font-label-caps text-[11px] text-on-surface-variant/70">AUTO-OCULTAR</span>
@@ -2295,14 +2295,14 @@ tailwind.config = {
                         <span class="font-label-caps text-[10px] text-on-surface-variant/70">DEMORA EN OCULTAR (seg)</span>
                         <span class="font-label-caps text-[10px] text-primary" id="ap-dock-delay-val">5</span>
                       </div>
-                      <input type="range" id="ap-dock-delay" min="1" max="15" value="5" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-delay-val').textContent=this.value"/>
+                      <input type="range" id="ap-dock-delay" min="1" max="15" value="5" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-dock-delay-val').textContent=this.value;saveAppearance()"/>
                     </div>
                     <div>
                       <div class="flex justify-between mb-1">
                         <span class="font-label-caps text-[10px] text-on-surface-variant/70">ANCHO</span>
                         <span class="font-label-caps text-[10px] text-primary" id="ap-dock-width-val">18</span>
                       </div>
-                      <input type="range" id="ap-dock-width" min="8" max="48" value="18" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-width-val').textContent=this.value"/>
+                      <input type="range" id="ap-dock-width" min="8" max="48" value="18" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-dock-width-val').textContent=this.value;saveAppearance()"/>
                     </div>
                     <div>
                       <span class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-2">ESTILO</span>
