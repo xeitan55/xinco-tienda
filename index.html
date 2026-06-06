@@ -2304,6 +2304,26 @@ tailwind.config = {
                       </div>
                       <input type="range" id="ap-dock-width" min="8" max="48" value="18" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" onchange="saveAppearance()" oninput="document.getElementById('ap-dock-width-val').textContent=this.value"/>
                     </div>
+                    <div>
+                      <span class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-2">ESTILO</span>
+                      <div class="flex gap-2">
+                        <label class="dock-style-option flex-1 text-center cursor-pointer p-2 rounded-lg border transition-all" style="border-color:var(--admin-accent,#9b87f5);" onclick="document.querySelector('input[name=\'dock-style\']:checked').value=='blur'||(this.querySelector('input').checked=true,this.querySelector('input').onchange())">
+                          <input type="radio" name="dock-style" value="blur" class="sr-only" onchange="saveAppearance()"/>
+                          <span class="material-symbols-outlined text-[18px] block mb-1" style="color:var(--admin-accent,#9b87f5);">blur_on</span>
+                          <span class="font-label-caps text-[9px] text-primary">BLUR</span>
+                        </label>
+                        <label class="dock-style-option flex-1 text-center cursor-pointer p-2 rounded-lg border transition-all" style="border-color:transparent;">
+                          <input type="radio" name="dock-style" value="acrylic" class="sr-only" onchange="saveAppearance()"/>
+                          <span class="material-symbols-outlined text-[18px] block mb-1" style="color:var(--admin-accent,#9b87f5);">blur_on</span>
+                          <span class="font-label-caps text-[9px] text-primary">ACRÍLICO</span>
+                        </label>
+                        <label class="dock-style-option flex-1 text-center cursor-pointer p-2 rounded-lg border transition-all" style="border-color:transparent;">
+                          <input type="radio" name="dock-style" value="colored" class="sr-only" onchange="saveAppearance()"/>
+                          <span class="material-symbols-outlined text-[18px] block mb-1" style="color:var(--admin-accent,#9b87f5);">format_color_fill</span>
+                          <span class="font-label-caps text-[9px] text-primary">COLOREABLE</span>
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <!-- Color de Énfasis -->

@@ -323,7 +323,10 @@
   .admin-fade-in { animation: adminFadeIn 0.35s cubic-bezier(0.16,1,0.3,1); }
   .admin-fade-out { animation: adminFadeIn 0.2s ease-in reverse forwards; }
   @keyframes dockSlideUp { from { transform: translateX(-50%) translateY(120%); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
-  .admin-dock { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.5); backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5); padding: 8px var(--dock-width, 32px); border-radius: 18px; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 4px 16px rgba(0,0,0,0.04); z-index: 50; animation: dockSlideUp 0.6s cubic-bezier(0.22,1,0.36,1); transition: opacity 0.4s cubic-bezier(0.22,1,0.36,1), transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+  .admin-dock { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; padding: 8px var(--dock-width, 32px); border-radius: 18px; z-index: 50; animation: dockSlideUp 0.6s cubic-bezier(0.22,1,0.36,1); transition: opacity 0.4s cubic-bezier(0.22,1,0.36,1), transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+.admin-dock.dock-blur { background: rgba(255,255,255,0.5); backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5); border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.admin-dock.dock-acrylic { background: rgba(255,255,255,0.78); backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 24px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.6); }
+.admin-dock.dock-colored { background: color-mix(in srgb, var(--admin-accent, #9b87f5) 15%, transparent); border: 1px solid color-mix(in srgb, var(--admin-accent, #9b87f5) 20%, transparent); box-shadow: 0 4px 16px color-mix(in srgb, var(--admin-accent, #9b87f5) 8%, transparent); }
   .admin-dock.dock-hidden { opacity: 0; transform: translateX(-50%) translateY(16px); pointer-events: none; }
   .dock-item { position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; background: var(--admin-accent, #9b87f5); border: none; color: #fff; transition: transform 0.2s cubic-bezier(0.22,1,0.36,1), background 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s cubic-bezier(0.22,1,0.36,1); box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
   .dock-item .dock-icon { width: 22px; height: 22px; stroke-width: 2; }
@@ -340,6 +343,8 @@
   .dock-item.zoomed::after { transform: translateX(-50%) scale(0.8) !important; }
   .dock-divider { width: 1px; height: 28px; background: rgba(0,0,0,0.08); margin: 0 6px; }
   @keyframes dockPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.dock-style-option { border-color: transparent; }
+.dock-style-option:has(input:checked) { border-color: var(--admin-accent, #9b87f5) !important; background: color-mix(in srgb, var(--admin-accent, #9b87f5) 8%, transparent); }
   #page-admin { position: relative; --admin-accent: #9b87f5; --admin-accent-light: #c4b5fd; --admin-accent-dim: #9b87f518; }
   #admin-bg-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; min-height: 100vh; z-index: 0; pointer-events: none; opacity: 0; animation: adminBgFadeIn 1s ease-out 0.3s forwards; }
   @keyframes adminBgFadeIn { from { opacity: 0; } to { opacity: 1; } }

@@ -2302,7 +2302,7 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', bgEnabled: true, bgDensity: 3, bgSpeed: 3, dockOpacity: 50, dockAutohide: true, dockDelay: 5, dockWidth: 18 };
+  return { theme: 'light', bgEnabled: true, bgDensity: 3, bgSpeed: 3, dockOpacity: 50, dockAutohide: true, dockDelay: 5, dockWidth: 18, dockStyle: 'blur' };
 }
 
 export function saveAppearance() {
@@ -2315,6 +2315,7 @@ export function saveAppearance() {
     dockAutohide: document.getElementById('ap-dock-autohide')?.checked ?? true,
     dockDelay: parseInt(document.getElementById('ap-dock-delay')?.value || '5'),
     dockWidth: parseInt(document.getElementById('ap-dock-width')?.value || '18'),
+    dockStyle: document.querySelector('input[name="dock-style"]:checked')?.value || 'blur',
   };
   localStorage.setItem(APP_KEY, JSON.stringify(cfg));
   applyAppearance(cfg);
@@ -2353,6 +2354,8 @@ export function applyAppearance(cfg) {
     dock.style.background = `rgba(255,255,255,${opacity * 0.5})`;
     const w = cfg.dockWidth || 18;
     dock.style.setProperty('--dock-width', w + 'px');
+    dock.classList.remove('dock-blur', 'dock-acrylic', 'dock-colored');
+    dock.classList.add('dock-' + (cfg.dockStyle || 'blur'));
   }
   const canvas = document.getElementById('bg-canvas');
   if (canvas) {
@@ -2392,6 +2395,8 @@ export function initAppearancePanel() {
           document.getElementById('ap-dock-delay-val').textContent = fbCfg.dockDelay;
           setVal('ap-dock-width', fbCfg.dockWidth);
           document.getElementById('ap-dock-width-val').textContent = fbCfg.dockWidth;
+          const styleRadio = document.querySelector(`input[name="dock-style"][value="${fbCfg.dockStyle || 'blur'}"]`);
+          if (styleRadio) styleRadio.checked = true;
           if (fbCfg.theme && window.setTheme) window.setTheme(fbCfg.theme);
           applyAppearance(fbCfg);
           return;
@@ -2413,6 +2418,8 @@ export function initAppearancePanel() {
     document.getElementById('ap-dock-delay-val').textContent = cfg.dockDelay;
     setVal('ap-dock-width', cfg.dockWidth);
     document.getElementById('ap-dock-width-val').textContent = cfg.dockWidth;
+    const styleRadio = document.querySelector(`input[name="dock-style"][value="${cfg.dockStyle || 'blur'}"]`);
+    if (styleRadio) styleRadio.checked = true;
     applyAppearance(cfg);
   })();
 }
