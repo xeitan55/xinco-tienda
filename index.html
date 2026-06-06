@@ -2281,9 +2281,31 @@ tailwind.config = {
                       <input type="range" id="ap-dock-width" min="8" max="48" value="18" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-dock-width-val').textContent=this.value;saveAppearance()"/>
                     </div>
                     <div>
+                      <div class="flex justify-between mb-1">
+                        <span class="font-label-caps text-[10px] text-on-surface-variant/70">LARGO</span>
+                        <span class="font-label-caps text-[10px] text-primary" id="ap-dock-height-val">44</span>
+                      </div>
+                      <input type="range" id="ap-dock-height" min="32" max="64" value="44" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-dock-height-val').textContent=this.value;saveAppearance()"/>
+                    </div>
+                    <div>
+                      <span class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-2">POSICIÓN</span>
+                      <div class="flex gap-2">
+                        <label class="dock-style-option flex-1 text-center cursor-pointer p-2 rounded-lg border transition-all" style="border-color:var(--admin-accent,#9b87f5);">
+                          <input type="radio" name="dock-position" value="bottom" class="sr-only" onchange="saveAppearance()"/>
+                          <span class="material-symbols-outlined text-[18px] block mb-1" style="color:var(--admin-accent,#9b87f5);">vertical_align_bottom</span>
+                          <span class="font-label-caps text-[9px] text-primary">ABAJO</span>
+                        </label>
+                        <label class="dock-style-option flex-1 text-center cursor-pointer p-2 rounded-lg border transition-all" style="border-color:transparent;">
+                          <input type="radio" name="dock-position" value="top" class="sr-only" onchange="saveAppearance()"/>
+                          <span class="material-symbols-outlined text-[18px] block mb-1" style="color:var(--admin-accent,#9b87f5);">vertical_align_top</span>
+                          <span class="font-label-caps text-[9px] text-primary">ARRIBA</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div>
                       <span class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-2">ESTILO</span>
                       <div class="flex gap-2">
-                        <label class="dock-style-option flex-1 text-center cursor-pointer p-2 rounded-lg border transition-all" style="border-color:var(--admin-accent,#9b87f5);" onclick="document.querySelector('input[name=\'dock-style\']:checked').value=='blur'||(this.querySelector('input').checked=true,this.querySelector('input').onchange())">
+                        <label class="dock-style-option flex-1 text-center cursor-pointer p-2 rounded-lg border transition-all" style="border-color:var(--admin-accent,#9b87f5);">
                           <input type="radio" name="dock-style" value="blur" class="sr-only" onchange="saveAppearance()"/>
                           <span class="material-symbols-outlined text-[18px] block mb-1" style="color:var(--admin-accent,#9b87f5);">blur_on</span>
                           <span class="font-label-caps text-[9px] text-primary">BLUR</span>
@@ -2293,12 +2315,14 @@ tailwind.config = {
                           <span class="material-symbols-outlined text-[18px] block mb-1" style="color:var(--admin-accent,#9b87f5);">blur_on</span>
                           <span class="font-label-caps text-[9px] text-primary">ACRÍLICO</span>
                         </label>
-                        <label class="dock-style-option flex-1 text-center cursor-pointer p-2 rounded-lg border transition-all" style="border-color:transparent;">
-                          <input type="radio" name="dock-style" value="colored" class="sr-only" onchange="saveAppearance()"/>
-                          <span class="material-symbols-outlined text-[18px] block mb-1" style="color:var(--admin-accent,#9b87f5);">format_color_fill</span>
-                          <span class="font-label-caps text-[9px] text-primary">COLOREABLE</span>
-                        </label>
                       </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="font-label-caps text-[11px] text-on-surface-variant/70">COLOREABLE</span>
+                      <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="ap-dock-colored" class="sr-only admin-toggle" onchange="saveAppearance()"/>
+                        <div class="toggle-track w-11 h-6 rounded-full relative transition-all duration-200" style="background:rgba(0,0,0,0.15);"><div class="toggle-dot absolute top-[2px] left-[2px] bg-white rounded-full h-5 w-5 transition-all duration-200 shadow-sm"></div></div>
+                      </label>
                     </div>
                   </div>
                 </div>

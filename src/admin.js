@@ -2208,7 +2208,7 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', dockOpacity: 50, dockAutohide: true, dockDelay: 5, dockWidth: 18, dockStyle: 'blur', bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
+  return { theme: 'light', dockOpacity: 50, dockAutohide: true, dockDelay: 5, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockColored: false, bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
 }
 
 export function saveAppearance() {
@@ -2218,7 +2218,10 @@ export function saveAppearance() {
     dockAutohide: document.getElementById('ap-dock-autohide')?.checked ?? true,
     dockDelay: parseInt(document.getElementById('ap-dock-delay')?.value || '5'),
     dockWidth: parseInt(document.getElementById('ap-dock-width')?.value || '18'),
+    dockHeight: parseInt(document.getElementById('ap-dock-height')?.value || '44'),
+    dockPosition: document.querySelector('input[name="dock-position"]:checked')?.value || 'bottom',
     dockStyle: document.querySelector('input[name="dock-style"]:checked')?.value || 'blur',
+    dockColored: document.getElementById('ap-dock-colored')?.checked ?? false,
     bgVideo1: document.getElementById('ap-bg-video-1')?.value.trim() || '',
     bgVideo2: document.getElementById('ap-bg-video-2')?.value.trim() || '',
     bgVideo3: document.getElementById('ap-bg-video-3')?.value.trim() || '',
@@ -2259,10 +2262,11 @@ export function applyAppearance(cfg) {
     const opacity = (cfg.dockOpacity || 50) / 100;
     dock.style.setProperty('--dock-bg-opacity', opacity);
     dock.style.background = `rgba(255,255,255,${opacity * 0.5})`;
-    const w = cfg.dockWidth || 18;
-    dock.style.setProperty('--dock-width', w + 'px');
-    dock.classList.remove('dock-blur', 'dock-acrylic', 'dock-colored');
-    dock.classList.add('dock-' + (cfg.dockStyle || 'blur'));
+    dock.style.setProperty('--dock-width', (cfg.dockWidth || 18) + 'px');
+    dock.style.setProperty('--dock-height', (cfg.dockHeight || 44) + 'px');
+    dock.classList.remove('dock-blur', 'dock-acrylic', 'dock-colored-on', 'dock-bottom', 'dock-top');
+    dock.classList.add('dock-' + (cfg.dockStyle || 'blur'), 'dock-' + (cfg.dockPosition || 'bottom'));
+    if (cfg.dockColored) dock.classList.add('dock-colored-on');
   }
   const video = document.getElementById('admin-bg-video');
   const src = cfg.bgVideo1 || cfg.bgVideo2 || cfg.bgVideo3 || cfg.bgVideo4 || '';
@@ -2292,8 +2296,13 @@ export function initAppearancePanel() {
           document.getElementById('ap-dock-delay-val').textContent = fbCfg.dockDelay;
           setVal('ap-dock-width', fbCfg.dockWidth);
           document.getElementById('ap-dock-width-val').textContent = fbCfg.dockWidth;
+          setVal('ap-dock-height', fbCfg.dockHeight);
+          document.getElementById('ap-dock-height-val').textContent = fbCfg.dockHeight;
+          const posRadio = document.querySelector(`input[name="dock-position"][value="${fbCfg.dockPosition || 'bottom'}"]`);
+          if (posRadio) posRadio.checked = true;
           const styleRadio = document.querySelector(`input[name="dock-style"][value="${fbCfg.dockStyle || 'blur'}"]`);
           if (styleRadio) styleRadio.checked = true;
+          setVal('ap-dock-colored', fbCfg.dockColored);
           if (fbCfg.theme && window.setTheme) window.setTheme(fbCfg.theme);
           for (let i = 1; i <= 4; i++) {
             const url = fbCfg['bgVideo' + i] || '';
@@ -2317,8 +2326,13 @@ export function initAppearancePanel() {
     document.getElementById('ap-dock-delay-val').textContent = cfg.dockDelay;
     setVal('ap-dock-width', cfg.dockWidth);
     document.getElementById('ap-dock-width-val').textContent = cfg.dockWidth;
+    setVal('ap-dock-height', cfg.dockHeight);
+    document.getElementById('ap-dock-height-val').textContent = cfg.dockHeight;
+    const posRadio = document.querySelector(`input[name="dock-position"][value="${cfg.dockPosition || 'bottom'}"]`);
+    if (posRadio) posRadio.checked = true;
     const styleRadio = document.querySelector(`input[name="dock-style"][value="${cfg.dockStyle || 'blur'}"]`);
     if (styleRadio) styleRadio.checked = true;
+    setVal('ap-dock-colored', cfg.dockColored);
     for (let i = 1; i <= 4; i++) {
       const url = cfg['bgVideo' + i] || '';
       const el = document.getElementById('ap-bg-video-' + i);
