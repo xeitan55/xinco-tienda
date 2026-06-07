@@ -48,6 +48,8 @@ export function adminNav(section) {
 }
 
 export function showAdminSection(section) {
+  localStorage.setItem('xinco_admin_section', section);
+  state.adminSection = section;
   const allSections = ['dashboard','orders','products','inventory','customers','banners','categorias','cupones','tracking','reportes','cobranzas','apariencia'];
   allSections.forEach(s => {
     const el = document.getElementById('admin-section-' + s);
@@ -2810,5 +2812,6 @@ export function init() {
   loadSocialConfigFromFirebase();
   initAdminThemeSelector();
   try { lucide?.createIcons(); } catch(e) {}
-  showAdminSection('dashboard');
+  const lastSection = localStorage.getItem('xinco_admin_section');
+  showAdminSection(lastSection || 'dashboard');
 }
