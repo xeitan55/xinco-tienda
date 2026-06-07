@@ -239,6 +239,12 @@
   .size-overlay { transform: translateY(100%); transition: transform 0.25s ease; }
   .grayscale-hover { filter: grayscale(100%); transition: filter 0.4s ease; }
   .grayscale-hover:hover { filter: grayscale(0%); }
+  .cat-card { transition: all 0.35s cubic-bezier(0.22,1,0.36,1); }
+  .cat-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+  .cat-card:hover .cat-card-img { transform: scale(1.05); }
+  .cat-card:hover .cat-card-label { transform: translateY(-2px); }
+  .cat-card-img { transition: all 0.4s cubic-bezier(0.22,1,0.36,1); }
+  .cat-card-label { transition: transform 0.3s cubic-bezier(0.22,1,0.36,1); }
   input[type=range] { -webkit-appearance: none; height: 2px; background: var(--primary); outline: none; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: var(--primary); cursor: pointer; }
   .toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: var(--toast-bg); color: var(--toast-text); font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; padding: 12px 20px; border: 2px solid var(--toast-border); transform: translateY(100px); opacity: 0; transition: all 0.3s ease; border-radius: 14px; }
