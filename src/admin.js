@@ -2755,25 +2755,19 @@ export function init() {
     const inner = document.getElementById('admin-dock-inner');
     if (!inner) return;
     const allChildren = () => [...inner.children];
-    const MAX_SCALE = 1.8;
-    const MAX_DIST = 120;
-    const LERP = 0.28;
+    const items = () => inner.querySelectorAll('.dock-item');
+    const LERP = 0.22;
     const BASE = 44, GAP = 8;
     let mouseX = -9999;
     let mouseInside = false;
     let running = true;
     let currentWidth = 0;
-    // create a floating label container for tooltips
+    // create a floating label above the dock
     const labelEl = document.createElement('div');
     labelEl.className = 'dock-label';
-    Object.assign(labelEl.style, { position:'absolute', top:'0', left:'0', pointerEvents:'none', opacity:'0', transition:'none', zIndex:'20', background:'rgba(0,0,0,0.75)', backdropFilter:'blur(8px)', WebkitBackdropFilter:'blur(8px)', color:'#fff', fontSize:'10px', fontWeight:'700', fontFamily:'"JetBrains Mono",monospace', letterSpacing:'0.08em', textTransform:'uppercase', padding:'3px 10px', borderRadius:'7px', whiteSpace:'nowrap' });
     inner.appendChild(labelEl);
-    let prevHovered = null;
-    allChildren().forEach(el => {
-      if (el.classList.contains('dock-item')) {
-        el._scale = 1;
-      }
-    });
+    let hovering = null;
+    items().forEach(el => el._scale = 1);
     dock.addEventListener('mousemove', e => {
       const r = dock.getBoundingClientRect();
       mouseX = e.clientX - r.left;
@@ -2782,25 +2776,32 @@ export function init() {
     dock.addEventListener('mouseleave', () => { mouseInside = false; });
     (function tick() {
       const dr = dock.getBoundingClientRect();
-      // update target scales with power curve
-      let closest = null, maxS = 0;
-      allChildren().forEach(el => {
-        if (!el.classList.contains('dock-item')) return;
+      // find the item nearest to cursor
+      let nearest = null, minDist = Infinity;
+      items().forEach(el => {
         const er = el.getBoundingClientRect();
         const cx = er.left + er.width / 2 - dr.left;
-        const dist = Math.abs(mouseX - cx);
+        const d = Math.abs(mouseX - cx);
+        el._hovered = false;
+        if (d < minDist && mouseInside) { minDist = d; nearest = el; }
+      });
+      if (nearest && minDist < BASE) nearest._hovered = true;
+      // assign target scales: nearest expands, neighbors slightly, rest stay
+      let nearestIdx = -1;
+      const itemArr = [...items()];
+      itemArr.forEach((el, i) => { if (el._hovered) nearestIdx = i; });
+      itemArr.forEach((el, i) => {
         let target = 1;
-        if (mouseInside && dist < MAX_DIST) {
-          const t = 1 - dist / MAX_DIST;
-          target = 1 + t * t * t * (MAX_SCALE - 1); // cubic falloff
+        if (nearestIdx >= 0) {
+          const diff = Math.abs(i - nearestIdx);
+          if (diff === 0) target = 1.5;
+          else if (diff === 1) target = 1.12;
+          else if (diff === 2) target = 1.02;
         }
         el._scale += (target - el._scale) * LERP;
         if (Math.abs(el._scale - 1) < 0.001) el._scale = 1;
-        el._hovered = false;
-        if (target > maxS) { maxS = target; closest = el; }
       });
-      if (closest) closest._hovered = true;
-      // position all children (items + dividers) from left to right
+      // position all children (items + dividers)
       let x = 0;
       allChildren().forEach(el => {
         if (el.classList.contains('dock-divider')) {
@@ -2815,32 +2816,26 @@ export function init() {
           const lift = (s - 1) * -12;
           el.style.left = x + 'px';
           el.style.transform = `translateY(${lift}px) scale(${s})`;
-          el.style.zIndex = s > 1.02 ? '2' : '';
-          el.style.boxShadow = s > 1.1 ? '0 8px 32px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.15)' : '';
+          el.style.zIndex = s > 1.1 ? '2' : '';
+          el.style.boxShadow = s > 1.2 ? '0 8px 32px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.15)' : '';
           x += w + GAP;
         }
       });
       const newWidth = x - GAP;
       currentWidth += (newWidth - currentWidth) * LERP;
       inner.style.width = currentWidth + 'px';
-      // update floating label
+      // floating label
       const ir = inner.getBoundingClientRect();
-      let found = null;
-      if (mouseInside) {
-        allChildren().forEach(el => {
-          if (!el.classList.contains('dock-item') || found) return;
-          if (el._hovered) found = el;
-        });
-      }
-      if (found && found._scale > 1) {
-        const er = found.getBoundingClientRect();
-        const labelTxt = found.dataset.section || '';
-        if (labelEl.textContent !== labelTxt) labelEl.textContent = labelTxt;
+      const hovered = nearest && nearest._hovered ? nearest : null;
+      if (hovered && hovering !== hovered) hovering = hovered;
+      else if (!hovered) hovering = null;
+      if (hovering) {
+        const er = hovering.getBoundingClientRect();
+        const txt = hovering.dataset.section || '';
+        if (labelEl.textContent !== txt) labelEl.textContent = txt;
         const lw = labelEl.offsetWidth, lh = labelEl.offsetHeight;
-        const cx = er.left + er.width / 2 - ir.left - lw / 2;
-        const top = er.top - ir.top - lh - 4;
-        labelEl.style.left = cx + 'px';
-        labelEl.style.top = top + 'px';
+        labelEl.style.left = (er.left + er.width / 2 - ir.left - lw / 2) + 'px';
+        labelEl.style.top = (er.top - ir.top - lh - 4) + 'px';
         labelEl.style.opacity = '1';
       } else {
         labelEl.style.opacity = '0';
