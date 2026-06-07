@@ -2107,9 +2107,15 @@ tailwind.config = {
                     </h3>
                     <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Mensajes que se muestran en la barra superior de la tienda.</p>
                     <div id="announcement-editor-list" class="space-y-2 mb-4"></div>
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 mb-5">
                       <button class="btn-outline py-2 px-4 text-[10px]" onclick="addAnnouncementMsg()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR MENSAJE</button>
                       <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveAnnouncementBar()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR</button>
+                    </div>
+                    <div class="border border-gray-200 rounded-xl p-4 bg-gray-50">
+                      <h4 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-3 text-[10px]">
+                        <span class="material-symbols-outlined text-[16px]">visibility</span> VISTA PREVIA
+                      </h4>
+                      <div id="announcement-preview-bar" class="w-full overflow-hidden text-white text-center text-[11px] font-label-caps" style="background:var(--admin-accent,#9b87f5);padding:8px 0;"></div>
                     </div>
                   </div>
                 </div>
@@ -2228,9 +2234,16 @@ tailwind.config = {
                   </div>
                 </div>
                 <div id="category-editor-list" class="space-y-2 mb-4"></div>
-                <div class="flex gap-2">
+                <div class="flex gap-2 mb-6">
                   <button class="btn-outline py-2 px-4 text-[10px]" onclick="addCategory()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR CATEGORÍA</button>
                   <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveCategories()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR TODO</button>
+                </div>
+                <!-- Preview en vivo -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-gray-50">
+                  <h4 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-3 text-[10px]">
+                    <span class="material-symbols-outlined text-[16px]">visibility</span> VISTA PREVIA EN HOME
+                  </h4>
+                  <div id="cat-preview-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
                 </div>
               </div>
             </div>

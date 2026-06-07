@@ -872,6 +872,7 @@ window.onCategoryInput = function(el) {
   const idx = parseInt(el.dataset.idx);
   const field = el.dataset.field;
   if (bannerState.categories[idx]) bannerState.categories[idx][field] = el.value;
+  renderCategoryPreview();
 };
 
 window.previewCatImg = function(idx, url) {
@@ -900,6 +901,7 @@ export async function uploadCategoryImg(idx, file) {
       if (input) input.value = data.secure_url;
       const imgPreview = document.getElementById('cat-preview-' + idx);
       if (imgPreview) imgPreview.src = data.secure_url;
+      renderCategoryPreview();
       window.showToast?.('Imagen subida ✅');
     } else window.showToast?.('Error al subir ❌');
   } catch(e) { window.showToast?.('Error de conexión ❌'); }
@@ -915,6 +917,7 @@ export function addCategory() {
   renderCategoryEditorList();
   renderAdminCatFilters();
   renderAdminCatSelect();
+  renderCategoryPreview();
 }
 
 export function removeCategory(idx) {
@@ -924,6 +927,7 @@ export function removeCategory(idx) {
   renderCategoryEditorList();
   renderAdminCatFilters();
   renderAdminCatSelect();
+  renderCategoryPreview();
 }
 
 export function moveCategory(idx, dir) {
@@ -934,6 +938,7 @@ export function moveCategory(idx, dir) {
   renderCategoryEditorList();
   renderAdminCatFilters();
   renderAdminCatSelect();
+  renderCategoryPreview();
 }
 
 export async function saveCategories() {
@@ -992,9 +997,25 @@ export function renderHomePageCats() {
   `).join('');
 }
 
+export function renderCategoryPreview() {
+  const grid = document.getElementById('cat-preview-grid');
+  if (!grid) return;
+  const cats = bannerState.categories || [];
+  grid.innerHTML = cats.map(c => `
+    <div class="relative w-full h-[120px] border-2 border-primary rounded-lg overflow-hidden bg-white">
+      <img src="${c.img || 'https://placehold.co/400x300/1c1c1c/5d22ff?text=+'}" alt="${c.name}" class="absolute inset-0 w-full h-full object-cover"/>
+      <div class="absolute inset-0 bg-primary/20"></div>
+      <div class="absolute bottom-0 left-0 p-2 bg-white border-t-2 border-r-2 border-primary rounded-tr-md">
+        <span style="font-family:Montserrat;font-size:12px;font-weight:800;" class="text-primary uppercase">${c.name}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
 export function initCatEditor() {
   _ensureCategoriesArray();
   renderCategoryEditorList();
+  renderCategoryPreview();
 }
 
 window.uploadCategoryImg = uploadCategoryImg;
@@ -1176,6 +1197,7 @@ export async function uploadToCloudinary(file, onProgress, onSuccess, onError, r
 // ===== BANNERS =====
 export function initBannerEditor() {
   renderAnnouncementEditorList();
+  renderAnnouncementPreview();
   document.getElementById('hero-edit-badge').value    = bannerState.hero.badge;
   document.getElementById('hero-edit-title').value    = bannerState.hero.title;
   document.getElementById('hero-edit-subtitle').value = bannerState.hero.subtitle;
@@ -1225,12 +1247,14 @@ export function renderAnnouncementEditorList() {
 export function addAnnouncementMsg() {
   bannerState.announcements.push('NUEVO MENSAJE — EDITAME');
   renderAnnouncementEditorList();
+  renderAnnouncementPreview();
 }
 
 export function removeAnnouncement(i) {
   if (bannerState.announcements.length <= 1) { window.showToast?.('Debe haber al menos 1 mensaje'); return; }
   bannerState.announcements.splice(i, 1);
   renderAnnouncementEditorList();
+  renderAnnouncementPreview();
 }
 
 export function moveAnnouncement(i, dir) {
@@ -1238,6 +1262,7 @@ export function moveAnnouncement(i, dir) {
   if (j < 0 || j >= bannerState.announcements.length) return;
   [bannerState.announcements[i], bannerState.announcements[j]] = [bannerState.announcements[j], bannerState.announcements[i]];
   renderAnnouncementEditorList();
+  renderAnnouncementPreview();
 }
 
 export async function saveAnnouncementBar() {
@@ -1547,6 +1572,13 @@ export async function savePromoBanner() {
   }
 }
 
+export function renderAnnouncementPreview() {
+  const bar = document.getElementById('announcement-preview-bar');
+  if (!bar) return;
+  const msgs = bannerState.announcements || [];
+  bar.innerHTML = msgs.map(m => `<span style="margin:0 24px;white-space:nowrap;display:inline-block;">${m}</span>`).join('');
+}
+
 export function renderAnnouncementBar() {
   const scroller = document.getElementById('announcement-scroller');
   if (!scroller) return;
@@ -1554,6 +1586,7 @@ export function renderAnnouncementBar() {
   scroller.innerHTML = msgs.map(m =>
     `<span class="font-label-caps text-label-caps tracking-widest uppercase px-12">${m}</span>`
   ).join('');
+  renderAnnouncementPreview();
 }
 
 export function renderHeroBanner() {
