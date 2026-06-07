@@ -2471,7 +2471,7 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', dockOpacity: 50, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
+  return { theme: 'light', dockOpacity: 50, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockDraggable: true, bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
 }
 
 export function saveAppearance() {
@@ -2482,6 +2482,7 @@ export function saveAppearance() {
     dockHeight: parseInt(document.getElementById('ap-dock-height')?.value || '44'),
     dockPosition: document.querySelector('input[name="dock-position"]:checked')?.value || 'bottom',
     dockStyle: document.querySelector('input[name="dock-style"]:checked')?.value || 'blur',
+    dockDraggable: document.getElementById('ap-dock-draggable')?.checked ?? true,
     bgVideo1: document.getElementById('ap-bg-video-1')?.value.trim() || '',
     bgVideo2: document.getElementById('ap-bg-video-2')?.value.trim() || '',
     bgVideo3: document.getElementById('ap-bg-video-3')?.value.trim() || '',
@@ -2489,6 +2490,7 @@ export function saveAppearance() {
   };
   localStorage.setItem(APP_KEY, JSON.stringify(cfg));
   applyAppearance(cfg);
+  window.syncDockDraggable?.();
 }
 
 export async function saveAppearanceToFirebase() {
@@ -2544,6 +2546,7 @@ export function applyAppearance(cfg) {
     dock.classList.add('dock-' + (cfg.dockStyle || 'blur'), 'dock-' + (cfg.dockPosition || 'bottom'));
   }
   window._appearanceCfg = cfg;
+  try { window.syncDockDraggable?.(); } catch(_) {}
 }
 
 export function initAppearancePanel() {
@@ -2561,6 +2564,7 @@ export function initAppearancePanel() {
           setVal('ap-dock-opacity', fbCfg.dockOpacity);
           document.getElementById('ap-dock-opacity-val').textContent = fbCfg.dockOpacity;
 
+          setVal('ap-dock-draggable', fbCfg.dockDraggable !== false);
           setVal('ap-dock-width', fbCfg.dockWidth);
           document.getElementById('ap-dock-width-val').textContent = fbCfg.dockWidth;
           setVal('ap-dock-height', fbCfg.dockHeight);
@@ -2585,6 +2589,7 @@ export function initAppearancePanel() {
     // Fallback to localStorage
     const cfg = loadAppearance();
     const setVal = (id, val) => { const el = document.getElementById(id); if (el) { if (el.type === 'checkbox') el.checked = val; else el.value = val; } };
+    setVal('ap-dock-draggable', cfg.dockDraggable !== false);
     setVal('ap-dock-opacity', cfg.dockOpacity);
     document.getElementById('ap-dock-opacity-val').textContent = cfg.dockOpacity;
     setVal('ap-dock-width', cfg.dockWidth);
@@ -2808,8 +2813,18 @@ export function init() {
   if (dockInner && !dockInner._dockDrag) {
     dockInner._dockDrag = true;
     let dragEl = null;
+    function syncDraggable() {
+      const enabled = window._appearanceCfg?.dockDraggable !== false;
+      dockInner.querySelectorAll('.dock-item').forEach(el => el.draggable = enabled);
+    }
+    syncDraggable();
+    // re-sync when appearance changes
+    const origApply = window.applyAppearance;
+    window._origApplyAppearance = origApply;
+    const origSaveAppearance = window.saveAppearance;
     dockInner.querySelectorAll('.dock-item').forEach(el => {
       el.addEventListener('dragstart', e => {
+        if (window._appearanceCfg?.dockDraggable === false) { e.preventDefault(); return; }
         dragEl = el;
         e.dataTransfer.effectAllowed = 'move';
         el.style.opacity = '0.4';
@@ -2821,6 +2836,7 @@ export function init() {
       });
     });
     dockInner.addEventListener('dragover', e => {
+      if (window._appearanceCfg?.dockDraggable === false) return;
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
       const target = e.target.closest('.dock-item');
@@ -2829,6 +2845,7 @@ export function init() {
       target.classList.add('drag-over');
     });
     dockInner.addEventListener('drop', e => {
+      if (window._appearanceCfg?.dockDraggable === false) return;
       e.preventDefault();
       const target = e.target.closest('.dock-item');
       if (!target || !dragEl || target === dragEl) return;
@@ -2851,6 +2868,8 @@ export function init() {
       dockInner.querySelectorAll('.dock-item').forEach(el => el.remove());
       dockInner.prepend(frag);
     } catch(_) {}
+    // re-sync draggable after save
+    window.syncDockDraggable = syncDraggable;
   }
   window.isAdmin = isAdmin;
   window.renderAdmin = renderAdmin;
