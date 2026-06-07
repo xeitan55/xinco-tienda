@@ -2213,8 +2213,6 @@ export function uploadAdminBgVideo(slot, file) {
   if (!file) return;
   window.showToast?.('Subiendo video...');
   const fileInput = document.querySelector('input[type="file"][accept="video/mp4,video/webm"]');
-  if (!file) return;
-  window.showToast?.('Subiendo video...');
   const maxSize = 100;
   if (file.size > maxSize * 1024 * 1024) { window.showToast?.(`⚠️ El archivo supera los ${maxSize}MB`); return; }
   if (!file.type.startsWith('video/')) { window.showToast?.('⚠️ Solo se permiten videos'); return; }
