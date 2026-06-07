@@ -19,7 +19,7 @@ let bannerState = {
     title: '30% OFF\nEN BUZOS',
     code: 'URBAN30'
   },
-  categories: {}
+  categories: []
 };
 
 const PRODUCTS = [

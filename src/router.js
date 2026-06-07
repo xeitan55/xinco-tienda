@@ -93,8 +93,8 @@ export async function nav(page, opts) {
   if (page === 'account') { const { renderAccountPage } = await import('./auth.js'); renderAccountPage(); }
   if (page === 'admin') {
     window.closeSearch?.();
-    const { renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers, renderAdminCupones, renderAdminTracking, renderAdminReports, renderAdminCatEditor, showAdminSection } = await import('./admin.js');
-    [renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers, renderAdminCupones, renderAdminTracking, renderAdminReports, renderAdminCatEditor].forEach(fn => { try { fn(); } catch(e) { console.error(e); } });
+    const { renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers, renderAdminCupones, renderAdminTracking, renderAdminReports, showAdminSection } = await import('./admin.js');
+    [renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers, renderAdminCupones, renderAdminTracking, renderAdminReports].forEach(fn => { try { fn(); } catch(e) { console.error(e); } });
     const lastSection = localStorage.getItem('xinco_admin_section');
     showAdminSection(lastSection || 'dashboard');
   }

@@ -32,7 +32,6 @@ export function renderAdmin() {
   renderAdminCupones();
   renderAdminTracking();
   renderAdminReports();
-  renderAdminCatEditor();
 }
 
 export function adminNav(section) {
@@ -791,71 +790,218 @@ export function renderAdminReports() {
   document.getElementById('rep-top-product').textContent = topEntry ? `${topEntry[0]} (x${topEntry[1]})` : '-';
 }
 
-// Category Editor
+// ===== CATEGORY CRUD =====
+export function _ensureCategoriesArray() {
+  if (!Array.isArray(bannerState.categories)) {
+    const old = bannerState.categories || {};
+    bannerState.categories = Object.entries(old).map(([slug, data]) => ({
+      slug,
+      name: (typeof data === 'string' ? slug : (data.title || slug)).charAt(0).toUpperCase() + (typeof data === 'string' ? slug : (data.title || slug)).slice(1),
+      img: typeof data === 'string' ? data : (data?.img || ''),
+      title: typeof data === 'string' ? '' : (data?.title || ''),
+      subtitle: typeof data === 'string' ? '' : (data?.subtitle || '')
+    }));
+    if (bannerState.categories.length === 0) {
+      bannerState.categories = [
+        { slug: 'remeras', name: 'Remeras', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80', title: 'Remeras', subtitle: '' },
+        { slug: 'pantalones', name: 'Pantalones', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80', title: 'Pantalones', subtitle: '' },
+        { slug: 'buzos', name: 'Buzos', img: 'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80', title: 'Buzos', subtitle: '' },
+        { slug: 'camperas', name: 'Camperas', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80', title: 'Camperas', subtitle: '' },
+        { slug: 'accesorios', name: 'Accesorios', img: 'https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=600&q=80', title: 'Accesorios', subtitle: '' }
+      ];
+    }
+  }
+}
+
 export function applySavedCatImages() {
-  const saved = bannerState.categories;
-  if (!saved) return;
-  Object.entries(saved).forEach(([cat, data]) => {
-    const imgUrl = typeof data === 'string' ? data : (data?.img || '');
-    _catImages[cat] = imgUrl;
-    const imgEl = document.getElementById(`cat-img-${cat}`);
-    if (imgEl && imgUrl) imgEl.src = imgUrl;
+  _ensureCategoriesArray();
+  bannerState.categories.forEach(cat => {
+    if (cat.img) _catImages[cat.slug] = cat.img;
   });
 }
 
-export function renderAdminCatEditor() {
-  const cats = ['remeras','pantalones','buzos','camperas','accesorios'];
-  const container = document.getElementById('admin-cat-editor');
-  if (!container) return;
-  container.innerHTML = cats.map(cat => {
-    const data = bannerState.categories?.[cat] || {};
-    return `
-      <div class="bg-surface-container-low border-2 border-outline-variant p-6">
-        <h3 class="font-label-caps text-label-caps text-primary uppercase mb-4">${cat}</h3>
-        <div class="flex flex-col md:flex-row gap-6">
+export function renderCategoryEditorList() {
+  _ensureCategoriesArray();
+  const el = document.getElementById('category-editor-list');
+  if (!el) return;
+  el.innerHTML = bannerState.categories.map((cat, i) => `
+    <div class="flex items-start gap-3 p-3 border-2 border-outline-variant bg-surface rounded-xl" id="cat-row-${i}">
+      <div class="flex flex-col gap-1 shrink-0 pt-1">
+        <button onclick="moveCategory(${i},-1)" ${i===0?'disabled style="opacity:0.3"':''} class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors disabled:cursor-not-allowed">
+          <span class="material-symbols-outlined text-[14px]">keyboard_arrow_up</span>
+        </button>
+        <button onclick="moveCategory(${i},1)" ${i===bannerState.categories.length-1?'disabled style="opacity:0.3"':''} class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors">
+          <span class="material-symbols-outlined text-[14px]">keyboard_arrow_down</span>
+        </button>
+      </div>
+      <div class="w-16 h-16 shrink-0 rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
+        <img id="cat-preview-${i}" src="${cat.img || 'https://placehold.co/150x200/1c1c1c/5d22ff?text=+'}" class="w-full h-full object-cover"/>
+      </div>
+      <div class="flex-1 min-w-0 space-y-2">
+        <div class="flex gap-2">
           <div class="flex-1">
-            <label class="font-label-caps text-[10px] text-on-surface-variant block mb-2">IMAGEN URL</label>
-            <div class="flex gap-3">
-              <input type="text" id="cat-img-input-${cat}" value="${data.img || ''}" class="flex-1 px-4 py-3 bg-surface border-2 border-outline-variant text-on-surface font-body-md text-sm" placeholder="https://..."/>
-              <button onclick="showUploadModal('cat-img-input-${cat}')" class="btn-violet px-4 py-2 text-[10px] shrink-0"><span class="material-symbols-outlined text-[14px]">cloud_upload</span></button>
+            <label class="font-label-caps text-[9px] text-on-surface-variant block mb-0.5">SLUG</label>
+            <input class="input-field py-1.5 text-[11px]" value="${cat.slug}" data-idx="${i}" data-field="slug" oninput="onCategoryInput(this)"/>
+          </div>
+          <div class="flex-1">
+            <label class="font-label-caps text-[9px] text-on-surface-variant block mb-0.5">NOMBRE</label>
+            <input class="input-field py-1.5 text-[11px]" value="${cat.name}" data-idx="${i}" data-field="name" oninput="onCategoryInput(this)"/>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <div class="flex-1">
+            <label class="font-label-caps text-[9px] text-on-surface-variant block mb-0.5">URL IMAGEN</label>
+            <div class="flex gap-1">
+              <input class="input-field py-1.5 text-[11px] flex-1" value="${cat.img}" data-idx="${i}" data-field="img" oninput="onCategoryInput(this);previewCatImg(${i},this.value)"/>
+              <button class="border border-gray-300 rounded-lg px-2 py-1 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('cat-file-${i}').click()">
+                <span class="material-symbols-outlined text-[14px]">upload</span>
+              </button>
+              <input type="file" id="cat-file-${i}" accept="image/*" class="hidden" onchange="uploadCategoryImg(${i},this.files[0])"/>
             </div>
           </div>
-          <div class="w-32">
-            <img id="cat-preview-${cat}" src="${data.img || 'https://placehold.co/150x200/1c1c1c/5d22ff?text=+'}" alt="${cat}" class="w-full h-32 object-cover border-2 border-primary"/>
-          </div>
         </div>
-        <div class="flex gap-4 mt-4">
-          <div class="flex-1">
-            <label class="font-label-caps text-[10px] text-on-surface-variant block mb-2">TÍTULO</label>
-            <input type="text" id="cat-title-${cat}" value="${data.title || ''}" class="w-full px-4 py-3 bg-surface border-2 border-outline-variant text-on-surface font-body-md text-sm" placeholder="Título de la categoría"/>
-          </div>
-          <div class="flex-1">
-            <label class="font-label-caps text-[10px] text-on-surface-variant block mb-2">SUBTÍTULO</label>
-            <input type="text" id="cat-subtitle-${cat}" value="${data.subtitle || ''}" class="w-full px-4 py-3 bg-surface border-2 border-outline-variant text-on-surface font-body-md text-sm" placeholder="Subtítulo"/>
-          </div>
-        </div>
-        <button onclick="saveCatImage('${cat}')" class="btn-violet mt-4 px-6 py-3 text-[10px]">GUARDAR CATEGORÍA</button>
-      </div>`;
-  }).join('');
+      </div>
+      <button onclick="removeCategory(${i})" class="p-2 border-2 border-error text-error hover:bg-error hover:text-on-error transition-colors shrink-0 self-start mt-1">
+        <span class="material-symbols-outlined text-[18px]">delete</span>
+      </button>
+    </div>
+  `).join('');
 }
 
-export async function saveCatImage(cat) {
-  const img = document.getElementById('cat-img-input-' + cat)?.value.trim() || '';
-  const title = document.getElementById('cat-title-' + cat)?.value.trim() || '';
-  const subtitle = document.getElementById('cat-subtitle-' + cat)?.value.trim() || '';
-  if (!bannerState.categories) bannerState.categories = {};
-  bannerState.categories[cat] = { img, title, subtitle };
-  _catImages[cat] = img;
-  const preview = document.getElementById('cat-preview-' + cat);
-  if (preview && img) preview.src = img;
-  const { fbSaveBannersRemote } = await import('./firebase.js');
+window.onCategoryInput = function(el) {
+  const idx = parseInt(el.dataset.idx);
+  const field = el.dataset.field;
+  if (bannerState.categories[idx]) bannerState.categories[idx][field] = el.value;
+};
+
+window.previewCatImg = function(idx, url) {
+  const img = document.getElementById('cat-preview-' + idx);
+  if (img && url) img.src = url;
+};
+
+export async function uploadCategoryImg(idx, file) {
+  if (!file) return;
+  window.showToast?.('Subiendo imagen...');
   try {
+    const signRes = await fetch('/api/cloudinary-sign?folder=xinco-tienda');
+    if (!signRes.ok) throw new Error('Sign failed');
+    const signData = await signRes.json();
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', signData.folder);
+    formData.append('timestamp', signData.timestamp);
+    formData.append('api_key', signData.apiKey);
+    formData.append('signature', signData.signature);
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${signData.cloudName}/image/upload`,{method:'POST',body:formData});
+    const data = await res.json();
+    if (data.secure_url) {
+      bannerState.categories[idx].img = data.secure_url;
+      const input = document.querySelector(`#cat-row-${idx} input[data-field="img"]`);
+      if (input) input.value = data.secure_url;
+      const imgPreview = document.getElementById('cat-preview-' + idx);
+      if (imgPreview) imgPreview.src = data.secure_url;
+      window.showToast?.('Imagen subida ✅');
+    } else window.showToast?.('Error al subir ❌');
+  } catch(e) { window.showToast?.('Error de conexión ❌'); }
+}
+
+export function addCategory() {
+  _ensureCategoriesArray();
+  const base = 'nueva-categoria';
+  let slug = base;
+  let n = 1;
+  while (bannerState.categories.some(c => c.slug === slug)) slug = base + '-' + (++n);
+  bannerState.categories.push({ slug, name: 'Nueva Categoría', img: '', title: '', subtitle: '' });
+  renderCategoryEditorList();
+  renderAdminCatFilters();
+  renderAdminCatSelect();
+}
+
+export function removeCategory(idx) {
+  _ensureCategoriesArray();
+  if (!confirm('¿Eliminar categoría "' + bannerState.categories[idx]?.name + '"?')) return;
+  bannerState.categories.splice(idx, 1);
+  renderCategoryEditorList();
+  renderAdminCatFilters();
+  renderAdminCatSelect();
+}
+
+export function moveCategory(idx, dir) {
+  _ensureCategoriesArray();
+  const target = idx + dir;
+  if (target < 0 || target >= bannerState.categories.length) return;
+  [bannerState.categories[idx], bannerState.categories[target]] = [bannerState.categories[target], bannerState.categories[idx]];
+  renderCategoryEditorList();
+  renderAdminCatFilters();
+  renderAdminCatSelect();
+}
+
+export async function saveCategories() {
+  _ensureCategoriesArray();
+  try {
+    const { fbSaveBannersRemote, syncFromFirebase } = await import('./firebase.js');
     await fbSaveBannersRemote({ categories: bannerState.categories });
-    window.showToast?.(`✅ Categoría ${cat} guardada`);
+    await syncFromFirebase();
+    applySavedCatImages();
+    renderAdminCatFilters();
+    renderAdminCatSelect();
+    renderHomePageCats();
+    window.showToast?.('✅ Categorías guardadas en Firebase');
   } catch(e) {
-    window.showToast?.('⚠️ Error al guardar en Firebase');
+    console.error('saveCategories:', e);
+    window.showToast?.('⚠️ Error al guardar: ' + e.message);
   }
 }
+
+export function renderAdminCatFilters() {
+  _ensureCategoriesArray();
+  const ul = document.getElementById('filter-categories');
+  if (!ul) return;
+  const allChecked = bannerState.categories.every(c => state.filterCat.includes(c.slug)) || state.filterCat.length === 0;
+  const allHtml = `<li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
+    <input type="checkbox" value="all" ${allChecked ? 'checked' : ''} class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
+    <span>Todos</span></label></li>`;
+  const catHtml = bannerState.categories.map(c => `<li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
+    <input type="checkbox" value="${c.slug}" ${state.filterCat.includes(c.slug) ? 'checked' : ''} class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
+    <span class="text-on-surface-variant group-hover:text-primary">${c.name}</span></label></li>
+  `).join('');
+  ul.innerHTML = allHtml + catHtml;
+}
+
+export function renderAdminCatSelect() {
+  _ensureCategoriesArray();
+  const sel = document.getElementById('pf-cat');
+  if (!sel) return;
+  sel.innerHTML = bannerState.categories.map(c => `<option value="${c.slug}">${c.name}</option>`).join('');
+}
+
+export function renderHomePageCats() {
+  _ensureCategoriesArray();
+  const section = document.getElementById('home-categories-section');
+  if (!section) return;
+  const grid = section.querySelector('.grid');
+  if (!grid) return;
+  grid.innerHTML = bannerState.categories.map(c => `
+    <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('${c.slug}')">
+      <img src="${c.img || 'https://placehold.co/800x600/1c1c1c/5d22ff?text=+'}" alt="${c.name}" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+      <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
+      <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
+        <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">${c.name}</h3>
+      </div>
+    </div>
+  `).join('');
+}
+
+export function initCatEditor() {
+  _ensureCategoriesArray();
+  renderCategoryEditorList();
+}
+
+window.uploadCategoryImg = uploadCategoryImg;
+window.addCategory = addCategory;
+window.removeCategory = removeCategory;
+window.moveCategory = moveCategory;
+window.saveCategories = saveCategories;
 
 // ===== PRODUCT IMAGE SLOTS =====
 export function renderProductImageSlots() {
@@ -1024,60 +1170,6 @@ export async function uploadToCloudinary(file, onProgress, onSuccess, onError, r
   } catch(e) {
     onError('Error al firmar upload');
     throw e;
-  }
-}
-
-// ===== CATEGORIES =====
-export function initCatEditor() {
-  const cats = bannerState.categories || {};
-  ['remeras','pantalones','buzos','accesorios'].forEach(cat => {
-    const urlEl = document.getElementById('admin-cat-url-' + cat);
-    const imgEl = document.getElementById('admin-cat-img-' + cat);
-    const data = cats[cat];
-    if (data) {
-      const url = typeof data === 'string' ? data : (data.img || '');
-      if (urlEl) urlEl.value = url;
-      if (imgEl) imgEl.src = url;
-    }
-  });
-}
-
-export async function uploadAdminCatImg(cat, file) {
-  if (!file) return;
-  window.showToast?.('Subiendo imagen...');
-  try {
-    const signRes = await fetch('/api/cloudinary-sign?folder=xinco-tienda');
-    if (!signRes.ok) throw new Error('Sign failed');
-    const signData = await signRes.json();
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('folder', signData.folder);
-    formData.append('timestamp', signData.timestamp);
-    formData.append('api_key', signData.apiKey);
-    formData.append('signature', signData.signature);
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${signData.cloudName}/image/upload`,{method:'POST',body:formData});
-    const data = await res.json();
-    if (data.secure_url) { document.getElementById('admin-cat-url-'+cat).value=data.secure_url; saveAdminCatImg(cat); }
-    else window.showToast?.('Error al subir ❌');
-  } catch(e) { window.showToast?.('Error de conexión ❌'); }
-}
-
-export async function saveAdminCatImg(cat) {
-  const url = document.getElementById('admin-cat-url-'+cat)?.value.trim();
-  if (!url) { window.showToast?.('Ingresá una URL ❌'); return; }
-  if (!bannerState.categories) bannerState.categories = {};
-  // Store as object with .img to match modular format; handle legacy string format on read
-  bannerState.categories[cat] = { img: url, title: document.getElementById('admin-cat-title-'+cat)?.value?.trim() || '', subtitle: '' };
-  try {
-    const { fbSaveBannersRemote, syncFromFirebase } = await import('./firebase.js');
-    await fbSaveBannersRemote({ categories: bannerState.categories });
-    await syncFromFirebase();
-    applySavedCatImages();
-    initCatEditor();
-    window.showToast?.('Categoría '+cat.toUpperCase()+' guardada ✅');
-  } catch(e) {
-    console.error('saveAdminCatImg:', e);
-    window.showToast?.('⚠️ Error al guardar en Firebase: ' + e.message);
   }
 }
 
@@ -2702,7 +2794,6 @@ export function init() {
   window.renderAdminCupones = renderAdminCupones;
   window.renderAdminTracking = renderAdminTracking;
   window.renderAdminReports = renderAdminReports;
-  window.renderAdminCatEditor = renderAdminCatEditor;
   window.editOrder = editOrder;
   window.closeEditOrder = closeEditOrder;
   window.saveEditOrder = saveEditOrder;
@@ -2726,7 +2817,6 @@ export function init() {
   window.deleteCoupon = deleteCoupon;
   window.updateTrackingNumber = updateTrackingNumber;
   window.applySavedCatImages = applySavedCatImages;
-  window.saveCatImage = saveCatImage;
   window.deleteProduct = deleteProduct;
   window.editProduct = editProductAdmin;
   window.renderProductImageSlots = renderProductImageSlots;
@@ -2792,8 +2882,6 @@ export function init() {
   window.previewReport = previewReport;
   window.printReport = printReport;
   window.initCatEditor = initCatEditor;
-  window.uploadAdminCatImg = uploadAdminCatImg;
-  window.saveAdminCatImg = saveAdminCatImg;
   window.setAdminColor = setAdminColor;
   window.setAdminBgVideo = setAdminBgVideo;
   window.uploadAdminBgVideo = uploadAdminBgVideo;

@@ -257,7 +257,7 @@ tailwind.config = {
   </section>
 
   <!-- Categorías -->
-  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary reveal">
+  <section id="home-categories-section" class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-[3px] border-primary reveal">
     <div class="flex justify-between items-end mb-8">
       <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase">Categorías</h2>
     </div>
@@ -1628,6 +1628,19 @@ tailwind.config = {
                     <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR HERO
                   </button>
                 </div>
+              <!-- Categorías -->
+              <div class="sub-tab-content space-y-6" data-tab="categorias">
+                <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">category</span> CATEGORÍAS
+                  </h3>
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Administrá las categorías de la tienda. El slug se usa internamente para los productos.</p>
+                  <div id="category-editor-list" class="space-y-2 mb-4"></div>
+                  <div class="flex gap-2">
+                    <button class="btn-outline py-2 px-4 text-[10px]" onclick="addCategory()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR CATEGORÍA</button>
+                    <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveCategories()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR TODO</button>
+                  </div>
+                </div>
               </div>
               <!-- Promo -->
               <div class="sub-tab-content space-y-6" data-tab="promo">
@@ -1677,83 +1690,26 @@ tailwind.config = {
           </div>
         </div>
 
-        <!-- Categories Section (moved from home to admin) -->
+        <!-- ===== CATEGORÍAS SECTION ===== -->
         <div id="admin-section-categorias" class="hidden space-y-5">
           <div class="admin-card">
             <div class="admin-card-body">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <!-- Remeras -->
-                <div class="border border-gray-200 rounded-xl p-4 bg-white">
-                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
-                    <img id="admin-cat-img-remeras" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80" class="w-full h-full object-cover"/>
-                  </div>
-                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">REMERAS</div>
-                  <div class="flex gap-2 mb-2">
-                    <input id="admin-cat-url-remeras" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
-                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-remeras').click()">
-                      <span class="material-symbols-outlined text-[14px]">upload</span>
-                    </button>
-                    <input type="file" id="admin-cat-file-remeras" accept="image/*" class="hidden" onchange="uploadAdminCatImg('remeras',this.files[0])"/>
-                  </div>
-                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('remeras')">
-                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
-                  </button>
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">category</span> CATEGORÍAS
+                  </h3>
+                  <p class="font-body-md text-on-surface-variant/70 text-sm mt-1">Administrá las categorías. El slug es el identificador que usan los productos.</p>
                 </div>
-                <!-- Pantalones -->
-                <div class="border border-gray-200 rounded-xl p-4 bg-white">
-                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
-                    <img id="admin-cat-img-pantalones" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80" class="w-full h-full object-cover"/>
-                  </div>
-                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">PANTALONES</div>
-                  <div class="flex gap-2 mb-2">
-                    <input id="admin-cat-url-pantalones" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
-                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-pantalones').click()">
-                      <span class="material-symbols-outlined text-[14px]">upload</span>
-                    </button>
-                    <input type="file" id="admin-cat-file-pantalones" accept="image/*" class="hidden" onchange="uploadAdminCatImg('pantalones',this.files[0])"/>
-                  </div>
-                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('pantalones')">
-                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
-                  </button>
-                </div>
-                <!-- Buzos -->
-                <div class="border border-gray-200 rounded-xl p-4 bg-white">
-                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
-                    <img id="admin-cat-img-buzos" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80" class="w-full h-full object-cover"/>
-                  </div>
-                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">BUZOS</div>
-                  <div class="flex gap-2 mb-2">
-                    <input id="admin-cat-url-buzos" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
-                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-buzos').click()">
-                      <span class="material-symbols-outlined text-[14px]">upload</span>
-                    </button>
-                    <input type="file" id="admin-cat-file-buzos" accept="image/*" class="hidden" onchange="uploadAdminCatImg('buzos',this.files[0])"/>
-                  </div>
-                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('buzos')">
-                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
-                  </button>
-                </div>
-                <!-- Accesorios -->
-                <div class="border border-gray-200 rounded-xl p-4 bg-white">
-                  <div class="aspect-[4/3] overflow-hidden rounded-lg border border-gray-100 mb-3 relative bg-gray-50">
-                    <img id="admin-cat-img-accesorios" src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80" class="w-full h-full object-cover"/>
-                  </div>
-                  <div class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">ACCESORIOS</div>
-                  <div class="flex gap-2 mb-2">
-                    <input id="admin-cat-url-accesorios" class="input-field flex-1 py-1.5" placeholder="URL de imagen..."/>
-                    <button class="border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-primary hover:text-on-primary hover:border-primary transition-colors font-label-caps text-[9px]" onclick="document.getElementById('admin-cat-file-accesorios').click()">
-                      <span class="material-symbols-outlined text-[14px]">upload</span>
-                    </button>
-                    <input type="file" id="admin-cat-file-accesorios" accept="image/*" class="hidden" onchange="uploadAdminCatImg('accesorios',this.files[0])"/>
-                  </div>
-                  <button class="btn-primary w-full py-1.5 text-[9px]" onclick="saveAdminCatImg('accesorios')">
-                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR
-            </button>
+              </div>
+              <div id="category-editor-list" class="space-y-2 mb-4"></div>
+              <div class="flex gap-2">
+                <button class="btn-outline py-2 px-4 text-[10px]" onclick="addCategory()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR CATEGORÍA</button>
+                <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveCategories()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR TODO</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
         <!-- ===== COBRANZAS SECTION ===== -->
         <div id="admin-section-cobranzas" class="hidden space-y-5">

@@ -128,7 +128,19 @@ async function syncFromFirebase() {
       if (fbData.announcements) bannerState.announcements = fbData.announcements;
       if (fbData.hero)          Object.assign(bannerState.hero, fbData.hero);
       if (fbData.promo)         Object.assign(bannerState.promo, fbData.promo);
-      if (fbData.categories)    Object.assign(bannerState.categories, fbData.categories);
+      if (fbData.categories) {
+        if (Array.isArray(fbData.categories)) {
+          bannerState.categories = fbData.categories;
+        } else if (typeof fbData.categories === 'object') {
+          bannerState.categories = Object.entries(fbData.categories).map(([slug, data]) => ({
+            slug,
+            name: (typeof data === 'string' ? slug : (data.title || slug)).charAt(0).toUpperCase() + (typeof data === 'string' ? slug : (data.title || slug)).slice(1),
+            img: typeof data === 'string' ? data : (data?.img || ''),
+            title: typeof data === 'string' ? '' : (data?.title || ''),
+            subtitle: typeof data === 'string' ? '' : (data?.subtitle || '')
+          }));
+        }
+      }
     }
   } catch(e) {
     console.warn('syncFromFirebase: no se pudieron cargar banners:', e.message);
@@ -261,7 +273,7 @@ async function bootFromFirebase() {
   try {
     const { validateCartCoupons } = await import('./coupons.js');
     const { renderAnnouncementBar, renderHeroBanner, renderPromoBanner } = await import('./banners.jsx');
-    const { applySavedCatImages } = await import('./admin.js');
+    const { applySavedCatImages, renderHomePageCats, renderAdminCatFilters, renderAdminCatSelect } = await import('./admin.js');
     const { renderHomeProducts, renderExclusiveProducts, renderCatalog } = await import('./products.js');
 
     loadCart();
@@ -272,6 +284,9 @@ async function bootFromFirebase() {
     renderHeroBanner();
     renderPromoBanner();
     applySavedCatImages();
+    renderHomePageCats();
+    renderAdminCatFilters();
+    renderAdminCatSelect();
     renderHomeProducts();
     renderExclusiveProducts();
     renderCatalog();
