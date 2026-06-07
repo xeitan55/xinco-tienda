@@ -125,7 +125,9 @@ async function syncFromFirebase() {
     const bannerSnap = await getDoc(doc(fbDb, 'config', 'banners'));
     if (bannerSnap.exists()) {
       const fbData = bannerSnap.data();
-      if (fbData.announcements) bannerState.announcements = fbData.announcements;
+      if (fbData.announcements) bannerState.announcements = fbData.announcements.map(
+        m => typeof m === 'string' ? { text: m, color: '#ffffff' } : m
+      );
       if (fbData.hero)          Object.assign(bannerState.hero, fbData.hero);
       if (fbData.promo)         Object.assign(bannerState.promo, fbData.promo);
       if (fbData.categories) {

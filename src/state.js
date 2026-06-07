@@ -1,8 +1,8 @@
 let bannerState = {
   announcements: [
-    'ENVÍO GRATIS SUPERANDO LOS $95.000',
-    'NUEVA COLECCIÓN DISPONIBLE',
-    'HASTA 30% OFF EN SELECCIONADOS'
+    { text: 'ENVÍO GRATIS SUPERANDO LOS $95.000', color: '#ffffff' },
+    { text: 'NUEVA COLECCIÓN DISPONIBLE', color: '#ffffff' },
+    { text: 'HASTA 30% OFF EN SELECCIONADOS', color: '#ffffff' }
   ],
   hero: {
     badge: 'NUEVA TEMPORADA',

@@ -1240,20 +1240,27 @@ export function initBannerEditor() {
   previewPromo();
 }
 
+function _normalizeAnn(msgs) {
+  return (msgs||[]).map(m => typeof m === 'string' ? { text: m, color: '#ffffff' } : (m && m.text ? m : { text: '', color: '#ffffff' }));
+}
+
 export function renderAnnouncementEditorList() {
   const el = document.getElementById('announcement-editor-list');
   if (!el) return;
-  el.innerHTML = bannerState.announcements.map((msg, i) => `<div class="flex items-center gap-3 p-3 border-[2px] border-outline-variant bg-surface" id="ann-row-${i}">
+  const msgs = _normalizeAnn(bannerState.announcements);
+  bannerState.announcements = msgs;
+  el.innerHTML = msgs.map((m, i) => `<div class="flex items-center gap-2 p-3 border-[2px] border-outline-variant bg-surface" id="ann-row-${i}">
     <div class="flex flex-col gap-1 shrink-0">
       <button onclick="moveAnnouncement(${i},-1)" ${i===0?'disabled style="opacity:0.3"':''} class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors disabled:cursor-not-allowed">
         <span class="material-symbols-outlined text-[14px]">keyboard_arrow_up</span>
       </button>
-      <button onclick="moveAnnouncement(${i},1)" ${i===bannerState.announcements.length-1?'disabled style="opacity:0.3"':''} class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors">
+      <button onclick="moveAnnouncement(${i},1)" ${i===msgs.length-1?'disabled style="opacity:0.3"':''} class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors">
         <span class="material-symbols-outlined text-[14px]">keyboard_arrow_down</span>
       </button>
     </div>
     <span class="w-7 h-7 bg-primary text-on-primary flex items-center justify-center font-label-caps text-[11px] shrink-0">${i+1}</span>
-    <input class="input-field flex-1 py-2 ann-input" value="${msg}" data-index="${i}" oninput="bannerState.announcements[${i}]=this.value;renderAnnouncementBar()"/>
+    <input class="input-field flex-1 py-2 ann-input" value="${m.text}" data-index="${i}" oninput="bannerState.announcements[${i}].text=this.value;renderAnnouncementBar()"/>
+    <input type="color" value="${m.color}" data-index="${i}" oninput="bannerState.announcements[${i}].color=this.value;renderAnnouncementBar()" class="w-8 h-8 p-0 border-2 border-outline-variant rounded cursor-pointer shrink-0"/>
     <button onclick="removeAnnouncement(${i})" class="p-2 border-2 border-error text-error hover:bg-error hover:text-on-error transition-colors shrink-0">
       <span class="material-symbols-outlined text-[18px]">delete</span>
     </button>
@@ -1261,7 +1268,7 @@ export function renderAnnouncementEditorList() {
 }
 
 export function addAnnouncementMsg() {
-  bannerState.announcements.push('NUEVO MENSAJE — EDITAME');
+  bannerState.announcements.push({ text: 'NUEVO MENSAJE — EDITAME', color: '#ffffff' });
   renderAnnouncementEditorList();
   renderAnnouncementPreview();
 }
@@ -1282,10 +1289,12 @@ export function moveAnnouncement(i, dir) {
 }
 
 export async function saveAnnouncementBar() {
+  const msgs = _normalizeAnn(bannerState.announcements);
   document.querySelectorAll('.ann-input').forEach(inp => {
     const idx = parseInt(inp.dataset.index);
-    bannerState.announcements[idx] = inp.value.trim() || bannerState.announcements[idx];
+    if (msgs[idx]) msgs[idx].text = inp.value.trim() || msgs[idx].text;
   });
+  bannerState.announcements = msgs;
   try {
     const { fbSaveBannersRemote, syncFromFirebase } = await import('./firebase.js');
     await fbSaveBannersRemote(bannerState);
@@ -1591,18 +1600,22 @@ export async function savePromoBanner() {
 export function renderAnnouncementPreview() {
   const bar = document.getElementById('announcement-preview-scroller');
   if (!bar) return;
-  const msgs = [...(bannerState.announcements || []), ...(bannerState.announcements || [])];
-  bar.innerHTML = msgs.map(m =>
-    `<span style="margin:0 24px;white-space:nowrap;display:inline-block;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;">${m}</span>`
+  const msgs = _normalizeAnn(bannerState.announcements);
+  bannerState.announcements = msgs;
+  const doubled = [...msgs, ...msgs];
+  bar.innerHTML = doubled.map(m =>
+    `<span style="margin:0 24px;white-space:nowrap;display:inline-block;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;color:${m.color};">${m.text}</span>`
   ).join('');
 }
 
 export function renderAnnouncementBar() {
   const scroller = document.getElementById('announcement-scroller');
   if (!scroller) return;
-  const msgs = [...bannerState.announcements, ...bannerState.announcements];
-  scroller.innerHTML = msgs.map(m =>
-    `<span class="font-label-caps text-label-caps tracking-widest uppercase px-12">${m}</span>`
+  const msgs = _normalizeAnn(bannerState.announcements);
+  bannerState.announcements = msgs;
+  const doubled = [...msgs, ...msgs];
+  scroller.innerHTML = doubled.map(m =>
+    `<span class="font-label-caps text-label-caps tracking-widest uppercase px-12" style="color:${m.color} !important;">${m.text}</span>`
   ).join('');
   renderAnnouncementPreview();
 }
