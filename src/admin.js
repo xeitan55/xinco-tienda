@@ -2471,7 +2471,7 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', dockOpacity: 50, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockColored: false, bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
+  return { theme: 'light', dockOpacity: 50, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
 }
 
 export function saveAppearance() {
@@ -2482,7 +2482,6 @@ export function saveAppearance() {
     dockHeight: parseInt(document.getElementById('ap-dock-height')?.value || '44'),
     dockPosition: document.querySelector('input[name="dock-position"]:checked')?.value || 'bottom',
     dockStyle: document.querySelector('input[name="dock-style"]:checked')?.value || 'blur',
-    dockColored: document.getElementById('ap-dock-colored')?.checked ?? false,
     bgVideo1: document.getElementById('ap-bg-video-1')?.value.trim() || '',
     bgVideo2: document.getElementById('ap-bg-video-2')?.value.trim() || '',
     bgVideo3: document.getElementById('ap-bg-video-3')?.value.trim() || '',
@@ -2543,7 +2542,6 @@ export function applyAppearance(cfg) {
     dock.style.setProperty('--dock-height', (cfg.dockHeight || 44) + 'px');
     dock.classList.remove('dock-blur', 'dock-acrylic', 'dock-colored-on', 'dock-bottom', 'dock-top');
     dock.classList.add('dock-' + (cfg.dockStyle || 'blur'), 'dock-' + (cfg.dockPosition || 'bottom'));
-    if (cfg.dockColored) dock.classList.add('dock-colored-on');
   }
   window._appearanceCfg = cfg;
 }
@@ -2571,7 +2569,6 @@ export function initAppearancePanel() {
           if (posRadio) posRadio.checked = true;
           const styleRadio = document.querySelector(`input[name="dock-style"][value="${fbCfg.dockStyle || 'blur'}"]`);
           if (styleRadio) styleRadio.checked = true;
-          setVal('ap-dock-colored', fbCfg.dockColored);
           if (fbCfg.theme && window.setTheme) window.setTheme(fbCfg.theme);
           for (let i = 1; i <= 4; i++) {
             const url = fbCfg['bgVideo' + i] || '';
@@ -2598,7 +2595,6 @@ export function initAppearancePanel() {
     if (posRadio) posRadio.checked = true;
     const styleRadio = document.querySelector(`input[name="dock-style"][value="${cfg.dockStyle || 'blur'}"]`);
     if (styleRadio) styleRadio.checked = true;
-    setVal('ap-dock-colored', cfg.dockColored);
     for (let i = 1; i <= 4; i++) {
       const url = cfg['bgVideo' + i] || '';
       const el = document.getElementById('ap-bg-video-' + i);
@@ -2781,66 +2777,55 @@ export function init() {
       });
     });
     dock.classList.remove('dock-hidden');
-    // Drag & drop reorder
-    if (!dock._dockDrag) {
-      dock._dockDrag = true;
-      let dragEl = null;
-      dock.addEventListener('dragstart', e => {
-        const item = e.target.closest('.dock-item');
-        if (!item) return;
-        dragEl = item;
+  }
+  // Drag & drop reorder (always init, outside _dockZoom guard)
+  if (dock && !dock._dockDrag) {
+    dock._dockDrag = true;
+    let dragEl = null;
+    dock.querySelectorAll('.dock-item').forEach(el => {
+      el.addEventListener('dragstart', e => {
+        dragEl = el;
         e.dataTransfer.effectAllowed = 'move';
-        item.style.opacity = '0.4';
+        el.style.opacity = '0.4';
       });
-      dock.addEventListener('dragend', e => {
-        const item = e.target.closest('.dock-item');
-        if (item) item.style.opacity = '';
+      el.addEventListener('dragend', () => {
+        el.style.opacity = '';
         dragEl = null;
-        document.querySelectorAll('.dock-item.drag-over').forEach(el => el.classList.remove('drag-over'));
+        dock.querySelectorAll('.dock-item.drag-over').forEach(x => x.classList.remove('drag-over'));
       });
-      dock.addEventListener('dragover', e => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        const target = e.target.closest('.dock-item');
-        if (!target || target === dragEl) return;
-        document.querySelectorAll('.dock-item.drag-over').forEach(el => el.classList.remove('drag-over'));
-        target.classList.add('drag-over');
-      });
-      dock.addEventListener('drop', e => {
-        e.preventDefault();
-        const target = e.target.closest('.dock-item');
-        if (!target || !dragEl || target === dragEl) return;
-        target.classList.remove('drag-over');
-        const rect = target.getBoundingClientRect();
-        const after = e.clientX > rect.left + rect.width / 2;
-        const parent = dock;
-        const allItems = [...parent.querySelectorAll('.dock-item, .dock-divider')];
-        const idxTarget = allItems.indexOf(target);
-        const idxDrag = allItems.indexOf(dragEl);
-        if (idxDrag === -1 || idxTarget === -1) return;
-        parent.insertBefore(dragEl, after && idxTarget < allItems.length - 1 ? allItems[idxTarget + 1] : target);
-        const order = [...parent.querySelectorAll('.dock-item')].map(el => el.dataset.section);
-        localStorage.setItem('xinco_dock_order', JSON.stringify(order));
-        try { lucide?.createIcons(); } catch(_) {}
-      });
-      const savedOrder = localStorage.getItem('xinco_dock_order');
-      if (savedOrder) {
-        try {
-          const order = JSON.parse(savedOrder);
-          const parent = dock;
-          const items = parent.querySelectorAll('.dock-item');
-          const itemMap = {};
-          items.forEach(el => { itemMap[el.dataset.section] = el; });
-          const fragments = document.createDocumentFragment();
-          order.forEach(key => {
-            const el = itemMap[key];
-            if (el) fragments.appendChild(el);
-          });
-          parent.querySelectorAll('.dock-item').forEach(el => el.remove());
-          parent.prepend(fragments);
-        } catch(_) {}
-      }
-    }
+    });
+    dock.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const target = e.target.closest('.dock-item');
+      if (!target || target === dragEl) return;
+      dock.querySelectorAll('.dock-item.drag-over').forEach(x => x.classList.remove('drag-over'));
+      target.classList.add('drag-over');
+    });
+    dock.addEventListener('drop', e => {
+      e.preventDefault();
+      const target = e.target.closest('.dock-item');
+      if (!target || !dragEl || target === dragEl) return;
+      target.classList.remove('drag-over');
+      const after = e.clientX > target.getBoundingClientRect().left + target.offsetWidth / 2;
+      const all = [...dock.querySelectorAll('.dock-item, .dock-divider')];
+      const ti = all.indexOf(target), di = all.indexOf(dragEl);
+      if (di === -1 || ti === -1) return;
+      dock.insertBefore(dragEl, after && ti < all.length - 1 ? all[ti + 1] : target);
+      const order = [...dock.querySelectorAll('.dock-item')].map(x => x.dataset.section);
+      localStorage.setItem('xinco_dock_order', JSON.stringify(order));
+      try { lucide?.createIcons(); } catch(_) {}
+    });
+    const saved = localStorage.getItem('xinco_dock_order');
+    if (saved) try {
+      const order = JSON.parse(saved);
+      const map = {}; dock.querySelectorAll('.dock-item').forEach(el => { map[el.dataset.section] = el; });
+      const frag = document.createDocumentFragment();
+      order.forEach(k => { if (map[k]) frag.appendChild(map[k]); });
+      dock.querySelectorAll('.dock-item').forEach(el => el.remove());
+      dock.prepend(frag);
+    } catch(_) {}
+  }
   }
   window.isAdmin = isAdmin;
   window.renderAdmin = renderAdmin;
