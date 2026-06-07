@@ -2826,7 +2826,6 @@ export function init() {
       dock.prepend(frag);
     } catch(_) {}
   }
-  }
   window.isAdmin = isAdmin;
   window.renderAdmin = renderAdmin;
   window.adminNav = adminNav;
