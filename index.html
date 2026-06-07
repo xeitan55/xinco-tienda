@@ -182,7 +182,7 @@ tailwind.config = {
 <header id="main-header" class="bg-background top-0 sticky border-b-[3px] border-primary z-50">
   <div class="flex justify-between items-center w-full px-4 md:px-8 py-3 max-w-[1440px] mx-auto">
     <!-- Left: Search + Mobile menu -->
-    <div class="flex items-center gap-4 w-1/3">
+    <div class="flex items-center gap-4 flex-1 justify-start">
       <button class="md:hidden p-1" onclick="openMobileMenu()"><span class="material-symbols-outlined">menu</span></button>
       <div class="hidden md:flex relative w-full max-w-xs border-2 border-primary group focus-within:border-secondary rounded-full">
         <span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-primary group-focus-within:text-secondary text-[20px]">search</span>
@@ -190,11 +190,11 @@ tailwind.config = {
       </div>
     </div>
     <!-- Center: Logo -->
-    <div class="flex-1 flex justify-center">
+    <div class="flex-none flex justify-center px-4 md:px-8">
       <a class="font-headline-lg text-primary tracking-tighter cursor-pointer" style="font-family:Montserrat;font-size:clamp(24px,4vw,40px);font-weight:900;letter-spacing:-0.04em;" onclick="nav('home')">XINCO</a>
     </div>
     <!-- Right: Auth + Cart -->
-    <div class="flex items-center gap-3 w-1/3 justify-end">
+    <div class="flex items-center gap-3 flex-1 justify-end">
       <button class="md:hidden p-1" onclick="openSearch()"><span class="material-symbols-outlined">search</span></button>
       <button id="auth-btn" class="hidden md:flex items-center gap-1 font-label-caps text-label-caps hover:text-secondary-container transition-colors" onclick="handleAuthBtn()">
         <span id="auth-label">ACCEDER</span>
