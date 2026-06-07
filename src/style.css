@@ -749,6 +749,20 @@ html.dark .dock-item { background: linear-gradient(120deg, color-mix(in srgb, va
   #bg-canvas.hidden { display: none; }
   .admin-toggle:checked + .toggle-track { background: var(--admin-accent, #9b87f5) !important; }
   .admin-toggle:checked + .toggle-track .toggle-dot { transform: translateX(100%); }
+  .admin-input:hover, #page-admin .input-field:hover, .admin-card .admin-card-body input:hover, .admin-card .admin-card-body select:hover, .admin-card .admin-card-body textarea:hover { border-color: rgba(0,0,0,0.25); }
+  html.dark .admin-input:hover, html.dark #page-admin .input-field:hover { border-color: rgba(255,255,255,0.2); }
+  .admin-card-body label { cursor: pointer; transition: color 0.15s; }
+  .admin-card-body label:hover { color: var(--admin-accent, #9b87f5); }
+  .admin-table td { cursor: default; }
+  .admin-table tr { transition: background 0.15s; cursor: pointer; }
+  .admin-table tr:hover td { background: rgba(0,0,0,0.03); }
+  html.dark .admin-table tr:hover td { background: rgba(255,255,255,0.04); }
+  .toggle-track { transition: all 0.2s; cursor: pointer; }
+  .toggle-track:hover { transform: scale(1.05); }
+  .admin-toggle-label { cursor: pointer; transition: color 0.15s; }
+  .admin-toggle-label:hover { color: var(--admin-accent, #9b87f5) !important; }
+  .sub-tab-btn:hover { background: rgba(0,0,0,0.03); color: var(--admin-accent, #9b87f5); }
+  .sub-tab-btn.active:hover { background: #fff; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
     .hero-particle { display: none; }
