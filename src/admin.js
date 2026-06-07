@@ -2782,6 +2782,7 @@ export function init() {
   window.saveAdminCatImg = saveAdminCatImg;
   window.setAdminColor = setAdminColor;
   window.setAdminBgVideo = setAdminBgVideo;
+  window.uploadAdminBgVideo = uploadAdminBgVideo;
   window.selectAdminBg = selectAdminBg;
   window.fetchAdminBgList = fetchAdminBgList;
   window.renderAdminBgSelection = renderAdminBgSelection;
