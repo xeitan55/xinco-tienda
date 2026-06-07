@@ -58,7 +58,7 @@ export function showAdminSection(section) {
   }
   localStorage.setItem('xinco_admin_section', section);
   state.adminSection = section;
-  const allSections = ['dashboard','orders','products','inventory','customers','banners','categorias','cupones','tracking','reportes','cobranzas','apariencia'];
+  const allSections = ['dashboard','orders','products','inventory','customers','cupones','tracking','reportes','cobranzas','configuracion'];
   allSections.forEach(s => {
     const el = document.getElementById('admin-section-' + s);
     if (!el) return;
@@ -77,13 +77,13 @@ export function showAdminSection(section) {
     b.classList.toggle('active', s === section);
   });
   const titles = { dashboard:'TABLERO', orders:'PEDIDOS', products:'PRODUCTOS', inventory:'INVENTARIO',
-    customers:'CLIENTES', cupones:'CUPONES', banners:'BANNERS', categorias:'CATEGORÍAS',
-    tracking:'ENVÍOS', reportes:'REPORTES', cobranzas:'COBRANZAS', apariencia:'APARIENCIA' };
+    customers:'CLIENTES', cupones:'CUPONES',
+    tracking:'ENVÍOS', reportes:'REPORTES', cobranzas:'COBRANZAS', configuracion:'CONFIGURACIÓN' };
   const subs = { dashboard:'Vista general del negocio', orders:'Lista completa de pedidos', products:'Crear y editar productos', inventory:'Stock y talles',
-    customers:'Información de clientes', cupones:'Códigos de descuento', banners:'Slider principal, hero y promos', categorias:'Imágenes de categorías en home',
-    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'MP, tarjetas y transferencia',     apariencia:'Tema del panel, video de fondo, dock, redes y EmailJS' };
+    customers:'Información de clientes', cupones:'Códigos de descuento',
+    tracking:'Proveedores, asignación y consulta', reportes:'Ventas, clientes y documentos PDF', cobranzas:'MP, tarjetas y transferencia', configuracion:'Apariencia, banners, categorías, social y EmailJS' };
   const icons = { dashboard:'dashboard', orders:'shopping_bag', products:'inventory_2', customers:'group',
-    cupones:'percent', banners:'image', categorias:'grid_view', tracking:'local_shipping', reportes:'bar_chart', cobranzas:'credit_card', apariencia:'palette' };
+    cupones:'percent', tracking:'local_shipping', reportes:'bar_chart', cobranzas:'credit_card', configuracion:'settings' };
   const title = document.getElementById('admin-section-title');
   if (title) { title.style.opacity = '0'; title.style.transform = 'translateY(-4px)'; setTimeout(() => { title.textContent = titles[section] || section.toUpperCase(); title.style.transition = 'all 0.25s cubic-bezier(0.16,1,0.3,1)'; title.style.opacity = '1'; title.style.transform = 'translateY(0)'; }, 40); }
   const sub = document.getElementById('admin-section-sub');
@@ -93,19 +93,18 @@ export function showAdminSection(section) {
   if (section === 'inventory') initInventoryChart();
   if (section === 'cobranzas') window.initCobranzasSection?.();
   if (section === 'cupones') { showAdminCouponTab?.('active'); renderAdminCupones(); }
-  if (section === 'banners') window.initBannerEditor?.();
   if (section === 'tracking') { window.initTrackingSection?.(); window.initShippingProviders?.(); }
   if (section === 'reportes') window.initReportesSection?.();
-  if (section === 'categorias') window.initCatEditor?.();
-  if (section === 'apariencia') {
+  if (section === 'configuracion') {
+    window.initBannerEditor?.();
+    window.initCatEditor?.();
     window.initAppearancePanel?.();
-    window.loadEmailJsIntoForm?.();
     loadSocialConfigFromFirebase();
   }
 }
 
 export function showSectionTab(sectionId, tabName) {
-  const container = document.getElementById('admin-section-' + sectionId);
+  const container = document.getElementById('admin-section-' + sectionId) || document.getElementById(sectionId);
   if (!container) return;
   container.querySelectorAll('.sub-tab-content').forEach(el => el.classList.remove('active'));
   container.querySelectorAll('.sub-tab-btn').forEach(el => el.classList.remove('active'));

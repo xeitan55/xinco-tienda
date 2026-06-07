@@ -1302,9 +1302,6 @@ tailwind.config = {
         </div>
         <div class="admin-header-right">
           <div class="brand-sub">Panel Admin</div>
-          <div class="admin-color-btn" id="admin-color-btn" onclick="event.stopPropagation();showAdminSection('apariencia')" title="Apariencia">
-            <span class="material-symbols-outlined">settings</span>
-          </div>
           <div class="admin-avatar"><span class="material-symbols-outlined">person</span></div>
         </div>
       </header>
@@ -1498,218 +1495,7 @@ tailwind.config = {
         </div>
 
         <!-- Banners Section -->
-        <div id="admin-section-banners" class="hidden space-y-5">
-          <div class="admin-card">
-            <div class="admin-card-body">
-              <div class="sub-tab-bar mb-5">
-                <button class="sub-tab-btn active" data-tab="anuncios" onclick="showSectionTab('banners','anuncios')">ANUNCIOS</button>
-                <button class="sub-tab-btn" data-tab="hero" onclick="showSectionTab('banners','hero')">HERO</button>
-                <button class="sub-tab-btn" data-tab="promo" onclick="showSectionTab('banners','promo')">PROMO</button>
-              </div>
-              <!-- Anuncios -->
-              <div class="sub-tab-content active space-y-6" data-tab="anuncios">
-                <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
-                    <span class="material-symbols-outlined text-[18px]">campaign</span> BARRA ANUNCIOS
-                  </h3>
-                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Mensajes que se muestran en la barra superior de la tienda.</p>
-                  <div id="announcement-editor-list" class="space-y-2 mb-4"></div>
-                  <div class="flex gap-2">
-                    <button class="btn-outline py-2 px-4 text-[10px]" onclick="addAnnouncementMsg()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR MENSAJE</button>
-                    <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveAnnouncementBar()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR</button>
-                  </div>
-                </div>
-              </div>
-              <!-- Hero -->
-              <div class="sub-tab-content space-y-6" data-tab="hero">
-                <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
-                    <span class="material-symbols-outlined text-[18px]">photo</span> HERO PRINCIPAL
-                  </h3>
-                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Personalizá el banner principal de la portada.</p>
-                  <!-- Live Preview -->
-                  <div id="hero-preview" class="relative w-full overflow-hidden mb-5" style="aspect-ratio:16/9;background:var(--hero-gradient);">
-                    <img id="hero-preview-img" class="absolute inset-0 w-full h-full object-cover opacity-60" style="display:none;"/>
-                    <video id="hero-preview-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
-                    <span id="hero-preview-video-badge" class="absolute top-3 right-3 bg-indigo-600 text-white text-[8px] font-bold px-2 py-1 rounded hidden">VIDEO</span>
-                    <span id="hero-preview-badge" class="badge badge-violet mb-4" style="position:absolute;top:20px;left:20px;"></span>
-                    <div style="position:absolute;bottom:20px;left:20px;right:20px;">
-                      <div id="hero-preview-title" style="font-family:Montserrat;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;text-transform:uppercase;" class="text-white"></div>
-                      <div id="hero-preview-subtitle" class="font-body-md text-white/70 mt-2"></div>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BADGE</label>
-                      <input id="hero-edit-badge" class="input-field" placeholder="NUEVA TEMPORADA" oninput="previewHero()"/>
-                    </div>
-                    <div>
-                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO</label>
-                      <input id="hero-edit-title" class="input-field" placeholder="XINCO" oninput="previewHero()"/>
-                    </div>
-                    <div>
-                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">SUBTÍTULO</label>
-                      <input id="hero-edit-subtitle" class="input-field" placeholder="Tu estilo, tu identidad" oninput="previewHero()"/>
-                    </div>
-                  </div>
-                  <!-- Image / Video Tab Buttons -->
-                  <div class="flex gap-2 mb-4 border-b border-gray-200 pb-2">
-                    <button id="tab-img-btn" class="hero-media-tab active px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('img')"><span class="material-symbols-outlined text-[14px] align-middle">image</span> IMAGEN</button>
-                    <button id="tab-vid-btn" class="hero-media-tab px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('video')"><span class="material-symbols-outlined text-[14px] align-middle">videocam</span> VIDEO</button>
-                  </div>
-                  <!-- Image Tab -->
-                  <div id="hero-tab-img">
-                    <div class="mb-4">
-                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">URL IMAGEN</label>
-                      <input id="hero-edit-img" class="input-field" placeholder="https://..." oninput="previewHeroImg()"/>
-                    </div>
-                    <div class="mb-4">
-                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">ESTILO DE ANIMACIÓN</label>
-                      <div id="anim-style-selector" class="flex flex-wrap gap-2">
-                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="default" onclick="selectAnimStyle('default')">CLÁSICO</button>
-                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="glitch" onclick="selectAnimStyle('glitch')">GLITCH</button>
-                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="typewriter" onclick="selectAnimStyle('typewriter')">MÁQUINA ESCRIBIR</button>
-                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="fade" onclick="selectAnimStyle('fade')">DESVANECER</button>
-                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="slide" onclick="selectAnimStyle('slide')">DESLIZAR</button>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Video Tab -->
-                  <div id="hero-tab-video" class="hidden">
-                    <div class="border border-indigo-100 rounded-xl p-4 bg-[#f8f6ff] mb-4">
-                      <div class="flex items-center gap-2 mb-3">
-                        <span class="material-symbols-outlined text-[18px] text-indigo-600">videocam</span>
-                        <span class="font-label-caps text-label-caps text-indigo-800 text-[10px]">VIDEO DE FONDO</span>
-                      </div>
-                      <p class="font-body-md text-on-surface-variant/70 text-sm mb-3">Subí un video para reemplazar la imagen de fondo del hero.</p>
-                      <div class="space-y-3">
-                        <div class="flex gap-2">
-                          <input id="hero-video-url" class="input-field flex-1 py-2" placeholder="URL de video (MP4, WebM)"/>
-                          <button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="previewHeroVideo()">VISTA PREVIA</button>
-                        </div>
-                        <div id="hero-video-status" class="font-label-caps text-[9px] text-on-surface-variant/60"></div>
-                        <button class="border border-error rounded-lg py-1.5 px-3 font-label-caps text-[9px] text-error hover:bg-error hover:text-on-error transition-colors" onclick="clearHeroVideo()">LIMPIAR VIDEO</button>
-                        <div id="hero-video-url-display" class="font-body-md text-[10px] text-indigo-600 break-all"></div>
-                        <div>
-                        <div id="hero-video-dropzone" class="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition-colors" onclick="document.getElementById('hero-video-file').click()" ondragover="this.classList.add('border-indigo-500','bg-indigo-50');event.preventDefault()" ondragleave="this.classList.remove('border-indigo-500','bg-indigo-50')" ondrop="handleHeroVideoFileDrop(event)">
-                          <span class="material-symbols-outlined text-[32px] text-indigo-300">cloud_upload</span>
-                          <p class="font-body-md text-sm text-indigo-400 mt-1">Arrastrá un video o hacé clic para seleccionar</p>
-                          <p class="font-label-caps text-[9px] text-indigo-300 mt-0.5">MP4, WebM — máx 10MB</p>
-                        </div>
-                        <input type="file" id="hero-video-file" accept="video/mp4,video/webm" class="hidden" onchange="uploadHeroVideo(this.files[0])"/>
-                          <div id="hero-video-upload-progress" class="hidden mt-3">
-                            <div class="w-full bg-indigo-100 rounded-full h-2">
-                              <div id="hero-video-upload-bar" class="bg-indigo-600 h-2 rounded-full" style="width:0%"></div>
-                            </div>
-                            <p id="hero-video-upload-pct" class="font-label-caps text-[9px] text-indigo-600 mt-1">0%</p>
-                            <p id="hero-video-upload-status" class="font-label-caps text-[9px] text-indigo-400 mt-0.5"></p>
-              </div>
-              <!-- Botón guardar -->
-              <div class="flex justify-end pt-2">
-                <button class="btn-violet py-3 px-8 text-[11px]" onclick="saveAppearanceToFirebase()">
-                  <span class="material-symbols-outlined text-[16px]">save</span> GUARDAR CAMBIOS
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-                    <div class="mb-4">
-                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">EFECTO DE VIDEO</label>
-                      <div id="video-effect-selector" class="flex flex-wrap gap-2">
-                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="none" onclick="selectVideoEffect('none')">NINGUNO</button>
-                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="blur" onclick="selectVideoEffect('blur')">BORROSO</button>
-                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="grayscale" onclick="selectVideoEffect('grayscale')">BLANCO Y NEGRO</button>
-                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="sepia" onclick="selectVideoEffect('sepia')">SEPIA</button>
-                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="contrast" onclick="selectVideoEffect('contrast')">CONTRASTE</button>
-                      </div>
-                    </div>
-                  </div>
-                  <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveHeroBanner()">
-                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR HERO
-                  </button>
-                </div>
-              <!-- Categorías -->
-              <div class="sub-tab-content space-y-6" data-tab="categorias">
-                <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
-                    <span class="material-symbols-outlined text-[18px]">category</span> CATEGORÍAS
-                  </h3>
-                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Administrá las categorías de la tienda. El slug se usa internamente para los productos.</p>
-                  <div id="category-editor-list" class="space-y-2 mb-4"></div>
-                  <div class="flex gap-2">
-                    <button class="btn-outline py-2 px-4 text-[10px]" onclick="addCategory()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR CATEGORÍA</button>
-                    <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveCategories()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR TODO</button>
-                  </div>
-                </div>
-              </div>
-              <!-- Promo -->
-              <div class="sub-tab-content space-y-6" data-tab="promo">
-                <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
-                    <span class="material-symbols-outlined text-[18px]">local_offer</span> BANNER PROMOCIONAL
-                  </h3>
-                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Editá el banner de oferta. Solo se muestra en la home si está habilitado.</p>
-                  <div class="flex items-center gap-3 mb-5 p-3 bg-surface-container-low rounded-lg">
-                    <span class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">MOSTRAR EN LA HOME</span>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" id="promo-edit-enabled" class="sr-only peer" onchange="previewPromo()"/>
-                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-container"></div>
-                    </label>
-                  </div>
-                  <div class="bg-primary text-on-primary p-6 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-xl">
-                    <div>
-                      <span id="promo-preview-label" class="font-label-caps text-[10px] text-secondary-container block mb-2"></span>
-                      <div id="promo-preview-title" style="font-family:Montserrat;font-size:clamp(20px,3vw,40px);font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;"></div>
-                    </div>
-                    <div>
-                      <div class="border-2 border-secondary-container px-6 py-3 rounded-xl">
-                        <span id="promo-preview-code" class="font-label-caps text-label-caps text-secondary-container tracking-widest"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ETIQUETA SUPERIOR</label>
-                      <input id="promo-edit-label" class="input-field" placeholder="OFERTA LIMITADA" oninput="previewPromo()"/>
-                    </div>
-                    <div>
-                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CÓDIGO DE DESCUENTO</label>
-                      <input id="promo-edit-code" class="input-field" placeholder="URBAN30" oninput="previewPromo()"/>
-                    </div>
-                    <div class="md:col-span-2">
-                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO OFERTA</label>
-                      <input id="promo-edit-title" class="input-field" placeholder="30% OFF EN BUZOS" oninput="previewPromo()"/>
-                    </div>
-                  </div>
-                  <button class="btn-violet py-2 px-5 text-[10px]" onclick="savePromoBanner()">
-                    <span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y PUBLICAR PROMO
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <!-- ===== CATEGORÍAS SECTION ===== -->
-        <div id="admin-section-categorias" class="hidden space-y-5">
-          <div class="admin-card">
-            <div class="admin-card-body">
-              <div class="flex items-center justify-between mb-4">
-                <div>
-                  <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
-                    <span class="material-symbols-outlined text-[18px]">category</span> CATEGORÍAS
-                  </h3>
-                  <p class="font-body-md text-on-surface-variant/70 text-sm mt-1">Administrá las categorías. El slug es el identificador que usan los productos.</p>
-                </div>
-              </div>
-              <div id="category-editor-list" class="space-y-2 mb-4"></div>
-              <div class="flex gap-2">
-                <button class="btn-outline py-2 px-4 text-[10px]" onclick="addCategory()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR CATEGORÍA</button>
-                <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveCategories()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR TODO</button>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <!-- ===== COBRANZAS SECTION ===== -->
         <div id="admin-section-cobranzas" class="hidden space-y-5">
@@ -2159,19 +1945,19 @@ tailwind.config = {
             </div>
           </div>
         </div>
-        <!-- ===== APARIENCIA SECTION ===== -->
-        <div id="admin-section-apariencia" class="hidden space-y-5">
-          <!-- Sub-tab bar -->
+        <!-- ===== CONFIGURACIÓN SECTION ===== -->
+        <div id="admin-section-configuracion" class="hidden space-y-5">
           <div class="sub-tab-bar">
-            <button class="sub-tab-btn active" data-tab="apariencia" onclick="showSectionTab('apariencia','apariencia')">APARIENCIA</button>
-            <button class="sub-tab-btn" data-tab="social" onclick="showSectionTab('apariencia','social');loadSocialConfigFromFirebase()">SOCIAL</button>
-            <button class="sub-tab-btn" data-tab="emailjs" onclick="showSectionTab('apariencia','emailjs');loadEmailJsIntoForm()">EMAILJS</button>
+            <button class="sub-tab-btn active" data-tab="apariencia" onclick="showSectionTab('configuracion','apariencia')">APARIENCIA</button>
+            <button class="sub-tab-btn" data-tab="banners" onclick="showSectionTab('configuracion','banners');window.initBannerEditor?.()">BANNERS</button>
+            <button class="sub-tab-btn" data-tab="categorias" onclick="showSectionTab('configuracion','categorias');window.initCatEditor?.()">CATEGORÍAS</button>
+            <button class="sub-tab-btn" data-tab="social" onclick="showSectionTab('configuracion','social');loadSocialConfigFromFirebase()">SOCIAL</button>
+            <button class="sub-tab-btn" data-tab="emailjs" onclick="showSectionTab('configuracion','emailjs');loadEmailJsIntoForm()">EMAILJS</button>
           </div>
           <!-- Tab: Apariencia -->
           <div class="sub-tab-content active" data-tab="apariencia">
             <div class="admin-card">
               <div class="admin-card-body space-y-6">
-                <!-- Color de Énfasis -->
                 <div class="border border-white/20 rounded-xl p-5" style="background:rgba(255,255,255,0.15);backdrop-filter:blur(12px);">
                   <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
                     <span class="material-symbols-outlined text-[18px]">palette</span> COLOR DE ÉNFASIS
@@ -2183,7 +1969,6 @@ tailwind.config = {
                     <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="green" style="background:#5cc97a" onclick="setAdminColor('green')"></button>
                   </div>
                 </div>
-                <!-- Tema -->
                 <div class="border border-white/20 rounded-xl p-5" style="background:rgba(255,255,255,0.15);backdrop-filter:blur(12px);">
                   <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
                     <span class="material-symbols-outlined text-[18px]">contrast</span> TEMA DEL PANEL
@@ -2191,14 +1976,14 @@ tailwind.config = {
                   <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Elegí el estilo del panel de administración.</p>
                   <div class="flex gap-3">
                     <label class="theme-option" onclick="setTheme('light');setTimeout(saveAppearance,50)">
-                      <input type="radio" name="admin-theme" value="light" class="sr-only"/>
+                      <input type="radio" name="cfg-theme" value="light" class="sr-only"/>
                       <div class="theme-option-box">
                         <div class="theme-preview" style="background:rgba(255,255,255,0.3);border:2px solid var(--admin-accent,#9b87f5);backdrop-filter:blur(4px);"><span style="color:#1a1c1c;font-size:16px;font-weight:700;">Aa</span></div>
                         <span class="font-label-caps text-[10px] text-primary">TRANSPARENTE</span>
                       </div>
                     </label>
                     <label class="theme-option" onclick="setTheme('dark');setTimeout(saveAppearance,50)">
-                      <input type="radio" name="admin-theme" value="dark" class="sr-only"/>
+                      <input type="radio" name="cfg-theme" value="dark" class="sr-only"/>
                       <div class="theme-option-box">
                         <div class="theme-preview" style="background:rgba(0,0,0,0.3);border:2px solid #fff;backdrop-filter:blur(4px);"><span style="color:#fff;font-size:16px;font-weight:700;">Aa</span></div>
                         <span class="font-label-caps text-[10px] text-primary">TRANSPARENTE OSCURO</span>
@@ -2206,7 +1991,6 @@ tailwind.config = {
                     </label>
                   </div>
                 </div>
-                <!-- Fondo de Video -->
                 <div class="border border-white/20 rounded-xl p-5" style="background:rgba(255,255,255,0.15);backdrop-filter:blur(12px);">
                   <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
                     <span class="material-symbols-outlined text-[18px]">videocam</span> FONDO DE VIDEO
@@ -2222,7 +2006,6 @@ tailwind.config = {
                   <div id="ap-bg-counter" class="text-center font-label-caps text-[10px] text-primary mt-2">FONDOS TOTALES 0/4</div>
                   <input type="hidden" id="ap-bg-video-1"/><input type="hidden" id="ap-bg-video-2"/><input type="hidden" id="ap-bg-video-3"/><input type="hidden" id="ap-bg-video-4"/>
                 </div>
-                <!-- Dock -->
                 <div class="border border-white/20 rounded-xl p-5" style="background:rgba(255,255,255,0.15);backdrop-filter:blur(12px);">
                   <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
                     <span class="material-symbols-outlined text-[18px]">dock_to_bottom</span> DOCK
@@ -2302,10 +2085,152 @@ tailwind.config = {
                     </div>
                   </div>
                 </div>
-
-                <!-- Botón guardar -->
                 <div class="flex justify-end">
-                  <button id="ap-apply-btn" class="btn-violet px-8 py-3 text-[11px] uppercase tracking-[.2em] font-bold" onclick="applyAllChanges()"><span class="material-symbols-outlined text-[18px]">check_circle</span> APLICAR CAMBIOS</button>
+                  <button class="btn-violet px-8 py-3 text-[11px] uppercase tracking-[.2em] font-bold" onclick="applyAllChanges()"><span class="material-symbols-outlined text-[18px]">check_circle</span> APLICAR CAMBIOS</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Tab: Banners (hero + announcements + promo) -->
+          <div class="sub-tab-content space-y-6" data-tab="banners">
+            <div class="admin-card">
+              <div class="admin-card-body" id="config-banners-inner">
+                <div class="sub-tab-bar mb-5">
+                  <button class="sub-tab-btn active" data-tab="anuncios" onclick="showSectionTab('config-banners-inner','anuncios')">ANUNCIOS</button>
+                  <button class="sub-tab-btn" data-tab="hero" onclick="showSectionTab('config-banners-inner','hero')">HERO</button>
+                  <button class="sub-tab-btn" data-tab="promo" onclick="showSectionTab('config-banners-inner','promo')">PROMO</button>
+                </div>
+                <div class="sub-tab-content active space-y-6" data-tab="anuncios">
+                  <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                    <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                      <span class="material-symbols-outlined text-[18px]">campaign</span> BARRA ANUNCIOS
+                    </h3>
+                    <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Mensajes que se muestran en la barra superior de la tienda.</p>
+                    <div id="announcement-editor-list" class="space-y-2 mb-4"></div>
+                    <div class="flex gap-2">
+                      <button class="btn-outline py-2 px-4 text-[10px]" onclick="addAnnouncementMsg()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR MENSAJE</button>
+                      <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveAnnouncementBar()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="sub-tab-content space-y-6" data-tab="hero">
+                  <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                    <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                      <span class="material-symbols-outlined text-[18px]">photo</span> HERO PRINCIPAL
+                    </h3>
+                    <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Personalizá el banner principal de la portada.</p>
+                    <div id="hero-preview" class="relative w-full overflow-hidden mb-5" style="aspect-ratio:16/9;background:var(--hero-gradient);">
+                      <img id="hero-preview-img" class="absolute inset-0 w-full h-full object-cover opacity-60" style="display:none;"/>
+                      <video id="hero-preview-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
+                      <span id="hero-preview-video-badge" class="absolute top-3 right-3 bg-indigo-600 text-white text-[8px] font-bold px-2 py-1 rounded hidden">VIDEO</span>
+                      <span id="hero-preview-badge" class="badge badge-violet mb-4" style="position:absolute;top:20px;left:20px;"></span>
+                      <div style="position:absolute;bottom:20px;left:20px;right:20px;">
+                        <div id="hero-preview-title" style="font-family:Montserrat;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;text-transform:uppercase;" class="text-white"></div>
+                        <div id="hero-preview-subtitle" class="font-body-md text-white/70 mt-2"></div>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BADGE</label><input id="hero-edit-badge" class="input-field" placeholder="NUEVA TEMPORADA" oninput="previewHero()"/></div>
+                      <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO</label><input id="hero-edit-title" class="input-field" placeholder="XINCO" oninput="previewHero()"/></div>
+                      <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">SUBTÍTULO</label><input id="hero-edit-subtitle" class="input-field" placeholder="Tu estilo, tu identidad" oninput="previewHero()"/></div>
+                    </div>
+                    <div class="flex gap-2 mb-4 border-b border-gray-200 pb-2">
+                      <button id="tab-img-btn" class="hero-media-tab active px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('img')"><span class="material-symbols-outlined text-[14px] align-middle">image</span> IMAGEN</button>
+                      <button id="tab-vid-btn" class="hero-media-tab px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('video')"><span class="material-symbols-outlined text-[14px] align-middle">videocam</span> VIDEO</button>
+                    </div>
+                    <div id="hero-tab-img">
+                      <div class="mb-4"><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">URL IMAGEN</label><input id="hero-edit-img" class="input-field" placeholder="https://..." oninput="previewHeroImg()"/></div>
+                      <div class="mb-4">
+                        <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">ESTILO DE ANIMACIÓN</label>
+                        <div id="anim-style-selector" class="flex flex-wrap gap-2">
+                          <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="default" onclick="selectAnimStyle('default')">CLÁSICO</button>
+                          <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="glitch" onclick="selectAnimStyle('glitch')">GLITCH</button>
+                          <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="typewriter" onclick="selectAnimStyle('typewriter')">MÁQUINA ESCRIBIR</button>
+                          <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="fade" onclick="selectAnimStyle('fade')">DESVANECER</button>
+                          <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="slide" onclick="selectAnimStyle('slide')">DESLIZAR</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="hero-tab-video" class="hidden">
+                      <div class="border border-indigo-100 rounded-xl p-4 bg-[#f8f6ff] mb-4">
+                        <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-[18px] text-indigo-600">videocam</span><span class="font-label-caps text-label-caps text-indigo-800 text-[10px]">VIDEO DE FONDO</span></div>
+                        <p class="font-body-md text-on-surface-variant/70 text-sm mb-3">Subí un video para reemplazar la imagen de fondo del hero.</p>
+                        <div class="space-y-3">
+                          <div class="flex gap-2"><input id="hero-video-url" class="input-field flex-1 py-2" placeholder="URL de video (MP4, WebM)"/><button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="previewHeroVideo()">VISTA PREVIA</button></div>
+                          <div id="hero-video-status" class="font-label-caps text-[9px] text-on-surface-variant/60"></div>
+                          <button class="border border-error rounded-lg py-1.5 px-3 font-label-caps text-[9px] text-error hover:bg-error hover:text-on-error transition-colors" onclick="clearHeroVideo()">LIMPIAR VIDEO</button>
+                          <div id="hero-video-url-display" class="font-body-md text-[10px] text-indigo-600 break-all"></div>
+                          <div id="hero-video-dropzone" class="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition-colors" onclick="document.getElementById('hero-video-file').click()" ondragover="this.classList.add('border-indigo-500','bg-indigo-50');event.preventDefault()" ondragleave="this.classList.remove('border-indigo-500','bg-indigo-50')" ondrop="handleHeroVideoFileDrop(event)">
+                            <span class="material-symbols-outlined text-[32px] text-indigo-300">cloud_upload</span>
+                            <p class="font-body-md text-sm text-indigo-400 mt-1">Arrastrá un video o hacé clic para seleccionar</p>
+                            <p class="font-label-caps text-[9px] text-indigo-300 mt-0.5">MP4, WebM — máx 10MB</p>
+                          </div>
+                          <input type="file" id="hero-video-file" accept="video/mp4,video/webm" class="hidden" onchange="uploadHeroVideo(this.files[0])"/>
+                          <div id="hero-video-upload-progress" class="hidden mt-3">
+                            <div class="w-full bg-indigo-100 rounded-full h-2"><div id="hero-video-upload-bar" class="bg-indigo-600 h-2 rounded-full" style="width:0%"></div></div>
+                            <p id="hero-video-upload-pct" class="font-label-caps text-[9px] text-indigo-600 mt-1">0%</p>
+                            <p id="hero-video-upload-status" class="font-label-caps text-[9px] text-indigo-400 mt-0.5"></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-4">
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">EFECTO DE VIDEO</label>
+                      <div id="video-effect-selector" class="flex flex-wrap gap-2">
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="none" onclick="selectVideoEffect('none')">NINGUNO</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="blur" onclick="selectVideoEffect('blur')">BORROSO</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="grayscale" onclick="selectVideoEffect('grayscale')">BLANCO Y NEGRO</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="sepia" onclick="selectVideoEffect('sepia')">SEPIA</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="contrast" onclick="selectVideoEffect('contrast')">CONTRASTE</button>
+                      </div>
+                    </div>
+                    <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveHeroBanner()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR HERO</button>
+                  </div>
+                </div>
+                <div class="sub-tab-content space-y-6" data-tab="promo">
+                  <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                    <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                      <span class="material-symbols-outlined text-[18px]">local_offer</span> BANNER PROMOCIONAL
+                    </h3>
+                    <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Editá el banner de oferta. Solo se muestra en la home si está habilitado.</p>
+                    <div class="flex items-center gap-3 mb-5 p-3 bg-surface-container-low rounded-lg">
+                      <span class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">MOSTRAR EN LA HOME</span>
+                      <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="promo-edit-enabled" class="sr-only peer" onchange="previewPromo()"/>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-container"></div>
+                      </label>
+                    </div>
+                    <div class="bg-primary text-on-primary p-6 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-xl">
+                      <div><span id="promo-preview-label" class="font-label-caps text-[10px] text-secondary-container block mb-2"></span><div id="promo-preview-title" style="font-family:Montserrat;font-size:clamp(20px,3vw,40px);font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;"></div></div>
+                      <div><div class="border-2 border-secondary-container px-6 py-3 rounded-xl"><span id="promo-preview-code" class="font-label-caps text-label-caps text-secondary-container tracking-widest"></span></div></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">ETIQUETA SUPERIOR</label><input id="promo-edit-label" class="input-field" placeholder="OFERTA LIMITADA" oninput="previewPromo()"/></div>
+                      <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">CÓDIGO DE DESCUENTO</label><input id="promo-edit-code" class="input-field" placeholder="URBAN30" oninput="previewPromo()"/></div>
+                      <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO OFERTA</label><input id="promo-edit-title" class="input-field" placeholder="30% OFF EN BUZOS" oninput="previewPromo()"/></div>
+                    </div>
+                    <button class="btn-violet py-2 px-5 text-[10px]" onclick="savePromoBanner()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR Y PUBLICAR PROMO</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Tab: Categorías -->
+          <div class="sub-tab-content space-y-6" data-tab="categorias">
+            <div class="admin-card">
+              <div class="admin-card-body">
+                <div class="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
+                      <span class="material-symbols-outlined text-[18px]">category</span> CATEGORÍAS
+                    </h3>
+                    <p class="font-body-md text-on-surface-variant/70 text-sm mt-1">Administrá las categorías. El slug es el identificador que usan los productos.</p>
+                  </div>
+                </div>
+                <div id="category-editor-list" class="space-y-2 mb-4"></div>
+                <div class="flex gap-2">
+                  <button class="btn-outline py-2 px-4 text-[10px]" onclick="addCategory()"><span class="material-symbols-outlined text-[13px]">add</span> AGREGAR CATEGORÍA</button>
+                  <button class="btn-violet py-2 px-4 text-[10px]" onclick="saveCategories()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR TODO</button>
                 </div>
               </div>
             </div>
@@ -2374,11 +2299,8 @@ tailwind.config = {
     <button class="dock-item" onclick="showAdminSection('products')" data-section="PRODUCTOS">
       <i data-lucide="package" class="dock-icon"></i>
     </button>
-    <button class="dock-item" onclick="showAdminSection('categorias')" data-section="CATEGORÍAS">
-      <i data-lucide="grid-3x3" class="dock-icon"></i>
-    </button>
-    <button class="dock-item" onclick="showAdminSection('banners')" data-section="BANNERS">
-      <i data-lucide="image" class="dock-icon"></i>
+    <button class="dock-item" onclick="showAdminSection('configuracion')" data-section="CONFIG">
+      <i data-lucide="settings" class="dock-icon"></i>
     </button>
     <div class="dock-divider"></div>
     <button class="dock-item" onclick="showAdminSection('cobranzas')" data-section="COBRANZAS">
