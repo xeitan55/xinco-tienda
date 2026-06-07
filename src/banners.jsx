@@ -1,12 +1,18 @@
 import { bannerState } from './state.js';
 import { fbDb } from './firebase.js';
 
+function _norm(msgs) {
+  return (msgs||[]).map(m => typeof m === 'string' ? { text: m, color: '#ffffff' } : (m && m.text ? m : { text: '', color: '#ffffff' }));
+}
+
 export function renderAnnouncementBar() {
   const scroller = document.getElementById('announcement-scroller');
   if (!scroller) return;
-  const msgs = [...bannerState.announcements, ...bannerState.announcements];
-  scroller.innerHTML = msgs.map(m =>
-    '<span class="font-label-caps text-label-caps tracking-widest uppercase px-12">' + m + '</span>'
+  const msgs = _norm(bannerState.announcements);
+  bannerState.announcements = msgs;
+  const doubled = [...msgs, ...msgs];
+  scroller.innerHTML = doubled.map(m =>
+    '<span class="font-label-caps text-label-caps tracking-widest uppercase px-12" style="color:' + m.color + ' !important;">' + m.text + '</span>'
   ).join('');
 }
 
