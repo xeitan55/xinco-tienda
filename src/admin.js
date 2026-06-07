@@ -2229,7 +2229,7 @@ export function uploadAdminBgVideo(slot, file) {
   if (file.size > maxSize * 1024 * 1024) { window.showToast?.(`⚠️ El archivo supera los ${maxSize}MB`); return; }
   if (!file.type.startsWith('video/')) { window.showToast?.('⚠️ Solo se permiten videos'); return; }
   // Fetch signed upload params from serverless function
-  fetch('/api/cloudinary-sign?folder=HOME/XINCO-TIENDA/ADMINPANEL/BACKGROUND')
+  fetch('/api/cloudinary-sign?folder=XINCO-TIENDA/ADMINPANEL/BACKGROUND')
     .then(r => r.json())
     .then(signData => {
       const fd = new FormData();

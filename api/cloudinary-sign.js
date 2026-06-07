@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Cloudinary API credentials not configured' });
   }
 
-  const folder = req.query.folder || 'HOME/XINCO-TIENDA/ADMINPANEL/BACKGROUND';
+  const folder = req.query.folder || 'XINCO-TIENDA/ADMINPANEL/BACKGROUND';
   const timestamp = Math.round(new Date().getTime() / 1000);
   const params = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
   const signature = crypto.createHash('sha256').update(params).digest('hex');

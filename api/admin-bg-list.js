@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
   try {
     const auth = Buffer.from(`${apiKey}:${apiSecret}`).toString('base64');
-    const url = `https://api.cloudinary.com/v1_1/${cloudName}/resources/video/upload?prefix=HOME/XINCO-TIENDA/ADMINPANEL/BACKGROUND&max_results=10&type=upload`;
+    const url = `https://api.cloudinary.com/v1_1/${cloudName}/resources/video/upload?prefix=XINCO-TIENDA/ADMINPANEL/BACKGROUND&max_results=10&type=upload`;
 
     const cloudRes = await fetch(url, {
       headers: { 'Authorization': `Basic ${auth}` }
