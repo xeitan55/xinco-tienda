@@ -2925,5 +2925,13 @@ export function init() {
   applyAppearance(cfg);
   loadSocialConfigFromFirebase();
   initAdminThemeSelector();
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('admin-user-menu');
+    if (menu && !e.target.closest('.admin-header-right')) menu.classList.add('hidden');
+  });
+  window.toggleUserMenu = function() {
+    const menu = document.getElementById('admin-user-menu');
+    if (menu) menu.classList.toggle('hidden');
+  };
   try { lucide?.createIcons(); } catch(e) {}
 }
