@@ -389,6 +389,10 @@
   .admin-header-right .brand-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; font-weight: 700; color: rgba(0,0,0,0.35); text-transform: uppercase; }
   .admin-avatar { width: 36px; height: 36px; border-radius: 10px; background: var(--admin-accent, #9b87f5); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .admin-avatar .material-symbols-outlined { color: #fff; font-size: 20px; }
+  .admin-user-menu { position: absolute; top: calc(100% + 8px); right: 0; background: #fff; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.04); padding: 4px; min-width: 190px; z-index: 100; animation: adminFadeIn 0.15s cubic-bezier(0.16,1,0.3,1); }
+  .admin-user-menu-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 14px; border: none; background: none; cursor: pointer; border-radius: 8px; font-size: 11px; font-weight: 700; color: #ef4444; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; transition: all 0.15s ease; }
+  .admin-user-menu-btn:hover { background: #fef2f2; transform: translateX(2px); }
+  .admin-user-menu-btn .material-symbols-outlined { font-size: 16px; }
   .admin-color-btn { width: 34px; height: 34px; border-radius: 10px; background: rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; position: relative; }
   .admin-color-btn:hover { background: rgba(0,0,0,0.08); }
   .admin-color-btn .material-symbols-outlined { font-size: 18px; color: rgba(0,0,0,0.45); transition: color 0.2s; }
