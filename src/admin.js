@@ -2471,15 +2471,13 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', dockOpacity: 50, dockAutohide: false, dockDelay: 5, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockColored: false, bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
+  return { theme: 'light', dockOpacity: 50, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockColored: false, bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
 }
 
 export function saveAppearance() {
   const cfg = {
     theme: window.getTheme?.() || 'light',
     dockOpacity: parseInt(document.getElementById('ap-dock-opacity')?.value || '50'),
-    dockAutohide: document.getElementById('ap-dock-autohide')?.checked ?? false,
-    dockDelay: parseInt(document.getElementById('ap-dock-delay')?.value || '5'),
     dockWidth: parseInt(document.getElementById('ap-dock-width')?.value || '18'),
     dockHeight: parseInt(document.getElementById('ap-dock-height')?.value || '44'),
     dockPosition: document.querySelector('input[name="dock-position"]:checked')?.value || 'bottom',
@@ -2564,9 +2562,7 @@ export function initAppearancePanel() {
           const setVal = (id, val) => { const el = document.getElementById(id); if (el) { if (el.type === 'checkbox') el.checked = val; else el.value = val; } };
           setVal('ap-dock-opacity', fbCfg.dockOpacity);
           document.getElementById('ap-dock-opacity-val').textContent = fbCfg.dockOpacity;
-          setVal('ap-dock-autohide', fbCfg.dockAutohide);
-          setVal('ap-dock-delay', fbCfg.dockDelay);
-          document.getElementById('ap-dock-delay-val').textContent = fbCfg.dockDelay;
+
           setVal('ap-dock-width', fbCfg.dockWidth);
           document.getElementById('ap-dock-width-val').textContent = fbCfg.dockWidth;
           setVal('ap-dock-height', fbCfg.dockHeight);
@@ -2594,9 +2590,6 @@ export function initAppearancePanel() {
     const setVal = (id, val) => { const el = document.getElementById(id); if (el) { if (el.type === 'checkbox') el.checked = val; else el.value = val; } };
     setVal('ap-dock-opacity', cfg.dockOpacity);
     document.getElementById('ap-dock-opacity-val').textContent = cfg.dockOpacity;
-    setVal('ap-dock-autohide', cfg.dockAutohide);
-    setVal('ap-dock-delay', cfg.dockDelay);
-    document.getElementById('ap-dock-delay-val').textContent = cfg.dockDelay;
     setVal('ap-dock-width', cfg.dockWidth);
     document.getElementById('ap-dock-width-val').textContent = cfg.dockWidth;
     setVal('ap-dock-height', cfg.dockHeight);
@@ -2787,27 +2780,7 @@ export function init() {
         item.style.removeProperty('--z-scale');
       });
     });
-    // Auto-hide dock (configurable)
-    let dockTimer;
-    const DOCK_ZONE = 60;
-    function getDockDelay() { return (window._appearanceCfg?.dockDelay || 5) * 1000; }
-    function showDock() {
-      dock.classList.remove('dock-hidden');
-      clearTimeout(dockTimer);
-      if (window._appearanceCfg?.dockAutohide !== false) dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), getDockDelay());
-    }
-    function initDockHide() {
-      clearTimeout(dockTimer);
-      if (window._appearanceCfg?.dockAutohide !== false) dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), getDockDelay());
-      else dock.classList.remove('dock-hidden');
-    }
-    document.addEventListener('mousemove', (e) => {
-      if (e.clientY > window.innerHeight - DOCK_ZONE) showDock();
-    });
-    dock.addEventListener('mouseenter', () => { clearTimeout(dockTimer); });
-    dock.addEventListener('mouseleave', () => { if (window._appearanceCfg?.dockAutohide !== false) dockTimer = setTimeout(() => dock.classList.add('dock-hidden'), getDockDelay()); });
-    dock.addEventListener('click', () => showDock());
-    initDockHide();
+    dock.classList.remove('dock-hidden');
   }
   window.isAdmin = isAdmin;
   window.renderAdmin = renderAdmin;

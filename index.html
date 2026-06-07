@@ -2018,20 +2018,6 @@ tailwind.config = {
                       </div>
                       <input type="range" id="ap-dock-opacity" min="10" max="100" value="50" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-dock-opacity-val').textContent=this.value;saveAppearance()"/>
                     </div>
-                    <div class="flex items-center justify-between">
-                      <span class="font-label-caps text-[11px] text-on-surface-variant/70">AUTO-OCULTAR</span>
-                      <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="ap-dock-autohide" class="sr-only admin-toggle" onchange="saveAppearance()"/>
-                        <div class="toggle-track w-11 h-6 rounded-full relative transition-all duration-200" style="background:rgba(0,0,0,0.15);"><div class="toggle-dot absolute top-[2px] left-[2px] bg-white rounded-full h-5 w-5 transition-all duration-200 shadow-sm"></div></div>
-                      </label>
-                    </div>
-                    <div>
-                      <div class="flex justify-between mb-1">
-                        <span class="font-label-caps text-[10px] text-on-surface-variant/70">DEMORA EN OCULTAR (seg)</span>
-                        <span class="font-label-caps text-[10px] text-primary" id="ap-dock-delay-val">5</span>
-                      </div>
-                      <input type="range" id="ap-dock-delay" min="1" max="15" value="5" class="w-full" style="accent-color:var(--admin-accent,#9b87f5);" oninput="document.getElementById('ap-dock-delay-val').textContent=this.value;saveAppearance()"/>
-                    </div>
                     <div>
                       <div class="flex justify-between mb-1">
                         <span class="font-label-caps text-[10px] text-on-surface-variant/70">ANCHO</span>
