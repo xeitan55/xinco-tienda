@@ -47,7 +47,16 @@ export function adminNav(section) {
   if (section === 'coupons') showAdminCouponTab?.('active');
 }
 
+let _adminEntered = false;
 export function showAdminSection(section) {
+  if (!_adminEntered) {
+    _adminEntered = true;
+    const video = document.getElementById('admin-bg-video');
+    if (video) {
+      const src = window._appearanceCfg?.bgVideo1 || '';
+      if (src) { video.src = src; video.load(); video.play().catch(() => {}); }
+    }
+  }
   localStorage.setItem('xinco_admin_section', section);
   state.adminSection = section;
   const allSections = ['dashboard','orders','products','inventory','customers','banners','categorias','cupones','tracking','reportes','cobranzas','apariencia'];
@@ -2130,7 +2139,7 @@ export function initAdminBg() {
   if (!video) return;
   const cfg = loadAppearance();
   const src = cfg.bgVideo1 || cfg.bgVideo2 || cfg.bgVideo3 || cfg.bgVideo4 || '';
-  if (src) { video.src = src; video.play().catch(() => {}); }
+  if (src) { video.src = src; video.load(); video.play().catch(() => {}); }
 }
 
 // ===== ADMIN BACKGROUNDS FROM CLOUDINARY FOLDER =====
@@ -2413,12 +2422,6 @@ export function applyAppearance(cfg) {
     dock.classList.add('dock-' + (cfg.dockStyle || 'blur'), 'dock-' + (cfg.dockPosition || 'bottom'));
     if (cfg.dockColored) dock.classList.add('dock-colored-on');
   }
-  const video = document.getElementById('admin-bg-video');
-  const src = cfg.bgVideo1 || cfg.bgVideo2 || cfg.bgVideo3 || cfg.bgVideo4 || '';
-  if (video && src) {
-    video.src = src;
-    video.play().catch(() => {});
-  }
   window._appearanceCfg = cfg;
 }
 
@@ -2626,7 +2629,6 @@ export function initAdminThemeSelector() {
 
 export function init() {
   applyBgColor(_currentBgColor);
-  initAdminBg();
   const dock = document.getElementById('admin-dock');
   if (dock && !dock._dockZoom) {
     dock._dockZoom = true;
@@ -2812,6 +2814,4 @@ export function init() {
   loadSocialConfigFromFirebase();
   initAdminThemeSelector();
   try { lucide?.createIcons(); } catch(e) {}
-  const lastSection = localStorage.getItem('xinco_admin_section');
-  showAdminSection(lastSection || 'dashboard');
 }
