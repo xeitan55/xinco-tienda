@@ -978,30 +978,42 @@ export async function uploadToCloudinary(file, onProgress, onSuccess, onError, r
   if (file.size > maxSize * 1024 * 1024) { onError(`El archivo supera los ${maxSize}MB`); return; }
   if (resourceType === 'image' && !file.type.startsWith('image/')) { onError('Solo se permiten imágenes'); return; }
   if (resourceType === 'video' && !file.type.startsWith('video/')) { onError('Solo se permiten videos'); return; }
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', CLOUDINARY.uploadPreset);
-  formData.append('folder', 'xinco-tienda');
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    const url = resourceType === 'video' ? CLOUDINARY.uploadVideoUrl() : CLOUDINARY.uploadUrl();
-    xhr.open('POST', url, true);
-    xhr.upload.onprogress = (e) => { if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100)); };
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        const res = JSON.parse(xhr.responseText);
-        const finalUrl = res.secure_url;
-        uploadedImages.unshift({ url: finalUrl, name: file.name, public_id: res.public_id });
-        onSuccess(finalUrl, res);
-        resolve(finalUrl);
-      } else {
-        try { const err = JSON.parse(xhr.responseText); onError(err.error?.message || 'Error Cloudinary ' + xhr.status); reject(err); }
-        catch(e) { onError('Error al subir imagen'); reject(e); }
-      }
-    };
-    xhr.onerror = () => { onError('Error de conexión'); reject('Network error'); };
-    xhr.send(formData);
-  });
+  try {
+    const signRes = await fetch('/api/cloudinary-sign?folder=xinco-tienda');
+    if (!signRes.ok) throw new Error('Sign failed');
+    const signData = await signRes.json();
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', signData.folder);
+    formData.append('timestamp', signData.timestamp);
+    formData.append('api_key', signData.apiKey);
+    formData.append('signature', signData.signature);
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const url = resourceType === 'video'
+        ? `https://api.cloudinary.com/v1_1/${signData.cloudName}/video/upload`
+        : `https://api.cloudinary.com/v1_1/${signData.cloudName}/image/upload`;
+      xhr.open('POST', url, true);
+      xhr.upload.onprogress = (e) => { if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100)); };
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const res = JSON.parse(xhr.responseText);
+          const finalUrl = res.secure_url;
+          uploadedImages.unshift({ url: finalUrl, name: file.name, public_id: res.public_id });
+          onSuccess(finalUrl, res);
+          resolve(finalUrl);
+        } else {
+          try { const err = JSON.parse(xhr.responseText); onError(err.error?.message || 'Error Cloudinary ' + xhr.status); reject(err); }
+          catch(e) { onError('Error al subir'); reject(e); }
+        }
+      };
+      xhr.onerror = () => { onError('Error de conexión'); reject('Network error'); };
+      xhr.send(formData);
+    });
+  } catch(e) {
+    onError('Error al firmar upload');
+    throw e;
+  }
 }
 
 // ===== CATEGORIES =====
@@ -1022,11 +1034,17 @@ export function initCatEditor() {
 export async function uploadAdminCatImg(cat, file) {
   if (!file) return;
   window.showToast?.('Subiendo imagen...');
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', 'XINCO TIENDA');
   try {
-    const res = await fetch('https://api.cloudinary.com/v1_1/damwe7juy/image/upload',{method:'POST',body:formData});
+    const signRes = await fetch('/api/cloudinary-sign?folder=xinco-tienda');
+    if (!signRes.ok) throw new Error('Sign failed');
+    const signData = await signRes.json();
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', signData.folder);
+    formData.append('timestamp', signData.timestamp);
+    formData.append('api_key', signData.apiKey);
+    formData.append('signature', signData.signature);
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${signData.cloudName}/image/upload`,{method:'POST',body:formData});
     const data = await res.json();
     if (data.secure_url) { document.getElementById('admin-cat-url-'+cat).value=data.secure_url; saveAdminCatImg(cat); }
     else window.showToast?.('Error al subir ❌');
@@ -2215,31 +2233,42 @@ export function uploadAdminBgVideo(slot, file) {
   const maxSize = 100;
   if (file.size > maxSize * 1024 * 1024) { window.showToast?.(`⚠️ El archivo supera los ${maxSize}MB`); return; }
   if (!file.type.startsWith('video/')) { window.showToast?.('⚠️ Solo se permiten videos'); return; }
-  const fd = new FormData();
-  fd.append('file', file);
-  fd.append('upload_preset', 'XINCO TIENDA');
-  fd.append('folder', 'HOME/XINCO-TIENDA/ADMINPANEL/BACKGROUND');
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', 'https://api.cloudinary.com/v1_1/damwe7juy/video/upload', true);
-  xhr.upload.onprogress = () => {};
-  xhr.onload = () => {
-    if (xhr.status === 200) {
-      const res = JSON.parse(xhr.responseText);
-      if (slot > 0) {
-        selectAdminBg(res.secure_url);
-      } else {
-        fetchAdminBgList().then(() => renderAdminBgSelection());
-        setAdminBgVideo(res.secure_url);
-      }
-      window.showToast?.('✅ Video subido a Cloudinary');
-    } else {
-      let msg = 'Error al subir';
-      try { const err = JSON.parse(xhr.responseText); msg = err.error?.message || msg; } catch(e) {}
-      window.showToast?.('❌ ' + msg);
-    }
-  };
-  xhr.onerror = () => { window.showToast?.('❌ Error de conexión'); };
-  xhr.send(fd);
+  // Fetch signed upload params from serverless function
+  fetch('/api/cloudinary-sign?folder=HOME/XINCO-TIENDA/ADMINPANEL/BACKGROUND')
+    .then(r => r.json())
+    .then(signData => {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('folder', signData.folder);
+      fd.append('timestamp', signData.timestamp);
+      fd.append('api_key', signData.apiKey);
+      fd.append('signature', signData.signature);
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${signData.cloudName}/video/upload`, true);
+      xhr.upload.onprogress = () => {};
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const res = JSON.parse(xhr.responseText);
+          if (slot > 0) {
+            selectAdminBg(res.secure_url);
+          } else {
+            fetchAdminBgList().then(() => renderAdminBgSelection());
+            setAdminBgVideo(res.secure_url);
+          }
+          window.showToast?.('✅ Video subido a Cloudinary');
+        } else {
+          let msg = 'Error al subir';
+          try { const err = JSON.parse(xhr.responseText); msg = err.error?.message || msg; } catch(e) {}
+          window.showToast?.('❌ ' + msg);
+        }
+      };
+      xhr.onerror = () => { window.showToast?.('❌ Error de conexión'); };
+      xhr.send(fd);
+    })
+    .catch(e => {
+      window.showToast?.('❌ Error al obtener firma de subida');
+      console.error('uploadAdminBgVideo sign error:', e);
+    });
 }
 
 // ===== PAGE BACKGROUND ANIMATION (antigravity particles) =====
