@@ -2781,6 +2781,66 @@ export function init() {
       });
     });
     dock.classList.remove('dock-hidden');
+    // Drag & drop reorder
+    if (!dock._dockDrag) {
+      dock._dockDrag = true;
+      let dragEl = null;
+      dock.addEventListener('dragstart', e => {
+        const item = e.target.closest('.dock-item');
+        if (!item) return;
+        dragEl = item;
+        e.dataTransfer.effectAllowed = 'move';
+        item.style.opacity = '0.4';
+      });
+      dock.addEventListener('dragend', e => {
+        const item = e.target.closest('.dock-item');
+        if (item) item.style.opacity = '';
+        dragEl = null;
+        document.querySelectorAll('.dock-item.drag-over').forEach(el => el.classList.remove('drag-over'));
+      });
+      dock.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const target = e.target.closest('.dock-item');
+        if (!target || target === dragEl) return;
+        document.querySelectorAll('.dock-item.drag-over').forEach(el => el.classList.remove('drag-over'));
+        target.classList.add('drag-over');
+      });
+      dock.addEventListener('drop', e => {
+        e.preventDefault();
+        const target = e.target.closest('.dock-item');
+        if (!target || !dragEl || target === dragEl) return;
+        target.classList.remove('drag-over');
+        const rect = target.getBoundingClientRect();
+        const after = e.clientX > rect.left + rect.width / 2;
+        const parent = dock;
+        const allItems = [...parent.querySelectorAll('.dock-item, .dock-divider')];
+        const idxTarget = allItems.indexOf(target);
+        const idxDrag = allItems.indexOf(dragEl);
+        if (idxDrag === -1 || idxTarget === -1) return;
+        parent.insertBefore(dragEl, after && idxTarget < allItems.length - 1 ? allItems[idxTarget + 1] : target);
+        const order = [...parent.querySelectorAll('.dock-item')].map(el => el.dataset.section);
+        localStorage.setItem('xinco_dock_order', JSON.stringify(order));
+        try { lucide?.createIcons(); } catch(_) {}
+      });
+      const savedOrder = localStorage.getItem('xinco_dock_order');
+      if (savedOrder) {
+        try {
+          const order = JSON.parse(savedOrder);
+          const parent = dock;
+          const items = parent.querySelectorAll('.dock-item');
+          const itemMap = {};
+          items.forEach(el => { itemMap[el.dataset.section] = el; });
+          const fragments = document.createDocumentFragment();
+          order.forEach(key => {
+            const el = itemMap[key];
+            if (el) fragments.appendChild(el);
+          });
+          parent.querySelectorAll('.dock-item').forEach(el => el.remove());
+          parent.prepend(fragments);
+        } catch(_) {}
+      }
+    }
   }
   window.isAdmin = isAdmin;
   window.renderAdmin = renderAdmin;
