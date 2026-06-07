@@ -720,7 +720,7 @@
   .whatsapp-float { position:fixed; bottom:24px; right:24px; z-index:9999; width:56px; height:56px; border-radius:50%; background:#25D366; color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(37,211,102,0.4); transition:all 0.3s cubic-bezier(0.16,1,0.3,1); cursor:pointer; }
   .whatsapp-float:hover { transform:scale(1.1); box-shadow:0 6px 24px rgba(37,211,102,0.5); }
   .sub-tab-bar { display: flex; gap: 3px; background: rgba(0,0,0,0.04); border-radius: 10px; padding: 3px; width: 100%; overflow-x: auto; }
-  .sub-tab-btn { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; font-weight: 700; text-transform: uppercase; padding: 7px 16px; border: none; background: transparent; cursor: pointer; transition: all 0.25s ease; border-radius: 7px; color: rgba(0,0,0,0.35); white-space: nowrap; }
+  .sub-tab-btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; font-weight: 700; text-transform: uppercase; padding: 8px 18px; border: none; background: transparent; cursor: pointer; transition: all 0.25s ease; border-radius: 7px; color: rgba(0,0,0,0.35); white-space: nowrap; }
   .sub-tab-btn:hover { color: rgba(0,0,0,0.55); }
   .sub-tab-btn.active { background: #fff; color: var(--admin-accent, #9b87f5); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
   .sub-tab-content { display: none; animation: adminFadeIn 0.25s cubic-bezier(0.16,1,0.3,1); }
