@@ -2763,10 +2763,15 @@ export function init() {
     let mouseInside = false;
     let running = true;
     let currentWidth = 0;
+    // create a floating label container for tooltips
+    const labelEl = document.createElement('div');
+    labelEl.className = 'dock-label';
+    Object.assign(labelEl.style, { position:'absolute', top:'0', left:'0', pointerEvents:'none', opacity:'0', transition:'none', zIndex:'20', background:'rgba(0,0,0,0.75)', backdropFilter:'blur(8px)', WebkitBackdropFilter:'blur(8px)', color:'#fff', fontSize:'10px', fontWeight:'700', fontFamily:'"JetBrains Mono",monospace', letterSpacing:'0.08em', textTransform:'uppercase', padding:'3px 10px', borderRadius:'7px', whiteSpace:'nowrap' });
+    inner.appendChild(labelEl);
+    let prevHovered = null;
     allChildren().forEach(el => {
       if (el.classList.contains('dock-item')) {
         el._scale = 1;
-        if (!el.hasAttribute('title')) el.title = el.dataset.section || '';
       }
     });
     dock.addEventListener('mousemove', e => {
@@ -2778,6 +2783,7 @@ export function init() {
     (function tick() {
       const dr = dock.getBoundingClientRect();
       // update target scales with power curve
+      let closest = null, maxS = 0;
       allChildren().forEach(el => {
         if (!el.classList.contains('dock-item')) return;
         const er = el.getBoundingClientRect();
@@ -2790,7 +2796,10 @@ export function init() {
         }
         el._scale += (target - el._scale) * LERP;
         if (Math.abs(el._scale - 1) < 0.001) el._scale = 1;
+        el._hovered = false;
+        if (target > maxS) { maxS = target; closest = el; }
       });
+      if (closest) closest._hovered = true;
       // position all children (items + dividers) from left to right
       let x = 0;
       allChildren().forEach(el => {
@@ -2803,7 +2812,7 @@ export function init() {
         } else {
           const s = el._scale || 1;
           const w = BASE * s;
-          const lift = (s - 1) * -50;
+          const lift = (s - 1) * -12;
           el.style.left = x + 'px';
           el.style.transform = `translateY(${lift}px) scale(${s})`;
           el.style.zIndex = s > 1.02 ? '2' : '';
@@ -2814,6 +2823,28 @@ export function init() {
       const newWidth = x - GAP;
       currentWidth += (newWidth - currentWidth) * LERP;
       inner.style.width = currentWidth + 'px';
+      // update floating label
+      const ir = inner.getBoundingClientRect();
+      let found = null;
+      if (mouseInside) {
+        allChildren().forEach(el => {
+          if (!el.classList.contains('dock-item') || found) return;
+          if (el._hovered) found = el;
+        });
+      }
+      if (found && found._scale > 1) {
+        const er = found.getBoundingClientRect();
+        const labelTxt = found.dataset.section || '';
+        if (labelEl.textContent !== labelTxt) labelEl.textContent = labelTxt;
+        const lw = labelEl.offsetWidth, lh = labelEl.offsetHeight;
+        const cx = er.left + er.width / 2 - ir.left - lw / 2;
+        const top = er.top - ir.top - lh - 4;
+        labelEl.style.left = cx + 'px';
+        labelEl.style.top = top + 'px';
+        labelEl.style.opacity = '1';
+      } else {
+        labelEl.style.opacity = '0';
+      }
       if (running) requestAnimationFrame(tick);
     })();
   }
