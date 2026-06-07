@@ -99,6 +99,7 @@ export function showAdminSection(section) {
     window.initBannerEditor?.();
     window.initCatEditor?.();
     window.initAppearancePanel?.();
+    window.loadEmailJsIntoForm?.();
     loadSocialConfigFromFirebase();
   }
 }
