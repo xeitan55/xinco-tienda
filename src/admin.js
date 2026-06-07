@@ -2336,14 +2336,14 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', dockOpacity: 50, dockAutohide: true, dockDelay: 5, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockColored: false, bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
+  return { theme: 'light', dockOpacity: 50, dockAutohide: false, dockDelay: 5, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockColored: false, bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
 }
 
 export function saveAppearance() {
   const cfg = {
     theme: window.getTheme?.() || 'light',
     dockOpacity: parseInt(document.getElementById('ap-dock-opacity')?.value || '50'),
-    dockAutohide: document.getElementById('ap-dock-autohide')?.checked ?? true,
+    dockAutohide: document.getElementById('ap-dock-autohide')?.checked ?? false,
     dockDelay: parseInt(document.getElementById('ap-dock-delay')?.value || '5'),
     dockWidth: parseInt(document.getElementById('ap-dock-width')?.value || '18'),
     dockHeight: parseInt(document.getElementById('ap-dock-height')?.value || '44'),
@@ -2406,9 +2406,6 @@ export function applyAppearance(cfg) {
   if (cfg.theme && window.setTheme) window.setTheme(cfg.theme);
   const dock = document.getElementById('admin-dock');
   if (dock) {
-    const opacity = (cfg.dockOpacity || 50) / 100;
-    dock.style.setProperty('--dock-bg-opacity', opacity);
-    dock.style.background = `rgba(255,255,255,${opacity * 0.5})`;
     dock.style.setProperty('--dock-width', (cfg.dockWidth || 18) + 'px');
     dock.style.setProperty('--dock-height', (cfg.dockHeight || 44) + 'px');
     dock.classList.remove('dock-blur', 'dock-acrylic', 'dock-colored-on', 'dock-bottom', 'dock-top');
