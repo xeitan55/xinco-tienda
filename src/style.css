@@ -262,6 +262,40 @@
   html.dark .suggestion-chip:hover { background: var(--primary) !important; color: var(--on-primary) !important; border-color: var(--primary) !important; }
   html.dark #hero-preview { background: var(--hero-gradient) !important; }
   html.dark .cart-overlay { background: rgba(0,0,0,0.7); }
+  html.dark .nav-link { color: var(--on-surface-variant); }
+  html.dark .nav-link:hover, html.dark .nav-link.active { color: var(--on-surface); border-bottom-color: var(--on-surface); }
+  html.dark #nav-exclusive.active { color: #D4AF37 !important; border-bottom-color: #D4AF37; }
+  html.dark .size-btn { background: var(--surface-container); border-color: var(--outline-variant); color: var(--on-surface); }
+  html.dark .size-btn:hover, html.dark .size-btn.selected { background: var(--on-surface); color: var(--surface); border-color: var(--on-surface); }
+  html.dark .size-btn.out-stock { opacity: 0.25; }
+  html.dark .tab-btn { background: var(--surface-container); border-color: var(--outline-variant); color: var(--on-surface); }
+  html.dark .tab-btn.active, html.dark .tab-btn:hover { background: var(--on-surface); color: var(--surface); border-color: var(--on-surface); }
+  html.dark .tab-btn-sm { color: var(--on-surface-variant); }
+  html.dark .tab-btn-sm.active, html.dark .tab-btn-sm:hover { background: var(--surface-container-high); color: var(--on-surface); box-shadow: none; }
+  html.dark .star.empty { color: var(--outline-variant); }
+  html.dark .color-swatch.selected { border-color: var(--on-surface); box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--on-surface); }
+  html.dark .card-hover:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+  html.dark .filter-color-btn.selected { outline-color: var(--on-surface) !important; }
+  html.dark .whatsapp-float { background: #25D366; color: #fff; }
+  html.dark .img-slot { border-color: var(--outline-variant); background: var(--surface-container-low); }
+  html.dark .img-slot:hover { border-color: var(--on-surface); background: var(--surface-container); }
+  html.dark .img-slot.has-image { border-color: var(--on-surface); }
+  html.dark .img-slot.is-main { border-color: var(--secondary-container); }
+  html.dark .img-slot .slot-badge { background: var(--secondary-container); color: var(--on-secondary-container); }
+  html.dark #search-overlay { background: rgba(20,20,22,0.7); }
+  html.dark #search-overlay::before { background: linear-gradient(90deg, #222 0%, var(--secondary-container) 50%, #222 100%); }
+  html.dark #search-overlay::after { background: rgba(255,255,255,0.06); }
+  html.dark #search-overlay .search-box { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); color: var(--on-surface); }
+  html.dark #search-overlay .search-box:focus-within { background: rgba(255,255,255,0.1); border-color: var(--secondary-container); box-shadow: 0 0 0 3px rgba(93,34,255,0.2), 4px 4px 0 rgba(93,34,255,0.15); }
+  html.dark #search-results .result-card { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15); }
+  html.dark #search-results .result-card:hover { background: rgba(255,255,255,0.1); box-shadow: 4px 4px 0 rgba(255,255,255,0.2); }
+  html.dark #search-overlay .search-title { background: linear-gradient(135deg, var(--on-surface) 60%, var(--secondary-container) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  html.dark #search-overlay .close-btn { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: var(--on-surface); }
+  html.dark #search-overlay .close-btn:hover { background: var(--on-surface); color: var(--surface); }
+  html.dark #product-overlay { background: rgba(20,20,22,0.7); }
+  html.dark #product-overlay::before { background: linear-gradient(90deg, #222 0%, var(--secondary-container) 50%, #222 100%); }
+  html.dark #product-overlay .product-close-btn { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: var(--on-surface); }
+  html.dark #product-overlay .product-close-btn:hover { background: var(--on-surface); color: var(--surface); }
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
   .modal-overlay.open { display: flex; align-items: center; justify-content: center; }
   .cart-drawer { position: fixed; right: 0; top: 0; bottom: 0; width: 420px; max-width: 100vw; background: var(--cart-bg); border-left: 0; z-index: 900; transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; border-radius: 24px 0 0 24px; box-shadow: -8px 0 30px rgba(0,0,0,0.1); }

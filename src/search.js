@@ -59,9 +59,9 @@ export function handleSearch(q) {
         ${p.badge ? `<span class="absolute top-2 left-2 badge badge-violet text-[9px]">${p.badge}</span>` : ''}
       </div>
       <div class="p-3">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;font-weight:700;color:#000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;font-weight:700;color:var(--on-surface,#000);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--admin-accent,#5d22ff);margin-top:4px;">${window.fmtPrice?.(p.price) || '$' + p.price}</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(0,0,0,0.35);margin-top:2px;text-transform:uppercase;">${p.cat}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--on-surface-variant,rgba(0,0,0,0.35));margin-top:2px;text-transform:uppercase;">${p.cat}</div>
       </div>
     </div>`).join('');
   try { window.staggerEnter?.(el, 0.05); } catch(e) {}
