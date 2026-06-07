@@ -2177,11 +2177,11 @@ export function renderAdminBgSelection() {
   }
 
   const cfg = loadAppearance();
-  const selected = [cfg.bgVideo1, cfg.bgVideo2, cfg.bgVideo3, cfg.bgVideo4].filter(Boolean);
-  const selectedCount = selected.length;
+  const selectedUrl = cfg.bgVideo1;
+  const selectedCount = selectedUrl ? 1 : 0;
 
-  container.innerHTML = _availableAdminBgs.map((bg, idx) => {
-    const isSelected = selected.includes(bg.url);
+  container.innerHTML = _availableAdminBgs.map((bg) => {
+    const isSelected = bg.url === selectedUrl;
     return `<div class="relative rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${isSelected ? 'border-primary' : 'border-transparent hover:border-white/30'}" onclick="window.selectAdminBg('${bg.url}')" style="aspect-ratio:16/9;background:#000;">
       <video src="${bg.url}" muted loop playsinline preload="metadata" class="w-full h-full object-cover" onmouseenter="this.play()" onmouseleave="this.pause()" onerror="this.parentElement.innerHTML='<div class=\\'flex items-center justify-center w-full h-full text-on-surface-variant/40 text-[10px]\\'>Error</div>'"></video>
       ${isSelected ? '<div class="absolute inset-0 flex items-center justify-center bg-primary/20"><span class="material-symbols-outlined text-white text-[24px]">check_circle</span></div>' : ''}
@@ -2192,20 +2192,19 @@ export function renderAdminBgSelection() {
 
 export function selectAdminBg(url) {
   const cfg = loadAppearance();
-  const slots = ['bgVideo1', 'bgVideo2', 'bgVideo3', 'bgVideo4'];
-  const existingIdx = slots.findIndex(k => cfg[k] === url);
-  if (existingIdx >= 0) {
-    cfg[slots[existingIdx]] = '';
-    setAdminBgVideo(cfg.bgVideo1 || cfg.bgVideo2 || cfg.bgVideo3 || cfg.bgVideo4 || '');
+  const current = cfg.bgVideo1;
+  if (current === url) {
+    cfg.bgVideo1 = '';
+    cfg.bgVideo2 = '';
+    cfg.bgVideo3 = '';
+    cfg.bgVideo4 = '';
+    setAdminBgVideo('');
   } else {
-    const emptyIdx = slots.findIndex(k => !cfg[k]);
-    if (emptyIdx >= 0) {
-      cfg[slots[emptyIdx]] = url;
-      setAdminBgVideo(url);
-    } else {
-      window.showToast?.('⚠️ Ya hay 4 fondos seleccionados. Quitá uno primero.');
-      return;
-    }
+    cfg.bgVideo1 = url;
+    cfg.bgVideo2 = '';
+    cfg.bgVideo3 = '';
+    cfg.bgVideo4 = '';
+    setAdminBgVideo(url);
   }
   localStorage.setItem(APP_KEY, JSON.stringify(cfg));
   for (let i = 1; i <= 4; i++) {
