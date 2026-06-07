@@ -763,10 +763,12 @@ html.dark .dock-item { background: linear-gradient(120deg, color-mix(in srgb, va
   .admin-toggle-label:hover { color: var(--admin-accent, #9b87f5) !important; }
   .sub-tab-btn:hover { background: rgba(0,0,0,0.03); color: var(--admin-accent, #9b87f5); }
   .sub-tab-btn.active:hover { background: #fff; }
+  .ann-preview-bar { background: #000 !important; padding: 8px 0; }
+  .ann-preview-scroller { display: inline-flex; white-space: nowrap; animation: scrollText 18s linear infinite; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
     .hero-particle { display: none; }
-    .scrolling-text-inner { animation: none !important; }
+    .scrolling-text-inner, .ann-preview-scroller { animation: none !important; }
     .skeleton { animation: none !important; background: rgba(200,200,200,0.15); }
     #xinco-canvas { display: none; }
   }

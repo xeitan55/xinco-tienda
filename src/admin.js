@@ -1589,10 +1589,12 @@ export async function savePromoBanner() {
 }
 
 export function renderAnnouncementPreview() {
-  const bar = document.getElementById('announcement-preview-bar');
+  const bar = document.getElementById('announcement-preview-scroller');
   if (!bar) return;
-  const msgs = bannerState.announcements || [];
-  bar.innerHTML = msgs.map(m => `<span style="margin:0 24px;white-space:nowrap;display:inline-block;">${m}</span>`).join('');
+  const msgs = [...(bannerState.announcements || []), ...(bannerState.announcements || [])];
+  bar.innerHTML = msgs.map(m =>
+    `<span style="margin:0 24px;white-space:nowrap;display:inline-block;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;">${m}</span>`
+  ).join('');
 }
 
 export function renderAnnouncementBar() {
