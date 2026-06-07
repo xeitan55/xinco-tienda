@@ -364,7 +364,7 @@
   .dock-item.active .dock-icon { filter: drop-shadow(0 0 10px rgba(255,255,255,0.4)); }
   .dock-item.active::before { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 14px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.85); animation: dockPulse 2s ease-in-out infinite; }
 
-  .dock-divider { width: 1px; height: 28px; background: rgba(0,0,0,0.08); }
+  .dock-divider { position: absolute; width: 1px; height: 28px; top: 50%; margin-top: -14px; background: rgba(0,0,0,0.08); pointer-events: none; }
   .dock-label { position: absolute; pointer-events: none; z-index: 20; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #fff; font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 7px; white-space: nowrap; transition: opacity 0.08s linear; }
   @keyframes dockPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 .dock-style-option { border-color: transparent; }

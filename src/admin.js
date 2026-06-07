@@ -2755,6 +2755,7 @@ export function init() {
     const inner = document.getElementById('admin-dock-inner');
     if (!inner) return;
     const allChildren = () => [...inner.children];
+    const items = () => inner.querySelectorAll('.dock-item');
     const MAX_SCALE = 1.6;
     const MAX_DIST = 130;
     const LERP = 0.22;
@@ -2763,14 +2764,60 @@ export function init() {
     let mouseInside = false;
     let running = true;
     let currentWidth = 0;
+
+    // helper: rebuild dividers every 3 items
+    function rebuildDividers() {
+      const itms = items();
+      inner.querySelectorAll('.dock-divider').forEach(d => d.remove());
+      itms.forEach((el, i) => {
+        if ((i + 1) % 3 === 0 && i < itms.length - 1) {
+          const div = document.createElement('div');
+          div.className = 'dock-divider';
+          el.after(div);
+        }
+      });
+    }
+
+    // restore saved order BEFORE starting RAF
+    const savedRaw = localStorage.getItem('xinco_dock_order');
+    if (savedRaw) try {
+      const order = JSON.parse(savedRaw);
+      const map = {}; items().forEach(el => { map[el.dataset.section] = el; });
+      const frag = document.createDocumentFragment();
+      order.forEach(k => { if (map[k]) frag.appendChild(map[k]); });
+      items().forEach(el => el.remove());
+      inner.prepend(frag);
+    } catch(_) {}
+    rebuildDividers();
+
+    // set initial positions to avoid first-frame flash
+    function setInitialPositions() {
+      let x = 0;
+      allChildren().forEach(el => {
+        el.style.position = 'absolute';
+        if (el.classList.contains('dock-divider')) {
+          el.style.left = x + 'px';
+          el.style.top = '50%';
+          el.style.marginTop = '-14px';
+          el.style.pointerEvents = 'none';
+          x += 1 + GAP;
+        } else {
+          el.style.top = '0';
+          el._scale = 1;
+          el.style.left = x + 'px';
+          el.style.transform = 'translateY(0px) scale(1)';
+          x += BASE + GAP;
+        }
+      });
+      inner.style.width = (x - GAP) + 'px';
+    }
+    setInitialPositions();
+
     // floating label
     const labelEl = document.createElement('div');
     labelEl.className = 'dock-label';
     inner.appendChild(labelEl);
     let hovering = null;
-    allChildren().forEach(el => {
-      if (el.classList.contains('dock-item')) el._scale = 1;
-    });
     dock.addEventListener('mousemove', e => {
       const r = dock.getBoundingClientRect();
       mouseX = e.clientX - r.left;
@@ -2889,16 +2936,17 @@ export function init() {
       const order = [...dockInner.querySelectorAll('.dock-item')].map(x => x.dataset.section);
       localStorage.setItem('xinco_dock_order', JSON.stringify(order));
       try { lucide?.createIcons(); } catch(_) {}
+      // rebuild dividers after every drag
+      const dItems = dockInner.querySelectorAll('.dock-item');
+      dockInner.querySelectorAll('.dock-divider').forEach(d => d.remove());
+      dItems.forEach((el, i) => {
+        if ((i + 1) % 3 === 0 && i < dItems.length - 1) {
+          const div = document.createElement('div');
+          div.className = 'dock-divider';
+          el.after(div);
+        }
+      });
     });
-    const saved = localStorage.getItem('xinco_dock_order');
-    if (saved) try {
-      const order = JSON.parse(saved);
-      const map = {}; dockInner.querySelectorAll('.dock-item').forEach(el => { map[el.dataset.section] = el; });
-      const frag = document.createDocumentFragment();
-      order.forEach(k => { if (map[k]) frag.appendChild(map[k]); });
-      dockInner.querySelectorAll('.dock-item').forEach(el => el.remove());
-      dockInner.prepend(frag);
-    } catch(_) {}
     // re-sync draggable after save
     window.syncDockDraggable = syncDraggable;
   }
