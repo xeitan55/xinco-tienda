@@ -2755,13 +2755,14 @@ export function init() {
     const inner = document.getElementById('admin-dock-inner');
     if (!inner) return;
     const allChildren = () => [...inner.children];
-    const MAX_SCALE = 1.5;
-    const MAX_DIST = 140;
-    const LERP = 0.18;
+    const MAX_SCALE = 1.8;
+    const MAX_DIST = 120;
+    const LERP = 0.28;
     const BASE = 44, GAP = 8;
     let mouseX = -9999;
     let mouseInside = false;
     let running = true;
+    let currentWidth = 0;
     allChildren().forEach(el => {
       if (el.classList.contains('dock-item')) {
         el._scale = 1;
@@ -2776,16 +2777,19 @@ export function init() {
     dock.addEventListener('mouseleave', () => { mouseInside = false; });
     (function tick() {
       const dr = dock.getBoundingClientRect();
-      // update target scales for items only
+      // update target scales with power curve
       allChildren().forEach(el => {
         if (!el.classList.contains('dock-item')) return;
         const er = el.getBoundingClientRect();
         const cx = er.left + er.width / 2 - dr.left;
         const dist = Math.abs(mouseX - cx);
         let target = 1;
-        if (mouseInside && dist < MAX_DIST) target = 1 + (1 - dist / MAX_DIST) * (MAX_SCALE - 1);
+        if (mouseInside && dist < MAX_DIST) {
+          const t = 1 - dist / MAX_DIST;
+          target = 1 + t * t * t * (MAX_SCALE - 1); // cubic falloff
+        }
         el._scale += (target - el._scale) * LERP;
-        if (Math.abs(el._scale - 1) < 0.01) el._scale = 1;
+        if (Math.abs(el._scale - 1) < 0.001) el._scale = 1;
       });
       // position all children (items + dividers) from left to right
       let x = 0;
@@ -2799,14 +2803,17 @@ export function init() {
         } else {
           const s = el._scale || 1;
           const w = BASE * s;
-          const yOff = (s - 1) * -36;
+          const lift = (s - 1) * -50;
           el.style.left = x + 'px';
-          el.style.transform = `translateY(${yOff}px) scale(${s})`;
+          el.style.transform = `translateY(${lift}px) scale(${s})`;
           el.style.zIndex = s > 1.02 ? '2' : '';
+          el.style.boxShadow = s > 1.1 ? '0 8px 32px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.15)' : '';
           x += w + GAP;
         }
       });
-      inner.style.width = (x - GAP) + 'px';
+      const newWidth = x - GAP;
+      currentWidth += (newWidth - currentWidth) * LERP;
+      inner.style.width = currentWidth + 'px';
       if (running) requestAnimationFrame(tick);
     })();
   }
