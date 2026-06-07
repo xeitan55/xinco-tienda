@@ -2160,44 +2160,44 @@ let _adminBgListError = null;
 export function renderAdminBgSelection() {
   const container = document.getElementById('ap-bg-available');
   const loading = document.getElementById('ap-bg-loading');
+  const counter = document.getElementById('ap-bg-counter');
   if (!container) return;
   if (loading) loading.style.display = 'none';
 
   if (_adminBgListError === 'credentials') {
     container.innerHTML = '<p class="text-warning text-sm col-span-4 flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">warning</span> Cloudinary no configurado — agregá API Key y Secret en Vercel.</p>';
+    if (counter) counter.textContent = 'FONDOS TOTALES 0/4';
     return;
   }
 
   if (_availableAdminBgs.length === 0) {
     container.innerHTML = '<p class="text-on-surface-variant/50 text-sm col-span-4">No hay fondos en la carpeta. Usá "SUBIR VIDEO" para agregar.</p>';
+    if (counter) counter.textContent = 'FONDOS TOTALES 0/4';
     return;
   }
 
   const cfg = loadAppearance();
   const selected = [cfg.bgVideo1, cfg.bgVideo2, cfg.bgVideo3, cfg.bgVideo4].filter(Boolean);
+  const selectedCount = selected.length;
 
   container.innerHTML = _availableAdminBgs.map((bg, idx) => {
     const isSelected = selected.includes(bg.url);
-    const slotIdx = [cfg.bgVideo1, cfg.bgVideo2, cfg.bgVideo3, cfg.bgVideo4].indexOf(bg.url);
-    const slotLabel = slotIdx >= 0 ? `F${slotIdx + 1}` : '';
-    return `<div class="relative rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${isSelected ? 'border-primary' : 'border-transparent hover:border-white/30'}" onclick="window.selectAdminBg('${bg.url}', ${idx})" style="aspect-ratio:16/9;background:#000;">
+    return `<div class="relative rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${isSelected ? 'border-primary' : 'border-transparent hover:border-white/30'}" onclick="window.selectAdminBg('${bg.url}')" style="aspect-ratio:16/9;background:#000;">
       <video src="${bg.url}" muted loop playsinline preload="metadata" class="w-full h-full object-cover" onmouseenter="this.play()" onmouseleave="this.pause()" onerror="this.parentElement.innerHTML='<div class=\\'flex items-center justify-center w-full h-full text-on-surface-variant/40 text-[10px]\\'>Error</div>'"></video>
-      ${slotLabel ? `<div class="absolute top-1 right-1 bg-primary text-white text-[8px] font-bold px-1.5 py-0.5 rounded">${slotLabel}</div>` : ''}
       ${isSelected ? '<div class="absolute inset-0 flex items-center justify-center bg-primary/20"><span class="material-symbols-outlined text-white text-[24px]">check_circle</span></div>' : ''}
     </div>`;
   }).join('');
+  if (counter) counter.textContent = `FONDOS TOTALES ${selectedCount}/4`;
 }
 
 export function selectAdminBg(url) {
   const cfg = loadAppearance();
-  // If already in a slot, remove it
   const slots = ['bgVideo1', 'bgVideo2', 'bgVideo3', 'bgVideo4'];
   const existingIdx = slots.findIndex(k => cfg[k] === url);
   if (existingIdx >= 0) {
     cfg[slots[existingIdx]] = '';
     setAdminBgVideo(cfg.bgVideo1 || cfg.bgVideo2 || cfg.bgVideo3 || cfg.bgVideo4 || '');
   } else {
-    // Find first empty slot
     const emptyIdx = slots.findIndex(k => !cfg[k]);
     if (emptyIdx >= 0) {
       cfg[slots[emptyIdx]] = url;
@@ -2208,14 +2208,9 @@ export function selectAdminBg(url) {
     }
   }
   localStorage.setItem(APP_KEY, JSON.stringify(cfg));
-  // Update hidden inputs
   for (let i = 1; i <= 4; i++) {
     const el = document.getElementById('ap-bg-video-' + i);
     if (el) el.value = cfg['bgVideo' + i] || '';
-    const label = document.getElementById('ap-bg-video-' + i + '-label');
-    if (label) label.textContent = cfg['bgVideo' + i] ? cfg['bgVideo' + i].split('/').pop().substring(0, 30) + '...' : 'Ninguno';
-    const clearBtn = document.getElementById('ap-bg-video-' + i + '-clear');
-    if (clearBtn) clearBtn.style.display = cfg['bgVideo' + i] ? 'inline' : 'none';
   }
   renderAdminBgSelection();
 }
@@ -2460,13 +2455,8 @@ export function initAppearancePanel() {
             const url = fbCfg['bgVideo' + i] || '';
             const el = document.getElementById('ap-bg-video-' + i);
             if (el) el.value = url;
-            const label = document.getElementById('ap-bg-video-' + i + '-label');
-            if (label) label.textContent = url ? url.split('/').pop().substring(0, 30) + '...' : 'Ninguno';
-            const clearBtn = document.getElementById('ap-bg-video-' + i + '-clear');
-            if (clearBtn) clearBtn.style.display = url ? 'inline' : 'none';
           }
           applyAppearance(fbCfg);
-          // Load available backgrounds from Cloudinary
           await fetchAdminBgList();
           renderAdminBgSelection();
           return;
@@ -2494,13 +2484,8 @@ export function initAppearancePanel() {
       const url = cfg['bgVideo' + i] || '';
       const el = document.getElementById('ap-bg-video-' + i);
       if (el) el.value = url;
-      const label = document.getElementById('ap-bg-video-' + i + '-label');
-      if (label) label.textContent = url ? url.split('/').pop().substring(0, 30) + '...' : 'Ninguno';
-      const clearBtn = document.getElementById('ap-bg-video-' + i + '-clear');
-      if (clearBtn) clearBtn.style.display = url ? 'inline' : 'none';
     }
     applyAppearance(cfg);
-    // Load available backgrounds from Cloudinary
     await fetchAdminBgList();
     renderAdminBgSelection();
   })();
