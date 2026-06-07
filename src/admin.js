@@ -2212,37 +2212,34 @@ export function setAdminBgVideo(url) {
 export function uploadAdminBgVideo(slot, file) {
   if (!file) return;
   window.showToast?.('Subiendo video...');
-  const fileInput = document.querySelector('input[type="file"][accept="video/mp4,video/webm"]');
   const maxSize = 100;
   if (file.size > maxSize * 1024 * 1024) { window.showToast?.(`⚠️ El archivo supera los ${maxSize}MB`); return; }
   if (!file.type.startsWith('video/')) { window.showToast?.('⚠️ Solo se permiten videos'); return; }
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', CLOUDINARY.uploadPreset);
-  formData.append('folder', 'HOME/XINCO-TIENDA/ADMINPANEL/BACKGROUND');
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', 'XINCO TIENDA');
+  fd.append('folder', 'HOME/XINCO-TIENDA/ADMINPANEL/BACKGROUND');
   const xhr = new XMLHttpRequest();
-  const url = CLOUDINARY.uploadVideoUrl();
-  xhr.open('POST', url, true);
-  xhr.upload.onprogress = (e) => {};
+  xhr.open('POST', 'https://api.cloudinary.com/v1_1/damwe7juy/video/upload', true);
+  xhr.upload.onprogress = () => {};
   xhr.onload = () => {
     if (xhr.status === 200) {
       const res = JSON.parse(xhr.responseText);
-      const finalUrl = res.secure_url;
       if (slot > 0) {
-        selectAdminBg(finalUrl);
+        selectAdminBg(res.secure_url);
       } else {
         fetchAdminBgList().then(() => renderAdminBgSelection());
-        setAdminBgVideo(finalUrl);
+        setAdminBgVideo(res.secure_url);
       }
       window.showToast?.('✅ Video subido a Cloudinary');
-      if (fileInput) fileInput.value = '';
     } else {
-      try { const err = JSON.parse(xhr.responseText); window.showToast?.('❌ ' + (err.error?.message || 'Error ' + xhr.status)); }
-      catch(e) { window.showToast?.('❌ Error al subir video'); }
+      let msg = 'Error al subir';
+      try { const err = JSON.parse(xhr.responseText); msg = err.error?.message || msg; } catch(e) {}
+      window.showToast?.('❌ ' + msg);
     }
   };
   xhr.onerror = () => { window.showToast?.('❌ Error de conexión'); };
-  xhr.send(formData);
+  xhr.send(fd);
 }
 
 // ===== PAGE BACKGROUND ANIMATION (antigravity particles) =====
