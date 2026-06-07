@@ -282,7 +282,7 @@ export function editProductAdmin(id) {
   const p = state.products.find(pr => String(pr.id) === String(id));
   if (!p) return;
   if (p.images && p.images.length > 0) {
-    pfImages = p.images.map(e => typeof e === 'string' ? { url: e, colorId: '' } : e);
+    pfImages = p.images.map(e => typeof e === 'string' ? { url: e, colorId: '' } : (e && e.url ? e : null)).filter(Boolean);
   } else if (p.img) {
     pfImages = [{ url: (typeof p.img === 'string' ? p.img : p.img.url || ''), colorId: '' }];
   } else {
@@ -352,7 +352,7 @@ export function showProductForm() {
   pfImages = []; pfSelectedColors = [];
   document.getElementById('product-form-container').classList.remove('hidden');
   document.getElementById('product-form-title').textContent = 'NUEVO PRODUCTO';
-  ['pf-id','pf-name','pf-price','pf-stock','pf-desc','pf-img','pf-img-url','pf-badge','pf-old-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['pf-id','pf-name','pf-price','pf-stock','pf-desc','pf-img','pf-img-url','pf-img-color','pf-badge','pf-old-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const excEl = document.getElementById('pf-exclusive');
   if (excEl) excEl.checked = false;
   renderProductImageSlots();
@@ -372,6 +372,8 @@ export function addProductImageUrl(colorId) {
   const url = document.getElementById('pf-img-url')?.value?.trim();
   if (!url) { window.showToast?.('Pegá una URL primero ❌'); return; }
   const cid = colorId || '';
+  // normalize legacy entries
+  pfImages = pfImages.map(e => typeof e === 'string' ? { url: e, colorId: '' } : e);
   const perColor = pfImages.filter(img => (img.colorId || '') === cid);
   if (perColor.length >= 4) { window.showToast?.('Máximo 4 imágenes por color ❌'); return; }
   const hidden = document.getElementById('pf-img');
@@ -1028,32 +1030,36 @@ window.saveCategories = saveCategories;
 export function renderProductImageSlots() {
   const el = document.getElementById('pf-image-slots');
   if (!el) return;
+  // normalize legacy string entries
+  pfImages = pfImages.map(e => typeof e === 'string' ? { url: e, colorId: '' } : (e && e.url ? e : null)).filter(Boolean);
   // build color groups: "general" + one per selected color
   const groups = [{ id: '', label: 'GENERAL', hex: null }];
   pfSelectedColors.forEach(cid => {
     const c = AVAILABLE_COLORS.find(x => x.id === cid);
     if (c) groups.push({ id: cid, label: c.label, hex: c.hex });
   });
-  const html = groups.map(g => {
-    const imgs = pfImages.filter(img => (img.colorId || '') === g.id);
+    const html = groups.map(g => {
+    const imgs = pfImages.filter(img => (img && img.colorId || '') === g.id);
     const slots = [];
     for (let i = 0; i < 4; i++) {
       const entry = imgs[i] || null;
       const url = entry ? entry.url : null;
       const realIdx = entry ? pfImages.indexOf(entry) : -1;
-      slots.push(`<div class="relative border-[3px] ${realIdx===0?'border-secondary-container':'border-primary'} bg-surface-container overflow-hidden flex flex-col" style="min-height:140px;" data-color="${g.id}" data-slot="${i}">
-        ${url ? `<div class="relative flex-1 min-h-0" style="height:100px;overflow:hidden;">
+      const isFirst = realIdx === 0;
+      const isEmpty = !url;
+      slots.push(`<div class="relative border-[3px] ${isFirst?'border-secondary-container':'border-primary'} bg-surface-container overflow-hidden flex flex-col" style="min-height:140px;">
+        ${!isEmpty ? `<div class="relative flex-1 min-h-0" style="height:100px;overflow:hidden;">
           <img src="${url}" class="w-full h-full object-cover"/>
           <div class="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
             <button class="p-1 bg-white text-black" onclick="removeProductImage(${realIdx})"><span class="material-symbols-outlined text-[16px]">delete</span></button>
             ${realIdx>0?`<button class="p-1 bg-white text-black" onclick="moveProductImageFirst(${realIdx})"><span class="material-symbols-outlined text-[16px]">star</span></button>`:''}
           </div>
-          ${realIdx===0?'<span class="absolute top-1 left-1 badge badge-violet text-[9px] pointer-events-none">PRINCIPAL</span>':''}
+          ${isFirst?'<span class="absolute top-1 left-1 badge badge-violet text-[9px] pointer-events-none">PRINCIPAL</span>':''}
         </div>` : `<div class="flex flex-col items-center justify-center gap-1 text-on-surface-variant cursor-pointer flex-1 p-2"
              onclick="document.getElementById('pf-file-${g.id}-${i}').click()"
              ondragover="event.preventDefault()"
              ondrop="handleSlotDrop(event,'${g.id}',${i})">
-          <span class="material-symbols-outlined text-[28px]">${realIdx===0||(imgs.length===0&&i===0)?'add_photo_alternate':'add_circle'}</span>
+          <span class="material-symbols-outlined text-[28px]">${isFirst||(imgs.length===0&&i===0)?'add_photo_alternate':'add_circle'}</span>
           <span class="font-label-caps text-[9px]">FOTO ${i+1}</span>
           <input type="file" id="pf-file-${g.id}-${i}" accept="image/*" class="hidden" onchange="uploadSlotImage(this.files[0],'${g.id}',${i})"/>
         </div>`}
@@ -1062,10 +1068,9 @@ export function renderProductImageSlots() {
         </div>
       </div>`);
     }
-    const headerBg = g.hex ? `style="background:${g.hex};${['blanco','beige','amarillo'].includes(g.id)?'color:#000;border-color:#ddd;':'color:#fff;'}"` : '';
     return `<div class="mb-4">
       <div class="flex items-center gap-2 mb-2">
-        ${g.hex ? `<span class="inline-block w-4 h-4 rounded-full border ${headerBg.match(/style/) ? headerBg.replace('style="','').replace('"','') : ''}"></span>` : ''}
+        ${g.hex ? `<span class="inline-block w-4 h-4 rounded-full border" style="background:${g.hex}"></span>` : ''}
         <span class="font-label-caps text-[10px] font-bold tracking-wide">${g.label}</span>
         <span class="font-label-caps text-[8px] text-on-surface-variant/50">(${imgs.length}/4)</span>
       </div>
@@ -1083,6 +1088,7 @@ export function handleSlotDrop(e, colorId, slotIndex) {
 
 export async function uploadSlotImage(file, colorId, slotIndex) {
   if (!file) return;
+  pfImages = pfImages.map(e => typeof e === 'string' ? { url: e, colorId: '' } : e);
   const perColor = pfImages.filter(img => (img.colorId || '') === colorId);
   if (perColor.length >= 4) { window.showToast?.('Máximo 4 imágenes por color ❌'); return; }
   const progressEl = document.getElementById('pf-slot-progress-'+colorId+'-'+slotIndex);
