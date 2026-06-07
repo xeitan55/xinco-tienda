@@ -2756,7 +2756,7 @@ export function init() {
     const LERP = 0.18;
     let mouseX = -9999;
     let mouseInside = false;
-    let raf = null;
+    let running = true;
     items.forEach(el => { el._scale = 1; });
     dock.addEventListener('mousemove', e => {
       const r = dock.getBoundingClientRect();
@@ -2764,8 +2764,7 @@ export function init() {
       mouseInside = true;
     });
     dock.addEventListener('mouseleave', () => { mouseInside = false; });
-    function tick() {
-      if (!raf) return;
+    (function tick() {
       const dr = dock.getBoundingClientRect();
       items.forEach(el => {
         const er = el.getBoundingClientRect();
@@ -2779,9 +2778,8 @@ export function init() {
         el.style.transform = `translateY(${yOff}px) scale(${el._scale})`;
         el.style.zIndex = el._scale > 1.02 ? '2' : '';
       });
-      raf = requestAnimationFrame(tick);
-    }
-    raf = requestAnimationFrame(tick);
+      if (running) requestAnimationFrame(tick);
+    })();
   }
   // Drag & drop reorder (always init, outside _dockZoom guard)
   const dockInner = document.getElementById('admin-dock-inner');
