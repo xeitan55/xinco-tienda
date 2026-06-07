@@ -1460,14 +1460,17 @@ tailwind.config = {
                 <div class="bg-[#f8f6ff] border border-indigo-100 rounded-xl p-5">
                   <div class="flex justify-between items-center mb-3">
                     <label class="font-label-caps text-label-caps text-primary flex items-center gap-2 text-[11px]">
-                      <span class="material-symbols-outlined text-[16px]">photo_library</span> IMÁGENES (HASTA 4)
+                      <span class="material-symbols-outlined text-[16px]">photo_library</span> IMÁGENES (4 POR COLOR)
                     </label>
-                    <span class="font-label-caps text-[9px] text-on-surface-variant/60">LA PRIMERA ES LA IMAGEN PRINCIPAL</span>
+                    <span class="font-label-caps text-[9px] text-on-surface-variant/60">SUBÍ FOTOS POR CADA COLOR</span>
                   </div>
-                  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3" id="pf-image-slots"></div>
+                  <div id="pf-image-slots"></div>
                   <div class="flex gap-2 mt-3">
+                    <select id="pf-img-color" class="border border-primary rounded-lg py-2 px-2 font-label-caps text-[9px] bg-white outline-none">
+                      <option value="">SIN COLOR</option>
+                    </select>
                     <input id="pf-img-url" class="input-field flex-1 py-2" placeholder="O pegá una URL de imagen y presioná AGREGAR"/>
-                    <button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="addProductImageUrl()">AGREGAR URL</button>
+                    <button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="addProductImageUrl(document.getElementById('pf-img-color').value)">AGREGAR URL</button>
                   </div>
                   <input type="hidden" id="pf-img"/>
                 </div>

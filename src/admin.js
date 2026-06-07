@@ -300,6 +300,7 @@ export function editProductAdmin(id) {
   if (document.getElementById('pf-cat')) document.getElementById('pf-cat').value = p.cat;
   renderProductImageSlots();
   renderColorSwatches(pfSelectedColors);
+  populateColorSelect();
   showAdminSection('products');
   document.getElementById('product-form-container').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -356,6 +357,7 @@ export function showProductForm() {
   if (excEl) excEl.checked = false;
   renderProductImageSlots();
   renderColorSwatches([]);
+  populateColorSelect();
   document.getElementById('product-form-container').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
@@ -366,18 +368,16 @@ export function hideProductForm() {
 export function addCustomColor() {
   window.showToast?.('Usá la sección de colores en el formulario');
 }
-export function addProductImageUrl() {
+export function addProductImageUrl(colorId) {
   const url = document.getElementById('pf-img-url')?.value?.trim();
   if (!url) { window.showToast?.('Pegá una URL primero ❌'); return; }
+  const cid = colorId || '';
+  const perColor = pfImages.filter(img => (img.colorId || '') === cid);
+  if (perColor.length >= 4) { window.showToast?.('Máximo 4 imágenes por color ❌'); return; }
   const hidden = document.getElementById('pf-img');
   if (hidden) hidden.value = url;
-  const slots = document.getElementById('pf-image-slots');
-  if (slots) {
-    const img = document.createElement('div');
-    img.className = 'relative aspect-square rounded-lg overflow-hidden border-2 border-primary';
-    img.innerHTML = `<img src="${url}" class="w-full h-full object-cover"/><button class="absolute top-1 right-1 bg-surface/80 rounded-full w-5 h-5 flex items-center justify-center font-label-caps text-[9px] text-on-surface" onclick="this.parentElement.remove()">✕</button>`;
-    slots.appendChild(img);
-  }
+  pfImages.push({ url, colorId: cid });
+  renderProductImageSlots();
   window.showToast?.('✅ Imagen agregada');
 }
 
@@ -1028,75 +1028,74 @@ window.saveCategories = saveCategories;
 export function renderProductImageSlots() {
   const el = document.getElementById('pf-image-slots');
   if (!el) return;
-  const slots = [];
-  for (let i = 0; i < 4; i++) {
-    const entry   = pfImages[i] || null;
-    const url     = entry ? (typeof entry === 'string' ? entry : entry.url) : null;
-    const colorId = entry ? (entry.colorId || '') : '';
-    const colorOpts = AVAILABLE_COLORS.map(c =>
-      `<option value="${c.id}" ${colorId===c.id?'selected':''}>${c.label}</option>`
-    ).join('');
-    slots.push(`<div class="relative border-[3px] ${i===0?'border-secondary-container':'border-primary'} bg-surface-container overflow-hidden flex flex-col" id="pf-slot-${i}" style="min-height:140px;">
-      ${url ? `<div class="relative flex-1 min-h-0" style="height:100px;overflow:hidden;">
-        <img src="${url}" class="w-full h-full object-cover"/>
-        <div class="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
-          <button class="p-1 bg-white text-black" onclick="removeProductImage(${i})"><span class="material-symbols-outlined text-[16px]">delete</span></button>
-          ${i>0?`<button class="p-1 bg-white text-black" onclick="moveProductImageFirst(${i})"><span class="material-symbols-outlined text-[16px]">star</span></button>`:''}
+  // build color groups: "general" + one per selected color
+  const groups = [{ id: '', label: 'GENERAL', hex: null }];
+  pfSelectedColors.forEach(cid => {
+    const c = AVAILABLE_COLORS.find(x => x.id === cid);
+    if (c) groups.push({ id: cid, label: c.label, hex: c.hex });
+  });
+  const html = groups.map(g => {
+    const imgs = pfImages.filter(img => (img.colorId || '') === g.id);
+    const slots = [];
+    for (let i = 0; i < 4; i++) {
+      const entry = imgs[i] || null;
+      const url = entry ? entry.url : null;
+      const realIdx = entry ? pfImages.indexOf(entry) : -1;
+      slots.push(`<div class="relative border-[3px] ${realIdx===0?'border-secondary-container':'border-primary'} bg-surface-container overflow-hidden flex flex-col" style="min-height:140px;" data-color="${g.id}" data-slot="${i}">
+        ${url ? `<div class="relative flex-1 min-h-0" style="height:100px;overflow:hidden;">
+          <img src="${url}" class="w-full h-full object-cover"/>
+          <div class="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
+            <button class="p-1 bg-white text-black" onclick="removeProductImage(${realIdx})"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+            ${realIdx>0?`<button class="p-1 bg-white text-black" onclick="moveProductImageFirst(${realIdx})"><span class="material-symbols-outlined text-[16px]">star</span></button>`:''}
+          </div>
+          ${realIdx===0?'<span class="absolute top-1 left-1 badge badge-violet text-[9px] pointer-events-none">PRINCIPAL</span>':''}
+        </div>` : `<div class="flex flex-col items-center justify-center gap-1 text-on-surface-variant cursor-pointer flex-1 p-2"
+             onclick="document.getElementById('pf-file-${g.id}-${i}').click()"
+             ondragover="event.preventDefault()"
+             ondrop="handleSlotDrop(event,'${g.id}',${i})">
+          <span class="material-symbols-outlined text-[28px]">${realIdx===0||(imgs.length===0&&i===0)?'add_photo_alternate':'add_circle'}</span>
+          <span class="font-label-caps text-[9px]">FOTO ${i+1}</span>
+          <input type="file" id="pf-file-${g.id}-${i}" accept="image/*" class="hidden" onchange="uploadSlotImage(this.files[0],'${g.id}',${i})"/>
+        </div>`}
+        <div id="pf-slot-progress-${g.id}-${i}" class="hidden absolute bottom-0 left-0 right-0 bg-black/70 p-1">
+          <div class="w-full h-1 bg-white/20"><div id="pf-slot-bar-${g.id}-${i}" class="h-1 bg-secondary-container" style="width:0%"></div></div>
         </div>
-        ${i===0?'<span class="absolute top-1 left-1 badge badge-violet text-[9px] pointer-events-none">PRINCIPAL</span>':''}
+      </div>`);
+    }
+    const headerBg = g.hex ? `style="background:${g.hex};${['blanco','beige','amarillo'].includes(g.id)?'color:#000;border-color:#ddd;':'color:#fff;'}"` : '';
+    return `<div class="mb-4">
+      <div class="flex items-center gap-2 mb-2">
+        ${g.hex ? `<span class="inline-block w-4 h-4 rounded-full border ${headerBg.match(/style/) ? headerBg.replace('style="','').replace('"','') : ''}"></span>` : ''}
+        <span class="font-label-caps text-[10px] font-bold tracking-wide">${g.label}</span>
+        <span class="font-label-caps text-[8px] text-on-surface-variant/50">(${imgs.length}/4)</span>
       </div>
-      <div class="p-1 bg-surface-container-low border-t border-outline-variant">
-        <label class="font-label-caps text-[8px] text-on-surface-variant block mb-0.5">COLOR DE ESTA FOTO:</label>
-        <select class="w-full font-label-caps text-[9px] border border-primary bg-white py-0.5 px-1 outline-none cursor-pointer" onchange="linkImageColor(${i}, this.value)">
-          <option value="">— SIN COLOR ESPECÍFICO —</option>
-          ${colorOpts}
-        </select>
-      </div>` : `<div class="flex flex-col items-center justify-center gap-1 text-on-surface-variant cursor-pointer flex-1 p-2"
-           onclick="document.getElementById('pf-file-${i}').click()"
-           ondragover="event.preventDefault()"
-           ondrop="handleSlotDrop(event,${i})">
-        <span class="material-symbols-outlined text-[28px]">${i===0?'add_photo_alternate':'add_circle'}</span>
-        <span class="font-label-caps text-[9px]">${i===0?'FOTO PRINCIPAL':'FOTO '+(i+1)}</span>
-        <span class="font-label-caps text-[8px] text-on-surface-variant">ARRASTRÁ O HACÉ CLIC</span>
-        <input type="file" id="pf-file-${i}" accept="image/*" class="hidden" onchange="uploadSlotImage(this.files[0],${i})"/>
-      </div>
-      <div id="pf-slot-progress-${i}" class="hidden absolute bottom-0 left-0 right-0 bg-black/70 p-1">
-        <div class="w-full h-1 bg-white/20"><div id="pf-slot-bar-${i}" class="h-1 bg-secondary-container" style="width:0%"></div></div>
-      </div>`}
-    </div>`);
-  }
-  el.innerHTML = slots.join('');
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">${slots.join('')}</div>
+    </div>`;
+  }).join('');
+  el.innerHTML = html;
 }
 
-export function linkImageColor(slotIndex, colorId) {
-  if (!pfImages[slotIndex]) return;
-  if (typeof pfImages[slotIndex] === 'string') {
-    pfImages[slotIndex] = { url: pfImages[slotIndex], colorId };
-  } else {
-    pfImages[slotIndex].colorId = colorId;
-  }
-}
-
-export function handleSlotDrop(e, slotIndex) {
+export function handleSlotDrop(e, colorId, slotIndex) {
   e.preventDefault();
   const file = e.dataTransfer.files[0];
-  if (file) uploadSlotImage(file, slotIndex);
+  if (file) uploadSlotImage(file, colorId, slotIndex);
 }
 
-export async function uploadSlotImage(file, slotIndex) {
-  if (!file || pfImages.filter(Boolean).length >= 4) { window.showToast?.('Máximo 4 imágenes por producto'); return; }
-  const progressEl = document.getElementById('pf-slot-progress-'+slotIndex);
-  const barEl = document.getElementById('pf-slot-bar-'+slotIndex);
+export async function uploadSlotImage(file, colorId, slotIndex) {
+  if (!file) return;
+  const perColor = pfImages.filter(img => (img.colorId || '') === colorId);
+  if (perColor.length >= 4) { window.showToast?.('Máximo 4 imágenes por color ❌'); return; }
+  const progressEl = document.getElementById('pf-slot-progress-'+colorId+'-'+slotIndex);
+  const barEl = document.getElementById('pf-slot-bar-'+colorId+'-'+slotIndex);
   if (progressEl) progressEl.classList.remove('hidden');
   try {
     await uploadToCloudinary(file,
       (pct) => { if(barEl) barEl.style.width = pct+'%'; },
       (url) => {
-        pfImages[slotIndex] = { url, colorId: '' };
-        pfImages = pfImages.filter(Boolean);
+        pfImages.push({ url, colorId });
         document.getElementById('pf-img').value = getFirstImageUrl();
         renderProductImageSlots();
-        window.showToast?.('Imagen '+(slotIndex+1)+' subida ☁️✅');
+        window.showToast?.('Imagen subida ☁️✅');
       },
       (err) => { window.showToast?.('Error: '+err+' ❌'); if(progressEl) progressEl.classList.add('hidden'); }
     );
@@ -1142,11 +1141,22 @@ export function toggleProductColor(colorId) {
   if (pfSelectedColors.includes(colorId)) pfSelectedColors = pfSelectedColors.filter(c=>c!==colorId);
   else pfSelectedColors.push(colorId);
   renderColorSwatches(pfSelectedColors);
+  populateColorSelect();
+  renderProductImageSlots();
 }
 
 export function renameColor(colorId, newLabel) {
   const color = AVAILABLE_COLORS.find(c => c.id === colorId);
   if (color && newLabel.trim()) color.label = newLabel.trim().toUpperCase();
+}
+
+function populateColorSelect() {
+  const sel = document.getElementById('pf-img-color');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">SIN COLOR</option>' + pfSelectedColors.map(cid => {
+    const c = AVAILABLE_COLORS.find(x => x.id === cid);
+    return c ? `<option value="${c.id}">${c.label}</option>` : '';
+  }).join('');
 }
 
 // ===== CLOUDINARY =====
