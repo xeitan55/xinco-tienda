@@ -2746,43 +2746,49 @@ export function init() {
   const dock = document.getElementById('admin-dock');
   if (dock && !dock._dockZoom) {
     dock._dockZoom = true;
-    const items = dock.querySelectorAll('.dock-item');
-    let rafId = null;
-    dock.addEventListener('mousemove', (e) => {
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        const rect = dock.getBoundingClientRect();
-        const mx = e.clientX - rect.left;
-        items.forEach(item => {
-          const ir = item.getBoundingClientRect();
-          const cx = ir.left + ir.width / 2 - rect.left;
-          const dist = Math.abs(mx - cx);
-          const maxDist = 100;
-          let scale = 1;
-          if (dist < maxDist) scale = 1 + (1 - dist / maxDist) * 0.35;
-          if (scale > 1.02) {
-            item.classList.add('zoomed');
-            item.style.setProperty('--z-scale', scale);
-          } else {
-            item.classList.remove('zoomed');
-            item.style.removeProperty('--z-scale');
-          }
-        });
-      });
-    });
-    dock.addEventListener('mouseleave', () => {
-      items.forEach(item => {
-        item.classList.remove('zoomed');
-        item.style.removeProperty('--z-scale');
-      });
-    });
     dock.classList.remove('dock-hidden');
+    const inner = document.getElementById('admin-dock-inner');
+    if (!inner) return;
+    const items = [...inner.querySelectorAll('.dock-item')];
+    const BASE_SIZE = 44;
+    const MAX_SCALE = 1.5;
+    const MAX_DIST = 140;
+    const LERP = 0.18;
+    let mouseX = -9999;
+    let mouseInside = false;
+    let raf = null;
+    items.forEach(el => { el._scale = 1; });
+    dock.addEventListener('mousemove', e => {
+      const r = dock.getBoundingClientRect();
+      mouseX = e.clientX - r.left;
+      mouseInside = true;
+    });
+    dock.addEventListener('mouseleave', () => { mouseInside = false; });
+    function tick() {
+      if (!raf) return;
+      const dr = dock.getBoundingClientRect();
+      items.forEach(el => {
+        const er = el.getBoundingClientRect();
+        const cx = er.left + er.width / 2 - dr.left;
+        const dist = Math.abs(mouseX - cx);
+        let target = 1;
+        if (mouseInside && dist < MAX_DIST) target = 1 + (1 - dist / MAX_DIST) * (MAX_SCALE - 1);
+        el._scale += (target - el._scale) * LERP;
+        if (Math.abs(el._scale - 1) < 0.001) el._scale = 1;
+        const yOff = (el._scale - 1) * -40;
+        el.style.transform = `translateY(${yOff}px) scale(${el._scale})`;
+        el.style.zIndex = el._scale > 1.02 ? '2' : '';
+      });
+      raf = requestAnimationFrame(tick);
+    }
+    raf = requestAnimationFrame(tick);
   }
   // Drag & drop reorder (always init, outside _dockZoom guard)
-  if (dock && !dock._dockDrag) {
-    dock._dockDrag = true;
+  const dockInner = document.getElementById('admin-dock-inner');
+  if (dockInner && !dockInner._dockDrag) {
+    dockInner._dockDrag = true;
     let dragEl = null;
-    dock.querySelectorAll('.dock-item').forEach(el => {
+    dockInner.querySelectorAll('.dock-item').forEach(el => {
       el.addEventListener('dragstart', e => {
         dragEl = el;
         e.dataTransfer.effectAllowed = 'move';
@@ -2791,39 +2797,39 @@ export function init() {
       el.addEventListener('dragend', () => {
         el.style.opacity = '';
         dragEl = null;
-        dock.querySelectorAll('.dock-item.drag-over').forEach(x => x.classList.remove('drag-over'));
+        dockInner.querySelectorAll('.dock-item.drag-over').forEach(x => x.classList.remove('drag-over'));
       });
     });
-    dock.addEventListener('dragover', e => {
+    dockInner.addEventListener('dragover', e => {
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
       const target = e.target.closest('.dock-item');
       if (!target || target === dragEl) return;
-      dock.querySelectorAll('.dock-item.drag-over').forEach(x => x.classList.remove('drag-over'));
+      dockInner.querySelectorAll('.dock-item.drag-over').forEach(x => x.classList.remove('drag-over'));
       target.classList.add('drag-over');
     });
-    dock.addEventListener('drop', e => {
+    dockInner.addEventListener('drop', e => {
       e.preventDefault();
       const target = e.target.closest('.dock-item');
       if (!target || !dragEl || target === dragEl) return;
       target.classList.remove('drag-over');
       const after = e.clientX > target.getBoundingClientRect().left + target.offsetWidth / 2;
-      const all = [...dock.querySelectorAll('.dock-item, .dock-divider')];
+      const all = [...dockInner.querySelectorAll('.dock-item, .dock-divider')];
       const ti = all.indexOf(target), di = all.indexOf(dragEl);
       if (di === -1 || ti === -1) return;
-      dock.insertBefore(dragEl, after && ti < all.length - 1 ? all[ti + 1] : target);
-      const order = [...dock.querySelectorAll('.dock-item')].map(x => x.dataset.section);
+      dockInner.insertBefore(dragEl, after && ti < all.length - 1 ? all[ti + 1] : target);
+      const order = [...dockInner.querySelectorAll('.dock-item')].map(x => x.dataset.section);
       localStorage.setItem('xinco_dock_order', JSON.stringify(order));
       try { lucide?.createIcons(); } catch(_) {}
     });
     const saved = localStorage.getItem('xinco_dock_order');
     if (saved) try {
       const order = JSON.parse(saved);
-      const map = {}; dock.querySelectorAll('.dock-item').forEach(el => { map[el.dataset.section] = el; });
+      const map = {}; dockInner.querySelectorAll('.dock-item').forEach(el => { map[el.dataset.section] = el; });
       const frag = document.createDocumentFragment();
       order.forEach(k => { if (map[k]) frag.appendChild(map[k]); });
-      dock.querySelectorAll('.dock-item').forEach(el => el.remove());
-      dock.prepend(frag);
+      dockInner.querySelectorAll('.dock-item').forEach(el => el.remove());
+      dockInner.prepend(frag);
     } catch(_) {}
   }
   window.isAdmin = isAdmin;
