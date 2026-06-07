@@ -2238,10 +2238,15 @@ tailwind.config = {
                   <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
                     <span class="material-symbols-outlined text-[18px]">videocam</span> FONDO DE VIDEO
                   </h3>
-                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Seleccioná hasta 4 fondos desde Cloudinary. Se usa el primero disponible.</p>
                   <div id="ap-bg-loading" class="text-on-surface-variant/50 text-sm mb-3 flex items-center gap-2"><span class="material-symbols-outlined animate-spin text-[16px]">sync</span> Cargando fondos disponibles...</div>
                   <div id="ap-bg-available" class="grid grid-cols-4 gap-2 mb-3"></div>
-                  <div class="space-y-2 mb-3">
+                  <div id="ap-bg-upload-area" class="mb-3">
+                    <p class="font-body-md text-on-surface-variant/70 text-sm mb-3">Subí videos a la carpeta Cloudinary:</p>
+                    <div class="flex flex-wrap gap-2">
+                      <label class="btn-violet px-3 py-2 text-[10px] cursor-pointer flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">cloud_upload</span>SUBIR VIDEO<input type="file" accept="video/mp4,video/webm" class="hidden" onchange="uploadAdminBgVideo(0,this.files[0])"/></label>
+                    </div>
+                  </div>
+                  <div class="space-y-2">
                     <div class="flex items-center gap-2"><span class="text-[10px] font-medium text-primary w-14">FONDO 1</span><span class="text-[10px] text-on-surface-variant/50 truncate flex-1" id="ap-bg-video-1-label">Ninguno</span><button class="text-[10px] text-error/60 hover:text-error transition-colors" onclick="document.getElementById('ap-bg-video-1').value='';document.getElementById('ap-bg-video-1-label').textContent='Ninguno';saveAppearance()" style="display:none" id="ap-bg-video-1-clear">✕</button><input type="hidden" id="ap-bg-video-1"/></div>
                     <div class="flex items-center gap-2"><span class="text-[10px] font-medium text-primary w-14">FONDO 2</span><span class="text-[10px] text-on-surface-variant/50 truncate flex-1" id="ap-bg-video-2-label">Ninguno</span><button class="text-[10px] text-error/60 hover:text-error transition-colors" onclick="document.getElementById('ap-bg-video-2').value='';document.getElementById('ap-bg-video-2-label').textContent='Ninguno';saveAppearance()" style="display:none" id="ap-bg-video-2-clear">✕</button><input type="hidden" id="ap-bg-video-2"/></div>
                     <div class="flex items-center gap-2"><span class="text-[10px] font-medium text-primary w-14">FONDO 3</span><span class="text-[10px] text-on-surface-variant/50 truncate flex-1" id="ap-bg-video-3-label">Ninguno</span><button class="text-[10px] text-error/60 hover:text-error transition-colors" onclick="document.getElementById('ap-bg-video-3').value='';document.getElementById('ap-bg-video-3-label').textContent='Ninguno';saveAppearance()" style="display:none" id="ap-bg-video-3-clear">✕</button><input type="hidden" id="ap-bg-video-3"/></div>

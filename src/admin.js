@@ -2121,13 +2121,23 @@ export async function fetchAdminBgList() {
     const res = await fetch('/api/admin-bg-list');
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
+    if (data.error === 'CLOUDINARY_CREDENTIALS_MISSING') {
+      console.warn('fetchAdminBgList:', data.hint);
+      _availableAdminBgs = [];
+      _adminBgListError = 'credentials';
+      return [];
+    }
     _availableAdminBgs = data.resources || [];
+    _adminBgListError = _availableAdminBgs.length === 0 ? 'empty' : null;
     return _availableAdminBgs;
   } catch (e) {
     console.warn('fetchAdminBgList:', e.message);
+    _adminBgListError = 'error';
     return [];
   }
 }
+
+let _adminBgListError = null;
 
 export function renderAdminBgSelection() {
   const container = document.getElementById('ap-bg-available');
@@ -2135,8 +2145,13 @@ export function renderAdminBgSelection() {
   if (!container) return;
   if (loading) loading.style.display = 'none';
 
+  if (_adminBgListError === 'credentials') {
+    container.innerHTML = '<p class="text-warning text-sm col-span-4 flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">warning</span> Cloudinary no configurado — agregá API Key y Secret en Vercel.</p>';
+    return;
+  }
+
   if (_availableAdminBgs.length === 0) {
-    container.innerHTML = '<p class="text-on-surface-variant/50 text-sm col-span-4">No hay fondos disponibles en Cloudinary.</p>';
+    container.innerHTML = '<p class="text-on-surface-variant/50 text-sm col-span-4">No hay fondos en la carpeta. Usá "SUBIR VIDEO" para agregar.</p>';
     return;
   }
 
@@ -2197,41 +2212,39 @@ export function setAdminBgVideo(url) {
 export function uploadAdminBgVideo(slot, file) {
   if (!file) return;
   window.showToast?.('Subiendo video...');
-  const uploadBgToFolder = (file, onProgress, onSuccess, onError, resourceType = 'video') => {
-    if (!file) return;
-    const maxSize = 100;
-    if (file.size > maxSize * 1024 * 1024) { onError(`El archivo supera los ${maxSize}MB`); return; }
-    if (resourceType === 'video' && !file.type.startsWith('video/')) { onError('Solo se permiten videos'); return; }
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY.uploadPreset);
-    formData.append('folder', 'HOME/XINCO-TIENDA/ADMINPANEL/BACKGROUND');
-    const xhr = new XMLHttpRequest();
-    const url = resourceType === 'video' ? CLOUDINARY.uploadVideoUrl() : CLOUDINARY.uploadUrl();
-    xhr.open('POST', url, true);
-    xhr.upload.onprogress = (e) => { if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100)); };
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        const res = JSON.parse(xhr.responseText);
-        const finalUrl = res.secure_url;
-        onSuccess(finalUrl, res);
+  const fileInput = document.querySelector('input[type="file"][accept="video/mp4,video/webm"]');
+  if (!file) return;
+  window.showToast?.('Subiendo video...');
+  const maxSize = 100;
+  if (file.size > maxSize * 1024 * 1024) { window.showToast?.(`⚠️ El archivo supera los ${maxSize}MB`); return; }
+  if (!file.type.startsWith('video/')) { window.showToast?.('⚠️ Solo se permiten videos'); return; }
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY.uploadPreset);
+  formData.append('folder', 'HOME/XINCO-TIENDA/ADMINPANEL/BACKGROUND');
+  const xhr = new XMLHttpRequest();
+  const url = CLOUDINARY.uploadVideoUrl();
+  xhr.open('POST', url, true);
+  xhr.upload.onprogress = (e) => {};
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const res = JSON.parse(xhr.responseText);
+      const finalUrl = res.secure_url;
+      if (slot > 0) {
+        selectAdminBg(finalUrl);
       } else {
-        try { const err = JSON.parse(xhr.responseText); onError(err.error?.message || 'Error Cloudinary ' + xhr.status); }
-        catch(e) { onError('Error al subir video'); }
+        fetchAdminBgList().then(() => renderAdminBgSelection());
+        setAdminBgVideo(finalUrl);
       }
-    };
-    xhr.onerror = () => { onError('Error de conexión'); };
-    xhr.send(formData);
+      window.showToast?.('✅ Video subido a Cloudinary');
+      if (fileInput) fileInput.value = '';
+    } else {
+      try { const err = JSON.parse(xhr.responseText); window.showToast?.('❌ ' + (err.error?.message || 'Error ' + xhr.status)); }
+      catch(e) { window.showToast?.('❌ Error al subir video'); }
+    }
   };
-  uploadBgToFolder(file,
-    (pct) => {},
-    (url) => {
-      selectAdminBg(url);
-      window.showToast?.('✅ Video de fondo subido');
-    },
-    (err) => { window.showToast?.('❌ ' + err); },
-    'video'
-  );
+  xhr.onerror = () => { window.showToast?.('❌ Error de conexión'); };
+  xhr.send(formData);
 }
 
 // ===== PAGE BACKGROUND ANIMATION (antigravity particles) =====

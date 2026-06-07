@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const cloudName = 'damwe7juy';
 
   if (!apiKey || !apiSecret) {
-    return res.status(500).json({ error: 'Cloudinary API credentials not configured' });
+    return res.status(200).json({ resources: [], error: 'CLOUDINARY_CREDENTIALS_MISSING', hint: 'Agregá CLOUDINARY_API_KEY y CLOUDINARY_API_SECRET en Vercel Environment Variables' });
   }
 
   try {
