@@ -1953,6 +1953,7 @@ tailwind.config = {
             <button class="sub-tab-btn" data-tab="categorias" onclick="showSectionTab('configuracion','categorias');window.initCatEditor?.()">CATEGORÍAS</button>
             <button class="sub-tab-btn" data-tab="social" onclick="showSectionTab('configuracion','social');loadSocialConfigFromFirebase()">SOCIAL</button>
             <button class="sub-tab-btn" data-tab="emailjs" onclick="showSectionTab('configuracion','emailjs');loadEmailJsIntoForm()">EMAILJS</button>
+            <button class="sub-tab-btn" data-tab="reset" onclick="showSectionTab('configuracion','reset')">RESET</button>
           </div>
           <!-- Tab: Apariencia -->
           <div class="sub-tab-content active" data-tab="apariencia">
@@ -2271,6 +2272,21 @@ tailwind.config = {
                 </div>
                 <div class="flex justify-end gap-3 mt-4">
                   <button class="btn-violet px-6 py-2 text-[11px] uppercase tracking-[.2em]" onclick="saveEmailJsConfigFromPanel()"><span class="material-symbols-outlined text-[16px]">save</span> GUARDAR</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Tab: Reset -->
+          <div class="sub-tab-content" data-tab="reset">
+            <div class="admin-card">
+              <div class="admin-card-body">
+                <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                  <span class="material-symbols-outlined text-[18px]">refresh-cw</span> RESETEAR DATOS
+                </h3>
+                <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Eliminá todos los datos locales (productos, pedidos, configuraciones) y empezá de cero. Esto no afecta a Firebase.</p>
+                <div class="flex gap-3">
+                  <button class="btn-outline py-2 px-4 text-[10px] border-error text-error hover:bg-error hover:text-on-error" onclick="if(confirm('¿Estás seguro? Se borrarán todos los datos locales.')){localStorage.clear();window.showToast?.('🗑️ Datos locales eliminados');location.reload()}"><span class="material-symbols-outlined text-[13px]">delete_sweep</span> RESETEAR LOCALES</button>
+                  <button class="btn-outline py-2 px-4 text-[10px] border-error text-error hover:bg-error hover:text-on-error" onclick="if(confirm('¿Eliminar TODOS los datos de Firebase? Esta acción no se puede deshacer.')){resetFirebaseData()}"><span class="material-symbols-outlined text-[13px]">cloud_off</span> RESETEAR FIREBASE</button>
                 </div>
               </div>
             </div>

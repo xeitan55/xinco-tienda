@@ -2902,6 +2902,24 @@ export function init() {
   window.subscribeNewsletter = subscribeNewsletter;
   window.loadSocialConfigFromFirebase = loadSocialConfigFromFirebase;
   window._adminBgColor = _currentBgColor;
+
+  window.resetFirebaseData = async function() {
+    if (!confirm('⚠️ ¿Estás seguro? Se borrarán TODOS los productos, pedidos, banners y config de Firebase.')) return;
+    if (!confirm('Última chance: ¿realmente querés eliminar todo?')) return;
+    const ready = await window.waitForFirebase();
+    if (!ready || !window._fb || !window.fbDb) { window.showToast?.('⚠️ Sin conexión a Firebase'); return; }
+    try {
+      const { doc, setDoc, collection, deleteDoc } = window._fb;
+      const refs = ['productos','pedidos','banners','config'].map(c => doc(window.fbDb, c, 'data'));
+      await Promise.all(refs.map(r => deleteDoc(r).catch(() => {})));
+      localStorage.clear();
+      window.showToast?.('✅ Todos los datos eliminados');
+      setTimeout(() => location.reload(), 1000);
+    } catch(e) {
+      window.showToast?.('⚠️ Error: ' + e.message);
+    }
+  };
+
   const cfg = loadAppearance();
   window._appearanceCfg = cfg;
   applyAppearance(cfg);
