@@ -2197,14 +2197,36 @@ export function setAdminBgVideo(url) {
 export function uploadAdminBgVideo(slot, file) {
   if (!file) return;
   window.showToast?.('Subiendo video...');
-  uploadToCloudinary(file,
+  const uploadBgToFolder = (file, onProgress, onSuccess, onError, resourceType = 'video') => {
+    if (!file) return;
+    const maxSize = 100;
+    if (file.size > maxSize * 1024 * 1024) { onError(`El archivo supera los ${maxSize}MB`); return; }
+    if (resourceType === 'video' && !file.type.startsWith('video/')) { onError('Solo se permiten videos'); return; }
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY.uploadPreset);
+    formData.append('folder', 'HOME/XINCO-TIENDA/ADMINPANEL/BACKGROUND');
+    const xhr = new XMLHttpRequest();
+    const url = resourceType === 'video' ? CLOUDINARY.uploadVideoUrl() : CLOUDINARY.uploadUrl();
+    xhr.open('POST', url, true);
+    xhr.upload.onprogress = (e) => { if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100)); };
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        const res = JSON.parse(xhr.responseText);
+        const finalUrl = res.secure_url;
+        onSuccess(finalUrl, res);
+      } else {
+        try { const err = JSON.parse(xhr.responseText); onError(err.error?.message || 'Error Cloudinary ' + xhr.status); }
+        catch(e) { onError('Error al subir video'); }
+      }
+    };
+    xhr.onerror = () => { onError('Error de conexión'); };
+    xhr.send(formData);
+  };
+  uploadBgToFolder(file,
     (pct) => {},
     (url) => {
-      document.getElementById('ap-bg-video-' + slot).value = url;
-      const label = document.getElementById('ap-bg-video-' + slot + '-label');
-      if (label) label.textContent = url.split('/').pop().substring(0, 30) + '...';
-      setAdminBgVideo(url);
-      saveAppearance();
+      selectAdminBg(url);
       window.showToast?.('✅ Video de fondo subido');
     },
     (err) => { window.showToast?.('❌ ' + err); },
