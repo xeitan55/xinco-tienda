@@ -296,6 +296,8 @@
   html.dark #product-overlay::before { background: linear-gradient(90deg, #222 0%, var(--secondary-container) 50%, #222 100%); }
   html.dark #product-overlay .product-close-btn { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: var(--on-surface); }
   html.dark #product-overlay .product-close-btn:hover { background: var(--on-surface); color: var(--surface); }
+  html.dark .badge-violet { background: var(--secondary-container, #5d22ff); color: var(--on-secondary-container, #fff); }
+  html.dark .badge-black { background: var(--badge-bg); color: var(--badge-text); }
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
   .modal-overlay.open { display: flex; align-items: center; justify-content: center; }
   .cart-drawer { position: fixed; right: 0; top: 0; bottom: 0; width: 420px; max-width: 100vw; background: var(--cart-bg); border-left: 0; z-index: 900; transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; border-radius: 24px 0 0 24px; box-shadow: -8px 0 30px rgba(0,0,0,0.1); }
