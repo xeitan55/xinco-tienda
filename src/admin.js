@@ -2757,6 +2757,7 @@ export function init() {
     let mouseX = -9999;
     let mouseInside = false;
     let running = true;
+    const BASE = 44, GAP = 8;
     items.forEach(el => { el._scale = 1; });
     dock.addEventListener('mousemove', e => {
       const r = dock.getBoundingClientRect();
@@ -2766,6 +2767,7 @@ export function init() {
     dock.addEventListener('mouseleave', () => { mouseInside = false; });
     (function tick() {
       const dr = dock.getBoundingClientRect();
+      // update target scales
       items.forEach(el => {
         const er = el.getBoundingClientRect();
         const cx = er.left + er.width / 2 - dr.left;
@@ -2773,11 +2775,18 @@ export function init() {
         let target = 1;
         if (mouseInside && dist < MAX_DIST) target = 1 + (1 - dist / MAX_DIST) * (MAX_SCALE - 1);
         el._scale += (target - el._scale) * LERP;
-        if (Math.abs(el._scale - 1) < 0.001) el._scale = 1;
-        const yOff = (el._scale - 1) * -40;
-        el.style.transform = `translateY(${yOff}px) scale(${el._scale})`;
-        el.style.zIndex = el._scale > 1.02 ? '2' : '';
+        if (Math.abs(el._scale - 1) < 0.01) el._scale = 1;
       });
+      // position items from left to right, container expands/contracts
+      let x = 0;
+      items.forEach(el => {
+        const w = BASE * el._scale;
+        const yOff = (el._scale - 1) * -36;
+        el.style.transform = `translateX(${x}px) translateY(${yOff}px) scale(${el._scale})`;
+        el.style.zIndex = el._scale > 1.02 ? '2' : '';
+        x += w + GAP;
+      });
+      inner.style.width = (x - GAP) + 'px';
       if (running) requestAnimationFrame(tick);
     })();
   }
