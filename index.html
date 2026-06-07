@@ -2215,6 +2215,18 @@ tailwind.config = {
           <div class="sub-tab-content active" data-tab="apariencia">
             <div class="admin-card">
               <div class="admin-card-body space-y-6">
+                <!-- Color de Énfasis -->
+                <div class="border border-white/20 rounded-xl p-5" style="background:rgba(255,255,255,0.15);backdrop-filter:blur(12px);">
+                  <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
+                    <span class="material-symbols-outlined text-[18px]">palette</span> COLOR DE ÉNFASIS
+                  </h3>
+                  <div class="flex gap-3 flex-wrap items-center">
+                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="violet" style="background:#9b87f5" onclick="setAdminColor('violet')"></button>
+                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="blue" style="background:#5b9cf5" onclick="setAdminColor('blue')"></button>
+                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="pink" style="background:#e87be8" onclick="setAdminColor('pink')"></button>
+                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="green" style="background:#5cc97a" onclick="setAdminColor('green')"></button>
+                  </div>
+                </div>
                 <!-- Tema -->
                 <div class="border border-white/20 rounded-xl p-5" style="background:rgba(255,255,255,0.15);backdrop-filter:blur(12px);">
                   <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
@@ -2334,25 +2346,7 @@ tailwind.config = {
                     </div>
                   </div>
                 </div>
-                <!-- Color de Énfasis -->
-                <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                  <h3 class="font-label-caps text-label-caps text-primary mb-4 flex items-center gap-2 text-[11px]">
-                    <span class="material-symbols-outlined text-[18px]">palette</span> COLOR DE ÉNFASIS & VECTORES
-                  </h3>
-                  <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Color de acento del panel de administración.</p>
-                  <div class="flex gap-3 flex-wrap items-center">
-                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="violet" style="background:#9b87f5" onclick="setAdminColor('violet')"></button>
-                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="blue" style="background:#5b9cf5" onclick="setAdminColor('blue')"></button>
-                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="pink" style="background:#e87be8" onclick="setAdminColor('pink')"></button>
-                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="green" style="background:#5cc97a" onclick="setAdminColor('green')"></button>
-                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="gold" style="background:#e8c84a" onclick="setAdminColor('gold')"></button>
-                    <button class="color-swatch w-10 h-10 rounded-xl border-2 border-transparent hover:scale-110 transition-all cursor-pointer" data-color="red" style="background:#f56060" onclick="setAdminColor('red')"></button>
-                    <div class="flex items-center gap-2 ml-2">
-                      <span class="font-label-caps text-[9px] text-on-surface-variant/60">PERSONALIZAR</span>
-                      <input type="color" id="ap-vector-color" value="#9b87f5" class="w-8 h-8 rounded-xl border-2 border-gray-200 cursor-pointer p-0" style="background:none;" onchange="setAdminCustomColor(this.value)"/>
-                    </div>
-                  </div>
-                </div>
+
                 <!-- Botón guardar -->
                 <div class="flex justify-end">
                   <button id="ap-apply-btn" class="btn-violet px-8 py-3 text-[11px] uppercase tracking-[.2em] font-bold" onclick="applyAllChanges()"><span class="material-symbols-outlined text-[18px]">check_circle</span> APLICAR CAMBIOS</button>
