@@ -2925,6 +2925,26 @@ export function init() {
   applyAppearance(cfg);
   loadSocialConfigFromFirebase();
   initAdminThemeSelector();
+  window.showResetModal = function(type) {
+    const modal = document.getElementById('reset-modal');
+    const title = document.getElementById('reset-modal-title');
+    const msg = document.getElementById('reset-modal-msg');
+    const btn = document.getElementById('reset-modal-confirm');
+    if (!modal) return;
+    if (type === 'local') {
+      title.textContent = 'RESETEAR LOCALES';
+      msg.textContent = 'Se borrarán todos los datos locales (productos, pedidos, configuraciones). ¿Estás seguro?';
+      btn.onclick = function() { localStorage.clear(); window.showToast?.('🗑️ Datos locales eliminados'); closeResetModal(); setTimeout(() => location.reload(), 800); };
+    } else {
+      title.textContent = 'RESETEAR FIREBASE';
+      msg.textContent = 'Se eliminarán TODOS los datos de Firebase (productos, pedidos, banners, config). Esta acción no se puede deshacer.';
+      btn.onclick = function() { closeResetModal(); resetFirebaseData(); };
+    }
+    modal.style.display = 'flex';
+  };
+  window.closeResetModal = function() {
+    document.getElementById('reset-modal').style.display = 'none';
+  };
   document.addEventListener('click', function(e) {
     const menu = document.getElementById('admin-user-menu');
     if (menu && !e.target.closest('.admin-header-right')) menu.classList.add('hidden');
