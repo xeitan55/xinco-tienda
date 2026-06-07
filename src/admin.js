@@ -2749,16 +2749,20 @@ export function init() {
     dock.classList.remove('dock-hidden');
     const inner = document.getElementById('admin-dock-inner');
     if (!inner) return;
-    const items = [...inner.querySelectorAll('.dock-item')];
-    const BASE_SIZE = 44;
+    const allChildren = () => [...inner.children];
     const MAX_SCALE = 1.5;
     const MAX_DIST = 140;
     const LERP = 0.18;
+    const BASE = 44, GAP = 8;
     let mouseX = -9999;
     let mouseInside = false;
     let running = true;
-    const BASE = 44, GAP = 8;
-    items.forEach(el => { el._scale = 1; });
+    allChildren().forEach(el => {
+      if (el.classList.contains('dock-item')) {
+        el._scale = 1;
+        if (!el.hasAttribute('title')) el.title = el.dataset.section || '';
+      }
+    });
     dock.addEventListener('mousemove', e => {
       const r = dock.getBoundingClientRect();
       mouseX = e.clientX - r.left;
@@ -2767,8 +2771,9 @@ export function init() {
     dock.addEventListener('mouseleave', () => { mouseInside = false; });
     (function tick() {
       const dr = dock.getBoundingClientRect();
-      // update target scales
-      items.forEach(el => {
+      // update target scales for items only
+      allChildren().forEach(el => {
+        if (!el.classList.contains('dock-item')) return;
         const er = el.getBoundingClientRect();
         const cx = er.left + er.width / 2 - dr.left;
         const dist = Math.abs(mouseX - cx);
@@ -2777,14 +2782,22 @@ export function init() {
         el._scale += (target - el._scale) * LERP;
         if (Math.abs(el._scale - 1) < 0.01) el._scale = 1;
       });
-      // position items from left to right, container expands/contracts
+      // position all children (items + dividers) from left to right
       let x = 0;
-      items.forEach(el => {
-        const w = BASE * el._scale;
-        const yOff = (el._scale - 1) * -36;
-        el.style.transform = `translateX(${x}px) translateY(${yOff}px) scale(${el._scale})`;
-        el.style.zIndex = el._scale > 1.02 ? '2' : '';
-        x += w + GAP;
+      allChildren().forEach(el => {
+        if (el.classList.contains('dock-divider')) {
+          el.style.position = 'absolute';
+          el.style.transform = `translateX(${x}px)`;
+          el.style.top = '50%';
+          el.style.marginTop = '-14px';
+          x += 1 + GAP; // divider is 1px wide
+        } else {
+          const w = BASE * (el._scale || 1);
+          const yOff = ((el._scale || 1) - 1) * -36;
+          el.style.transform = `translateX(${x}px) translateY(${yOff}px) scale(${el._scale || 1})`;
+          el.style.zIndex = (el._scale || 1) > 1.02 ? '2' : '';
+          x += w + GAP;
+        }
       });
       inner.style.width = (x - GAP) + 'px';
       if (running) requestAnimationFrame(tick);

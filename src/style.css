@@ -358,15 +358,13 @@
   .dock-item .dock-icon { filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)); }
   .dock-item .dock-icon { width: 22px; height: 22px; stroke-width: 2; }
   .dock-item:hover { background: var(--admin-accent-light, #c4b5fd); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
-  .dock-item:hover .dock-icon { filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); }
   .dock-item.drag-over { transform: scale(1.15) !important; box-shadow: 0 0 0 3px var(--admin-accent,#9b87f5), 0 8px 24px rgba(0,0,0,0.2); z-index: 10; }
   .dock-item:active { transform: translateY(-1px) scale(0.95) !important; box-shadow: 0 1px 2px rgba(0,0,0,0.12); }
   .dock-item.active { background: var(--admin-accent-light, #c4b5fd); box-shadow: 0 0 0 2px #fff, 0 0 16px rgba(0,0,0,0.15); }
   .dock-item.active .dock-icon { filter: drop-shadow(0 0 10px rgba(255,255,255,0.4)); }
   .dock-item.active::before { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 14px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.85); animation: dockPulse 2s ease-in-out infinite; }
-  .dock-item::after { content: attr(data-section); position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%) scale(0.8); background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; font-weight: 700; padding: 6px 12px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; border: 1px solid rgba(255,255,255,0.1); }
-  .dock-item:hover::after { opacity: 1; transform: translateX(-50%) scale(1); }
-  .dock-divider { width: 1px; height: 28px; background: rgba(0,0,0,0.08); margin: 0 6px; }
+
+  .dock-divider { width: 1px; height: 28px; background: rgba(0,0,0,0.08); }
   @keyframes dockPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 .dock-style-option { border-color: transparent; }
 .dock-style-option:has(input:checked) { border-color: var(--admin-accent, #9b87f5) !important; background: color-mix(in srgb, var(--admin-accent, #9b87f5) 8%, transparent); }
