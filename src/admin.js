@@ -2792,15 +2792,17 @@ export function init() {
       allChildren().forEach(el => {
         if (el.classList.contains('dock-divider')) {
           el.style.position = 'absolute';
-          el.style.transform = `translateX(${x}px)`;
+          el.style.left = x + 'px';
           el.style.top = '50%';
           el.style.marginTop = '-14px';
-          x += 1 + GAP; // divider is 1px wide
+          x += 1 + GAP;
         } else {
-          const w = BASE * (el._scale || 1);
-          const yOff = ((el._scale || 1) - 1) * -36;
-          el.style.transform = `translateX(${x}px) translateY(${yOff}px) scale(${el._scale || 1})`;
-          el.style.zIndex = (el._scale || 1) > 1.02 ? '2' : '';
+          const s = el._scale || 1;
+          const w = BASE * s;
+          const yOff = (s - 1) * -36;
+          el.style.left = x + 'px';
+          el.style.transform = `translateY(${yOff}px) scale(${s})`;
+          el.style.zIndex = s > 1.02 ? '2' : '';
           x += w + GAP;
         }
       });
