@@ -1038,7 +1038,7 @@ export function renderProductImageSlots() {
     const c = AVAILABLE_COLORS.find(x => x.id === cid);
     if (c) groups.push({ id: cid, label: c.label, hex: c.hex });
   });
-    const html = groups.map(g => {
+  const html = groups.map(g => {
     const imgs = pfImages.filter(img => (img && img.colorId || '') === g.id);
     const slots = [];
     for (let i = 0; i < 4; i++) {
@@ -3010,7 +3010,7 @@ export function init() {
   window.deleteProduct = deleteProduct;
   window.editProduct = editProductAdmin;
   window.renderProductImageSlots = renderProductImageSlots;
-  window.linkImageColor = linkImageColor;
+
   window.handleSlotDrop = handleSlotDrop;
   window.uploadSlotImage = uploadSlotImage;
   window.getFirstImageUrl = getFirstImageUrl;
