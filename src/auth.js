@@ -102,7 +102,6 @@ export async function doRegister() {
     }
     const fullName = nombre + ' ' + apellido;
     _lastRegisteredUser = { email, name: fullName };
-    localStorage.setItem('xinco_last_reg_email', email);
     state.user = user;
     await updateAuthUI();
     document.getElementById('register-form-panel').classList.add('hidden');
