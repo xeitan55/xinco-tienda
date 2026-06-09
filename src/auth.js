@@ -663,6 +663,7 @@ export async function handleEmailVerification() {
 }
 
 export function init() {
+  try { localStorage.removeItem('xinco_last_reg_email'); } catch(_) {}
   window.doLogin = doLogin;
   window.doRegister = doRegister;
   window.doLogout = doLogout;
