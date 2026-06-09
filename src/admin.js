@@ -2059,7 +2059,7 @@ export function buildReportHTML(tipo, orders) {
   const fp = (n) => window.fmtPrice ? window.fmtPrice(n) : '$' + n;
   const header = `<div style="border-bottom:3px solid #000;padding-bottom:20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-start;">
     <div><div style="font-family:Arial,sans-serif;font-size:32px;font-weight:900;letter-spacing:-2px;line-height:1;">XINCO</div>
-    <div style="font-size:10px;color:#666;margin-top:4px;font-family:monospace;letter-spacing:1px;">URBAN STREETWEAR — MAR DEL PLATA</div></div>
+    <div style="font-size:10px;color:#666;margin-top:4px;font-family:monospace;letter-spacing:1px;">PREMIUM — MAR DEL PLATA</div></div>
     <div style="text-align:right;"><div style="font-size:10px;color:#666;font-family:monospace;">GENERADO EL ${now}</div>
     <div style="font-size:10px;color:#666;font-family:monospace;margin-top:2px;">USO EXCLUSIVO INTERNO</div></div></div>`;
   if (tipo === 'ventas') {
