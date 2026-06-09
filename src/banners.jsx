@@ -141,7 +141,7 @@ export function startHeroParticles() {
   if (!container) return;
   container.innerHTML = '';
   _particles = [];
-  const COLORS = ['#5d22ff','#ffffff','#c6c6c6','#4500d1'];
+  const COLORS = ['#ffffff','#c6c6c6','#888888','#555555'];
   const COUNT = 28;
   for (let i = 0; i < COUNT; i++) {
     const dot = document.createElement('div');
@@ -282,7 +282,7 @@ export async function uploadHeroImage(file) {
   progress.classList.remove('hidden');
   result.classList.add('hidden');
   bar.style.width = '0%';
-  bar.style.background = '#5d22ff';
+  bar.style.background = 'var(--admin-accent, #1a1a1a)';
   status.textContent = 'SUBIENDO...';
   const reader = new FileReader();
   reader.onload = (ev) => { document.getElementById('hero-preview-img').src = ev.target.result; };

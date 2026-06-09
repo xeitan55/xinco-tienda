@@ -837,7 +837,7 @@ export function renderCategoryEditorList() {
         </button>
       </div>
       <div class="w-16 h-16 shrink-0 rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
-        <img id="cat-preview-${i}" src="${cat.img || 'https://placehold.co/150x200/1c1c1c/5d22ff?text=+'}" class="w-full h-full object-cover"/>
+        <img id="cat-preview-${i}" src="${cat.img || 'https://placehold.co/150x200/1c1c1c/1a1a1a?text=+'}" class="w-full h-full object-cover"/>
       </div>
       <div class="flex-1 min-w-0 space-y-2">
         <div class="flex gap-2">
@@ -990,7 +990,7 @@ export function renderHomePageCats() {
   if (!grid) return;
   grid.innerHTML = bannerState.categories.map(c => `
     <div class="cat-card group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('${c.slug}')">
-      <img src="${c.img || 'https://placehold.co/800x600/1c1c1c/5d22ff?text=+'}" alt="${c.name}" class="cat-card-img absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+      <img src="${c.img || 'https://placehold.co/800x600/1c1c1c/1a1a1a?text=+'}" alt="${c.name}" class="cat-card-img absolute inset-0 w-full h-full object-cover "/>
       <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
       <div class="cat-card-label absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
         <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">${c.name}</h3>
@@ -1005,7 +1005,7 @@ export function renderCategoryPreview() {
   const cats = bannerState.categories || [];
   grid.innerHTML = cats.map(c => `
     <div class="relative w-full h-[120px] border-2 border-primary rounded-lg overflow-hidden bg-white">
-      <img src="${c.img || 'https://placehold.co/400x300/1c1c1c/5d22ff?text=+'}" alt="${c.name}" class="absolute inset-0 w-full h-full object-cover"/>
+      <img src="${c.img || 'https://placehold.co/400x300/1c1c1c/1a1a1a?text=+'}" alt="${c.name}" class="absolute inset-0 w-full h-full object-cover"/>
       <div class="absolute inset-0 bg-primary/20"></div>
       <div class="absolute bottom-0 left-0 p-2 bg-white border-t-2 border-r-2 border-primary rounded-tr-md">
         <span style="font-family:Montserrat;font-size:12px;font-weight:800;" class="text-primary uppercase">${c.name}</span>
@@ -1414,7 +1414,7 @@ export function startHeroParticles() {
   if (!container) return;
   container.innerHTML = '';
   _particles = [];
-  const COLORS  = ['#5d22ff','#ffffff','#c6c6c6','#4500d1'];
+  const COLORS  = ['#ffffff','#c6c6c6','#888888','#555555'];
   const COUNT   = 28;
   for (let i = 0; i < COUNT; i++) {
     const dot = document.createElement('div');

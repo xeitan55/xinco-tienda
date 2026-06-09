@@ -132,7 +132,7 @@ export async function filterCatalog(tag) {
   document.querySelectorAll('.filter-cat').forEach(cb => {
     cb.checked = state.filterCat.length > 0 ? cb.value === tag : cb.value === 'all';
   });
-  const titles = { newdrops:'NEW DROPS', stylo:'STYLO', esenciales:'ESENCIALES', exclusive:'EXCLUSIVE' };
+  const titles = { newdrops:'NOVEDADES', stylo:'STYLE', esenciales:'ESENCIALES', exclusive:'EXCLUSIVE' };
   document.getElementById('catalog-title').textContent = titles[tag] || tag.toUpperCase();
   state._catFilterNav = true;
   await nav('catalog');
