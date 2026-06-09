@@ -35,10 +35,10 @@ export function setAccentColor(hex) {
 }
 
 export function setTheme(name) {
-  const themes = { light: { label: 'Claro', icon: 'light_mode' }, dark: { label: 'Oscuro', icon: 'dark_mode' }, 'dark-soft': { label: 'Suave', icon: 'bedtime' } };
+  const themes = { light: { label: 'Claro', icon: 'light_mode' }, dark: { label: 'Oscuro', icon: 'dark_mode' } };
   const theme = themes[name];
   if (!theme) return;
-  document.documentElement.classList.remove('dark', 'dark-soft');
+  document.documentElement.classList.remove('dark');
   document.documentElement.classList.add('theme-transitioning');
   if (name !== 'light') document.documentElement.classList.add(name);
   localStorage.setItem(THEME_KEY, name);

@@ -2783,10 +2783,8 @@ export function subscribeNewsletter() {
 // ===== INIT THEME RADIO IN ADMIN =====
 export function initAdminThemeSelector() {
   const current = window.getTheme?.() || 'light';
-  const theme = current === 'dark-soft' ? 'dark' : current;
-  const radio = document.querySelector(`input[name="admin-theme"][value="${theme}"]`);
+  const radio = document.querySelector(`input[name="admin-theme"][value="${current}"]`);
   if (radio) radio.checked = true;
-  if (current === 'dark-soft') { window.setTheme?.('dark'); saveAppearance(); }
 }
 
 export function init() {
