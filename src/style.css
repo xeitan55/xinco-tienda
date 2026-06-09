@@ -430,9 +430,41 @@
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
   ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); }
-  .product-card:hover .size-overlay { transform: translateY(0); }
-  .product-card { border-radius: 20px; overflow: hidden; }
-  .size-overlay { transform: translateY(100%); transition: transform 0.25s ease; }
+  .product-card {
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .product-card:hover {
+    box-shadow: 0 16px 48px rgba(0,0,0,0.1) !important;
+    transform: translateY(-6px) !important;
+  }
+  .product-card:hover .product-thumb-img {
+    transform: scale(1.08);
+  }
+  .product-card:hover .product-name {
+    color: var(--accent-color);
+  }
+  .size-overlay {
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .product-card:hover .size-overlay {
+    transform: translateY(0);
+  }
+  .product-card:hover .size-overlay button {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .size-overlay button {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .size-overlay button:nth-child(1) { transition-delay: 0.03s; }
+  .size-overlay button:nth-child(2) { transition-delay: 0.06s; }
+  .size-overlay button:nth-child(3) { transition-delay: 0.09s; }
+  .size-overlay button:nth-child(4) { transition-delay: 0.12s; }
   /* grayscale-hover removed */
   .cat-card { transition: all 0.35s cubic-bezier(0.22,1,0.36,1); }
   .cat-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
@@ -533,6 +565,7 @@ html.dark .admin-solid .admin-card-header { border-color: var(--outline-variant)
   html.dark .star.empty { color: var(--outline-variant); }
   html.dark .color-swatch.selected { border-color: var(--on-surface); box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--on-surface); }
   html.dark .card-hover:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+html.dark .product-card:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.3) !important; }
   html.dark .filter-color-btn.selected { outline-color: var(--on-surface) !important; }
   html.dark .whatsapp-float { background: #25D366; color: #fff; }
   html.dark .img-slot { border-color: var(--outline-variant); background: var(--surface-container-low); }

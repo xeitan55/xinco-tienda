@@ -23,13 +23,13 @@ export function renderProductCard(p, small=false) {
       <div class="relative aspect-[4/5] overflow-hidden border-b-[3px] border-primary bg-surface-container">
         ${p.badge ? `<div class="absolute top-3 left-3 z-10"><span class="badge badge-violet text-[9px]">${p.badge}</span></div>` : ''}
         ${p.oldPrice && p.badge !== 'SALE' ? `<div class="absolute top-3 right-3 z-10"><span class="badge badge-black text-[9px]">SALE</span></div>` : ''}
-        <img src="${img}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover transition-all duration-500"/>
+        <img src="${img}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover product-thumb-img transition-all duration-700"/>
         <div class="absolute bottom-0 left-0 w-full bg-primary/90 border-t-[3px] border-primary size-overlay flex">
           ${(p.sizes||['S','M','L','XL']).slice(0,4).map(s=>`<button class="flex-1 py-2 font-label-caps text-on-primary hover:bg-secondary-container text-[9px] border-r border-white/20 last:border-0" onclick="event.stopPropagation();quickAddToCart('${p.id}','${s}','${colors[0]||'negro'}')">${s}</button>`).join('')}
         </div>
       </div>
       <div class="p-3">
-        <div class="font-label-caps text-label-caps text-primary truncate mb-1 text-[11px]">${p.name}</div>
+        <div class="font-label-caps text-label-caps text-primary truncate mb-1 text-[11px] product-name transition-colors duration-300">${p.name}</div>
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="font-label-caps text-[12px] text-primary">${window.fmtPrice?.(p.price) || '$' + p.price}</span>
