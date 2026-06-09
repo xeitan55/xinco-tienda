@@ -152,6 +152,7 @@ export function initStitches() {
   let cols = 0, rows = 0;
   let mx = -9999, my = -9999;
   let animId = null;
+  let isVisible = true;
   const SPACING = 32;
   const MOUSE_RADIUS = 140;
   const STITCH_SIZE = 4;
@@ -178,6 +179,7 @@ export function initStitches() {
   }
 
   function draw() {
+    if (!isVisible) { animId = requestAnimationFrame(draw); return; }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const p of pts) {
       const dxo = p.ox - p.x;
@@ -236,6 +238,9 @@ export function initStitches() {
     canvas.style.display = 'none';
     cancelAnimationFrame(animId);
   }
+  document.addEventListener('visibilitychange', () => {
+    isVisible = !document.hidden;
+  });
 }
 
 export function initXincoGlitter() {

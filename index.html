@@ -3,7 +3,21 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>XINCO</title>
+<meta name="description" content="XINCO - Urban Streetwear. Ropa urbana con corte impecable y materiales premium. Envíos a todo el país."/>
+<meta name="keywords" content="xinco, ropa urbana, streetwear, moda, remeras, buzos, pantalones, mar del plata"/>
+<meta name="author" content="XINCO"/>
+<meta name="theme-color" content="#000000"/>
+<meta property="og:title" content="XINCO - Urban Streetwear"/>
+<meta property="og:description" content="Descubrí la colección de urban streetwear. Prendas urbanas con estilo único."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://www.xinco.shop/"/>
+<meta property="og:image" content="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1200&q=80"/>
+<meta property="og:locale" content="es_AR"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="XINCO - Urban Streetwear"/>
+<meta name="twitter:description" content="Descubrí la colección de urban streetwear."/>
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1200&q=80"/>
+<title>XINCO - Urban Streetwear</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='85' font-size='90' font-weight='900' font-family='Montserrat,sans-serif' fill='%23000'%3EX%3C/text%3E%3C/svg%3E">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
@@ -277,28 +291,28 @@ tailwind.config = {
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
       <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('remeras')">
-        <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Remeras</h3>
         </div>
       </div>
       <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('pantalones')">
-        <img id="cat-img-pantalones-display" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80" alt="Pantalones" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <img id="cat-img-pantalones-display" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80" alt="Pantalones" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Pantalones</h3>
         </div>
       </div>
       <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('buzos')">
-        <img id="cat-img-buzos-display" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80" alt="Buzos" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <img id="cat-img-buzos-display" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80" alt="Buzos" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Buzos</h3>
         </div>
       </div>
       <div class="group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('accesorios')">
-        <img id="cat-img-accesorios-display" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80" alt="Accesorios" class="absolute inset-0 w-full h-full object-cover grayscale-hover"/>
+        <img id="cat-img-accesorios-display" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80" alt="Accesorios" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Accesorios</h3>

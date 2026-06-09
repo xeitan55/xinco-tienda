@@ -13,7 +13,6 @@ import { init as initCart } from './cart.js';
 import { init as initCoupons } from './coupons.js';
 import { init as initBanners } from './banners.jsx';
 import { init as initCheckout } from './checkout.js';
-import { init as initAdmin } from './admin.js';
 import { init as initSendTicket } from './send-ticket.js';
 
 initState();
@@ -29,7 +28,6 @@ initCart();
 initCoupons();
 initBanners();
 initCheckout();
-initAdmin();
 initSendTicket();
 
 window.bootFromFirebase();
