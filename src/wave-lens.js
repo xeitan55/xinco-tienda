@@ -28,9 +28,9 @@ function fbm(x, y, n) {
 }
 
 const LAYERS = [
-  { count: 10, amp: 160, freq: 0.08, speed: 0.12, alpha: 0.04, lineW: 1.8 },
-  { count: 8, amp: 110, freq: 0.15, speed: 0.20, alpha: 0.06, lineW: 1.2 },
-  { count: 6, amp: 70, freq: 0.25, speed: 0.30, alpha: 0.08, lineW: 0.7 },
+  { spacing: 28, amp: 80, freq: 0.15, speed: 0.08, alpha: 0.15, lineW: 1.5 },
+  { spacing: 18, amp: 50, freq: 0.28, speed: 0.15, alpha: 0.20, lineW: 1.0 },
+  { spacing: 10, amp: 30, freq: 0.45, speed: 0.25, alpha: 0.25, lineW: 0.6 },
 ];
 
 export function init() {
@@ -45,6 +45,7 @@ export function init() {
   let cx = -9999, cy = -9999;
   let time = 0;
   let running = true;
+  let hasMoved = false;
 
   function resize() {
     dpr = window.devicePixelRatio || 1;
@@ -58,33 +59,25 @@ export function init() {
   }
 
   function updateMask() {
-    const r = Math.min(W, H) * 0.3;
-    const g = `radial-gradient(circle ${r}px at ${cx}px ${cy}px, white 0%, white 20%, transparent 55%, transparent 100%)`;
+    const r = Math.min(W, H, 600) * 0.28;
+    const g = `radial-gradient(circle ${r}px at ${cx}px ${cy}px, white 0%, white 22%, transparent 52%, transparent 100%)`;
     wrap.style.maskImage = g;
     wrap.style.webkitMaskImage = g;
   }
 
-  function drawFlow() {
+  function drawWaves() {
     ctx.clearRect(0, 0, W, H);
-    const t = time * 0.0006;
+    const t = time * 0.001;
 
     for (const l of LAYERS) {
       ctx.beginPath();
-      const spacing = W / (l.count + 1);
-      for (let i = 0; i < l.count; i++) {
-        const bx = spacing * (i + 1) + (i % 2 === 0 ? -40 : 40);
-        const ny0 = t * l.speed * 0.08;
-        const ox0 = (fbm(bx * 0.001 * l.freq, ny0, 2) - 0.5) * l.amp * 0.3;
-        ctx.moveTo(bx + ox0, H + 10);
-        const steps = 50;
-        for (let j = 1; j <= steps; j++) {
-          const p = j / steps;
-          const y = H - p * (H + 20);
-          const nx = bx * 0.002 * l.freq + t * l.speed * 0.06;
-          const ny = p * 0.6 + t * l.speed * 0.05;
-          const sway = Math.sin(p * Math.PI + t * l.speed * 0.04) * 20 * p;
-          const n = fbm(nx * 2, ny * 2, 2) - 0.5;
-          const x = bx + n * l.amp * p + sway;
+      for (let row = -l.spacing; row < H + l.spacing; row += l.spacing) {
+        ctx.moveTo(0, row + Math.sin(row * 0.008 + t * 0.15 * l.speed) * 8);
+        for (let x = 3; x <= W; x += 3) {
+          const dx = Math.sin(row * 0.008 + t * 0.15 * l.speed) * 8;
+          const nx = (x + dx) * 0.003 * l.freq + t * l.speed * 0.08;
+          const ny = row * 0.002 + t * l.speed * 0.06;
+          const y = row + (fbm(nx, ny, 2) - 0.5) * l.amp;
           ctx.lineTo(x, y);
         }
       }
@@ -92,6 +85,14 @@ export function init() {
       ctx.lineWidth = l.lineW;
       ctx.stroke();
     }
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+    ctx.fillStyle = '#ff3333';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
   }
 
   function tick() {
@@ -101,15 +102,32 @@ export function init() {
     cy += (ty - cy) * ease;
     updateMask();
     time++;
-    drawFlow();
+    drawWaves();
     requestAnimationFrame(tick);
   }
 
-  document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+  document.addEventListener('mousemove', e => {
+    if (!hasMoved) {
+      hasMoved = true;
+      tx = e.clientX;
+      ty = e.clientY;
+      cx = tx;
+      cy = ty;
+    } else {
+      tx = e.clientX;
+      ty = e.clientY;
+    }
+  });
   document.addEventListener('mouseleave', () => { tx = -9999; ty = -9999; });
   document.addEventListener('touchmove', e => {
-    const t = e.touches[0];
-    if (t) { tx = t.clientX; ty = t.clientY; }
+    if (!hasMoved) {
+      hasMoved = true;
+      const t = e.touches[0];
+      if (t) { tx = t.clientX; ty = t.clientY; cx = tx; cy = ty; }
+    } else {
+      const t = e.touches[0];
+      if (t) { tx = t.clientX; ty = t.clientY; }
+    }
   }, { passive: true });
 
   let resizeTimer;
@@ -119,6 +137,17 @@ export function init() {
   });
 
   resize();
+
+  // show full canvas briefly, then apply mask
+  setTimeout(() => {
+    if (!hasMoved) {
+      cx = W / 2;
+      cy = H / 2;
+      updateMask();
+      setTimeout(() => { tx = -9999; ty = -9999; }, 1200);
+    }
+  }, 300);
+
   requestAnimationFrame(tick);
 
   return () => { running = false; };
