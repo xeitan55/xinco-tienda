@@ -257,6 +257,28 @@ export function initXincoGlitter() {
   let surfacePoints = [];
   let sparkles = [];
 
+  function hexToHue(hex) {
+    hex = hex.replace('#', '').trim();
+    if (hex.length === 3) {
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    const r = parseInt(hex.substring(0, 2), 16) / 255 || 0;
+    const g = parseInt(hex.substring(2, 4), 16) / 255 || 0;
+    const b = parseInt(hex.substring(4, 6), 16) / 255 || 0;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0;
+    if (max !== min) {
+      const d = max - min;
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return Math.round(h * 360);
+  }
+
   function getTitleText() {
     const el = document.getElementById('hero-title');
     return el ? el.textContent || 'XINCO' : 'XINCO';
@@ -285,7 +307,7 @@ export function initXincoGlitter() {
     const tw = er.width;
     const th = er.height;
     if (tw < 1 || th < 1) return;
-    const font = window.getComputedStyle(el).font || '900 80px Montserrat';
+    const font = window.getComputedStyle(el).font || '900 80px Syne';
     const scale = 2;
     const off = document.createElement('canvas');
     off.width = Math.ceil(tw * scale);
@@ -295,7 +317,7 @@ export function initXincoGlitter() {
     offCtx.fillRect(0, 0, off.width, off.height);
     offCtx.fillStyle = '#fff';
     const fontSize = parseFloat(font.match(/\d+px/)?.[0] || '80');
-    offCtx.font = `${900} ${fontSize * scale}px Montserrat`;
+    offCtx.font = `${900} ${fontSize * scale}px Syne`;
     offCtx.textBaseline = 'top';
     offCtx.textAlign = 'left';
     offCtx.fillText(text, 0, 0);
@@ -331,10 +353,14 @@ export function initXincoGlitter() {
     const p = pool[Math.floor(Math.random() * pool.length)];
     const size = 2 + Math.random() * 4;
     const isBig = Math.random() < 0.15;
+    const accentHex = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#7c3aed';
+    let hue = 270;
+    try { hue = hexToHue(accentHex); } catch(e){}
+    const finalHue = (hue + Math.round((Math.random() - 0.5) * 30) + 360) % 360;
     sparkles.push({
       x: p.x + (Math.random() - 0.5) * 4, y: p.y + (Math.random() - 0.5) * 4,
       size: isBig ? size * 2.5 : size, life: 0, maxLife: 0.6 + Math.random() * 1.0,
-      speed: 0.02 + Math.random() * 0.04, hue: Math.random() < 0.3 ? 270 : Math.random() < 0.5 ? 300 : 260, isBig,
+      speed: 0.02 + Math.random() * 0.04, hue: finalHue, isBig,
     });
   }
 
@@ -358,10 +384,13 @@ export function initXincoGlitter() {
     const cx = contourPoints.reduce((s, p) => s + p.x, 0) / contourPoints.length;
     const cy = contourPoints.reduce((s, p) => s + p.y, 0) / contourPoints.length;
     const pulse = 0.5 + 0.5 * Math.sin(time * 0.025);
+    const accentHex = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#7c3aed';
+    let hue = 270;
+    try { hue = hexToHue(accentHex); } catch(e){}
     const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 200);
-    grad.addColorStop(0, `rgba(139,92,246,${0.06 * (0.6 + 0.4 * pulse)})`);
-    grad.addColorStop(0.5, `rgba(139,92,246,${0.02})`);
-    grad.addColorStop(1, 'rgba(139,92,246,0)');
+    grad.addColorStop(0, `hsla(${hue}, 90%, 60%, ${0.06 * (0.6 + 0.4 * pulse)})`);
+    grad.addColorStop(0.5, `hsla(${hue}, 90%, 60%, 0.02)`);
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, W, H);
   }
@@ -372,21 +401,21 @@ export function initXincoGlitter() {
       const alpha = t < 0.15 ? t / 0.15 : t > 0.85 ? (1 - t) / 0.15 : 1;
       const glowSize = s.size * 5;
       const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, glowSize);
-      grad.addColorStop(0, `rgba(255,255,255,${alpha * 0.3})`);
-      grad.addColorStop(0.3, `rgba(216,180,255,${alpha * 0.12})`);
+      grad.addColorStop(0, `hsla(${s.hue}, 100%, 90%, ${alpha * 0.3})`);
+      grad.addColorStop(0.3, `hsla(${s.hue}, 90%, 75%, ${alpha * 0.12})`);
       grad.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(s.x, s.y, glowSize, 0, Math.PI * 2);
       ctx.fill();
       const r = s.size;
-      ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.9})`;
+      ctx.strokeStyle = `hsla(${s.hue}, 100%, 95%, ${alpha * 0.9})`;
       ctx.lineWidth = 0.8 + s.size * 0.15;
       ctx.beginPath();
       ctx.moveTo(s.x - r * 1.5, s.y); ctx.lineTo(s.x + r * 1.5, s.y);
       ctx.moveTo(s.x, s.y - r * 1.5); ctx.lineTo(s.x, s.y + r * 1.5);
       ctx.stroke();
-      ctx.strokeStyle = `rgba(200,160,255,${alpha * 0.5})`;
+      ctx.strokeStyle = `hsla(${s.hue}, 80%, 70%, ${alpha * 0.5})`;
       ctx.lineWidth = 0.5 + s.size * 0.1;
       const d = r * 0.9;
       ctx.beginPath();
