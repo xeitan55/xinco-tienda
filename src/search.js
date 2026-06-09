@@ -68,21 +68,22 @@ export function handleSearch(q) {
 }
 
 function initTypewriter() {
-  const input = document.getElementById('search-input');
-  if (!input) return;
+  const inputs = [document.getElementById('search-input'), document.getElementById('header-search')].filter(Boolean);
+  if (!inputs.length) return;
   const phrases = ['BUSCAR', 'NOMBRE', 'CATEGORÍA', 'SKU'];
   let pIdx = 0, cIdx = 0, dir = 1;
   let timer = null;
   function tick() {
     const phrase = phrases[pIdx];
+    const val = phrase.slice(0, cIdx) + (dir === 1 && cIdx > 0 && cIdx < phrase.length ? '|' : cIdx <= 0 ? '|' : '');
+    const placeholder = val || '|';
+    inputs.forEach(el => el.setAttribute('placeholder', placeholder));
     if (dir === 1) {
       cIdx++;
-      input.setAttribute('placeholder', phrase.slice(0, cIdx) + '|');
-      if (cIdx >= phrase.length) { dir = -1; clearTimeout(timer); timer = setTimeout(tick, 800); return; }
+      if (cIdx > phrase.length) { dir = -1; clearTimeout(timer); timer = setTimeout(tick, 800); return; }
     } else {
       cIdx--;
-      input.setAttribute('placeholder', phrase.slice(0, cIdx) + '|');
-      if (cIdx <= 0) { dir = 1; pIdx = (pIdx + 1) % phrases.length; clearTimeout(timer); timer = setTimeout(tick, 400); return; }
+      if (cIdx < 0) { dir = 1; pIdx = (pIdx + 1) % phrases.length; clearTimeout(timer); timer = setTimeout(tick, 400); return; }
     }
     timer = setTimeout(tick, dir === 1 ? 80 + Math.random() * 60 : 30);
   }
