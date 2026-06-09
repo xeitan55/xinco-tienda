@@ -67,9 +67,32 @@ export function handleSearch(q) {
   try { window.staggerEnter?.(el, 0.05); } catch(e) {}
 }
 
+function initTypewriter() {
+  const input = document.getElementById('search-input');
+  if (!input) return;
+  const phrases = ['BUSCAR', 'NOMBRE', 'CATEGORÍA', 'SKU'];
+  let pIdx = 0, cIdx = 0, dir = 1;
+  let timer = null;
+  function tick() {
+    const phrase = phrases[pIdx];
+    if (dir === 1) {
+      cIdx++;
+      input.setAttribute('placeholder', phrase.slice(0, cIdx) + '|');
+      if (cIdx >= phrase.length) { dir = -1; clearTimeout(timer); timer = setTimeout(tick, 800); return; }
+    } else {
+      cIdx--;
+      input.setAttribute('placeholder', phrase.slice(0, cIdx) + '|');
+      if (cIdx <= 0) { dir = 1; pIdx = (pIdx + 1) % phrases.length; clearTimeout(timer); timer = setTimeout(tick, 400); return; }
+    }
+    timer = setTimeout(tick, dir === 1 ? 80 + Math.random() * 60 : 30);
+  }
+  tick();
+}
+
 export function init() {
   window.openSearch = openSearch;
   window.closeSearch = closeSearch;
   window.clearSearch = clearSearch;
   window.handleSearch = handleSearch;
+  initTypewriter();
 }
