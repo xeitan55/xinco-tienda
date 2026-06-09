@@ -221,9 +221,9 @@
   .splash-letter {
     display: inline-block;
     font-family: 'Syne', sans-serif;
-    font-size: clamp(56px,12vw,140px);
+    font-size: clamp(52px,10vw,120px);
     font-weight: 900;
-    letter-spacing: -0.06em;
+    letter-spacing: -0.02em;
     color: var(--on-background, #000);
     line-height: 1;
     text-transform: uppercase;
@@ -647,7 +647,8 @@ html.dark .dock-item { background: linear-gradient(120deg, color-mix(in srgb, va
   .admin-current-section .section-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.02em; color: #1a1c1c; line-height: 1.2; }
   .admin-current-section .section-sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; font-weight: 700; color: rgba(0,0,0,0.35); text-transform: uppercase; margin-top: 2px; }
   .admin-brand-center { justify-self: center; text-align: center; }
-  .admin-brand-center .brand-main { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 900; letter-spacing: -0.05em; color: #1a1c1c; line-height: 1; cursor: default; }
+  .admin-brand-center .brand-main { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: -0.01em; color: #1a1c1c; line-height: 1; cursor: default; }
+  .admin-brand-center .brand-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; font-weight: 700; color: rgba(0,0,0,0.35); text-transform: uppercase; margin-top: 2px; }
   .admin-header-right { display: flex; align-items: center; gap: 16px; justify-self: end; position: relative; }
   .admin-header-right .brand-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; font-weight: 700; color: rgba(0,0,0,0.35); text-transform: uppercase; }
   .admin-avatar { width: 36px; height: 36px; border-radius: 10px; background: var(--admin-accent, #9b87f5); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
