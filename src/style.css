@@ -385,6 +385,32 @@
     border-radius: 50%;
     border: 2px solid rgba(0,0,0,0.15);
   }
+  html.dark .theme-panel-inner {
+    background: rgba(30,30,35,0.9);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.1);
+  }
+  html.dark .theme-panel-inner h4 { color: rgba(255,255,255,0.4); }
+  html.dark .theme-btn {
+    border-color: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.6);
+  }
+  html.dark .theme-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  html.dark .theme-btn.active { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.25); }
+  html.dark-soft .theme-panel-inner {
+    background: rgba(20,20,25,0.92);
+    border-color: rgba(255,255,255,0.06);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.35), 0 4px 12px rgba(0,0,0,0.12);
+  }
+  html.dark-soft .theme-panel-inner h4 { color: rgba(255,255,255,0.35); }
+  html.dark-soft .theme-btn {
+    border-color: rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.5);
+  }
+  html.dark-soft .theme-btn:hover { background: rgba(255,255,255,0.06); color: #eee; }
+  html.dark-soft .theme-btn.active { background: rgba(255,255,255,0.1); color: #eee; border-color: rgba(255,255,255,0.2); }
   .page { display: none; animation: fadeInUp 0.35s ease-out; background: rgba(255,255,255,0.85); }
   html.dark .page { background: rgba(18,18,18,0.85); }
   .page.active { display: block; }
