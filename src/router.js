@@ -175,16 +175,6 @@ export function init() {
       window.closeMobileMenu();
     }
   });
-  // ESC key closes overlays
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      window.closeSearch?.();
-      window.closeMobileMenu?.();
-      const po = document.getElementById('product-overlay');
-      if (po?.classList.contains('open')) window.closeProductOverlay?.();
-    }
-  });
-
   // Browser back/forward
   window.addEventListener('popstate', (e) => {
     const page = e.state?.page;

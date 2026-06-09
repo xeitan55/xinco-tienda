@@ -733,7 +733,7 @@ html.dark .admin-solid .admin-card { background: var(--surface-container-lowest)
     position: fixed;
     inset: 0;
     z-index: 800;
-    padding: 64px 48px 48px;
+    padding: clamp(32px, 6vw, 64px) clamp(16px, 5vw, 48px) clamp(24px, 5vw, 48px);
     background: rgba(249, 249, 249, 0.55);
     backdrop-filter: blur(28px) saturate(180%);
     -webkit-backdrop-filter: blur(28px) saturate(180%);
