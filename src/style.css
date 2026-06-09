@@ -1131,15 +1131,10 @@ html.dark .admin-solid .admin-card { background: var(--surface-container-lowest)
     color: var(--primary);
   }
 
-  #wave-lens-wrap { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
-  #wave-lens-wrap canvas { display: block; width: 100%; height: 100%; }
-  #wave-lens { display: none; }
-
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
     .hero-particle { display: none; }
     .scrolling-text-inner, .ann-preview-scroller { animation: none !important; }
     .skeleton { animation: none !important; background: rgba(200,200,200,0.15); }
     #xinco-canvas { display: none; }
-    #wave-canvas { display: none; }
   }

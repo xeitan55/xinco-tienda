@@ -16,7 +16,6 @@ import { init as initCheckout } from './checkout.js';
 import { init as initSendTicket } from './send-ticket.js';
 import { init as initLang } from './lang.js';
 import { init as initIcons } from './icons.js';
-import { init as initWaveLens } from './wave-lens.js';
 
 initState();
 initLang();
@@ -34,6 +33,5 @@ initBanners();
 initCheckout();
 initSendTicket();
 initIcons();
-initWaveLens();
 
 window.bootFromFirebase();
