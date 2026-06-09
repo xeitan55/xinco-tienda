@@ -200,7 +200,8 @@ export function initStitches() {
       p.x += p.vx;
       p.y += p.vy;
     }
-    ctx.strokeStyle = 'rgba(93,34,255,0.2)';
+    const accentDim = getComputedStyle(document.documentElement).getPropertyValue('--accent-dim').trim() || 'rgba(93,34,255,0.2)';
+    ctx.strokeStyle = accentDim;
     ctx.lineWidth = 0.5;
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
@@ -218,7 +219,8 @@ export function initStitches() {
     }
     for (const p of pts) {
       const s = STITCH_SIZE * (0.6 + 0.4 * (1 - Math.min(1, Math.sqrt((p.x - mx) ** 2 + (p.y - my) ** 2) / MOUSE_RADIUS)));
-      ctx.strokeStyle = 'rgba(93,34,255,0.5)';
+      const accentStrong = getComputedStyle(document.documentElement).getPropertyValue('--accent-strong').trim() || 'rgba(93,34,255,0.5)';
+      ctx.strokeStyle = accentStrong;
       ctx.lineWidth = 1.2;
       ctx.beginPath(); ctx.moveTo(p.x - s, p.y - s); ctx.lineTo(p.x + s, p.y + s); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(p.x + s, p.y - s); ctx.lineTo(p.x - s, p.y + s); ctx.stroke();

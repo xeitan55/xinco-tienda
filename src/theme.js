@@ -1,46 +1,90 @@
 const THEME_KEY = 'xinco-theme';
+const ACCENT_KEY = 'xinco-accent';
 
-const THEMES = {
-  light: { label: 'Claro', icon: 'light_mode', class: '' },
-  'dark-soft': { label: 'Oscuro Suave', icon: 'bedtime', class: 'dark-soft' },
-  dark: { label: 'Oscuro', icon: 'dark_mode', class: 'dark' },
-};
+const ACCENTS = [
+  { name: 'blue',   hex: '#3B82F6', label: 'Azul' },
+  { name: 'violet', hex: '#8B5CF6', label: 'Violeta' },
+  { name: 'mint',   hex: '#34D399', label: 'Menta' },
+  { name: 'pink',   hex: '#F472B6', label: 'Rosa' },
+  { name: 'rose',   hex: '#FB7185', label: 'Rosado' },
+  { name: 'peach',  hex: '#FB923C', label: 'Durazno' },
+];
+
+export function setAccentColor(hex) {
+  const r = parseInt(hex.slice(1,3), 16) || 59;
+  const g = parseInt(hex.slice(3,5), 16) || 130;
+  const b = parseInt(hex.slice(5,7), 16) || 246;
+  const root = document.documentElement;
+  root.style.setProperty('--accent-color', hex);
+  root.style.setProperty('--accent-color-rgb', `${r}, ${g}, ${b}`);
+  root.style.setProperty('--accent-dim', `rgba(${r}, ${g}, ${b}, 0.2)`);
+  root.style.setProperty('--accent-strong', `rgba(${r}, ${g}, ${b}, 0.5)`);
+  localStorage.setItem(ACCENT_KEY, hex);
+  document.querySelectorAll('.accent-swatch').forEach(el => {
+    el.classList.toggle('active', el.dataset.color === hex);
+  });
+}
 
 export function setTheme(name) {
-  const theme = THEMES[name];
+  const themes = { light: { label: 'Claro', icon: 'light_mode' }, dark: { label: 'Oscuro', icon: 'dark_mode' }, 'dark-soft': { label: 'Suave', icon: 'bedtime' } };
+  const theme = themes[name];
   if (!theme) return;
   document.documentElement.classList.remove('dark', 'dark-soft');
-  if (theme.class) document.documentElement.classList.add(theme.class);
+  if (name !== 'light') document.documentElement.classList.add(name);
   localStorage.setItem(THEME_KEY, name);
-  const icon = document.querySelector('#theme-toggle .material-symbols-outlined');
-  if (icon) icon.textContent = theme.icon;
-  const btn = document.getElementById('theme-toggle');
-  if (btn) btn.title = theme.label;
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === name);
+  });
 }
 
 export function getTheme() {
   return localStorage.getItem(THEME_KEY) || 'light';
 }
 
-export function cycleTheme() {
-  const current = getTheme();
-  const names = Object.keys(THEMES);
-  const idx = names.indexOf(current);
-  const next = names[(idx + 1) % names.length];
-  setTheme(next);
-  window.showToast?.(`Tema: ${THEMES[next].label}`);
+export function getAccent() {
+  return localStorage.getItem(ACCENT_KEY) || '#3B82F6';
 }
 
-export function initTheme() {
-  const saved = getTheme();
-  setTheme(saved);
+export function toggleThemePanel() {
+  const panel = document.getElementById('theme-panel');
+  if (!panel) return;
+  const isOpen = panel.classList.toggle('open');
+  if (isOpen) buildAccentSelector();
 }
 
 export function init() {
-  window.toggleTheme = cycleTheme;
+  window.setAccentColor = setAccentColor;
   window.setTheme = setTheme;
   window.getTheme = getTheme;
-  initTheme();
+  window.toggleThemePanel = toggleThemePanel;
+
+  const savedTheme = getTheme();
+  const savedAccent = getAccent();
+  setTheme(savedTheme);
+  setAccentColor(savedAccent);
+
+  document.addEventListener('click', (e) => {
+    const panel = document.getElementById('theme-panel');
+    const container = document.getElementById('theme-panel-container');
+    if (!panel || !container) return;
+    if (!container.contains(e.target)) {
+      panel.classList.remove('open');
+    }
+  });
 }
 
-export { THEMES };
+function buildAccentSelector() {
+  const container = document.getElementById('accent-selector');
+  if (!container || container.dataset.built) return;
+  container.dataset.built = '1';
+  ACCENTS.forEach(a => {
+    const swatch = document.createElement('button');
+    swatch.className = 'accent-swatch';
+    swatch.dataset.color = a.hex;
+    swatch.style.background = a.hex;
+    swatch.setAttribute('aria-label', a.label);
+    swatch.onclick = () => setAccentColor(a.hex);
+    if (a.hex === getAccent()) swatch.classList.add('active');
+    container.appendChild(swatch);
+  });
+}

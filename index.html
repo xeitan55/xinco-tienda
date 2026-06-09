@@ -243,9 +243,23 @@ tailwind.config = {
         <span id="auth-label">ACCEDER</span>
         <span class="material-symbols-outlined text-[20px]">account_circle</span>
       </button>
-      <button class="relative p-1" id="theme-toggle" onclick="toggleTheme()" title="Tema claro">
-        <span class="material-symbols-outlined text-primary">light_mode</span>
-      </button>
+      <div class="relative" id="theme-panel-container">
+        <button class="relative p-1" id="theme-toggle" onclick="toggleThemePanel()" title="Personalizar">
+          <span class="material-symbols-outlined text-primary">palette</span>
+        </button>
+        <div id="theme-panel">
+          <div class="theme-panel-inner">
+            <h4>Tema</h4>
+            <div class="theme-options" id="theme-selector">
+              <button class="theme-btn active" data-theme="light" onclick="setTheme('light')">Claro</button>
+              <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Oscuro</button>
+              <button class="theme-btn" data-theme="dark-soft" onclick="setTheme('dark-soft')">Suave</button>
+            </div>
+            <h4>Acento</h4>
+            <div class="accent-options" id="accent-selector"></div>
+          </div>
+        </div>
+      </div>
       <button class="relative p-1" onclick="openCart()">
         <span class="material-symbols-outlined text-primary">shopping_bag</span>
         <span id="cart-count" class="absolute -top-1 -right-1 bg-secondary-container text-primary font-label-caps text-[10px] w-5 h-5 flex items-center justify-center border-2 border-primary rounded-full">0</span>
