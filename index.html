@@ -150,7 +150,7 @@ tailwind.config = {
   <button onclick="closeMobileMenu()" class="absolute top-6 right-6 text-white close-btn-anim"><span class="material-symbols-outlined text-[32px]">close</span></button>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('home');closeMobileMenu()">INICIO</a>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">CATÁLOGO</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">COLECCIONES</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('accesorios');closeMobileMenu()">ACCESORIOS</a>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">NOVEDADES</a>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;color:#000;" onclick="filterCatalog('exclusive');closeMobileMenu()">EXCLUSIVE</a>
 </div>
@@ -241,7 +241,7 @@ tailwind.config = {
   <nav class="hidden md:flex border-t border-outline-variant/30 justify-center gap-8 py-2">
     <a class="nav-link" id="nav-home" onclick="nav('home')">INICIO</a>
     <a class="nav-link" id="nav-catalog" onclick="nav('catalog')">CATÁLOGO</a>
-    <a class="nav-link" id="nav-accesorios" onclick="filterCatalog('accesorios')">ACCESORIOS</a>
+    <a class="nav-link" id="nav-accesorios" onclick="nav('accesorios')">ACCESORIOS</a>
     <a class="nav-link" id="nav-newdrops" onclick="filterCatalog('newdrops')">NOVEDADES</a>
     <a class="nav-link" style="color:#000;" id="nav-exclusive" onclick="filterCatalog('exclusive')">EXCLUSIVE</a>
   </nav>
@@ -308,8 +308,8 @@ tailwind.config = {
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Buzos</h3>
         </div>
       </div>
-      <div class="group relative block w-full h-[280px] border-2 border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('accesorios')">
-        <img id="cat-img-accesorios-display" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80" alt="Accesorios" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
+      <div class="group relative block w-full h-[280px] border-2 border-primary overflow-hidden cursor-pointer rounded-xl" onclick="nav('accesorios')">
+        <img id="cat-img-accesorios-display" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80" alt="Accesorios" class="absolute inset-0 w-full h-full object-cover" loading="lazy"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-2 border-r-2 border-primary rounded-tr-xl">
           <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Accesorios</h3>
@@ -433,9 +433,10 @@ tailwind.config = {
           <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4">TIENDA</h4>
           <ul class="space-y-2">
             <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="nav('catalog')">Catálogo</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('newdrops')">New Drops</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('newdrops')">Novedades</a></li>
             <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('buzos')">Buzos</a></li>
             <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('remeras')">Remeras</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="nav('accesorios')">Accesorios</a></li>
             <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('exclusive')" style="color:#000;">EXCLUSIVE</a></li>
           </ul>
         </div>
@@ -553,6 +554,42 @@ tailwind.config = {
           <span class="material-symbols-outlined text-[64px] text-outline-variant">search_off</span>
           <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">NO SE ENCONTRARON PRODUCTOS</p>
           <button class="btn-outline mt-6" onclick="resetFilters()">VER TODOS</button>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- PAGE: ACCESORIOS (catalogo aparte)   -->
+<!-- ===================================== -->
+<div id="page-accesorios" class="page">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
+    <header class="mb-12 border-b-2 border-primary pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+      <div>
+        <h1 style="font-family:Montserrat;font-size:clamp(36px,7vw,80px);font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">ACCESORIOS</h1>
+        <p class="font-body-lg text-on-surface-variant mt-2">Gorras, pulseras, aros, cadenas y más.</p>
+      </div>
+      <span id="accesorios-count" class="font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap"></span>
+    </header>
+    <div class="flex flex-col md:flex-row gap-10">
+      <main class="flex-1">
+        <div class="flex justify-between items-center mb-6">
+          <span id="accesorios-count-2" class="font-label-caps text-label-caps text-on-surface-variant"></span>
+          <div class="flex items-center gap-2">
+            <span class="font-label-caps text-label-caps text-on-surface-variant">ORDENAR:</span>
+            <select id="accesorios-sort" class="input-field py-2" style="width:auto;font-size:11px;" onchange="renderAccessories()">
+              <option value="default">RELEVANCIA</option>
+              <option value="price-asc">PRECIO: MENOR A MAYOR</option>
+              <option value="price-desc">PRECIO: MAYOR A MENOR</option>
+              <option value="newest">MÁS NUEVOS</option>
+            </select>
+          </div>
+        </div>
+        <div id="accesorios-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        <div id="accesorios-empty" class="hidden py-16 text-center">
+          <span class="material-symbols-outlined text-[64px] text-outline-variant">search_off</span>
+          <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">NO HAY ACCESORIOS DISPONIBLES</p>
         </div>
       </main>
     </div>

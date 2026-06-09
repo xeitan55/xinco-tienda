@@ -92,6 +92,32 @@ export function renderCatalog() {
   }
 }
 
+export function renderAccessories() {
+  let filtered = state.products.filter(p => p.cat === 'accesorios');
+
+  const sortEl = document.getElementById('accesorios-sort');
+  const sort = sortEl ? sortEl.value : 'default';
+  if (sort === 'price-asc') filtered.sort((a,b) => a.price - b.price);
+  else if (sort === 'price-desc') filtered.sort((a,b) => b.price - a.price);
+  else if (sort === 'newest') filtered.sort((a,b) => (b.tags?.includes('newdrops')?1:0) - (a.tags?.includes('newdrops')?1:0));
+
+  const grid = document.getElementById('accesorios-grid');
+  const empty = document.getElementById('accesorios-empty');
+  const count1 = document.getElementById('accesorios-count');
+  const count2 = document.getElementById('accesorios-count-2');
+  const countStr = `${filtered.length} ITEM${filtered.length !== 1 ? 'S' : ''}`;
+  if (count1) count1.textContent = countStr;
+  if (count2) count2.textContent = countStr;
+  if (filtered.length === 0) {
+    if (grid) grid.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+  } else {
+    if (empty) empty.classList.add('hidden');
+    if (grid) grid.innerHTML = filtered.map(p => renderProductCard(p)).join('');
+    try { window.staggerEnter?.(grid); } catch(e) {}
+  }
+}
+
 export async function openProduct(id) {
   const { loadReviews } = await import('./reviews.js');
   const p = state.products.find(pr => String(pr.id) === String(id));
@@ -361,6 +387,7 @@ export function init() {
   window.renderHomeProducts = renderHomeProducts;
   window.renderExclusiveProducts = renderExclusiveProducts;
   window.renderCatalog = renderCatalog;
+  window.renderAccessories = renderAccessories;
   window.openProduct = openProduct;
   window.closeProductOverlay = closeProductOverlay;
   window.swapProductImage = swapProductImage;

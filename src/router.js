@@ -3,6 +3,7 @@ import { state } from './state.js';
 const SLUG_MAP = {
   home: '/',
   catalog: '/catalogo',
+  accesorios: '/accesorios',
   cart: '/carrito',
   checkout: '/checkout',
   login: '/login',
@@ -64,7 +65,7 @@ export async function nav(page, opts) {
     if (document.getElementById('nav-'+page)) document.getElementById('nav-'+page).classList.add('active');
   }
 
-  const { renderHomeProducts, renderExclusiveProducts, renderCatalog } = await import('./products.js');
+  const { renderHomeProducts, renderExclusiveProducts, renderCatalog, renderAccessories } = await import('./products.js');
   const { renderCartPage } = await import('./cart.js');
   const { renderCheckoutPage } = await import('./checkout.js');
 
@@ -88,6 +89,7 @@ export async function nav(page, opts) {
     state._catFilterNav = false;
     renderCatalog();
   }
+  if (page === 'accesorios') renderAccessories();
   if (page === 'cart') renderCartPage();
   if (page === 'checkout') renderCheckoutPage();
   if (page === 'account') { const { renderAccountPage } = await import('./auth.js'); renderAccountPage(); }
