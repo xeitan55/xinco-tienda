@@ -283,216 +283,245 @@ tailwind.config = {
 <!-- PAGE: HOME                            -->
 <!-- ===================================== -->
 <div id="page-home" class="page active">
-  <!-- Hero -->
-  <section id="hero-section" class="border-b-2 border-primary relative overflow-hidden" style="min-height:90vh;background:var(--hero-gradient,#000);display:flex;align-items:flex-end;">
-    <!-- Video background (hidden when no video) -->
-    <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
-    <!-- Image background (fallback / default) -->
-    <img id="hero-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-60"/>
-    <!-- Gradient overlay -->
-    <div class="absolute inset-0 z-[2]" style="background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.1) 100%);"></div>
 
-    <!-- XINCO Premium Canvas -->
+  <!-- HERO -->
+  <section id="hero-section" class="relative overflow-hidden" style="min-height:100vh;background:var(--hero-gradient,#000);display:flex;align-items:flex-end;">
+    <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
+    <img id="hero-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-60"/>
+    <div class="absolute inset-0 z-[2] hero-overlay"></div>
     <canvas id="xinco-canvas" class="absolute inset-0 z-[11] pointer-events-none" style="width:100%;height:100%;"></canvas>
-    <!-- Content -->
-    <div class="relative z-10 px-6 md:px-12 pb-12 md:pb-20 max-w-[1440px] w-full mx-auto" style="z-index:10;">
-      <span id="hero-badge" class="badge badge-violet mb-4 hero-anim-badge"></span>
-      <h1 id="hero-title" class="text-white uppercase mb-6 hero-anim-title" style="font-family:Montserrat;font-size:clamp(48px,10vw,120px);font-weight:900;line-height:1;letter-spacing:-0.04em;"></h1>
-      <p id="hero-subtitle" class="text-white/70 mb-8 max-w-md hero-anim-subtitle" style="font-family:Inter;font-size:18px;"></p>
-      <div class="flex gap-4 flex-wrap hero-anim-btns">
-        <button class="btn-violet" onclick="nav('catalog')" data-i18n="hero.explore">EXPLORAR COLECCIÓN <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
-        <button class="btn-outline" style="color:#fff;border-color:#fff;background:transparent;" onclick="filterCatalog('newdrops')" data-i18n="hero.new">NOVEDADES</button>
+
+    <div class="relative z-10 px-6 md:px-12 pb-16 md:pb-24 max-w-[1440px] w-full mx-auto" style="z-index:10;">
+      <div class="max-w-2xl">
+        <span id="hero-badge" class="hero-badge mb-5 hero-anim-badge"></span>
+        <h1 id="hero-title" class="text-white uppercase mb-5 hero-anim-title" style="font-family:Montserrat;font-size:clamp(44px,9vw,110px);font-weight:900;line-height:0.95;letter-spacing:-0.04em;"></h1>
+        <p id="hero-subtitle" class="text-white/60 mb-10 max-w-lg hero-anim-subtitle" style="font-family:Inter;font-size:clamp(15px,1.2vw,18px);line-height:1.7;"></p>
+        <div class="flex gap-4 flex-wrap hero-anim-btns">
+          <button class="btn-primary border-2 border-white text-white bg-transparent hover:bg-white hover:text-primary px-8 py-3 text-sm font-bold tracking-widest uppercase transition-all duration-300" onclick="nav('catalog')" data-i18n="hero.explore">EXPLORAR COLECCIÓN</button>
+          <button class="btn-outline border-2 border-white/30 text-white/80 hover:text-white hover:border-white px-8 py-3 text-sm font-bold tracking-widest uppercase transition-all duration-300 bg-transparent" onclick="filterCatalog('newdrops')" data-i18n="hero.new">NOVEDADES</button>
+        </div>
       </div>
     </div>
 
-    <div class="absolute bottom-0 left-0 z-[5] pointer-events-none hero-corner-accent-bl" style="width:200px;height:200px;opacity:0.1;">
-      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" y="197" width="160" height="3" fill="#ffffff"/>
-        <rect x="0" y="100" width="3" height="100" fill="#ffffff"/>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+      <svg width="20" height="30" viewBox="0 0 20 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.4;">
+        <rect x="1.5" y="1.5" width="17" height="27" rx="8.5" stroke="white" stroke-width="2"/>
+        <circle cx="10" cy="10" r="2" fill="white"/>
       </svg>
     </div>
   </section>
 
-  <!-- Categorías -->
-  <section id="home-categories-section" class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal">
-    <div class="flex justify-between items-end mb-8">
-      <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase" data-i18n="categories.title">Categorías</h2>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
-      <div class="group relative block w-full h-[280px] border-2 border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('remeras')">
-        <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
-        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
-        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-2 border-r-2 border-primary rounded-tr-xl">
-          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase" data-i18n="categories.shirts">Remeras</h3>
-        </div>
+  <!-- COLECCIONES -->
+  <section id="home-categories-section" class="px-6 md:px-12 py-20 md:py-28 reveal" style="background:var(--surface);">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="mb-12 md:mb-16">
+        <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">Colecciones</span>
+        <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Descubrí tu estilo</h2>
       </div>
-      <div class="group relative block w-full h-[280px] border-2 border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('pantalones')">
-        <img id="cat-img-pantalones-display" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80" alt="Pantalones" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
-        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
-        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-2 border-r-2 border-primary rounded-tr-xl">
-          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase" data-i18n="categories.pants">Pantalones</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        <div class="collection-card relative col-span-2 row-span-2 aspect-[3/4] md:aspect-auto md:h-[520px] overflow-hidden cursor-pointer rounded-2xl" onclick="filterCatalog('remeras')">
+          <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=900&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover" loading="lazy"/>
+          <div class="collection-card-overlay"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-10">
+            <span class="text-xs tracking-[0.2em] uppercase text-white/50">Colección</span>
+            <h3 class="text-white uppercase text-2xl md:text-3xl font-bold mt-1" style="font-family:Montserrat;font-weight:800;" data-i18n="categories.shirts">Remeras</h3>
+          </div>
         </div>
-      </div>
-      <div class="group relative block w-full h-[280px] border-2 border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('buzos')">
-        <img id="cat-img-buzos-display" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80" alt="Buzos" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
-        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
-        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-2 border-r-2 border-primary rounded-tr-xl">
-          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase" data-i18n="categories.hoodies">Buzos</h3>
+        <div class="collection-card relative aspect-[3/4] md:aspect-auto md:h-[250px] overflow-hidden cursor-pointer rounded-2xl" onclick="filterCatalog('pantalones')">
+          <img id="cat-img-pantalones-display" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80" alt="Pantalones" class="absolute inset-0 w-full h-full object-cover" loading="lazy"/>
+          <div class="collection-card-overlay"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-5 z-10">
+            <span class="text-xs tracking-[0.2em] uppercase text-white/50">Colección</span>
+            <h3 class="text-white uppercase text-xl font-bold mt-1" style="font-family:Montserrat;font-weight:800;" data-i18n="categories.pants">Pantalones</h3>
+          </div>
         </div>
-      </div>
-      <div class="group relative block w-full h-[280px] border-2 border-primary overflow-hidden cursor-pointer rounded-xl" onclick="nav('accesorios')">
-        <img id="cat-img-accesorios-display" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80" alt="Accesorios" class="absolute inset-0 w-full h-full object-cover" loading="lazy"/>
-        <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
-        <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-2 border-r-2 border-primary rounded-tr-xl">
-          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase" data-i18n="categories.accessories">Accesorios</h3>
+        <div class="collection-card relative aspect-[3/4] md:aspect-auto md:h-[250px] overflow-hidden cursor-pointer rounded-2xl" onclick="filterCatalog('buzos')">
+          <img id="cat-img-buzos-display" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80" alt="Buzos" class="absolute inset-0 w-full h-full object-cover" loading="lazy"/>
+          <div class="collection-card-overlay"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-5 z-10">
+            <span class="text-xs tracking-[0.2em] uppercase text-white/50">Colección</span>
+            <h3 class="text-white uppercase text-xl font-bold mt-1" style="font-family:Montserrat;font-weight:800;" data-i18n="categories.hoodies">Buzos</h3>
+          </div>
+        </div>
+        <div class="collection-card relative aspect-[3/4] md:col-span-2 md:h-[250px] overflow-hidden cursor-pointer rounded-2xl" onclick="nav('accesorios')">
+          <img id="cat-img-accesorios-display" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80" alt="Accesorios" class="absolute inset-0 w-full h-full object-cover" loading="lazy"/>
+          <div class="collection-card-overlay"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-5 z-10">
+            <span class="text-xs tracking-[0.2em] uppercase text-white/50">Colección</span>
+            <h3 class="text-white uppercase text-xl font-bold mt-1" style="font-family:Montserrat;font-weight:800;" data-i18n="categories.accessories">Accesorios</h3>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- New Arrivals -->
-  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal">
-    <div class="flex justify-between items-end mb-8">
-      <div>
-        <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2" data-i18n="home.newarrivals.label">NEW ARRIVALS</span>
-        <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase" data-i18n="home.newarrivals.title">Acaban de caer</h2>
+  <!-- NEW ARRIVALS -->
+  <section class="px-6 md:px-12 py-20 md:py-28 reveal" style="background:var(--surface-container-low);">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="flex justify-between items-end mb-10 md:mb-14">
+        <div>
+          <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">New Arrivals</span>
+          <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Acaban de caer</h2>
+        </div>
+        <a class="hidden md:inline-flex items-center gap-1 text-xs tracking-[0.2em] uppercase text-on-surface-variant hover:text-primary transition-colors cursor-pointer font-bold" onclick="nav('catalog')" data-i18n="home.newarrivals.seeall">Ver todo <span class="material-symbols-outlined text-[14px]">arrow_forward</span></a>
       </div>
-      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 hover:text-secondary-container hover:border-secondary-container transition-colors cursor-pointer" onclick="nav('catalog')" data-i18n="home.newarrivals.seeall">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
+      <div id="home-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5"></div>
     </div>
-    <div id="home-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
   </section>
 
-
-
-  <!-- Exclusive -->
-  <section id="exclusive-section" class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal" style="display:none;">
-    <div class="flex justify-between items-end mb-8">
-      <div>
-        <span class="font-label-caps text-label-caps tracking-widest block mb-2 text-primary" data-i18n="home.exclusive.label">EXCLUSIVE</span>
-        <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase" data-i18n="home.exclusive.title">Edición limitada</h2>
+  <!-- EXCLUSIVE -->
+  <section id="exclusive-section" class="px-6 md:px-12 py-20 md:py-28 reveal" style="display:none;background:var(--surface);">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="flex justify-between items-end mb-10 md:mb-14">
+        <div>
+          <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">Edición Limitada</span>
+          <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Exclusive</h2>
+        </div>
+        <a class="hidden md:inline-flex items-center gap-1 text-xs tracking-[0.2em] uppercase text-on-surface-variant hover:text-primary transition-colors cursor-pointer font-bold" onclick="nav('catalog')" data-i18n="home.exclusive.seeall">Ver todo <span class="material-symbols-outlined text-[14px]">arrow_forward</span></a>
       </div>
-      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps pb-1 hover:opacity-70 transition-opacity cursor-pointer text-primary" style="border-bottom:2px solid var(--primary);" onclick="nav('catalog')" data-i18n="home.exclusive.seeall">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
+      <div id="exclusive-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5"></div>
     </div>
-    <div id="exclusive-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
   </section>
 
-  <!-- Banner Promo (oculto por defecto, se muestra desde admin) -->
-  <section id="promo-banner-section" class="border-b-2 border-primary bg-primary text-on-primary px-6 md:px-12 py-16" style="display:none;">
+  <!-- PROMO BANNER -->
+  <section id="promo-banner-section" class="px-6 md:px-12 py-20" style="display:none;background:var(--primary);">
     <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
       <div>
-        <span class="promo-label font-label-caps text-label-caps text-secondary-container mb-3 block"></span>
-        <h2 class="promo-title uppercase" style="font-family:Montserrat;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;"></h2>
+        <span class="promo-label text-xs tracking-[0.25em] uppercase text-white/50 mb-3 block"></span>
+        <h2 class="promo-title text-white uppercase" style="font-family:Montserrat;font-size:clamp(28px,4vw,56px);font-weight:900;letter-spacing:-0.03em;line-height:1;"></h2>
       </div>
-      <div class="flex flex-col gap-3 text-center">
-        <p class="font-body-md text-on-primary/70">Aplicar código al pagar.</p>
-        <div class="border-2 border-secondary-container px-8 py-4">
-          <span class="promo-code font-label-caps text-label-caps text-secondary-container tracking-widest text-lg"></span>
+      <div class="flex flex-col gap-4 text-center">
+        <p class="text-sm text-white/60">Aplicar código al pagar.</p>
+        <div class="border border-white/20 px-8 py-4">
+          <span class="promo-code text-xs tracking-[0.25em] uppercase text-white/80 font-bold"></span>
         </div>
-        <button class="btn-violet" onclick="filterCatalog('buzos')">CANJEAR AHORA</button>
+        <button class="btn-primary bg-white text-primary hover:bg-white/90 px-8 py-3 text-sm font-bold tracking-widest uppercase transition-all" onclick="filterCatalog('buzos')">CANJEAR AHORA</button>
       </div>
     </div>
   </section>
 
-  <!-- Trust Bar -->
-  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="trust-item bg-surface-container-low">
-        <div class="trust-icon bg-primary text-on-primary"><span class="material-symbols-outlined">local_shipping</span></div>
-        <h3 class="text-primary" data-i18n="trust.shipping.title">ENVÍO A TODO EL PAÍS</h3>
-        <p data-i18n="trust.shipping.desc">Entregas en 3-7 días hábiles</p>
-      </div>
-      <div class="trust-item bg-surface-container-low">
-        <div class="trust-icon bg-primary text-on-primary"><span class="material-symbols-outlined">repeat</span></div>
-        <h3 class="text-primary" data-i18n="trust.returns.title">CAMBIOS SIN CARGO</h3>
-        <p data-i18n="trust.returns.desc">Dentro de los 30 días</p>
-      </div>
-      <div class="trust-item bg-surface-container-low">
-        <div class="trust-icon bg-primary text-on-primary"><span class="material-symbols-outlined">lock</span></div>
-        <h3 class="text-primary" data-i18n="trust.payment.title">PAGO SEGURO</h3>
-        <p data-i18n="trust.payment.desc">Transferencia, débito o crédito</p>
-      </div>
-      <div class="trust-item bg-surface-container-low">
-        <div class="trust-icon bg-primary text-on-primary"><span class="material-symbols-outlined">support_agent</span></div>
-        <h3 class="text-primary" data-i18n="trust.support.title">ATENCIÓN DIRECTA</h3>
-        <p data-i18n="trust.support.desc">Respondemos al toque por WhatsApp</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal">
-    <div class="grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2" data-i18n="about.label">LA MARCA</span>
-          <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">XINCO<br>Premium</h2>
-        <p class="text-on-surface-variant mt-6" style="font-family:Inter;font-size:15px;line-height:1.8;" data-i18n-html="about.text">Nacimos en Mar del Plata con una idea clara: romper con lo de siempre. XINCO no es solo ropa, es una forma de expresar quién sos. Prendas con corte impecable, materiales premium y un estilo que habla por sí solo. Cada colección está pensada para el que camina diferente.</p>
-        <button class="btn-violet mt-6" onclick="nav('catalog')" data-i18n="about.cta">CONOCÉ LA COLECCIÓN</button>
-      </div>
-      <div>
-        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80" alt="XINCO" class="about-img" loading="lazy"/>
-      </div>
-    </div>
-  </section>
-
-  <!-- Instagram -->
-  <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal">
-    <div class="flex justify-between items-end mb-8">
-      <div>
-        <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2" data-i18n="instagram.label">@XINCO.STORE</span>
-        <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" data-i18n="instagram.title">Seguinos en Instagram</h2>
-      </div>
-      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 hover:text-secondary-container hover:border-secondary-container transition-colors cursor-pointer" href="https://instagram.com/xinco.store" target="_blank">@XINCO.STORE <span class="material-symbols-outlined ml-1 text-[16px]">open_in_new</span></a>
-    </div>
-    <div class="insta-grid">
-      <div class="insta-item"><img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80" alt="" loading="lazy"/></div>
-      <div class="insta-item"><img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=400&q=80" alt="" loading="lazy"/></div>
-      <div class="insta-item"><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80" alt="" loading="lazy"/></div>
-      <div class="insta-item"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80" alt="" loading="lazy"/></div>
-      <div class="insta-item"><img src="https://images.unsplash.com/photo-1496747611176-84322e173d44?w=400&q=80" alt="" loading="lazy"/></div>
-      <div class="insta-item"><img src="https://images.unsplash.com/photo-1509637095346-3e1e5b9b8e45?w=400&q=80" alt="" loading="lazy"/></div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-   <footer class="bg-primary text-on-primary px-6 md:px-12 py-16 reveal">
+  <!-- VALORES -->
+  <section class="px-6 md:px-12 py-20 md:py-28 reveal" style="background:var(--surface-container-low);">
     <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 pb-12 border-b" style="border-color:rgba(128,128,128,0.3);">
+      <div class="mb-12 md:mb-16 text-center">
+        <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">Por qué XINCO</span>
+        <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Hecho para vos</h2>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div class="value-card">
+          <div class="value-icon">✈</div>
+          <h3 class="text-primary uppercase text-sm font-bold tracking-wider mb-2" data-i18n="trust.shipping.title">Envío a todo el país</h3>
+          <p class="text-on-surface-variant/70 text-sm leading-relaxed" data-i18n="trust.shipping.desc">Entregas en 3-7 días hábiles</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">↻</div>
+          <h3 class="text-primary uppercase text-sm font-bold tracking-wider mb-2" data-i18n="trust.returns.title">Cambios sin cargo</h3>
+          <p class="text-on-surface-variant/70 text-sm leading-relaxed" data-i18n="trust.returns.desc">Dentro de los 30 días</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🔒</div>
+          <h3 class="text-primary uppercase text-sm font-bold tracking-wider mb-2" data-i18n="trust.payment.title">Pago seguro</h3>
+          <p class="text-on-surface-variant/70 text-sm leading-relaxed" data-i18n="trust.payment.desc">Transferencia, débito o crédito</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">💬</div>
+          <h3 class="text-primary uppercase text-sm font-bold tracking-wider mb-2" data-i18n="trust.support.title">Atención directa</h3>
+          <p class="text-on-surface-variant/70 text-sm leading-relaxed" data-i18n="trust.support.desc">Respondemos al toque por WhatsApp</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / BRAND STORY -->
+  <section class="reveal" style="background:var(--surface);">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-20 md:py-28">
+      <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
         <div>
-          <h3 style="font-family:Montserrat;font-size:32px;font-weight:900;" class="mb-4">XINCO</h3>
-          <p class="text-on-primary/60 text-sm" style="font-family:Inter;" data-i18n="footer.rights">XINCO All Rights Reserved.<br>Mar del Plata, Buenos Aires,<br>Argentina.</p>
+          <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">La marca</span>
+          <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">XINCO Premium</h2>
+          <p class="text-on-surface-variant/80 mt-6 md:mt-8" style="font-family:Inter;font-size:15px;line-height:2;" data-i18n-html="about.text">Nacimos en Mar del Plata con una idea clara: romper con lo de siempre. XINCO no es solo ropa, es una forma de expresar quién sos. Prendas con corte impecable, materiales premium y un estilo que habla por sí solo. Cada colección está pensada para el que camina diferente.</p>
+          <div class="flex gap-8 mt-8 md:mt-10">
+            <div>
+              <span class="text-2xl md:text-3xl font-black text-primary" style="font-family:Montserrat;">100+</span>
+              <p class="text-xs tracking-wider uppercase text-on-surface-variant/60 mt-1">Diseños</p>
+            </div>
+            <div>
+              <span class="text-2xl md:text-3xl font-black text-primary" style="font-family:Montserrat;">500+</span>
+              <p class="text-xs tracking-wider uppercase text-on-surface-variant/60 mt-1">Clientes</p>
+            </div>
+            <div>
+              <span class="text-2xl md:text-3xl font-black text-primary" style="font-family:Montserrat;">24/7</span>
+              <p class="text-xs tracking-wider uppercase text-on-surface-variant/60 mt-1">Soporte</p>
+            </div>
+          </div>
+          <button class="btn-primary border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-on-primary px-8 py-3 text-sm font-bold tracking-widest uppercase transition-all duration-300 mt-8" onclick="nav('catalog')" data-i18n="about.cta">Conocé la colección</button>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80" alt="XINCO" class="w-full aspect-[3/4] object-cover rounded-2xl" loading="lazy"/>
+          <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80" alt="XINCO" class="w-full aspect-[3/4] object-cover rounded-2xl mt-8" loading="lazy"/>
+        </div>
+      </div>
+    </div>
+    <div class="w-full h-px" style="background:var(--outline-variant);"></div>
+  </section>
+
+  <!-- INSTAGRAM -->
+  <section class="px-6 md:px-12 py-20 md:py-28 reveal" style="background:var(--surface);">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="text-center mb-12 md:mb-16">
+        <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">@XINCO.STORE</span>
+        <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Seguinos en Instagram</h2>
+      </div>
+      <div class="insta-grid">
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80" alt="" loading="lazy"/></div>
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=400&q=80" alt="" loading="lazy"/></div>
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80" alt="" loading="lazy"/></div>
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80" alt="" loading="lazy"/></div>
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1496747611176-84322e173d44?w=400&q=80" alt="" loading="lazy"/></div>
+        <div class="insta-item"><img src="https://images.unsplash.com/photo-1509637095346-3e1e5b9b8e45?w=400&q=80" alt="" loading="lazy"/></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="px-6 md:px-12 py-16 md:py-20" style="background:var(--primary);">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12 pb-12" style="border-bottom:1px solid rgba(255,255,255,0.1);">
+        <div class="col-span-2 md:col-span-1">
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:900;" class="text-white mb-4">XINCO</h3>
+          <p class="text-white/40 text-sm leading-relaxed" style="font-family:Inter;" data-i18n="footer.rights">Mar del Plata, Buenos Aires, Argentina.</p>
         </div>
         <div>
-          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4" data-i18n="footer.shop">TIENDA</h4>
-          <ul class="space-y-2">
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="nav('catalog')" data-i18n="footer.catalog">Catálogo</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('newdrops')" data-i18n="footer.new">Novedades</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('buzos')" data-i18n="footer.hoodies">Buzos</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('remeras')" data-i18n="footer.shirts">Remeras</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="nav('accesorios')" data-i18n="footer.accessories">Accesorios</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('exclusive')" data-i18n="footer.exclusive">EXCLUSIVE</a></li>
+          <h4 class="text-xs tracking-[0.2em] uppercase text-white/40 mb-5" data-i18n="footer.shop">Tienda</h4>
+          <ul class="space-y-3">
+            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="nav('catalog')" data-i18n="footer.catalog">Catálogo</a></li>
+            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="filterCatalog('newdrops')" data-i18n="footer.new">Novedades</a></li>
+            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="filterCatalog('buzos')" data-i18n="footer.hoodies">Buzos</a></li>
+            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="filterCatalog('remeras')" data-i18n="footer.shirts">Remeras</a></li>
+            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="nav('accesorios')" data-i18n="footer.accessories">Accesorios</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4" data-i18n="footer.help">AYUDA</h4>
-          <ul class="space-y-2">
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="showSizeGuide()" data-i18n="footer.sizeguide">Guía de Talles</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.showToast?.('Envíos a todo el país — consultá por WhatsApp')" data-i18n="footer.shipping">Envíos</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.showToast?.('Aceptamos cambios dentro de los 30 días')" data-i18n="footer.returns">Devoluciones</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" data-i18n="footer.contact">Contacto</a></li>
+          <h4 class="text-xs tracking-[0.2em] uppercase text-white/40 mb-5" data-i18n="footer.help">Ayuda</h4>
+          <ul class="space-y-3">
+            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="showSizeGuide()" data-i18n="footer.sizeguide">Guía de Talles</a></li>
+            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="window.showToast?.('Envíos a todo el país — consultá por WhatsApp')" data-i18n="footer.shipping">Envíos</a></li>
+            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="window.showToast?.('Aceptamos cambios dentro de los 30 días')" data-i18n="footer.returns">Devoluciones</a></li>
+            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" data-i18n="footer.contact">Contacto</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4" data-i18n="footer.newsletter">NEWSLETTER</h4>
-          <p class="text-on-primary/60 text-sm mb-3" style="font-family:Inter;" data-i18n="footer.newsletter.desc">Enterate primero de los drops.</p>
-          <div class="flex border-2" style="border-color:var(--on-primary);">
-            <input id="newsletter-email" class="bg-transparent flex-1 px-3 py-2 text-on-primary text-sm outline-none placeholder:text-on-primary/40" style="font-family:Inter;" placeholder="tu@email.com" autocomplete="off" data-i18n-placeholder="footer.newsletter.email"/>
-            <button class="bg-on-primary text-primary px-4 font-label-caps text-[11px]" onclick="subscribeNewsletter()" data-i18n="footer.newsletter.ok">OK</button>
+          <h4 class="text-xs tracking-[0.2em] uppercase text-white/40 mb-5" data-i18n="footer.newsletter">Newsletter</h4>
+          <p class="text-white/50 text-sm mb-4 leading-relaxed" style="font-family:Inter;" data-i18n="footer.newsletter.desc">Enterate primero de los drops y colecciones nuevas.</p>
+          <div class="flex" style="border-bottom:1px solid rgba(255,255,255,0.2);">
+            <input id="newsletter-email" class="bg-transparent flex-1 px-0 py-2 text-white text-sm outline-none placeholder:text-white/30" style="font-family:Inter;" placeholder="tu@email.com" autocomplete="off" data-i18n-placeholder="footer.newsletter.email"/>
+            <button class="text-white/60 hover:text-white text-xs tracking-wider uppercase transition-colors font-bold px-2" onclick="subscribeNewsletter()" data-i18n="footer.newsletter.ok">OK</button>
           </div>
         </div>
       </div>
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-        <span class="font-label-caps text-label-caps text-on-primary/40" data-i18n="footer.copyright">© 2025 XINCO — MAR DEL PLATA, BUENOS AIRES, ARGENTINA</span>
-        <div id="footer-social" class="flex gap-3"></div>
+        <span class="text-xs tracking-wider text-white/30" data-i18n="footer.copyright">© 2025 XINCO — Mar del Plata, Buenos Aires, Argentina</span>
+        <div id="footer-social" class="flex gap-4"></div>
       </div>
     </div>
   </footer>

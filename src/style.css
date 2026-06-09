@@ -1091,6 +1091,81 @@ html.dark .admin-solid .admin-card { background: var(--surface-container-lowest)
   .insta-item:hover img { transform: scale(1.08); }
   .insta-item::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background 0.3s; }
   .insta-item:hover::after { background: rgba(0,0,0,0.15); }
+  /* ===== HOMEPAGE REDESIGN ===== */
+
+  .hero-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.05) 100%);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    padding: 6px 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 100px;
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .collection-card {
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .collection-card:hover {
+    transform: scale(1.02);
+  }
+
+  .collection-card img {
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .collection-card:hover img {
+    transform: scale(1.08);
+  }
+
+  .collection-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.05) 50%, transparent 70%);
+    transition: opacity 0.4s ease;
+    z-index: 1;
+  }
+
+  .collection-card:hover .collection-card-overlay {
+    opacity: 0.85;
+  }
+
+  .value-card {
+    padding: 32px 24px;
+    border-radius: 16px;
+    background: var(--surface);
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    text-align: center;
+  }
+
+  .value-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+  }
+
+  .value-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 20px;
+    border-radius: 50%;
+    background: var(--surface-container-low);
+    color: var(--primary);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
     .hero-particle { display: none; }
