@@ -14,6 +14,7 @@ export function dismissSplash() {
   const wait = Math.max(0, SPLASH_MIN_MS - elapsed);
   setTimeout(() => {
     el.classList.add('hiding');
+    document.body.style.overflow = '';
     setTimeout(() => { el.style.display = 'none'; }, 650);
   }, wait);
 }
@@ -448,6 +449,7 @@ export function initXincoGlitter() {
 }
 
 export function init() {
+  document.body.style.overflow = 'hidden';
   window.dismissSplash = dismissSplash;
   window.preloadImage = preloadImage;
   window.showToast = showToast;
