@@ -10,6 +10,7 @@ export function openSearch() {
   _searchOpening = true;
   const overlay = document.getElementById('search-overlay');
   overlay?.classList.add('open');
+  document.body.style.overflow = 'hidden';
   const results = document.getElementById('search-results');
   if (results) results.innerHTML = '';
   document.getElementById('search-empty')?.classList.add('hidden');
@@ -24,6 +25,7 @@ export function closeSearch() {
   const overlay = document.getElementById('search-overlay');
   if (!overlay?.classList.contains('open')) return;
   overlay.classList.remove('open');
+  document.body.style.overflow = '';
   const inp = document.getElementById('search-input');
   if (inp) inp.value = '';
   const hs = document.getElementById('header-search');
