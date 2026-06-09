@@ -669,7 +669,8 @@ html.dark .dock-item { background: linear-gradient(120deg, color-mix(in srgb, va
   .star { color: var(--accent-color, #5d22ff); font-size: 16px; }
   .star.empty { color: #e2e2e2; }
   #search-overlay {
-    display: none;
+    display: flex;
+    flex-direction: column;
     position: fixed;
     inset: 0;
     z-index: 800;
@@ -678,14 +679,17 @@ html.dark .dock-item { background: linear-gradient(120deg, color-mix(in srgb, va
     backdrop-filter: blur(28px) saturate(180%);
     -webkit-backdrop-filter: blur(28px) saturate(180%);
     opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
     transform: translateY(-8px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s 0.25s;
   }
   #search-overlay.open {
-    display: flex;
-    flex-direction: column;
     opacity: 1;
+    pointer-events: all;
+    visibility: visible;
     transform: translateY(0);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s 0s;
   }
   #search-overlay::before {
     content: '';
