@@ -23,6 +23,15 @@ export function setAccentColor(hex) {
   document.querySelectorAll('.accent-swatch').forEach(el => {
     el.classList.toggle('active', el.dataset.color === hex);
   });
+  document.querySelectorAll('.color-swatch').forEach(el => {
+    el.classList.toggle('active', el.dataset.color === hex);
+  });
+  const admin = document.querySelector('#page-admin');
+  if (admin) {
+    admin.style.setProperty('--admin-accent', hex);
+    admin.style.setProperty('--admin-accent-light', `rgba(${r + 40}, ${g + 40}, ${b + 40}, 0.7)`);
+    admin.style.setProperty('--admin-accent-dim', `rgba(${r}, ${g}, ${b}, 0.12)`);
+  }
 }
 
 export function setTheme(name) {

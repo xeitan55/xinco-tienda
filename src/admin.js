@@ -2502,7 +2502,7 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', dockOpacity: 50, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockDraggable: true, bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
+  return { theme: 'light', dockOpacity: 50, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockDraggable: true, adminSolid: false, bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
 }
 
 export function saveAppearance() {
@@ -2514,6 +2514,7 @@ export function saveAppearance() {
     dockPosition: document.querySelector('input[name="dock-position"]:checked')?.value || 'bottom',
     dockStyle: document.querySelector('input[name="dock-style"]:checked')?.value || 'blur',
     dockDraggable: document.getElementById('ap-dock-draggable')?.checked ?? true,
+    adminSolid: document.querySelector('input[name="cfg-solid"]:checked')?.value === 'solid',
     bgVideo1: document.getElementById('ap-bg-video-1')?.value.trim() || '',
     bgVideo2: document.getElementById('ap-bg-video-2')?.value.trim() || '',
     bgVideo3: document.getElementById('ap-bg-video-3')?.value.trim() || '',
@@ -2567,6 +2568,12 @@ export async function applyAllChanges() {
   }
 }
 
+export function setAdminSolid(enabled) {
+  document.documentElement.classList.toggle('admin-solid', !!enabled);
+  const radio = document.querySelector(`input[name="cfg-solid"][value="${enabled ? 'solid' : 'glass'}"]`);
+  if (radio) radio.checked = true;
+}
+
 export function applyAppearance(cfg) {
   if (cfg.theme && window.setTheme) window.setTheme(cfg.theme);
   const dock = document.getElementById('admin-dock');
@@ -2576,6 +2583,9 @@ export function applyAppearance(cfg) {
     dock.classList.remove('dock-blur', 'dock-acrylic', 'dock-colored-on', 'dock-bottom', 'dock-top');
     dock.classList.add('dock-' + (cfg.dockStyle || 'blur'), 'dock-' + (cfg.dockPosition || 'bottom'));
   }
+  document.documentElement.classList.toggle('admin-solid', !!cfg.adminSolid);
+  const solidRadio = document.querySelector(`input[name="cfg-solid"][value="${cfg.adminSolid ? 'solid' : 'glass'}"]`);
+  if (solidRadio) solidRadio.checked = true;
   window._appearanceCfg = cfg;
   try { window.syncDockDraggable?.(); } catch(_) {}
 }
@@ -2605,6 +2615,8 @@ export function initAppearancePanel() {
           const styleRadio = document.querySelector(`input[name="dock-style"][value="${fbCfg.dockStyle || 'blur'}"]`);
           if (styleRadio) styleRadio.checked = true;
           if (fbCfg.theme && window.setTheme) window.setTheme(fbCfg.theme);
+          const solidRadio = document.querySelector(`input[name="cfg-solid"][value="${fbCfg.adminSolid ? 'solid' : 'glass'}"]`);
+          if (solidRadio) solidRadio.checked = true;
           for (let i = 1; i <= 4; i++) {
             const url = fbCfg['bgVideo' + i] || '';
             const el = document.getElementById('ap-bg-video-' + i);
@@ -3094,6 +3106,7 @@ export function init() {
   window.fetchAdminBgList = fetchAdminBgList;
   window.renderAdminBgSelection = renderAdminBgSelection;
   window.initAppearancePanel = initAppearancePanel;
+  window.setAdminSolid = setAdminSolid;
   window.saveAppearance = saveAppearance;
   window.saveAppearanceToFirebase = saveAppearanceToFirebase;
   window.applyAllChanges = applyAllChanges;
