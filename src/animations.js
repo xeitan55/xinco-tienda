@@ -1,6 +1,6 @@
 import { _bootResolved } from './firebase.js';
 
-const SPLASH_MIN_MS = 2400;
+const SPLASH_MIN_MS = 3000;
 const SPLASH_MAX_MS = 8000;
 const _splashStart = Date.now();
 let _splashDismissed = false;
