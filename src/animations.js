@@ -367,35 +367,44 @@ export function initXincoGlitter() {
   }
 
   function drawSparkles() {
+    const wave = time * 0.02;
     for (const s of sparkles) {
       const t = s.life / s.maxLife;
       const alpha = t < 0.15 ? t / 0.15 : t > 0.85 ? (1 - t) / 0.15 : 1;
+      const wx = Math.sin(wave + s.y * 0.015) * 4;
+      const wy = Math.cos(wave + s.x * 0.015) * 4;
+      const x = s.x + wx;
+      const y = s.y + wy;
       const glowSize = s.size * 5;
-      const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, glowSize);
+      const grad = ctx.createRadialGradient(x, y, 0, x, y, glowSize);
       grad.addColorStop(0, `rgba(255,255,255,${alpha * 0.3})`);
       grad.addColorStop(0.3, `rgba(216,180,255,${alpha * 0.12})`);
       grad.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.arc(s.x, s.y, glowSize, 0, Math.PI * 2);
+      ctx.arc(x, y, glowSize, 0, Math.PI * 2);
       ctx.fill();
       const r = s.size;
       ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.9})`;
       ctx.lineWidth = 0.8 + s.size * 0.15;
       ctx.beginPath();
-      ctx.moveTo(s.x - r * 1.5, s.y); ctx.lineTo(s.x + r * 1.5, s.y);
-      ctx.moveTo(s.x, s.y - r * 1.5); ctx.lineTo(s.x, s.y + r * 1.5);
+      ctx.moveTo(x - r * 1.5, y); ctx.lineTo(x + r * 1.5, y);
+      ctx.moveTo(x, y - r * 1.5); ctx.lineTo(x, y + r * 1.5);
       ctx.stroke();
       ctx.strokeStyle = `rgba(200,160,255,${alpha * 0.5})`;
       ctx.lineWidth = 0.5 + s.size * 0.1;
       const d = r * 0.9;
+      const rot = Math.sin(wave * 0.5 + s.x * 0.01 + s.y * 0.01) * 0.15;
+      const cosR = Math.cos(rot), sinR = Math.sin(rot);
+      const dx1 = d * cosR - d * sinR, dy1 = d * sinR + d * cosR;
+      const dx2 = d * cosR + d * sinR, dy2 = d * sinR - d * cosR;
       ctx.beginPath();
-      ctx.moveTo(s.x - d, s.y - d); ctx.lineTo(s.x + d, s.y + d);
-      ctx.moveTo(s.x + d, s.y - d); ctx.lineTo(s.x - d, s.y + d);
+      ctx.moveTo(x - dx1, y - dy1); ctx.lineTo(x + dx1, y + dy1);
+      ctx.moveTo(x - dx2, y - dy2); ctx.lineTo(x + dx2, y + dy2);
       ctx.stroke();
       ctx.fillStyle = `rgba(255,255,255,${alpha * 0.95})`;
       ctx.beginPath();
-      ctx.arc(s.x, s.y, 1 + s.size * 0.15, 0, Math.PI * 2);
+      ctx.arc(x, y, 1 + s.size * 0.15, 0, Math.PI * 2);
       ctx.fill();
     }
   }
