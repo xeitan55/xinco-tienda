@@ -2824,7 +2824,8 @@ export function init() {
     // restore saved order BEFORE starting RAF
     const savedRaw = localStorage.getItem('xinco_dock_order');
     if (savedRaw) try {
-      const order = JSON.parse(savedRaw);
+      let order = JSON.parse(savedRaw);
+      order = order.map(k => k === 'TIENDA' ? 'VOLVER A LA TIENDA' : k);
       const map = {}; items().forEach(el => { map[el.dataset.section] = el; });
       const frag = document.createDocumentFragment();
       order.forEach(k => { if (map[k]) frag.appendChild(map[k]); });
