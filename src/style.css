@@ -1035,18 +1035,7 @@ html.dark .admin-solid .admin-card { background: var(--surface-container-lowest)
   .insta-item:hover img { transform: scale(1.08); }
   .insta-item::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background 0.3s; }
   .insta-item:hover::after { background: rgba(0,0,0,0.15); }
-  .trust-item { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 32px 16px; border-radius: 16px; transition: transform 0.2s; }
-  .trust-item:hover { transform: translateY(-4px); }
-  .trust-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin-bottom: 12px; font-size: 22px; }
-  .trust-item h3 { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; margin-bottom: 4px; }
-  .trust-item p { font-family: 'Plus Jakarta Sans'; font-size: 13px; opacity: 0.65; }
-  .about-img { width: 100%; height: 400px; object-fit: cover; border-radius: 16px; }
-  .insta-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; border-radius: 16px; overflow: hidden; }
-  .insta-item { position: relative; aspect-ratio: 1; overflow: hidden; cursor: pointer; }
-  .insta-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
-  .insta-item:hover img { transform: scale(1.08); }
-  .insta-item::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background 0.3s; }
-  .insta-item:hover::after { background: rgba(0,0,0,0.15); }
+
   /* ===== HOMEPAGE REDESIGN ===== */
 
   .hero-overlay {
