@@ -149,11 +149,11 @@ tailwind.config = {
 <!-- ===== MOBILE MENU ===== -->
 <div id="mobile-menu" class="mobile-menu">
   <button onclick="closeMobileMenu()" class="absolute top-6 right-6 close-btn-anim" style="color:var(--inverse-on-surface,#fff)"><span class="material-symbols-outlined text-[32px]">close</span></button>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Syne;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('home');closeMobileMenu()" data-i18n="mobile.home">INICIO</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Syne;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()" data-i18n="mobile.catalog">CATÁLOGO</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Syne;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('accesorios');closeMobileMenu()" data-i18n="mobile.accessories">ACCESORIOS</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Syne;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()" data-i18n="mobile.new">NOVEDADES</a>
-  <a class="font-display-xl uppercase cursor-pointer" style="font-family:Syne;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="filterCatalog('exclusive');closeMobileMenu()" data-i18n="mobile.exclusive">EXCLUSIVE</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Syne;font-size:clamp(20px,5vw,40px);font-weight:900;" onclick="nav('home');closeMobileMenu()" data-i18n="mobile.home">INICIO</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Syne;font-size:clamp(20px,5vw,40px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()" data-i18n="mobile.catalog">CATÁLOGO</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Syne;font-size:clamp(20px,5vw,40px);font-weight:900;" onclick="nav('accesorios');closeMobileMenu()" data-i18n="mobile.accessories">ACCESORIOS</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Syne;font-size:clamp(20px,5vw,40px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()" data-i18n="mobile.new">NOVEDADES</a>
+  <a class="font-display-xl uppercase cursor-pointer" style="font-family:Syne;font-size:clamp(20px,5vw,40px);font-weight:900;" onclick="filterCatalog('exclusive');closeMobileMenu()" data-i18n="mobile.exclusive">EXCLUSIVE</a>
 </div>
 
 <!-- ===== SEARCH OVERLAY ===== -->
@@ -162,7 +162,7 @@ tailwind.config = {
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
       <div>
-        <h2 class="search-title" style="font-family:Syne;font-size:clamp(36px,6vw,56px);font-weight:900;letter-spacing:-0.03em;" data-i18n="search.title">BUSCAR</h2>
+        <h2 class="search-title" style="font-family:Syne;font-size:clamp(20px,3vw,32px);font-weight:900;letter-spacing:-0.03em;" data-i18n="search.title">BUSCAR</h2>
         <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--on-surface-variant);margin-top:4px;" data-i18n="search.hint">CTRL+K PARA ABRIR / ESC PARA CERRAR</p>
       </div>
       <button onclick="closeSearch()" class="close-btn p-3">
@@ -220,7 +220,7 @@ tailwind.config = {
     </div>
     <!-- Center: Logo -->
     <div class="flex-none flex justify-center px-4 md:px-8">
-      <a class="font-headline-lg text-primary tracking-tighter cursor-pointer relative" style="font-family:Syne;font-size:clamp(24px,4vw,40px);font-weight:900;letter-spacing:-0.04em;" onclick="nav('home');window.scrollTo({top:0,behavior:'smooth'})">XINCO<span style="font-size:0.35em;position:absolute;top:0;right:-0.6em;opacity:0.4;">©</span></a>
+      <a class="font-headline-lg text-primary tracking-tighter cursor-pointer relative" style="font-family:Syne;font-size:clamp(20px,3vw,32px);font-weight:900;letter-spacing:-0.04em;" onclick="nav('home');window.scrollTo({top:0,behavior:'smooth'})">XINCO<span style="font-size:0.35em;position:absolute;top:0;right:-0.6em;opacity:0.4;">©</span></a>
     </div>
     <!-- Right: Auth + Cart -->
     <div class="flex items-center gap-3 flex-1 justify-end">
@@ -280,7 +280,7 @@ tailwind.config = {
     <div class="relative z-10 px-6 md:px-12 pb-16 md:pb-24 max-w-[1440px] w-full mx-auto" style="z-index:10;">
       <div class="max-w-2xl">
         <span id="hero-badge" class="hero-badge mb-5 hero-anim-badge"></span>
-        <h1 id="hero-title" class="text-white uppercase mb-5 hero-anim-title" style="font-family:Syne;font-size:clamp(44px,9vw,110px);font-weight:900;line-height:0.95;letter-spacing:-0.04em;"></h1>
+        <h1 id="hero-title" class="text-white uppercase mb-5 hero-anim-title" style="font-family:Syne;font-size:clamp(28px,6vw,60px);font-weight:900;line-height:0.95;letter-spacing:-0.04em;"></h1>
         <p id="hero-subtitle" class="text-white/60 mb-10 max-w-lg hero-anim-subtitle" style="font-family:Plus Jakarta Sans;font-size:clamp(15px,1.2vw,18px);line-height:1.7;"></p>
         <div class="flex gap-4 flex-wrap hero-anim-btns">
           <button class="btn-primary border-2 border-white text-white bg-transparent hover:bg-white hover:text-primary px-8 py-3 text-sm font-bold tracking-widest uppercase transition-all duration-300" onclick="nav('catalog')" data-i18n="hero.explore">EXPLORAR COLECCIÓN</button>
@@ -302,7 +302,7 @@ tailwind.config = {
     <div class="max-w-[1440px] mx-auto">
       <div class="mb-12 md:mb-16">
         <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">Colecciones</span>
-        <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Descubrí tu estilo</h2>
+        <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(20px,3vw,32px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Descubrí tu estilo</h2>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         <div class="collection-card relative col-span-2 row-span-2 aspect-[3/4] md:aspect-auto md:h-[520px] overflow-hidden cursor-pointer rounded-2xl" onclick="filterCatalog('remeras')">
@@ -347,7 +347,7 @@ tailwind.config = {
       <div class="flex justify-between items-end mb-10 md:mb-14">
         <div>
           <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">New Arrivals</span>
-          <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Acaban de caer</h2>
+          <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(20px,3vw,32px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Acaban de caer</h2>
         </div>
         <a class="hidden md:inline-flex items-center gap-1 text-xs tracking-[0.2em] uppercase text-on-surface-variant hover:text-primary transition-colors cursor-pointer font-bold" onclick="nav('catalog')" data-i18n="home.newarrivals.seeall">Ver todo <span class="material-symbols-outlined text-[14px]">arrow_forward</span></a>
       </div>
@@ -361,7 +361,7 @@ tailwind.config = {
       <div class="flex justify-between items-end mb-10 md:mb-14">
         <div>
           <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">Edición Limitada</span>
-          <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Exclusive</h2>
+          <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(20px,3vw,32px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Exclusive</h2>
         </div>
         <a class="hidden md:inline-flex items-center gap-1 text-xs tracking-[0.2em] uppercase text-on-surface-variant hover:text-primary transition-colors cursor-pointer font-bold" onclick="nav('catalog')" data-i18n="home.exclusive.seeall">Ver todo <span class="material-symbols-outlined text-[14px]">arrow_forward</span></a>
       </div>
@@ -374,7 +374,7 @@ tailwind.config = {
     <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
       <div>
         <span class="promo-label text-xs tracking-[0.25em] uppercase text-white/50 mb-3 block"></span>
-        <h2 class="promo-title text-white uppercase" style="font-family:Syne;font-size:clamp(28px,4vw,56px);font-weight:900;letter-spacing:-0.03em;line-height:1;"></h2>
+        <h2 class="promo-title text-white uppercase" style="font-family:Syne;font-size:clamp(22px,3.5vw,40px);font-weight:900;letter-spacing:-0.03em;line-height:1;"></h2>
       </div>
       <div class="flex flex-col gap-4 text-center">
         <p class="text-sm text-white/60">Aplicar código al pagar.</p>
@@ -391,7 +391,7 @@ tailwind.config = {
     <div class="max-w-[1440px] mx-auto">
       <div class="mb-12 md:mb-16 text-center">
         <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">Por qué XINCO</span>
-        <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Hecho para vos</h2>
+        <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(20px,3vw,32px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Hecho para vos</h2>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         <div class="value-card">
@@ -424,7 +424,7 @@ tailwind.config = {
       <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
         <div>
           <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">La marca</span>
-          <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">XINCO Premium</h2>
+          <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(20px,3vw,32px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">XINCO Premium</h2>
           <p class="text-on-surface-variant/80 mt-6 md:mt-8" style="font-family:Plus Jakarta Sans;font-size:15px;line-height:2;" data-i18n-html="about.text">Nacimos en Mar del Plata con una idea clara: romper con lo de siempre. XINCO no es solo ropa, es una forma de expresar quién sos. Prendas con corte impecable, materiales premium y un estilo que habla por sí solo. Cada colección está pensada para el que camina diferente.</p>
           <div class="flex gap-8 mt-8 md:mt-10">
             <div>
@@ -456,7 +456,7 @@ tailwind.config = {
     <div class="max-w-[1440px] mx-auto">
       <div class="text-center mb-12 md:mb-16">
         <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">@XINCO.STORE</span>
-        <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Seguinos en Instagram</h2>
+        <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(20px,3vw,32px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Seguinos en Instagram</h2>
       </div>
       <div class="insta-grid">
         <div class="insta-item"><img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80" alt="" loading="lazy"/></div>
@@ -474,7 +474,7 @@ tailwind.config = {
     <div class="max-w-[1440px] mx-auto">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12 pb-12" style="border-bottom:1px solid rgba(255,255,255,0.1);">
         <div class="col-span-2 md:col-span-1">
-          <h3 style="font-family:Syne;font-size:28px;font-weight:900;" class="text-white mb-4">XINCO</h3>
+          <h3 style="font-family:Syne;font-size:22px;font-weight:900;" class="text-white mb-4">XINCO</h3>
           <p class="text-white/40 text-sm leading-relaxed" style="font-family:Plus Jakarta Sans;" data-i18n="footer.rights">Mar del Plata, Buenos Aires, Argentina.</p>
         </div>
         <div>
@@ -520,7 +520,7 @@ tailwind.config = {
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
     <header class="mb-12 border-b-2 border-primary pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
       <div>
-<h1 id="catalog-title" style="font-family:Syne;font-size:clamp(36px,7vw,80px);font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase" data-i18n="catalog.title">TODOS LOS ITEMS</h1>
+<h1 id="catalog-title" style="font-family:Syne;font-size:clamp(22px,4vw,40px);font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase" data-i18n="catalog.title">TODOS LOS ITEMS</h1>
         <p class="font-body-lg text-on-surface-variant mt-2" data-i18n="catalog.subtitle">Explorá nuestra colección.</p>
       </div>
       <span id="catalog-count" class="font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap"></span>
@@ -614,7 +614,7 @@ tailwind.config = {
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
     <header class="mb-12 border-b-2 border-primary pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
       <div>
-        <h1 style="font-family:Syne;font-size:clamp(36px,7vw,80px);font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase" data-i18n="accessories.title">ACCESORIOS</h1>
+        <h1 style="font-family:Syne;font-size:clamp(22px,4vw,40px);font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase" data-i18n="accessories.title">ACCESORIOS</h1>
         <p class="font-body-lg text-on-surface-variant mt-2" data-i18n="accessories.subtitle">Gorras, pulseras, aros, cadenas y más.</p>
       </div>
       <span id="accesorios-count" class="font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap"></span>
@@ -674,7 +674,7 @@ tailwind.config = {
       <!-- Details -->
       <div class="md:col-span-5 md:sticky md:top-24">
         <span id="product-badge" class="badge badge-violet mb-4 inline-block"></span>
-        <h1 id="product-name" style="font-family:Syne;font-size:clamp(24px,4vw,40px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase mb-2"></h1>
+        <h1 id="product-name" style="font-family:Syne;font-size:clamp(20px,3vw,32px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase mb-2"></h1>
         <div class="flex items-center gap-3 mb-4">
           <span id="product-price" class="font-label-caps text-[20px] text-primary"></span>
           <span id="product-old-price" class="font-label-caps text-label-caps text-outline line-through"></span>
@@ -726,14 +726,14 @@ tailwind.config = {
     </div>
     <!-- Related Products -->
     <div class="mt-16 pt-12 border-t-2 border-primary">
-      <h2 style="font-family:Syne;font-size:32px;font-weight:800;" class="text-primary uppercase mb-8" data-i18n="product.related">TAMBIÉN TE PUEDE GUSTAR</h2>
+      <h2 style="font-family:Syne;font-size:24px;font-weight:800;" class="text-primary uppercase mb-8" data-i18n="product.related">TAMBIÉN TE PUEDE GUSTAR</h2>
       <div id="related-products" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
     </div>
     <!-- Reviews -->
     <div class="mt-16 pt-12 border-t-2 border-primary" id="reviews-section">
       <div class="flex justify-between items-start mb-8">
         <div>
-          <h2 style="font-family:Syne;font-size:28px;font-weight:800;" class="text-primary uppercase mb-1" data-i18n="product.reviews">RESEÑAS</h2>
+          <h2 style="font-family:Syne;font-size:22px;font-weight:800;" class="text-primary uppercase mb-1" data-i18n="product.reviews">RESEÑAS</h2>
           <p class="font-label-caps text-label-caps text-on-surface-variant" id="reviews-count" data-i18n="product.reviews.count">0 OPINIONES</p>
         </div>
         <button class="btn-primary text-sm py-2 px-4" id="review-btn" onclick="openReviewForm()" data-i18n="product.reviews.write">ESCRIBIR UNA RESEÑA</button>
@@ -784,7 +784,7 @@ tailwind.config = {
 <!-- ===================================== -->
 <div id="page-cart" class="page">
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
-    <h1 style="font-family:Syne;font-size:clamp(32px,6vw,64px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-2 border-primary pb-6">TU CARRITO</h1>
+    <h1 style="font-family:Syne;font-size:clamp(24px,4.5vw,48px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-2 border-primary pb-6">TU CARRITO</h1>
     <div class="flex flex-col lg:flex-row gap-12">
       <div class="flex-1" id="cart-page-items"></div>
       <aside class="lg:w-80 shrink-0">
@@ -811,7 +811,7 @@ tailwind.config = {
 <!-- ===================================== -->
 <div id="page-checkout" class="page">
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
-    <h1 style="font-family:Syne;font-size:clamp(28px,5vw,56px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-2 border-primary pb-6" data-i18n="checkout.title">FINALIZAR COMPRA</h1>
+    <h1 style="font-family:Syne;font-size:clamp(22px,4vw,40px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-2 border-primary pb-6" data-i18n="checkout.title">FINALIZAR COMPRA</h1>
     <div class="flex flex-col lg:flex-row gap-12">
       <!-- Form -->
       <div class="flex-1">
@@ -953,7 +953,7 @@ tailwind.config = {
     <div class="w-full max-w-md">
       <div class="text-center mb-10">
         <a onclick="nav('home')" class="cursor-pointer">
-          <h1 style="font-family:Syne;font-size:48px;font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">XINCO</h1>
+          <h1 style="font-family:Syne;font-size:32px;font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">XINCO</h1>
         </a>
         <p class="font-label-caps text-label-caps text-on-surface-variant mt-2" data-i18n="login.subtitle">ACCEDÉ A TU CUENTA</p>
       </div>
@@ -1022,7 +1022,7 @@ tailwind.config = {
     <div class="w-full max-w-md">
       <div class="text-center mb-10">
         <a onclick="nav('home')" class="cursor-pointer">
-          <h1 style="font-family:Syne;font-size:48px;font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">XINCO</h1>
+          <h1 style="font-family:Syne;font-size:32px;font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">XINCO</h1>
         </a>
         <p class="font-label-caps text-label-caps text-on-surface-variant mt-2" data-i18n="register.subtitle">CREÁ TU CUENTA</p>
       </div>
@@ -1089,7 +1089,7 @@ tailwind.config = {
         <div class="w-20 h-20 bg-primary flex items-center justify-center mx-auto mb-6">
           <span class="material-symbols-outlined text-white text-[48px]">mark_email_read</span>
         </div>
-        <h2 style="font-family:Syne;font-size:28px;font-weight:900;letter-spacing:-0.02em;" class="text-primary uppercase mb-3" data-i18n="register.success_title">¡REVISÁ TU EMAIL!</h2>
+        <h2 style="font-family:Syne;font-size:22px;font-weight:900;letter-spacing:-0.02em;" class="text-primary uppercase mb-3" data-i18n="register.success_title">¡REVISÁ TU EMAIL!</h2>
         <p class="font-body-md text-on-surface-variant mb-2" data-i18n="register.success_text1">Te enviamos un correo de verificación a:</p>
         <div class="border-[2px] border-secondary-container px-5 py-3 mb-5 inline-block">
           <span id="reg-sent-email" class="font-label-caps text-label-caps text-secondary-container"></span>
@@ -1115,7 +1115,7 @@ tailwind.config = {
 <!-- ===================================== -->
 <div id="page-account" class="page">
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
-    <h1 style="font-family:Syne;font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-2 border-primary pb-6" data-i18n="account.title">MI CUENTA</h1>
+    <h1 style="font-family:Syne;font-size:clamp(22px,4vw,36px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-2 border-primary pb-6" data-i18n="account.title">MI CUENTA</h1>
     <div class="flex flex-col md:flex-row gap-8">
 
       <!-- Sidebar -->
@@ -1688,19 +1688,19 @@ tailwind.config = {
                   <div class="cobr-card admin-card card-hover">
                     <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:#009ee3;"><span class="material-symbols-outlined text-white text-[24px]">account_balance_wallet</span></div><span class="font-label-caps text-[11px]" style="background:var(--admin-accent,#9b87f5);color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;">62%</span></div>
                     <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">MERCADO PAGO</div>
-                    <div style="font-family:Syne;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$77.190</span></div>
+                    <div style="font-family:Syne;font-size:24px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$77.190</span></div>
                     <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:#009ee3;border-radius:999px;width:62%"></div></div>
                   </div>
                   <div class="cobr-card admin-card card-hover">
                     <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">credit_card</span></div><span class="font-label-caps text-[11px]" style="background:var(--admin-accent,#9b87f5);color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;">24%</span></div>
                     <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">TARJETA CRÉ/DÉB</div>
-                    <div style="font-family:Syne;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$29.880</span></div>
+                    <div style="font-family:Syne;font-size:24px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$29.880</span></div>
                     <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:var(--admin-accent,#9b87f5);border-radius:999px;width:24%"></div></div>
                   </div>
                   <div class="cobr-card admin-card card-hover">
                     <div class="flex justify-between items-center mb-4"><div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(0,0,0,0.04);"><span class="material-symbols-outlined" style="color:var(--admin-accent,#9b87f5);font-size:24px;">swap_horiz</span></div><span class="font-label-caps text-[11px]" style="background:rgba(0,0,0,0.06);color:rgba(0,0,0,0.45);padding:4px 12px;border-radius:999px;font-weight:700;">14%</span></div>
                     <div class="font-label-caps text-[11px]" style="color:rgba(0,0,0,0.4);margin-bottom:4px;letter-spacing:0.1em;">TRANSFERENCIA</div>
-                    <div style="font-family:Syne;font-size:32px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$17.430</span></div>
+                    <div style="font-family:Syne;font-size:24px;font-weight:800;color:#1a1c1c;"><span class="cobr-stat">$17.430</span></div>
                     <div class="w-full h-2" style="background:rgba(0,0,0,0.06);border-radius:999px;margin-top:16px;"><div class="h-2" style="background:rgba(0,0,0,0.15);border-radius:999px;width:14%"></div></div>
                   </div>
                 </div>
@@ -2394,7 +2394,7 @@ tailwind.config = {
                       </label>
                     </div>
                     <div class="bg-primary text-on-primary p-6 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-xl">
-                      <div><span id="promo-preview-label" class="font-label-caps text-[10px] text-secondary-container block mb-2"></span><div id="promo-preview-title" style="font-family:Syne;font-size:clamp(20px,3vw,40px);font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;"></div></div>
+                      <div><span id="promo-preview-label" class="font-label-caps text-[10px] text-secondary-container block mb-2"></span><div id="promo-preview-title" style="font-family:Syne;font-size:clamp(18px,2.5vw,32px);font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;"></div></div>
                       <div><div class="border-2 border-secondary-container px-6 py-3 rounded-xl"><span id="promo-preview-code" class="font-label-caps text-label-caps text-secondary-container tracking-widest"></span></div></div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -2563,7 +2563,7 @@ tailwind.config = {
 <div id="size-guide-modal" class="modal-overlay">
   <div class="bg-surface border-2 border-primary p-8 max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
     <div class="flex justify-between items-center mb-6">
-      <h2 style="font-family:Syne;font-size:28px;font-weight:800;" class="text-primary uppercase" data-i18n="sizeguide.title">GUÍA DE TALLES</h2>
+      <h2 style="font-family:Syne;font-size:22px;font-weight:800;" class="text-primary uppercase" data-i18n="sizeguide.title">GUÍA DE TALLES</h2>
       <button onclick="closeSizeGuide()"><span class="material-symbols-outlined">close</span></button>
     </div>
     <table class="w-full border-collapse font-label-caps text-label-caps">
