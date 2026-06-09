@@ -36,7 +36,6 @@
 .insta-item::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background 0.3s; }
 .insta-item:hover::after { background: rgba(0,0,0,0.15); }
 </style>
-  <script src="https://unpkg.com/lucide@latest"></script>
   <script id="tailwind-config">
 tailwind.config = {
   darkMode: "class",
@@ -162,12 +161,12 @@ tailwind.config = {
 
 <!-- ===== MOBILE MENU ===== -->
 <div id="mobile-menu" class="mobile-menu">
-  <button onclick="closeMobileMenu()" class="absolute top-6 right-6 text-white close-btn-anim"><span class="material-symbols-outlined text-[32px]">close</span></button>
+  <button onclick="closeMobileMenu()" class="absolute top-6 right-6 close-btn-anim" style="color:var(--inverse-on-surface,#fff)"><span class="material-symbols-outlined text-[32px]">close</span></button>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('home');closeMobileMenu()" data-i18n="mobile.home">INICIO</a>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()" data-i18n="mobile.catalog">CATÁLOGO</a>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('accesorios');closeMobileMenu()" data-i18n="mobile.accessories">ACCESORIOS</a>
   <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()" data-i18n="mobile.new">NOVEDADES</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;color:#000;" onclick="filterCatalog('exclusive');closeMobileMenu()" data-i18n="mobile.exclusive">EXCLUSIVE</a>
+  <a class="font-display-xl uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="filterCatalog('exclusive');closeMobileMenu()" data-i18n="mobile.exclusive">EXCLUSIVE</a>
 </div>
 
 <!-- ===== SEARCH OVERLAY ===== -->
@@ -177,30 +176,30 @@ tailwind.config = {
     <div class="flex justify-between items-center mb-8">
       <div>
         <h2 class="search-title" style="font-family:Montserrat;font-size:clamp(36px,6vw,56px);font-weight:900;letter-spacing:-0.03em;" data-i18n="search.title">BUSCAR</h2>
-        <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(0,0,0,0.4);margin-top:4px;" data-i18n="search.hint">CTRL+K PARA ABRIR / ESC PARA CERRAR</p>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--on-surface-variant);margin-top:4px;" data-i18n="search.hint">CTRL+K PARA ABRIR / ESC PARA CERRAR</p>
       </div>
       <button onclick="closeSearch()" class="close-btn p-3">
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
     <!-- Search box acrílico -->
-    <div class="search-box relative flex items-center mb-2 rounded-full border-2 border-black/10">
-      <span class="material-symbols-outlined absolute left-4 text-black" style="font-size:22px;">search</span>
+    <div class="search-box relative flex items-center mb-2 rounded-full" style="border:2px solid var(--outline-variant);">
+      <span class="material-symbols-outlined absolute left-4" style="font-size:22px;color:var(--on-surface);">search</span>
       <input
         id="search-input"
-        class="w-full bg-transparent border-none pl-14 pr-5 py-4 outline-none placeholder:text-black/30"
-        style="font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:0.05em;color:#000;"
+        class="w-full bg-transparent border-none pl-14 pr-5 py-4 outline-none"
+        style="font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:0.05em;color:var(--on-surface);"
         placeholder=""
         autocomplete="new-password"
         oninput="handleSearch(this.value)"
       />
-      <div id="search-clear" class="hidden absolute right-4 cursor-pointer text-black/40 hover:text-black" onclick="clearSearch()">
+      <div id="search-clear" class="hidden absolute right-4 cursor-pointer" style="color:var(--on-surface-variant);" onclick="clearSearch()">
         <span class="material-symbols-outlined text-[20px]">backspace</span>
       </div>
     </div>
     <!-- Sugerencias rápidas -->
     <div id="search-suggestions" class="flex flex-wrap gap-2 mb-8">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(0,0,0,0.4);" data-i18n="search.suggestions">SUGERENCIAS:</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--on-surface-variant);" data-i18n="search.suggestions">SUGERENCIAS:</span>
       <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Remeras';handleSearch('Remeras')" data-i18n="search.shirts">REMERAS</button>
       <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Buzos';handleSearch('Buzos')" data-i18n="search.hoodies">BUZOS</button>
       <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Pantalones';handleSearch('Pantalones')" data-i18n="search.pants">PANTALONES</button>
@@ -211,8 +210,8 @@ tailwind.config = {
     <div id="search-results" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
     <!-- Empty state -->
     <div id="search-empty" class="hidden text-center py-12">
-      <span class="material-symbols-outlined text-[56px]" style="color:rgba(0,0,0,0.15);">search_off</span>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(0,0,0,0.35);margin-top:12px;" data-i18n="search.empty">SIN RESULTADOS — INTENTÁ CON OTRO TÉRMINO</p>
+      <span class="material-symbols-outlined text-[56px]" style="color:var(--outline-variant);">search_off</span>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--on-surface-variant);margin-top:12px;" data-i18n="search.empty">SIN RESULTADOS — INTENTÁ CON OTRO TÉRMINO</p>
     </div>
   </div>
 </div>
@@ -276,7 +275,7 @@ tailwind.config = {
     <a class="nav-link" id="nav-catalog" onclick="nav('catalog')" data-i18n="nav.catalog">CATÁLOGO</a>
     <a class="nav-link" id="nav-accesorios" onclick="nav('accesorios')" data-i18n="nav.accessories">ACCESORIOS</a>
     <a class="nav-link" id="nav-newdrops" onclick="filterCatalog('newdrops')" data-i18n="nav.new">NOVEDADES</a>
-    <a class="nav-link" style="color:#000;" id="nav-exclusive" onclick="filterCatalog('exclusive')" data-i18n="nav.exclusive">EXCLUSIVE</a>
+    <a class="nav-link" id="nav-exclusive" onclick="filterCatalog('exclusive')" data-i18n="nav.exclusive">EXCLUSIVE</a>
   </nav>
 </header>
 
@@ -369,10 +368,10 @@ tailwind.config = {
   <section id="exclusive-section" class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal" style="display:none;">
     <div class="flex justify-between items-end mb-8">
       <div>
-        <span class="font-label-caps text-label-caps tracking-widest block mb-2" style="color:#000;" data-i18n="home.exclusive.label">EXCLUSIVE</span>
-        <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;color:#000;" class="uppercase" data-i18n="home.exclusive.title">Edición limitada</h2>
+        <span class="font-label-caps text-label-caps tracking-widest block mb-2 text-primary" data-i18n="home.exclusive.label">EXCLUSIVE</span>
+        <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase" data-i18n="home.exclusive.title">Edición limitada</h2>
       </div>
-      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps pb-1 hover:opacity-70 transition-opacity cursor-pointer" style="color:#000;border-bottom:2px solid #000;" onclick="nav('catalog')" data-i18n="home.exclusive.seeall">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
+      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps pb-1 hover:opacity-70 transition-opacity cursor-pointer text-primary" style="border-bottom:2px solid var(--primary);" onclick="nav('catalog')" data-i18n="home.exclusive.seeall">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
     </div>
     <div id="exclusive-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
   </section>
@@ -470,7 +469,7 @@ tailwind.config = {
             <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('buzos')" data-i18n="footer.hoodies">Buzos</a></li>
             <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('remeras')" data-i18n="footer.shirts">Remeras</a></li>
             <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="nav('accesorios')" data-i18n="footer.accessories">Accesorios</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('exclusive')" style="color:#000;" data-i18n="footer.exclusive">EXCLUSIVE</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('exclusive')" data-i18n="footer.exclusive">EXCLUSIVE</a></li>
           </ul>
         </div>
         <div>
@@ -952,7 +951,7 @@ tailwind.config = {
           <button class="font-label-caps text-[10px] text-secondary-container underline mt-2" onclick="resendVerificationEmail()" data-i18n="login.resend">REENVIAR EMAIL DE VERIFICACIÓN</button>
         </div>
       </div>
-      <div class="border-2 border-primary p-8 bg-white">
+      <div class="border-2 border-primary p-8 bg-surface">
         <div id="login-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
         <div class="mb-5">
           <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="login.email">EMAIL</label>
@@ -1014,7 +1013,7 @@ tailwind.config = {
       </div>
 
       <!-- FORMULARIO DE REGISTRO -->
-      <div id="register-form-panel" class="border-2 border-primary p-8 bg-white">
+      <div id="register-form-panel" class="border-2 border-primary p-8 bg-surface">
         <div id="reg-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div>
@@ -1172,7 +1171,7 @@ tailwind.config = {
         <!-- PERFIL -->
         <div id="acc-content-profile" class="hidden">
           <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5" data-i18n="account.profile_title">DATOS PERSONALES</h2>
-          <div class="bg-white border-2 border-primary p-6 mb-5">
+          <div class="bg-surface border-2 border-primary p-6 mb-5">
             <div id="profile-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-4 border-2 border-error"></div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
@@ -1222,7 +1221,7 @@ tailwind.config = {
           <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">MÉTODOS DE PAGO</h2>
 
           <!-- Mercado Pago -->
-          <div class="bg-white border-2 border-primary p-6 mb-5">
+          <div class="bg-surface border-2 border-primary p-6 mb-5">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-10 h-10 flex items-center justify-center shrink-0" style="background:#009ee3;">
                 <span class="material-symbols-outlined text-white text-[20px]">account_balance_wallet</span>
@@ -1236,7 +1235,7 @@ tailwind.config = {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CBU / CVU</label>
-                <input id="user-mp-cbu" class="input-field" placeholder="0000000000000000000000" oninput="validatePaymentField('user-mp-cbu')"/>
+                <input id="user-mp-cbu" class="input-field" placeholder="0000000000000000000" oninput="validatePaymentField('user-mp-cbu')"/>
                 <p id="user-mp-cbu-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
               </div>
               <div>
@@ -1256,7 +1255,7 @@ tailwind.config = {
           </div>
 
           <!-- Tarjetas -->
-          <div class="bg-white border-2 border-primary p-6 mb-5">
+          <div class="bg-surface border-2 border-primary p-6 mb-5">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0">
                 <span class="material-symbols-outlined text-white text-[20px]">credit_card</span>
@@ -1306,7 +1305,7 @@ tailwind.config = {
           </div>
 
           <!-- Transferencia -->
-          <div class="bg-white border-2 border-primary p-6">
+          <div class="bg-surface border-2 border-primary p-6">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0">
                 <span class="material-symbols-outlined text-white text-[20px]">swap_horiz</span>
@@ -1344,7 +1343,7 @@ tailwind.config = {
         <!-- DIRECCIONES -->
         <div id="acc-content-addresses" class="hidden">
           <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">MIS DIRECCIONES</h2>
-          <div class="bg-white border-2 border-primary p-6">
+          <div class="bg-surface border-2 border-primary p-6">
             <div id="addresses-list" class="space-y-3 mb-4"></div>
             <button class="btn-outline text-[11px]" onclick="showAddAddressForm()">
               <span class="material-symbols-outlined text-[14px]">add</span> AGREGAR DIRECCIÓN
@@ -1369,7 +1368,7 @@ tailwind.config = {
           <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">SEGURIDAD DE LA CUENTA</h2>
 
           <!-- Cambiar email -->
-          <div class="bg-white border-2 border-primary p-6 mb-5">
+          <div class="bg-surface border-2 border-primary p-6 mb-5">
             <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2">
               <span class="material-symbols-outlined text-[18px]">email</span> CAMBIAR EMAIL
             </h3>
@@ -1402,7 +1401,7 @@ tailwind.config = {
           </div>
 
           <!-- Cambiar contraseña -->
-          <div class="bg-white border-2 border-primary p-6">
+          <div class="bg-surface border-2 border-primary p-6">
             <h3 class="font-label-caps text-label-caps text-primary mb-1 flex items-center gap-2">
               <span class="material-symbols-outlined text-[18px]">lock</span> CAMBIAR CONTRASEÑA
             </h3>
@@ -1591,8 +1590,8 @@ tailwind.config = {
                 <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BADGE (opcional)</label><input id="pf-badge" class="input-field" placeholder="NUEVO / SALE / DROP EXCLUSIVO"/></div>
                 <div class="flex items-end pb-2">
                   <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" id="pf-exclusive" class="w-4 h-4 accent-[#000]"/>
-                    <span style="color:#000;font-weight:700;font-size:11px;">EXCLUSIVO</span>
+                    <input type="checkbox" id="pf-exclusive" class="w-4 h-4" style="accent-color:var(--on-surface);"/>
+                    <span style="font-weight:700;font-size:11px;color:var(--on-surface);">EXCLUSIVO</span>
                   </label>
                 </div>
                 <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">DESCRIPCIÓN</label><textarea id="pf-desc" class="input-field" rows="2" placeholder="Descripción del producto..."></textarea></div>

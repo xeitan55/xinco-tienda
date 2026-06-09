@@ -2966,7 +2966,7 @@ export function init() {
       dockInner.insertBefore(dragEl, after && ti < all.length - 1 ? all[ti + 1] : target);
       const order = [...dockInner.querySelectorAll('.dock-item')].map(x => x.dataset.section);
       localStorage.setItem('xinco_dock_order', JSON.stringify(order));
-      try { lucide?.createIcons(); } catch(_) {}
+      if (typeof window.replaceIcons === 'function') setTimeout(window.replaceIcons, 50);
       // rebuild dividers after every drag
       const dItems = dockInner.querySelectorAll('.dock-item');
       dockInner.querySelectorAll('.dock-divider').forEach(d => d.remove());
@@ -3152,5 +3152,5 @@ export function init() {
     const menu = document.getElementById('admin-user-menu');
     if (menu) menu.classList.toggle('hidden');
   };
-  try { lucide?.createIcons(); } catch(e) {}
+  if (typeof window.replaceIcons === 'function') setTimeout(window.replaceIcons, 50);
 }

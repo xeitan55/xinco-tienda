@@ -30,11 +30,13 @@ export function setTheme(name) {
   const theme = themes[name];
   if (!theme) return;
   document.documentElement.classList.remove('dark', 'dark-soft');
+  document.documentElement.classList.add('theme-transitioning');
   if (name !== 'light') document.documentElement.classList.add(name);
   localStorage.setItem(THEME_KEY, name);
   document.querySelectorAll('.theme-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.theme === name);
   });
+  setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 400);
 }
 
 export function getTheme() {

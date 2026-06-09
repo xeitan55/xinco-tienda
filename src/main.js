@@ -15,6 +15,7 @@ import { init as initBanners } from './banners.jsx';
 import { init as initCheckout } from './checkout.js';
 import { init as initSendTicket } from './send-ticket.js';
 import { init as initLang } from './lang.js';
+import { init as initIcons } from './icons.js';
 
 initState();
 initLang();
@@ -31,5 +32,6 @@ initCoupons();
 initBanners();
 initCheckout();
 initSendTicket();
+initIcons();
 
 window.bootFromFirebase();
