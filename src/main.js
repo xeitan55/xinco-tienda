@@ -14,8 +14,10 @@ import { init as initCoupons } from './coupons.js';
 import { init as initBanners } from './banners.jsx';
 import { init as initCheckout } from './checkout.js';
 import { init as initSendTicket } from './send-ticket.js';
+import { init as initLang } from './lang.js';
 
 initState();
+initLang();
 initFirebase();
 initTheme();
 initAnimations();
