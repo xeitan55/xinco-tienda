@@ -118,6 +118,7 @@ const LUCIDE_MAP = {
   users: 'customers', truck: 'tracking', boxes: 'inventory',
   package: 'products', 'credit-card': 'payment', percent: 'coupon',
   'bar-chart-3': 'chart', store: 'store', settings: 'settings',
+  'log-out': 'logout',
 };
 
 function getIconSize(el) {
