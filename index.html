@@ -124,11 +124,11 @@ tailwind.config = {
   <!-- Content -->
   <div class="splash-content">
     <div class="splash-logo">
-      <span class="splash-letter">X</span>
-      <span class="splash-letter">I</span>
-      <span class="splash-letter">N</span>
-      <span class="splash-letter">C</span>
-      <span class="splash-letter">O</span>
+      <span class="splash-letter" data-i18n="splash.x">X</span>
+      <span class="splash-letter" data-i18n="splash.i">I</span>
+      <span class="splash-letter" data-i18n="splash.n">N</span>
+      <span class="splash-letter" data-i18n="splash.c">C</span>
+      <span class="splash-letter" data-i18n="splash.o">O</span>
     </div>
   </div>
 </div>
@@ -142,32 +142,32 @@ tailwind.config = {
 <!-- ===== CART DRAWER ===== -->
 <div id="cart-drawer" class="cart-drawer">
   <div class="p-stack-sm border-b-2 border-primary flex justify-between items-center sticky top-0 bg-surface z-10">
-    <h2 class="font-headline-md text-primary uppercase" style="font-family:Montserrat;font-size:24px;font-weight:900;">TU CARRITO</h2>
+    <h2 class="font-headline-md text-primary uppercase" style="font-family:Montserrat;font-size:24px;font-weight:900;" data-i18n="cart.title">TU CARRITO</h2>
     <button onclick="closeCart()" class="p-2 hover:bg-surface-container"><span class="material-symbols-outlined">close</span></button>
   </div>
   <div id="cart-items" class="p-stack-sm flex flex-col gap-gutter"></div>
   <div id="cart-footer" class="p-stack-sm border-t-2 border-primary sticky bottom-0 bg-surface">
     <div class="flex justify-between mb-4">
-      <span class="font-label-caps text-label-caps text-on-surface-variant">SUBTOTAL</span>
+      <span class="font-label-caps text-label-caps text-on-surface-variant" data-i18n="cart.subtotal">SUBTOTAL</span>
       <span id="cart-subtotal" class="font-label-caps text-label-caps text-primary">$0</span>
     </div>
     <div class="flex justify-between mb-stack-sm">
-      <span class="font-label-caps text-label-caps text-on-surface-variant">ENVÍO</span>
-      <span id="cart-shipping" class="font-label-caps text-label-caps text-primary">GRATIS</span>
+      <span class="font-label-caps text-label-caps text-on-surface-variant" data-i18n="cart.shipping">ENVÍO</span>
+      <span id="cart-shipping" class="font-label-caps text-label-caps text-primary" data-i18n="cart.free">GRATIS</span>
     </div>
-    <button class="btn-violet w-full justify-center" onclick="goToCheckout()">FINALIZAR COMPRA <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
-    <button class="btn-outline w-full justify-center mt-2" onclick="closeCart()">SEGUIR COMPRANDO</button>
+    <button class="btn-violet w-full justify-center" onclick="goToCheckout()" data-i18n="cart.checkout">FINALIZAR COMPRA <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+    <button class="btn-outline w-full justify-center mt-2" onclick="closeCart()" data-i18n="cart.continue">SEGUIR COMPRANDO</button>
   </div>
 </div>
 
 <!-- ===== MOBILE MENU ===== -->
 <div id="mobile-menu" class="mobile-menu">
   <button onclick="closeMobileMenu()" class="absolute top-6 right-6 text-white close-btn-anim"><span class="material-symbols-outlined text-[32px]">close</span></button>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('home');closeMobileMenu()">INICIO</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">CATÁLOGO</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('accesorios');closeMobileMenu()">ACCESORIOS</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()">NOVEDADES</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;color:#000;" onclick="filterCatalog('exclusive');closeMobileMenu()">EXCLUSIVE</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('home');closeMobileMenu()" data-i18n="mobile.home">INICIO</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()" data-i18n="mobile.catalog">CATÁLOGO</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('accesorios');closeMobileMenu()" data-i18n="mobile.accessories">ACCESORIOS</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;" onclick="nav('catalog');closeMobileMenu()" data-i18n="mobile.new">NOVEDADES</a>
+  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:Montserrat;font-size:clamp(28px,8vw,56px);font-weight:900;color:#000;" onclick="filterCatalog('exclusive');closeMobileMenu()" data-i18n="mobile.exclusive">EXCLUSIVE</a>
 </div>
 
 <!-- ===== SEARCH OVERLAY ===== -->
@@ -176,8 +176,8 @@ tailwind.config = {
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
       <div>
-        <h2 class="search-title" style="font-family:Montserrat;font-size:clamp(36px,6vw,56px);font-weight:900;letter-spacing:-0.03em;">BUSCAR</h2>
-        <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(0,0,0,0.4);margin-top:4px;">CTRL+K PARA ABRIR / ESC PARA CERRAR</p>
+        <h2 class="search-title" style="font-family:Montserrat;font-size:clamp(36px,6vw,56px);font-weight:900;letter-spacing:-0.03em;" data-i18n="search.title">BUSCAR</h2>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(0,0,0,0.4);margin-top:4px;" data-i18n="search.hint">CTRL+K PARA ABRIR / ESC PARA CERRAR</p>
       </div>
       <button onclick="closeSearch()" class="close-btn p-3">
         <span class="material-symbols-outlined">close</span>
@@ -200,19 +200,19 @@ tailwind.config = {
     </div>
     <!-- Sugerencias rápidas -->
     <div id="search-suggestions" class="flex flex-wrap gap-2 mb-8">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(0,0,0,0.4);">SUGERENCIAS:</span>
-      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Remeras';handleSearch('Remeras')">REMERAS</button>
-      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Buzos';handleSearch('Buzos')">BUZOS</button>
-      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Pantalones';handleSearch('Pantalones')">PANTALONES</button>
-      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='NUEVO';handleSearch('NUEVO')">NOVEDADES</button>
-      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='SALE';handleSearch('SALE')">SALE</button>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(0,0,0,0.4);" data-i18n="search.suggestions">SUGERENCIAS:</span>
+      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Remeras';handleSearch('Remeras')" data-i18n="search.shirts">REMERAS</button>
+      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Buzos';handleSearch('Buzos')" data-i18n="search.hoodies">BUZOS</button>
+      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='Pantalones';handleSearch('Pantalones')" data-i18n="search.pants">PANTALONES</button>
+      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='NUEVO';handleSearch('NUEVO')" data-i18n="search.new">NOVEDADES</button>
+      <button class="suggestion-chip" onclick="document.getElementById('search-input').value='SALE';handleSearch('SALE')" data-i18n="search.sale">SALE</button>
     </div>
     <!-- Results grid -->
     <div id="search-results" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
     <!-- Empty state -->
     <div id="search-empty" class="hidden text-center py-12">
       <span class="material-symbols-outlined text-[56px]" style="color:rgba(0,0,0,0.15);">search_off</span>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(0,0,0,0.35);margin-top:12px;">SIN RESULTADOS — INTENTÁ CON OTRO TÉRMINO</p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(0,0,0,0.35);margin-top:12px;" data-i18n="search.empty">SIN RESULTADOS — INTENTÁ CON OTRO TÉRMINO</p>
     </div>
   </div>
 </div>
@@ -240,22 +240,26 @@ tailwind.config = {
     <div class="flex items-center gap-3 flex-1 justify-end">
       <button class="md:hidden p-1" onclick="openSearch()"><span class="material-symbols-outlined">search</span></button>
       <button id="auth-btn" class="hidden md:flex items-center gap-1 font-label-caps text-label-caps hover:text-secondary-container transition-colors" onclick="handleAuthBtn()">
-        <span id="auth-label">ACCEDER</span>
+        <span id="auth-label" data-i18n="header.login">ACCEDER</span>
         <span class="material-symbols-outlined text-[20px]">account_circle</span>
       </button>
+      <button class="relative p-1 group" id="lang-toggle" onclick="toggleLang()" title="Cambiar idioma">
+        <span class="material-symbols-outlined text-primary">translate</span>
+        <span id="lang-label" class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 text-[8px] font-bold font-label-caps text-primary leading-none">ES</span>
+      </button>
       <div class="relative" id="theme-panel-container">
-        <button class="relative p-1" id="theme-toggle" onclick="toggleThemePanel()" title="Personalizar">
+        <button class="relative p-1" id="theme-toggle" onclick="toggleThemePanel()" title="Personalizar" data-i18n-title="header.customize">
           <span class="material-symbols-outlined text-primary">palette</span>
         </button>
         <div id="theme-panel">
           <div class="theme-panel-inner">
-            <h4>Tema</h4>
+            <h4 data-i18n="theme.title">Tema</h4>
             <div class="theme-options" id="theme-selector">
-              <button class="theme-btn active" data-theme="light" onclick="setTheme('light')">Claro</button>
-              <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Oscuro</button>
-              <button class="theme-btn" data-theme="dark-soft" onclick="setTheme('dark-soft')">Suave</button>
+              <button class="theme-btn active" data-theme="light" onclick="setTheme('light')" data-i18n="theme.light">Claro</button>
+              <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')" data-i18n="theme.dark">Oscuro</button>
+              <button class="theme-btn" data-theme="dark-soft" onclick="setTheme('dark-soft')" data-i18n="theme.soft">Suave</button>
             </div>
-            <h4>Acento</h4>
+            <h4 data-i18n="theme.accent">Acento</h4>
             <div class="accent-options" id="accent-selector"></div>
           </div>
         </div>
@@ -268,11 +272,11 @@ tailwind.config = {
   </div>
   <!-- Nav Links Desktop -->
   <nav class="hidden md:flex border-t border-outline-variant/30 justify-center gap-8 py-2">
-    <a class="nav-link" id="nav-home" onclick="nav('home')">INICIO</a>
-    <a class="nav-link" id="nav-catalog" onclick="nav('catalog')">CATÁLOGO</a>
-    <a class="nav-link" id="nav-accesorios" onclick="nav('accesorios')">ACCESORIOS</a>
-    <a class="nav-link" id="nav-newdrops" onclick="filterCatalog('newdrops')">NOVEDADES</a>
-    <a class="nav-link" style="color:#000;" id="nav-exclusive" onclick="filterCatalog('exclusive')">EXCLUSIVE</a>
+    <a class="nav-link" id="nav-home" onclick="nav('home')" data-i18n="nav.home">INICIO</a>
+    <a class="nav-link" id="nav-catalog" onclick="nav('catalog')" data-i18n="nav.catalog">CATÁLOGO</a>
+    <a class="nav-link" id="nav-accesorios" onclick="nav('accesorios')" data-i18n="nav.accessories">ACCESORIOS</a>
+    <a class="nav-link" id="nav-newdrops" onclick="filterCatalog('newdrops')" data-i18n="nav.new">NOVEDADES</a>
+    <a class="nav-link" style="color:#000;" id="nav-exclusive" onclick="filterCatalog('exclusive')" data-i18n="nav.exclusive">EXCLUSIVE</a>
   </nav>
 </header>
 
@@ -297,8 +301,8 @@ tailwind.config = {
       <h1 id="hero-title" class="text-white uppercase mb-6 hero-anim-title" style="font-family:Montserrat;font-size:clamp(48px,10vw,120px);font-weight:900;line-height:1;letter-spacing:-0.04em;"></h1>
       <p id="hero-subtitle" class="text-white/70 mb-8 max-w-md hero-anim-subtitle" style="font-family:Inter;font-size:18px;"></p>
       <div class="flex gap-4 flex-wrap hero-anim-btns">
-        <button class="btn-violet" onclick="nav('catalog')">EXPLORAR COLECCIÓN <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
-        <button class="btn-outline" style="color:#fff;border-color:#fff;background:transparent;" onclick="filterCatalog('newdrops')">NOVEDADES</button>
+        <button class="btn-violet" onclick="nav('catalog')" data-i18n="hero.explore">EXPLORAR COLECCIÓN <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+        <button class="btn-outline" style="color:#fff;border-color:#fff;background:transparent;" onclick="filterCatalog('newdrops')" data-i18n="hero.new">NOVEDADES</button>
       </div>
     </div>
 
@@ -313,35 +317,35 @@ tailwind.config = {
   <!-- Categorías -->
   <section id="home-categories-section" class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal">
     <div class="flex justify-between items-end mb-8">
-      <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase">Categorías</h2>
+      <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase" data-i18n="categories.title">Categorías</h2>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
       <div class="group relative block w-full h-[280px] border-2 border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('remeras')">
         <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-2 border-r-2 border-primary rounded-tr-xl">
-          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Remeras</h3>
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase" data-i18n="categories.shirts">Remeras</h3>
         </div>
       </div>
       <div class="group relative block w-full h-[280px] border-2 border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('pantalones')">
         <img id="cat-img-pantalones-display" src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80" alt="Pantalones" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-2 border-r-2 border-primary rounded-tr-xl">
-          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Pantalones</h3>
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase" data-i18n="categories.pants">Pantalones</h3>
         </div>
       </div>
       <div class="group relative block w-full h-[280px] border-2 border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('buzos')">
         <img id="cat-img-buzos-display" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80" alt="Buzos" class="absolute inset-0 w-full h-full object-cover grayscale-hover" loading="lazy"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-2 border-r-2 border-primary rounded-tr-xl">
-          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Buzos</h3>
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase" data-i18n="categories.hoodies">Buzos</h3>
         </div>
       </div>
       <div class="group relative block w-full h-[280px] border-2 border-primary overflow-hidden cursor-pointer rounded-xl" onclick="nav('accesorios')">
         <img id="cat-img-accesorios-display" src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80" alt="Accesorios" class="absolute inset-0 w-full h-full object-cover" loading="lazy"/>
         <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
         <div class="absolute bottom-0 left-0 p-6 bg-surface border-t-2 border-r-2 border-primary rounded-tr-xl">
-          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">Accesorios</h3>
+          <h3 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase" data-i18n="categories.accessories">Accesorios</h3>
         </div>
       </div>
     </div>
@@ -351,10 +355,10 @@ tailwind.config = {
   <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal">
     <div class="flex justify-between items-end mb-8">
       <div>
-        <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2">NEW ARRIVALS</span>
-        <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase">Acaban de caer</h2>
+        <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2" data-i18n="home.newarrivals.label">NEW ARRIVALS</span>
+        <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" class="text-primary uppercase" data-i18n="home.newarrivals.title">Acaban de caer</h2>
       </div>
-      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 hover:text-secondary-container hover:border-secondary-container transition-colors cursor-pointer" onclick="nav('catalog')">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
+      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 hover:text-secondary-container hover:border-secondary-container transition-colors cursor-pointer" onclick="nav('catalog')" data-i18n="home.newarrivals.seeall">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
     </div>
     <div id="home-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
   </section>
@@ -365,10 +369,10 @@ tailwind.config = {
   <section id="exclusive-section" class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal" style="display:none;">
     <div class="flex justify-between items-end mb-8">
       <div>
-        <span class="font-label-caps text-label-caps tracking-widest block mb-2" style="color:#000;">EXCLUSIVE</span>
-        <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;color:#000;" class="uppercase">Edición limitada</h2>
+        <span class="font-label-caps text-label-caps tracking-widest block mb-2" style="color:#000;" data-i18n="home.exclusive.label">EXCLUSIVE</span>
+        <h2 style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;color:#000;" class="uppercase" data-i18n="home.exclusive.title">Edición limitada</h2>
       </div>
-      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps pb-1 hover:opacity-70 transition-opacity cursor-pointer" style="color:#000;border-bottom:2px solid #000;" onclick="nav('catalog')">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
+      <a class="hidden md:inline-flex items-center font-label-caps text-label-caps pb-1 hover:opacity-70 transition-opacity cursor-pointer" style="color:#000;border-bottom:2px solid #000;" onclick="nav('catalog')" data-i18n="home.exclusive.seeall">VER TODO <span class="material-symbols-outlined ml-1 text-[16px]">arrow_forward</span></a>
     </div>
     <div id="exclusive-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
   </section>
@@ -395,23 +399,23 @@ tailwind.config = {
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div class="trust-item bg-surface-container-low">
         <div class="trust-icon bg-primary text-on-primary"><span class="material-symbols-outlined">local_shipping</span></div>
-        <h3 class="text-primary">ENVÍO A TODO EL PAÍS</h3>
-        <p>Entregas en 3-7 días hábiles</p>
+        <h3 class="text-primary" data-i18n="trust.shipping.title">ENVÍO A TODO EL PAÍS</h3>
+        <p data-i18n="trust.shipping.desc">Entregas en 3-7 días hábiles</p>
       </div>
       <div class="trust-item bg-surface-container-low">
         <div class="trust-icon bg-primary text-on-primary"><span class="material-symbols-outlined">repeat</span></div>
-        <h3 class="text-primary">CAMBIOS SIN CARGO</h3>
-        <p>Dentro de los 30 días</p>
+        <h3 class="text-primary" data-i18n="trust.returns.title">CAMBIOS SIN CARGO</h3>
+        <p data-i18n="trust.returns.desc">Dentro de los 30 días</p>
       </div>
       <div class="trust-item bg-surface-container-low">
         <div class="trust-icon bg-primary text-on-primary"><span class="material-symbols-outlined">lock</span></div>
-        <h3 class="text-primary">PAGO SEGURO</h3>
-        <p>Transferencia, débito o crédito</p>
+        <h3 class="text-primary" data-i18n="trust.payment.title">PAGO SEGURO</h3>
+        <p data-i18n="trust.payment.desc">Transferencia, débito o crédito</p>
       </div>
       <div class="trust-item bg-surface-container-low">
         <div class="trust-icon bg-primary text-on-primary"><span class="material-symbols-outlined">support_agent</span></div>
-        <h3 class="text-primary">ATENCIÓN DIRECTA</h3>
-        <p>Respondemos al toque por WhatsApp</p>
+        <h3 class="text-primary" data-i18n="trust.support.title">ATENCIÓN DIRECTA</h3>
+        <p data-i18n="trust.support.desc">Respondemos al toque por WhatsApp</p>
       </div>
     </div>
   </section>
@@ -420,10 +424,10 @@ tailwind.config = {
   <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal">
     <div class="grid md:grid-cols-2 gap-12 items-center">
       <div>
-        <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2">LA MARCA</span>
+        <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2" data-i18n="about.label">LA MARCA</span>
           <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;">XINCO<br>Premium</h2>
-        <p class="text-on-surface-variant mt-6" style="font-family:Inter;font-size:15px;line-height:1.8;">Nacimos en Mar del Plata con una idea clara: romper con lo de siempre. XINCO no es solo ropa, es una forma de expresar quién sos. Prendas con corte impecable, materiales premium y un estilo que habla por sí solo. Cada colección está pensada para el que camina diferente.</p>
-        <button class="btn-violet mt-6" onclick="nav('catalog')">CONOCÉ LA COLECCIÓN</button>
+        <p class="text-on-surface-variant mt-6" style="font-family:Inter;font-size:15px;line-height:1.8;" data-i18n-html="about.text">Nacimos en Mar del Plata con una idea clara: romper con lo de siempre. XINCO no es solo ropa, es una forma de expresar quién sos. Prendas con corte impecable, materiales premium y un estilo que habla por sí solo. Cada colección está pensada para el que camina diferente.</p>
+        <button class="btn-violet mt-6" onclick="nav('catalog')" data-i18n="about.cta">CONOCÉ LA COLECCIÓN</button>
       </div>
       <div>
         <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80" alt="XINCO" class="about-img" loading="lazy"/>
@@ -435,8 +439,8 @@ tailwind.config = {
   <section class="max-w-[1440px] mx-auto px-6 md:px-12 py-16 border-b-2 border-primary reveal">
     <div class="flex justify-between items-end mb-8">
       <div>
-        <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2">@XINCO.STORE</span>
-        <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;">Seguinos en Instagram</h2>
+        <span class="font-label-caps text-label-caps text-secondary-container tracking-widest block mb-2" data-i18n="instagram.label">@XINCO.STORE</span>
+        <h2 class="text-primary uppercase" style="font-family:Montserrat;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-0.02em;" data-i18n="instagram.title">Seguinos en Instagram</h2>
       </div>
       <a class="hidden md:inline-flex items-center font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 hover:text-secondary-container hover:border-secondary-container transition-colors cursor-pointer" href="https://instagram.com/xinco.store" target="_blank">@XINCO.STORE <span class="material-symbols-outlined ml-1 text-[16px]">open_in_new</span></a>
     </div>
@@ -456,39 +460,39 @@ tailwind.config = {
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 pb-12 border-b" style="border-color:rgba(128,128,128,0.3);">
         <div>
           <h3 style="font-family:Montserrat;font-size:32px;font-weight:900;" class="mb-4">XINCO</h3>
-          <p class="text-on-primary/60 text-sm" style="font-family:Inter;">XINCO All Rights Reserved.<br>Mar del Plata, Buenos Aires,<br>Argentina.</p>
+          <p class="text-on-primary/60 text-sm" style="font-family:Inter;" data-i18n="footer.rights">XINCO All Rights Reserved.<br>Mar del Plata, Buenos Aires,<br>Argentina.</p>
         </div>
         <div>
-          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4">TIENDA</h4>
+          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4" data-i18n="footer.shop">TIENDA</h4>
           <ul class="space-y-2">
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="nav('catalog')">Catálogo</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('newdrops')">Novedades</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('buzos')">Buzos</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('remeras')">Remeras</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="nav('accesorios')">Accesorios</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('exclusive')" style="color:#000;">EXCLUSIVE</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="nav('catalog')" data-i18n="footer.catalog">Catálogo</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('newdrops')" data-i18n="footer.new">Novedades</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('buzos')" data-i18n="footer.hoodies">Buzos</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('remeras')" data-i18n="footer.shirts">Remeras</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="nav('accesorios')" data-i18n="footer.accessories">Accesorios</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="filterCatalog('exclusive')" style="color:#000;" data-i18n="footer.exclusive">EXCLUSIVE</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4">AYUDA</h4>
+          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4" data-i18n="footer.help">AYUDA</h4>
           <ul class="space-y-2">
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="showSizeGuide()">Guía de Talles</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.showToast?.('Envíos a todo el país — consultá por WhatsApp')">Envíos</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.showToast?.('Aceptamos cambios dentro de los 30 días')">Devoluciones</a></li>
-            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">Contacto</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="showSizeGuide()" data-i18n="footer.sizeguide">Guía de Talles</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.showToast?.('Envíos a todo el país — consultá por WhatsApp')" data-i18n="footer.shipping">Envíos</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.showToast?.('Aceptamos cambios dentro de los 30 días')" data-i18n="footer.returns">Devoluciones</a></li>
+            <li><a class="text-on-primary/80 hover:text-on-primary text-sm cursor-pointer" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" data-i18n="footer.contact">Contacto</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4">NEWSLETTER</h4>
-          <p class="text-on-primary/60 text-sm mb-3" style="font-family:Inter;">Enterate primero de los drops.</p>
+          <h4 class="font-label-caps text-label-caps text-on-primary/60 mb-4" data-i18n="footer.newsletter">NEWSLETTER</h4>
+          <p class="text-on-primary/60 text-sm mb-3" style="font-family:Inter;" data-i18n="footer.newsletter.desc">Enterate primero de los drops.</p>
           <div class="flex border-2" style="border-color:var(--on-primary);">
-            <input id="newsletter-email" class="bg-transparent flex-1 px-3 py-2 text-on-primary text-sm outline-none placeholder:text-on-primary/40" style="font-family:Inter;" placeholder="tu@email.com" autocomplete="off"/>
-            <button class="bg-on-primary text-primary px-4 font-label-caps text-[11px]" onclick="subscribeNewsletter()">OK</button>
+            <input id="newsletter-email" class="bg-transparent flex-1 px-3 py-2 text-on-primary text-sm outline-none placeholder:text-on-primary/40" style="font-family:Inter;" placeholder="tu@email.com" autocomplete="off" data-i18n-placeholder="footer.newsletter.email"/>
+            <button class="bg-on-primary text-primary px-4 font-label-caps text-[11px]" onclick="subscribeNewsletter()" data-i18n="footer.newsletter.ok">OK</button>
           </div>
         </div>
       </div>
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-        <span class="font-label-caps text-label-caps text-on-primary/40">© 2025 XINCO — MAR DEL PLATA, BUENOS AIRES, ARGENTINA</span>
+        <span class="font-label-caps text-label-caps text-on-primary/40" data-i18n="footer.copyright">© 2025 XINCO — MAR DEL PLATA, BUENOS AIRES, ARGENTINA</span>
         <div id="footer-social" class="flex gap-3"></div>
       </div>
     </div>
@@ -502,8 +506,8 @@ tailwind.config = {
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
     <header class="mb-12 border-b-2 border-primary pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
       <div>
-        <h1 id="catalog-title" style="font-family:Montserrat;font-size:clamp(36px,7vw,80px);font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">TODOS LOS ITEMS</h1>
-        <p class="font-body-lg text-on-surface-variant mt-2">Explorá nuestra colección.</p>
+<h1 id="catalog-title" style="font-family:Montserrat;font-size:clamp(36px,7vw,80px);font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase" data-i18n="catalog.title">TODOS LOS ITEMS</h1>
+        <p class="font-body-lg text-on-surface-variant mt-2" data-i18n="catalog.subtitle">Explorá nuestra colección.</p>
       </div>
       <span id="catalog-count" class="font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap"></span>
     </header>
@@ -512,30 +516,30 @@ tailwind.config = {
       <aside class="w-full md:w-64 shrink-0">
         <div class="md:sticky md:top-24 space-y-8">
           <div class="border-b-2 border-primary pb-6">
-            <h3 class="font-label-caps text-label-caps text-primary mb-4">CATEGORÍA</h3>
+            <h3 class="font-label-caps text-label-caps text-primary mb-4" data-i18n="catalog.filter.category">CATEGORÍA</h3>
             <ul class="space-y-2" id="filter-categories">
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
                 <input type="checkbox" value="all" checked class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
-                <span>Todos</span></label></li>
+                <span data-i18n="catalog.filter.all">Todos</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
                 <input type="checkbox" value="remeras" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
-                <span class="text-on-surface-variant group-hover:text-primary">Remeras</span></label></li>
+                <span class="text-on-surface-variant group-hover:text-primary" data-i18n="catalog.filter.tshirts">Remeras</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
                 <input type="checkbox" value="pantalones" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
-                <span class="text-on-surface-variant group-hover:text-primary">Pantalones</span></label></li>
+                <span class="text-on-surface-variant group-hover:text-primary" data-i18n="catalog.filter.pants">Pantalones</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
                 <input type="checkbox" value="buzos" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
-                <span class="text-on-surface-variant group-hover:text-primary">Buzos</span></label></li>
+                <span class="text-on-surface-variant group-hover:text-primary" data-i18n="catalog.filter.hoodies">Buzos</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
                 <input type="checkbox" value="camperas" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
-                <span class="text-on-surface-variant group-hover:text-primary">Camperas</span></label></li>
+                <span class="text-on-surface-variant group-hover:text-primary" data-i18n="catalog.filter.jackets">Camperas</span></label></li>
               <li><label class="flex items-center gap-2 cursor-pointer group font-body-md">
                 <input type="checkbox" value="accesorios" class="filter-cat form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5 bg-transparent"/>
-                <span class="text-on-surface-variant group-hover:text-primary">Accesorios</span></label></li>
+                <span class="text-on-surface-variant group-hover:text-primary" data-i18n="catalog.filter.accessories">Accesorios</span></label></li>
             </ul>
           </div>
           <div class="border-b-2 border-primary pb-6">
-            <h3 class="font-label-caps text-label-caps text-primary mb-4">TALLE</h3>
+            <h3 class="font-label-caps text-label-caps text-primary mb-4" data-i18n="catalog.filter.size">TALLE</h3>
             <div class="flex flex-wrap gap-2" id="filter-sizes">
               <button class="size-btn filter-size" data-size="XS">XS</button>
               <button class="size-btn filter-size" data-size="S">S</button>
@@ -546,7 +550,7 @@ tailwind.config = {
             </div>
           </div>
           <div class="border-b-2 border-primary pb-6">
-            <h3 class="font-label-caps text-label-caps text-primary mb-4">COLOR</h3>
+            <h3 class="font-label-caps text-label-caps text-primary mb-4" data-i18n="catalog.filter.color">COLOR</h3>
             <div class="flex flex-wrap gap-2" id="filter-colors">
               <button class="w-8 h-8 border-2 border-primary bg-black filter-color" data-color="negro" title="Negro"></button>
               <button class="w-8 h-8 border-2 border-primary bg-white filter-color" data-color="blanco" title="Blanco"></button>
@@ -555,13 +559,13 @@ tailwind.config = {
             </div>
           </div>
           <div class="border-b-2 border-primary pb-6">
-            <h3 class="font-label-caps text-label-caps text-primary mb-2">PRECIO</h3>
+            <h3 class="font-label-caps text-label-caps text-primary mb-2" data-i18n="catalog.filter.price">PRECIO</h3>
             <div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant mb-3">
               <span>$0</span><span id="price-label">$200.000</span>
             </div>
             <input type="range" min="0" max="200000" value="200000" step="5000" id="price-range" class="w-full" oninput="document.getElementById('price-label').textContent='$'+Number(this.value).toLocaleString('es-AR');renderCatalog()"/>
           </div>
-          <button class="btn-outline w-full justify-center" onclick="resetFilters()">LIMPIAR FILTROS</button>
+          <button class="btn-outline w-full justify-center" onclick="resetFilters()" data-i18n="catalog.filter.clear">LIMPIAR FILTROS</button>
         </div>
       </aside>
       <!-- Products Grid -->
@@ -569,20 +573,20 @@ tailwind.config = {
         <div class="flex justify-between items-center mb-6">
           <span id="catalog-count-2" class="font-label-caps text-label-caps text-on-surface-variant"></span>
           <div class="flex items-center gap-2">
-            <span class="font-label-caps text-label-caps text-on-surface-variant">ORDENAR:</span>
+            <span class="font-label-caps text-label-caps text-on-surface-variant" data-i18n="catalog.sort">ORDENAR:</span>
             <select id="sort-select" class="input-field py-2" style="width:auto;font-size:11px;" onchange="renderCatalog()">
-              <option value="default">RELEVANCIA</option>
-              <option value="price-asc">PRECIO: MENOR A MAYOR</option>
-              <option value="price-desc">PRECIO: MAYOR A MENOR</option>
-              <option value="newest">MÁS NUEVOS</option>
+              <option value="default" data-i18n="catalog.sort.relevance">RELEVANCIA</option>
+              <option value="price-asc" data-i18n="catalog.sort.price_asc">PRECIO: MENOR A MAYOR</option>
+              <option value="price-desc" data-i18n="catalog.sort.price_desc">PRECIO: MAYOR A MENOR</option>
+              <option value="newest" data-i18n="catalog.sort.newest">MÁS NUEVOS</option>
             </select>
           </div>
         </div>
         <div id="catalog-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
         <div id="catalog-empty" class="hidden py-16 text-center">
           <span class="material-symbols-outlined text-[64px] text-outline-variant">search_off</span>
-          <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">NO SE ENCONTRARON PRODUCTOS</p>
-          <button class="btn-outline mt-6" onclick="resetFilters()">VER TODOS</button>
+          <p class="font-label-caps text-label-caps text-on-surface-variant mt-4" data-i18n="catalog.empty">NO SE ENCONTRARON PRODUCTOS</p>
+          <button class="btn-outline mt-6" onclick="resetFilters()" data-i18n="catalog.empty.cta">VER TODOS</button>
         </div>
       </main>
     </div>
@@ -596,8 +600,8 @@ tailwind.config = {
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
     <header class="mb-12 border-b-2 border-primary pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
       <div>
-        <h1 style="font-family:Montserrat;font-size:clamp(36px,7vw,80px);font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">ACCESORIOS</h1>
-        <p class="font-body-lg text-on-surface-variant mt-2">Gorras, pulseras, aros, cadenas y más.</p>
+        <h1 style="font-family:Montserrat;font-size:clamp(36px,7vw,80px);font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase" data-i18n="accessories.title">ACCESORIOS</h1>
+        <p class="font-body-lg text-on-surface-variant mt-2" data-i18n="accessories.subtitle">Gorras, pulseras, aros, cadenas y más.</p>
       </div>
       <span id="accesorios-count" class="font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap"></span>
     </header>
@@ -606,19 +610,19 @@ tailwind.config = {
         <div class="flex justify-between items-center mb-6">
           <span id="accesorios-count-2" class="font-label-caps text-label-caps text-on-surface-variant"></span>
           <div class="flex items-center gap-2">
-            <span class="font-label-caps text-label-caps text-on-surface-variant">ORDENAR:</span>
+            <span class="font-label-caps text-label-caps text-on-surface-variant" data-i18n="accessories.sort">ORDENAR:</span>
             <select id="accesorios-sort" class="input-field py-2" style="width:auto;font-size:11px;" onchange="renderAccessories()">
-              <option value="default">RELEVANCIA</option>
-              <option value="price-asc">PRECIO: MENOR A MAYOR</option>
-              <option value="price-desc">PRECIO: MAYOR A MENOR</option>
-              <option value="newest">MÁS NUEVOS</option>
+              <option value="default" data-i18n="accessories.sort.relevance">RELEVANCIA</option>
+              <option value="price-asc" data-i18n="accessories.sort.price_asc">PRECIO: MENOR A MAYOR</option>
+              <option value="price-desc" data-i18n="accessories.sort.price_desc">PRECIO: MAYOR A MENOR</option>
+              <option value="newest" data-i18n="accessories.sort.newest">MÁS NUEVOS</option>
             </select>
           </div>
         </div>
         <div id="accesorios-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
         <div id="accesorios-empty" class="hidden py-16 text-center">
           <span class="material-symbols-outlined text-[64px] text-outline-variant">search_off</span>
-          <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">NO HAY ACCESORIOS DISPONIBLES</p>
+          <p class="font-label-caps text-label-caps text-on-surface-variant mt-4" data-i18n="accessories.empty">NO HAY ACCESORIOS DISPONIBLES</p>
         </div>
       </main>
     </div>
@@ -635,11 +639,11 @@ tailwind.config = {
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12 w-full">
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface-variant mb-8">
-      <a class="hover:text-primary cursor-pointer" onclick="closeProductOverlay(); nav('home')">INICIO</a>
+      <a class="hover:text-primary cursor-pointer" onclick="closeProductOverlay(); nav('home')" data-i18n="product.breadcrumb.home">INICIO</a>
       <span>/</span>
-      <a class="hover:text-primary cursor-pointer" onclick="closeProductOverlay(); nav('catalog')">CATÁLOGO</a>
+      <a class="hover:text-primary cursor-pointer" onclick="closeProductOverlay(); nav('catalog')" data-i18n="product.breadcrumb.catalog">CATÁLOGO</a>
       <span>/</span>
-      <span id="product-breadcrumb" class="text-primary">PRODUCTO</span>
+      <span id="product-breadcrumb" class="text-primary" data-i18n="product.breadcrumb.product">PRODUCTO</span>
     </nav>
     <div id="product-content" class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
       <!-- Images -->
@@ -648,7 +652,7 @@ tailwind.config = {
           <img id="product-main-img" src="" alt="" class="w-full h-full object-cover grayscale-hover"/>
           <div id="zoom-lens" class="absolute pointer-events-none z-10 border-2 border-primary" style="width:200px;height:200px;border-radius:50%;display:none;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,0.3), 0 4px 20px rgba(0,0,0,0.15);"></div>
           <div class="absolute bottom-3 right-3 bg-surface/80 backdrop-blur-sm px-2.5 py-1.5 border border-primary rounded text-[10px] font-label-caps text-on-surface opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <span class="material-symbols-outlined text-[14px] align-middle">search</span> ZOOM
+            <span class="material-symbols-outlined text-[14px] align-middle">search</span> <span data-i18n="product.zoom">ZOOM</span>
           </div>
         </div>
         <div class="grid grid-cols-3 gap-2" id="product-thumbs"></div>
@@ -668,60 +672,60 @@ tailwind.config = {
         </div>
         <!-- Color Selector -->
         <div class="mb-6">
-          <p class="font-label-caps text-label-caps mb-3 uppercase">COLOR: <span id="selected-color-label">NEGRO FANTASMA</span></p>
+          <p class="font-label-caps text-label-caps mb-3 uppercase" data-i18n="product.color">COLOR: <span id="selected-color-label">NEGRO FANTASMA</span></p>
           <div class="flex gap-2" id="color-selector"></div>
         </div>
         <!-- Size Selector -->
         <div class="mb-6">
           <div class="flex justify-between items-center mb-3">
-            <p class="font-label-caps text-label-caps uppercase">TALLE: <span id="selected-size-label">—</span></p>
-            <button class="font-label-caps text-[10px] underline cursor-pointer" onclick="showSizeGuide()">GUÍA DE TALLES</button>
+            <p class="font-label-caps text-label-caps uppercase" data-i18n="product.size">TALLE: <span id="selected-size-label">—</span></p>
+            <button class="font-label-caps text-[10px] underline cursor-pointer" onclick="showSizeGuide()" data-i18n="product.sizeguide">GUÍA DE TALLES</button>
           </div>
           <div id="size-selector" class="grid grid-cols-5 gap-2"></div>
         </div>
         <!-- Description -->
         <p id="product-desc" class="font-body-md text-on-surface-variant mb-6"></p>
         <!-- Actions -->
-        <button id="add-to-cart-btn" class="btn-violet w-full justify-center mb-3 text-base py-4" onclick="addSelectedToCart()">AGREGAR AL CARRITO <span class="material-symbols-outlined">shopping_bag</span></button>
-        <button class="btn-outline w-full justify-center mb-6" onclick="showToast('¡Guardado en favoritos! ❤️')">GUARDAR EN FAVORITOS <span class="material-symbols-outlined text-[16px]">favorite_border</span></button>
+        <button id="add-to-cart-btn" class="btn-violet w-full justify-center mb-3 text-base py-4" onclick="addSelectedToCart()" data-i18n="product.addtocart">AGREGAR AL CARRITO <span class="material-symbols-outlined">shopping_bag</span></button>
+        <button class="btn-outline w-full justify-center mb-6" onclick="showToast('¡Guardado en favoritos! ❤️')" data-i18n="product.favorite">GUARDAR EN FAVORITOS <span class="material-symbols-outlined text-[16px]">favorite_border</span></button>
         <!-- Product Details -->
         <div class="border-t-2 border-primary pt-6 space-y-3">
           <div class="flex justify-between font-label-caps text-label-caps">
-            <span class="text-on-surface-variant">SKU</span><span id="product-sku" class="text-primary"></span>
+            <span class="text-on-surface-variant" data-i18n="product.sku">SKU</span><span id="product-sku" class="text-primary"></span>
           </div>
           <div class="flex justify-between font-label-caps text-label-caps">
-            <span class="text-on-surface-variant">CATEGORÍA</span><span id="product-cat" class="text-primary uppercase"></span>
+            <span class="text-on-surface-variant" data-i18n="product.category">CATEGORÍA</span><span id="product-cat" class="text-primary uppercase"></span>
           </div>
           <div class="flex justify-between font-label-caps text-label-caps">
-            <span class="text-on-surface-variant">STOCK</span><span id="product-stock" class="text-primary"></span>
+            <span class="text-on-surface-variant" data-i18n="product.stock">STOCK</span><span id="product-stock" class="text-primary"></span>
           </div>
           <div class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface-variant mt-4">
             <span class="material-symbols-outlined text-[18px]">local_shipping</span>
-            <span>ENVÍO GRATIS A PARTIR DE $95.000</span>
+            <span data-i18n="product.shipping_info">ENVÍO GRATIS A PARTIR DE $95.000</span>
           </div>
           <div class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface-variant">
             <span class="material-symbols-outlined text-[18px]">replay</span>
-            <span>30 DÍAS DE GARANTÍA DE DEVOLUCIÓN</span>
+            <span data-i18n="product.returns_info">30 DÍAS DE GARANTÍA DE DEVOLUCIÓN</span>
           </div>
         </div>
       </div>
     </div>
     <!-- Related Products -->
     <div class="mt-16 pt-12 border-t-2 border-primary">
-      <h2 style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary uppercase mb-8">TAMBIÉN TE PUEDE GUSTAR</h2>
+      <h2 style="font-family:Montserrat;font-size:32px;font-weight:800;" class="text-primary uppercase mb-8" data-i18n="product.related">TAMBIÉN TE PUEDE GUSTAR</h2>
       <div id="related-products" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
     </div>
     <!-- Reviews -->
     <div class="mt-16 pt-12 border-t-2 border-primary" id="reviews-section">
       <div class="flex justify-between items-start mb-8">
         <div>
-          <h2 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase mb-1">RESEÑAS</h2>
-          <p class="font-label-caps text-label-caps text-on-surface-variant" id="reviews-count">0 OPINIONES</p>
+          <h2 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase mb-1" data-i18n="product.reviews">RESEÑAS</h2>
+          <p class="font-label-caps text-label-caps text-on-surface-variant" id="reviews-count" data-i18n="product.reviews.count">0 OPINIONES</p>
         </div>
-        <button class="btn-primary text-sm py-2 px-4" id="review-btn" onclick="openReviewForm()">ESCRIBIR UNA RESEÑA</button>
+        <button class="btn-primary text-sm py-2 px-4" id="review-btn" onclick="openReviewForm()" data-i18n="product.reviews.write">ESCRIBIR UNA RESEÑA</button>
       </div>
       <div id="reviews-list" class="space-y-4">
-        <div class="text-center py-12 text-on-surface-variant font-label-caps text-label-caps" id="reviews-empty">Sin reseñas aún. ¡Sé el primero en opinar!</div>
+        <div class="text-center py-12 text-on-surface-variant font-label-caps text-label-caps" id="reviews-empty" data-i18n="product.reviews.empty">Sin reseñas aún. ¡Sé el primero en opinar!</div>
       </div>
     </div>
   </div>
@@ -732,10 +736,10 @@ tailwind.config = {
   <div class="absolute inset-0 bg-black/50" onclick="closeReviewForm()"></div>
   <div class="relative bg-surface border-2 border-primary w-full max-w-lg mx-4 p-8 max-h-[90vh] overflow-y-auto">
     <button class="absolute top-4 right-4" onclick="closeReviewForm()"><span class="material-symbols-outlined text-primary">close</span></button>
-    <h3 class="font-headline-md text-primary uppercase mb-6" style="font-family:Montserrat;font-size:22px;font-weight:800;">RESEÑA</h3>
+    <h3 class="font-headline-md text-primary uppercase mb-6" style="font-family:Montserrat;font-size:22px;font-weight:800;" data-i18n="review.title">RESEÑA</h3>
     <form onsubmit="submitReview();return false" class="space-y-5">
       <div>
-        <p class="font-label-caps text-label-caps text-on-surface-variant mb-2">PUNTUACIÓN</p>
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-2" data-i18n="review.rating">PUNTUACIÓN</p>
         <div class="flex gap-2" id="review-stars">
           <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="1">★</span>
           <span class="star-rating text-[28px] cursor-pointer text-outline-variant hover:text-primary transition-colors" data-val="2">★</span>
@@ -745,18 +749,18 @@ tailwind.config = {
         </div>
       </div>
       <div>
-        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TÍTULO</label>
-        <input id="review-title" class="input-field w-full" placeholder="Ej: Excelente calidad" maxlength="60"/>
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="review.title_label">TÍTULO</label>
+        <input id="review-title" class="input-field w-full" placeholder="Ej: Excelente calidad" maxlength="60" data-i18n-placeholder="review.title_placeholder"/>
       </div>
       <div>
-        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">OPINIÓN</label>
-        <textarea id="review-text" class="input-field w-full min-h-[100px]" placeholder="Contá tu experiencia con el producto..." maxlength="500"></textarea>
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="review.comment_label">OPINIÓN</label>
+        <textarea id="review-text" class="input-field w-full min-h-[100px]" placeholder="Contá tu experiencia con el producto..." maxlength="500" data-i18n-placeholder="review.comment_placeholder"></textarea>
       </div>
       <div class="flex items-center gap-3">
         <input type="checkbox" id="review-delivery" class="form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5"/>
-        <label for="review-delivery" class="font-label-caps text-label-caps text-on-surface-variant text-sm cursor-pointer">El producto llegó en buen estado y a tiempo</label>
+        <label for="review-delivery" class="font-label-caps text-label-caps text-on-surface-variant text-sm cursor-pointer" data-i18n="review.condition">El producto llegó en buen estado y a tiempo</label>
       </div>
-      <button type="submit" class="btn-violet w-full justify-center py-3" id="review-submit-btn">PUBLICAR RESEÑA</button>
+      <button type="submit" class="btn-violet w-full justify-center py-3" id="review-submit-btn" data-i18n="review.submit">PUBLICAR RESEÑA</button>
     </form>
   </div>
 </div>
@@ -793,132 +797,132 @@ tailwind.config = {
 <!-- ===================================== -->
 <div id="page-checkout" class="page">
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
-    <h1 style="font-family:Montserrat;font-size:clamp(28px,5vw,56px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-2 border-primary pb-6">FINALIZAR COMPRA</h1>
+    <h1 style="font-family:Montserrat;font-size:clamp(28px,5vw,56px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-2 border-primary pb-6" data-i18n="checkout.title">FINALIZAR COMPRA</h1>
     <div class="flex flex-col lg:flex-row gap-12">
       <!-- Form -->
       <div class="flex-1">
         <!-- Steps -->
         <div class="flex gap-0 mb-10 border-2 border-primary">
           <div class="flex-1 flex items-center justify-center gap-2 py-3 bg-primary text-on-primary font-label-caps text-label-caps" id="step-1-tab">
-            <span class="w-6 h-6 flex items-center justify-center border-2 border-white text-[11px]">1</span> DATOS
+            <span class="w-6 h-6 flex items-center justify-center border-2 border-white text-[11px]">1</span> <span data-i18n="checkout.step1">DATOS</span>
           </div>
           <div class="flex-1 flex items-center justify-center gap-2 py-3 bg-surface text-on-surface font-label-caps text-label-caps border-l-2 border-primary" id="step-2-tab">
-            <span class="w-6 h-6 flex items-center justify-center border-2 border-primary text-[11px]">2</span> ENVÍO
+            <span class="w-6 h-6 flex items-center justify-center border-2 border-primary text-[11px]">2</span> <span data-i18n="checkout.step2">ENVÍO</span>
           </div>
           <div class="flex-1 flex items-center justify-center gap-2 py-3 bg-surface text-on-surface font-label-caps text-label-caps border-l-2 border-primary" id="step-3-tab">
-            <span class="w-6 h-6 flex items-center justify-center border-2 border-primary text-[11px]">3</span> PAGO
+            <span class="w-6 h-6 flex items-center justify-center border-2 border-primary text-[11px]">3</span> <span data-i18n="checkout.step3">PAGO</span>
           </div>
         </div>
         <!-- Step 1: Datos Personales -->
         <div id="checkout-step-1">
-          <h2 class="font-label-caps text-label-caps text-primary mb-6">DATOS PERSONALES</h2>
+          <h2 class="font-label-caps text-label-caps text-primary mb-6" data-i18n="checkout.personal">DATOS PERSONALES</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label><input class="input-field" id="co-nombre" placeholder="Juan"/></div>
-            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO *</label><input class="input-field" id="co-apellido" placeholder="Pérez"/></div>
-            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL *</label><input class="input-field" id="co-email" type="email" placeholder="juan@email.com"/></div>
-            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TELÉFONO</label><input class="input-field" id="co-tel" placeholder="+54 9 11 0000-0000"/></div>
+            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.name">NOMBRE *</label><input class="input-field" id="co-nombre" placeholder="Juan" data-i18n-placeholder="checkout.name_pl"/></div>
+            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.lastname">APELLIDO *</label><input class="input-field" id="co-apellido" placeholder="Pérez" data-i18n-placeholder="checkout.lastname_pl"/></div>
+            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.email">EMAIL *</label><input class="input-field" id="co-email" type="email" placeholder="juan@email.com" data-i18n-placeholder="checkout.email_pl"/></div>
+            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.phone">TELÉFONO</label><input class="input-field" id="co-tel" placeholder="+54 9 11 0000-0000" data-i18n-placeholder="checkout.phone_pl"/></div>
           </div>
-          <h2 class="font-label-caps text-label-caps text-primary mb-6">DIRECCIÓN DE ENVÍO</h2>
+          <h2 class="font-label-caps text-label-caps text-primary mb-6" data-i18n="checkout.address_title">DIRECCIÓN DE ENVÍO</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DIRECCIÓN *</label><input class="input-field" id="co-dir" placeholder="Av. Corrientes 1234"/></div>
-            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CIUDAD *</label><input class="input-field" id="co-ciudad" placeholder="Buenos Aires"/></div>
-            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CÓDIGO POSTAL *</label><input class="input-field" id="co-cp" placeholder="1000"/></div>
-            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">PROVINCIA *</label>
+            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.address">DIRECCIÓN *</label><input class="input-field" id="co-dir" placeholder="Av. Corrientes 1234" data-i18n-placeholder="checkout.address_pl"/></div>
+            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.city">CIUDAD *</label><input class="input-field" id="co-ciudad" placeholder="Buenos Aires" data-i18n-placeholder="checkout.city_pl"/></div>
+            <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.zip">CÓDIGO POSTAL *</label><input class="input-field" id="co-cp" placeholder="1000" data-i18n-placeholder="checkout.zip_pl"/></div>
+            <div class="md:col-span-2"><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.province">PROVINCIA *</label>
               <select class="input-field"><option>Buenos Aires</option><option>CABA</option><option>Córdoba</option><option>Santa Fe</option><option>Mendoza</option><option>Otro</option></select>
             </div>
           </div>
-          <button class="btn-primary" onclick="checkoutStep(2)">CONTINUAR <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+          <button class="btn-primary" onclick="checkoutStep(2)" data-i18n="checkout.continue">CONTINUAR <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
         </div>
         <!-- Step 2: Envío -->
         <div id="checkout-step-2" style="display:none;">
-          <h2 class="font-label-caps text-label-caps text-primary mb-6">MÉTODO DE ENVÍO</h2>
+          <h2 class="font-label-caps text-label-caps text-primary mb-6" data-i18n="checkout.shipping_title">MÉTODO DE ENVÍO</h2>
           <!-- Aviso pendiente -->
           <div class="flex items-start gap-3 border-[2px] border-outline-variant bg-surface-container-low p-4 mb-5">
             <span class="material-symbols-outlined text-[20px] text-on-surface-variant mt-0.5">info</span>
             <div>
-              <div class="font-label-caps text-[10px] text-primary mb-0.5">COSTO DE ENVÍO</div>
+              <div class="font-label-caps text-[10px] text-primary mb-0.5" data-i18n="checkout.shipping_cost_title">COSTO DE ENVÍO</div>
               <p class="font-body-md text-sm text-on-surface-variant">El costo exacto queda <strong>pendiente</strong> y se calcula una vez confirmada la dirección de entrega. Lo verás reflejado en el total final antes de pagar.</p>
             </div>
           </div>
           <!-- Opciones dinámicas desde admin (renderShippingOptions las inyecta) -->
           <div id="shipping-options-list" class="space-y-4 mb-8"></div>
           <div class="flex gap-4">
-            <button class="btn-outline" onclick="checkoutStep(1)"><span class="material-symbols-outlined text-[16px]">arrow_back</span> VOLVER</button>
-            <button class="btn-primary" onclick="checkoutStep(3)">CONTINUAR <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+            <button class="btn-outline" onclick="checkoutStep(1)" data-i18n="checkout.back"><span class="material-symbols-outlined text-[16px]">arrow_back</span> VOLVER</button>
+            <button class="btn-primary" onclick="checkoutStep(3)" data-i18n="checkout.continue">CONTINUAR <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
           </div>
         </div>
         <!-- Step 3: Pago -->
         <div id="checkout-step-3" style="display:none;">
-          <h2 class="font-label-caps text-label-caps text-primary mb-6">MÉTODO DE PAGO</h2>
+          <h2 class="font-label-caps text-label-caps text-primary mb-6" data-i18n="checkout.payment_title">MÉTODO DE PAGO</h2>
           <div class="space-y-4 mb-8">
             <label class="flex items-center gap-4 p-4 border-2 border-primary cursor-pointer hover:bg-surface-container-low">
               <input type="radio" name="payment" value="mercadopago" checked class="text-primary"/>
               <span class="material-symbols-outlined">account_balance_wallet</span>
               <div>
-                <div class="font-label-caps text-label-caps text-primary">MERCADO PAGO</div>
-                <div class="font-body-md text-on-surface-variant text-sm">Tarjeta, efectivo, cuotas</div>
+                <div class="font-label-caps text-label-caps text-primary" data-i18n="checkout.mp">MERCADO PAGO</div>
+                <div class="font-body-md text-on-surface-variant text-sm" data-i18n="checkout.mp_desc">Tarjeta, efectivo, cuotas</div>
               </div>
             </label>
             <label class="flex items-center gap-4 p-4 border-2 border-primary cursor-pointer hover:bg-surface-container-low">
               <input type="radio" name="payment" value="card" class="text-primary"/>
               <span class="material-symbols-outlined">credit_card</span>
               <div>
-                <div class="font-label-caps text-label-caps text-primary">TARJETA DE CRÉDITO / DÉBITO</div>
-                <div class="font-body-md text-on-surface-variant text-sm">Hasta 12 cuotas sin interés</div>
+                <div class="font-label-caps text-label-caps text-primary" data-i18n="checkout.card">TARJETA DE CRÉDITO / DÉBITO</div>
+                <div class="font-body-md text-on-surface-variant text-sm" data-i18n="checkout.card_desc">Hasta 12 cuotas sin interés</div>
               </div>
             </label>
             <label class="flex items-center gap-4 p-4 border-2 border-primary cursor-pointer hover:bg-surface-container-low">
               <input type="radio" name="payment" value="transfer" class="text-primary"/>
               <span class="material-symbols-outlined">swap_horiz</span>
               <div>
-                <div class="font-label-caps text-label-caps text-primary">TRANSFERENCIA BANCARIA</div>
-                <div class="font-body-md text-on-surface-variant text-sm">10% de descuento adicional</div>
+                <div class="font-label-caps text-label-caps text-primary" data-i18n="checkout.transfer">TRANSFERENCIA BANCARIA</div>
+                <div class="font-body-md text-on-surface-variant text-sm" data-i18n="checkout.transfer_desc">10% de descuento adicional</div>
               </div>
             </label>
           </div>
           <div id="card-form" class="border-2 border-primary p-6 mb-6">
             <div class="grid grid-cols-1 gap-4">
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NÚMERO DE TARJETA</label><input id="card-number" class="input-field" placeholder="0000 0000 0000 0000" maxlength="19" oninput="this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim()"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.card_number">NÚMERO DE TARJETA</label><input id="card-number" class="input-field" placeholder="0000 0000 0000 0000" maxlength="19" data-i18n-placeholder="checkout.card_pl" oninput="this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim()"/></div>
               <div class="grid grid-cols-2 gap-4">
-                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">VENCIMIENTO</label><input id="card-expiry" class="input-field" placeholder="MM/AA" maxlength="5"/></div>
-                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CVV</label><input id="card-cvv-input" class="input-field" placeholder="000" maxlength="3" type="password"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.expiry">VENCIMIENTO</label><input id="card-expiry" class="input-field" placeholder="MM/AA" maxlength="5" data-i18n-placeholder="checkout.expiry_pl"/></div>
+                <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.cvv">CVV</label><input id="card-cvv-input" class="input-field" placeholder="000" maxlength="3" type="password" data-i18n-placeholder="checkout.cvv_pl"/></div>
               </div>
-              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE EN LA TARJETA</label><input id="card-holder" class="input-field" placeholder="JUAN PEREZ"/></div>
+              <div><label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="checkout.card_name">NOMBRE EN LA TARJETA</label><input id="card-holder" class="input-field" placeholder="JUAN PEREZ" data-i18n-placeholder="checkout.card_name_pl"/></div>
             </div>
           </div>
           <div class="flex gap-4">
-            <button class="btn-outline" onclick="checkoutStep(2)"><span class="material-symbols-outlined text-[16px]">arrow_back</span> VOLVER</button>
-            <button class="btn-violet flex-1 justify-center py-4" onclick="placeOrder()">CONFIRMAR PEDIDO <span class="material-symbols-outlined">check</span></button>
+            <button class="btn-outline" onclick="checkoutStep(2)" data-i18n="checkout.back"><span class="material-symbols-outlined text-[16px]">arrow_back</span> VOLVER</button>
+            <button class="btn-violet flex-1 justify-center py-4" onclick="placeOrder()" data-i18n="checkout.confirm">CONFIRMAR PEDIDO <span class="material-symbols-outlined">check</span></button>
           </div>
         </div>
       </div>
       <!-- Order Summary -->
       <aside class="lg:w-80 shrink-0">
         <div class="border-2 border-primary p-6 md:sticky md:top-24">
-          <h3 class="font-label-caps text-label-caps text-primary mb-6 pb-3 border-b-2 border-primary">TU PEDIDO</h3>
+          <h3 class="font-label-caps text-label-caps text-primary mb-6 pb-3 border-b-2 border-primary" data-i18n="checkout.order_summary">TU PEDIDO</h3>
           <div id="checkout-items" class="space-y-4 mb-6"></div>
           <div class="space-y-3 pt-4 border-t-2 border-primary">
-            <div class="flex justify-between font-label-caps text-label-caps"><span class="text-on-surface-variant">SUBTOTAL</span><span id="checkout-subtotal">$0</span></div>
+            <div class="flex justify-between font-label-caps text-label-caps"><span class="text-on-surface-variant" data-i18n="checkout.subtotal">SUBTOTAL</span><span id="checkout-subtotal">$0</span></div>
             <div class="flex justify-between font-label-caps text-label-caps items-center">
-              <span class="text-on-surface-variant">ENVÍO</span>
+              <span class="text-on-surface-variant" data-i18n="checkout.shipping">ENVÍO</span>
               <span id="checkout-shipping-display" class="flex items-center gap-1">
                 <span class="inline-block w-2 h-2 rounded-full bg-outline-variant animate-pulse"></span>
-                <span class="text-on-surface-variant" style="font-size:10px;">PENDIENTE</span>
+                <span class="text-on-surface-variant" style="font-size:10px;" data-i18n="checkout.pending">PENDIENTE</span>
               </span>
             </div>
-            <div class="flex justify-between font-label-caps text-[15px] font-bold text-primary pt-3 border-t-2 border-primary"><span>TOTAL</span><span id="checkout-total">$0</span></div>
+            <div class="flex justify-between font-label-caps text-[15px] font-bold text-primary pt-3 border-t-2 border-primary"><span data-i18n="checkout.total">TOTAL</span><span id="checkout-total">$0</span></div>
           </div>
           <!-- Cupón de descuento -->
           <div class="mt-4 pt-4 border-t-2 border-primary">
-            <h3 class="font-label-caps text-label-caps text-primary mb-3 text-[11px]">CUPÓN DE DESCUENTO</h3>
+            <h3 class="font-label-caps text-label-caps text-primary mb-3 text-[11px]" data-i18n="checkout.coupon">CUPÓN DE DESCUENTO</h3>
             <div class="flex gap-2">
-              <input id="coupon-input" class="input-field flex-1 uppercase" placeholder="INGRESÁ TU CÓDIGO" onkeydown="if(event.key==='Enter')applyCoupon()"/>
-              <button class="btn-outline py-2 px-4 text-[10px] shrink-0" onclick="applyCoupon()">APLICAR</button>
+              <input id="coupon-input" class="input-field flex-1 uppercase" placeholder="INGRESÁ TU CÓDIGO" data-i18n-placeholder="checkout.coupon_pl" onkeydown="if(event.key==='Enter')applyCoupon()"/>
+              <button class="btn-outline py-2 px-4 text-[10px] shrink-0" onclick="applyCoupon()" data-i18n="checkout.apply">APLICAR</button>
             </div>
             <div id="coupon-status" class="mt-2 font-label-caps text-[10px]"></div>
           </div>
           <!-- Nota envío pendiente (oculta cuando se resuelve) -->
-          <div id="checkout-shipping-note" class="mt-3 font-label-caps text-[9px] text-on-surface-variant text-center opacity-70">
+          <div id="checkout-shipping-note" class="mt-3 font-label-caps text-[9px] text-on-surface-variant text-center opacity-70" data-i18n="checkout.shipping_note">
             EL COSTO DE ENVÍO SE CALCULA ANTES DE CONFIRMAR EL PAGO
           </div>
         </div>
@@ -937,27 +941,27 @@ tailwind.config = {
         <a onclick="nav('home')" class="cursor-pointer">
           <h1 style="font-family:Montserrat;font-size:48px;font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">XINCO</h1>
         </a>
-        <p class="font-label-caps text-label-caps text-on-surface-variant mt-2">ACCEDÉ A TU CUENTA</p>
+        <p class="font-label-caps text-label-caps text-on-surface-variant mt-2" data-i18n="login.subtitle">ACCEDÉ A TU CUENTA</p>
       </div>
       <!-- Email not verified warning -->
       <div id="login-verify-warning" class="hidden border-2 border-secondary-container p-4 mb-5 flex items-start gap-3">
         <span class="material-symbols-outlined text-secondary-container shrink-0">mark_email_unread</span>
         <div>
-          <p class="font-label-caps text-label-caps text-primary mb-1">VERIFICÁ TU EMAIL</p>
-          <p class="font-body-md text-sm text-on-surface-variant">Tu cuenta no está verificada. Revisá tu bandeja de entrada y hacé clic en el link que te enviamos.</p>
-          <button class="font-label-caps text-[10px] text-secondary-container underline mt-2" onclick="resendVerificationEmail()">REENVIAR EMAIL DE VERIFICACIÓN</button>
+          <p class="font-label-caps text-label-caps text-primary mb-1" data-i18n="login.verify_title">VERIFICÁ TU EMAIL</p>
+          <p class="font-body-md text-sm text-on-surface-variant" data-i18n="login.verify_text">Tu cuenta no está verificada. Revisá tu bandeja de entrada y hacé clic en el link que te enviamos.</p>
+          <button class="font-label-caps text-[10px] text-secondary-container underline mt-2" onclick="resendVerificationEmail()" data-i18n="login.resend">REENVIAR EMAIL DE VERIFICACIÓN</button>
         </div>
       </div>
       <div class="border-2 border-primary p-8 bg-white">
         <div id="login-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
         <div class="mb-5">
-          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL</label>
-          <input id="login-email" class="input-field" type="email" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="login.email">EMAIL</label>
+          <input id="login-email" class="input-field" type="email" placeholder="tu@email.com" data-i18n-placeholder="login.email_pl" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
         </div>
         <div class="mb-4">
-          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONTRASEÑA</label>
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="login.password">CONTRASEÑA</label>
           <div class="relative">
-            <input id="login-pass" class="input-field" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+            <input id="login-pass" class="input-field" type="password" placeholder="••••••••" data-i18n-placeholder="login.password_pl" onkeydown="if(event.key==='Enter')doLogin()"/>
             <button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant" onclick="togglePass('login-pass')"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
           </div>
         </div>
@@ -965,32 +969,32 @@ tailwind.config = {
         <div class="flex items-center justify-between mb-5">
           <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="login-remember" class="form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5" checked/>
-            <span class="font-label-caps text-label-caps text-on-surface-variant">RECORDAR MI CUENTA</span>
+            <span class="font-label-caps text-label-caps text-on-surface-variant" data-i18n="login.remember">RECORDAR MI CUENTA</span>
           </label>
-          <a class="font-label-caps text-[10px] text-on-surface-variant underline cursor-pointer" onclick="showForgotPassword()">¿OLVIDASTE TU CONTRASEÑA?</a>
+          <a class="font-label-caps text-[10px] text-on-surface-variant underline cursor-pointer" onclick="showForgotPassword()" data-i18n="login.forgot">¿OLVIDASTE TU CONTRASEÑA?</a>
         </div>
-        <button class="btn-primary w-full justify-center py-4 mb-4" onclick="doLogin()">INICIAR SESIÓN</button>
+        <button class="btn-primary w-full justify-center py-4 mb-4" onclick="doLogin()" data-i18n="login.submit">INICIAR SESIÓN</button>
         <div class="flex items-center gap-3 my-4">
           <div class="flex-1 h-px bg-outline-variant"></div>
-          <span class="font-label-caps text-[10px] text-on-surface-variant">O CONTINUÁ CON</span>
+          <span class="font-label-caps text-[10px] text-on-surface-variant" data-i18n="login.or">O CONTINUÁ CON</span>
           <div class="flex-1 h-px bg-outline-variant"></div>
         </div>
-        <button class="btn-outline w-full justify-center py-3 mb-5" onclick="doLoginGoogle()">
+        <button class="btn-outline w-full justify-center py-3 mb-5" onclick="doLoginGoogle()" data-i18n="login.google">
           <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
           INICIAR CON GOOGLE
         </button>
         <div class="text-center">
-          <span class="font-body-md text-on-surface-variant text-sm">¿No tenés cuenta? </span>
-          <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('register')">REGISTRATE</a>
+          <span class="font-body-md text-on-surface-variant text-sm" data-i18n="login.noaccount">¿No tenés cuenta? </span>
+          <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('register')" data-i18n="login.register">REGISTRATE</a>
                 </div>
               </div>
               <!-- Save button -->
               <div class="border border-gray-100 rounded-xl p-5 bg-white">
                 <button onclick="saveAppearanceToFirebase()" class="btn-violet w-full py-3 text-[11px] font-label-caps tracking-wider flex items-center justify-center gap-2">
                   <span class="material-symbols-outlined text-[18px]">cloud_upload</span>
-                  GUARDAR CAMBIOS EN LA NUBE
+                  <span data-i18n="login.save">GUARDAR CAMBIOS EN LA NUBE</span>
                 </button>
-                <p class="font-label-caps text-[9px] text-on-surface-variant/50 text-center mt-2">Los cambios se guardan localmente al instante. Usá este botón para sincronizar con Firebase.</p>
+                <p class="font-label-caps text-[9px] text-on-surface-variant/50 text-center mt-2" data-i18n="login.save_helper">Los cambios se guardan localmente al instante. Usá este botón para sincronizar con Firebase.</p>
               </div>
             </div>
           </div>
@@ -1006,7 +1010,7 @@ tailwind.config = {
         <a onclick="nav('home')" class="cursor-pointer">
           <h1 style="font-family:Montserrat;font-size:48px;font-weight:900;letter-spacing:-0.04em;" class="text-primary uppercase">XINCO</h1>
         </a>
-        <p class="font-label-caps text-label-caps text-on-surface-variant mt-2">CREÁ TU CUENTA</p>
+        <p class="font-label-caps text-label-caps text-on-surface-variant mt-2" data-i18n="register.subtitle">CREÁ TU CUENTA</p>
       </div>
 
       <!-- FORMULARIO DE REGISTRO -->
@@ -1014,26 +1018,26 @@ tailwind.config = {
         <div id="reg-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-5 border-2 border-error"></div>
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div>
-            <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label>
-            <input id="reg-nombre" class="input-field" placeholder="Juan"/>
+            <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="register.name">NOMBRE *</label>
+            <input id="reg-nombre" class="input-field" placeholder="Juan" data-i18n-placeholder="register.name_pl"/>
           </div>
           <div>
-            <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO *</label>
-            <input id="reg-apellido" class="input-field" placeholder="Pérez"/>
+            <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="register.lastname">APELLIDO *</label>
+            <input id="reg-apellido" class="input-field" placeholder="Pérez" data-i18n-placeholder="register.lastname_pl"/>
           </div>
         </div>
         <div class="mb-4">
-          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">EMAIL *</label>
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="register.email">EMAIL *</label>
           <div class="relative">
-            <input id="reg-email" class="input-field pr-10" type="email" placeholder="tu@email.com" oninput="validateEmailField()"/>
+            <input id="reg-email" class="input-field pr-10" type="email" placeholder="tu@email.com" data-i18n-placeholder="register.email_pl" oninput="validateEmailField()"/>
             <span id="reg-email-icon" class="absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] hidden"></span>
           </div>
           <p id="reg-email-hint" class="font-label-caps text-[10px] mt-1 hidden"></p>
         </div>
         <div class="mb-4">
-          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONTRASEÑA *</label>
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="register.password">CONTRASEÑA *</label>
           <div class="relative">
-            <input id="reg-pass" class="input-field pr-10" type="password" placeholder="Mínimo 8 caracteres" oninput="checkPasswordStrength()"/>
+            <input id="reg-pass" class="input-field pr-10" type="password" placeholder="Mínimo 8 caracteres" data-i18n-placeholder="register.password_pl" oninput="checkPasswordStrength()"/>
             <button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('reg-pass')"><span class="material-symbols-outlined text-[20px] text-on-surface-variant">visibility</span></button>
           </div>
           <!-- Password strength bar -->
@@ -1048,21 +1052,21 @@ tailwind.config = {
           </div>
         </div>
         <div class="mb-5">
-          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">CONFIRMAR CONTRASEÑA *</label>
+          <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="register.confirm">CONFIRMAR CONTRASEÑA *</label>
           <div class="relative">
-            <input id="reg-pass2" class="input-field pr-10" type="password" placeholder="Repetí tu contraseña" oninput="checkPasswordMatch()"/>
+            <input id="reg-pass2" class="input-field pr-10" type="password" placeholder="Repetí tu contraseña" data-i18n-placeholder="register.confirm_pl" oninput="checkPasswordMatch()"/>
             <button class="absolute right-3 top-1/2 -translate-y-1/2" onclick="togglePass('reg-pass2')"><span class="material-symbols-outlined text-[20px] text-on-surface-variant">visibility</span></button>
           </div>
           <p id="reg-pass-match" class="font-label-caps text-[10px] mt-1 hidden"></p>
         </div>
         <label class="flex items-start gap-3 mb-5 cursor-pointer">
           <input type="checkbox" id="reg-terms" class="mt-1 form-checkbox text-primary border-2 border-primary rounded-none focus:ring-0 h-5 w-5"/>
-          <span class="font-body-md text-sm text-on-surface-variant">Acepto los <a class="text-primary underline cursor-pointer">Términos y Condiciones</a> y la <a class="text-primary underline cursor-pointer">Política de Privacidad</a></span>
+          <span class="font-body-md text-sm text-on-surface-variant"><span data-i18n="register.accept">Acepto los</span> <a class="text-primary underline cursor-pointer" data-i18n="register.terms">Términos y Condiciones</a> <span data-i18n="register.and">y la</span> <a class="text-primary underline cursor-pointer" data-i18n="register.privacy">Política de Privacidad</a></span>
         </label>
-        <button id="reg-submit-btn" class="btn-primary w-full justify-center py-4 mb-4" onclick="doRegister()">CREAR CUENTA</button>
+        <button id="reg-submit-btn" class="btn-primary w-full justify-center py-4 mb-4" onclick="doRegister()" data-i18n="register.submit">CREAR CUENTA</button>
         <div class="text-center">
-          <span class="font-body-md text-on-surface-variant text-sm">¿Ya tenés cuenta? </span>
-          <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('login')">INICIÁ SESIÓN</a>
+          <span class="font-body-md text-on-surface-variant text-sm" data-i18n="register.hasaccount">¿Ya tenés cuenta? </span>
+          <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('login')" data-i18n="register.signin">INICIÁ SESIÓN</a>
         </div>
       </div>
 
@@ -1071,21 +1075,21 @@ tailwind.config = {
         <div class="w-20 h-20 bg-primary flex items-center justify-center mx-auto mb-6">
           <span class="material-symbols-outlined text-white text-[48px]">mark_email_read</span>
         </div>
-        <h2 style="font-family:Montserrat;font-size:28px;font-weight:900;letter-spacing:-0.02em;" class="text-primary uppercase mb-3">¡REVISÁ TU EMAIL!</h2>
-        <p class="font-body-md text-on-surface-variant mb-2">Te enviamos un correo de verificación a:</p>
+        <h2 style="font-family:Montserrat;font-size:28px;font-weight:900;letter-spacing:-0.02em;" class="text-primary uppercase mb-3" data-i18n="register.success_title">¡REVISÁ TU EMAIL!</h2>
+        <p class="font-body-md text-on-surface-variant mb-2" data-i18n="register.success_text1">Te enviamos un correo de verificación a:</p>
         <div class="border-[2px] border-secondary-container px-5 py-3 mb-5 inline-block">
           <span id="reg-sent-email" class="font-label-caps text-label-caps text-secondary-container"></span>
         </div>
-        <p class="font-body-md text-on-surface-variant text-sm mb-6">Hacé clic en el link del email para activar tu cuenta y acceder a todas las funciones.</p>
+        <p class="font-body-md text-on-surface-variant text-sm mb-6" data-i18n="register.success_text2">Hacé clic en el link del email para activar tu cuenta y acceder a todas las funciones.</p>
         <div class="space-y-3">
-          <button class="btn-primary w-full justify-center py-4" onclick="nav('login')">
+          <button class="btn-primary w-full justify-center py-4" onclick="nav('login')" data-i18n="register.success_cta">
             <span class="material-symbols-outlined text-[16px]">login</span> IR AL INICIO DE SESIÓN
           </button>
-          <button class="btn-outline w-full justify-center py-3" onclick="resendFromRegister()">
+          <button class="btn-outline w-full justify-center py-3" onclick="resendFromRegister()" data-i18n="register.resend">
             <span class="material-symbols-outlined text-[16px]">refresh</span> REENVIAR EMAIL
           </button>
         </div>
-        <p class="font-label-caps text-[10px] text-on-surface-variant mt-4">¿No lo encontrás? Revisá la carpeta de spam o correo no deseado.</p>
+        <p class="font-label-caps text-[10px] text-on-surface-variant mt-4" data-i18n="register.success_spam">¿No lo encontrás? Revisá la carpeta de spam o correo no deseado.</p>
       </div>
 
     </div>
@@ -1097,7 +1101,7 @@ tailwind.config = {
 <!-- ===================================== -->
 <div id="page-account" class="page">
   <div class="max-w-[1440px] mx-auto px-6 md:px-12 py-12">
-    <h1 style="font-family:Montserrat;font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-2 border-primary pb-6">MI CUENTA</h1>
+    <h1 style="font-family:Montserrat;font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-0.03em;" class="text-primary uppercase mb-8 border-b-2 border-primary pb-6" data-i18n="account.title">MI CUENTA</h1>
     <div class="flex flex-col md:flex-row gap-8">
 
       <!-- Sidebar -->
@@ -1124,24 +1128,24 @@ tailwind.config = {
           </div>
           <!-- Nav tabs -->
           <nav class="divide-y divide-outline-variant">
-            <button class="tab-btn active w-full text-left" id="acc-tab-orders" onclick="showAccountTab('orders')">
+            <button class="tab-btn active w-full text-left" id="acc-tab-orders" onclick="showAccountTab('orders')" data-i18n="account.orders">
               <span class="material-symbols-outlined text-[16px] mr-2">receipt_long</span>MIS PEDIDOS
             </button>
-            <button class="tab-btn w-full text-left" id="acc-tab-profile" onclick="showAccountTab('profile')">
+            <button class="tab-btn w-full text-left" id="acc-tab-profile" onclick="showAccountTab('profile')" data-i18n="account.profile">
               <span class="material-symbols-outlined text-[16px] mr-2">person</span>MI PERFIL
             </button>
-            <button class="tab-btn w-full text-left" id="acc-tab-payment" onclick="showAccountTab('payment')">
+            <button class="tab-btn w-full text-left" id="acc-tab-payment" onclick="showAccountTab('payment')" data-i18n="account.payment">
               <span class="material-symbols-outlined text-[16px] mr-2">payments</span>MÉTODOS DE PAGO
             </button>
-            <button class="tab-btn w-full text-left" id="acc-tab-addresses" onclick="showAccountTab('addresses')">
+            <button class="tab-btn w-full text-left" id="acc-tab-addresses" onclick="showAccountTab('addresses')" data-i18n="account.addresses">
               <span class="material-symbols-outlined text-[16px] mr-2">location_on</span>DIRECCIONES
             </button>
-            <button class="tab-btn w-full text-left" id="acc-tab-security" onclick="showAccountTab('security')">
+            <button class="tab-btn w-full text-left" id="acc-tab-security" onclick="showAccountTab('security')" data-i18n="account.security">
               <span class="material-symbols-outlined text-[16px] mr-2">lock</span>SEGURIDAD
             </button>
           </nav>
           <div class="p-3">
-            <button class="btn-outline w-full justify-center py-2 text-[11px]" onclick="doLogout()">
+            <button class="btn-outline w-full justify-center py-2 text-[11px]" onclick="doLogout()" data-i18n="account.logout">
               <span class="material-symbols-outlined text-[14px]">logout</span> CERRAR SESIÓN
             </button>
           </div>
@@ -1159,55 +1163,55 @@ tailwind.config = {
           </div>
           <div id="account-orders-empty" class="text-center py-16 border-2 border-primary">
             <span class="material-symbols-outlined text-[64px] text-outline-variant">package_2</span>
-            <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">NO TENÉS PEDIDOS AÚN</p>
-            <button class="btn-primary mt-6" onclick="nav('catalog')">EMPEZAR A COMPRAR</button>
+            <p class="font-label-caps text-label-caps text-on-surface-variant mt-4" data-i18n="account.orders_empty">NO TENÉS PEDIDOS AÚN</p>
+            <button class="btn-primary mt-6" onclick="nav('catalog')" data-i18n="account.start_shopping">EMPEZAR A COMPRAR</button>
           </div>
           <div id="account-orders-list" class="hidden space-y-4"></div>
         </div>
 
         <!-- PERFIL -->
         <div id="acc-content-profile" class="hidden">
-          <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5">DATOS PERSONALES</h2>
+          <h2 style="font-family:Montserrat;font-size:22px;font-weight:800;" class="text-primary uppercase mb-5" data-i18n="account.profile_title">DATOS PERSONALES</h2>
           <div class="bg-white border-2 border-primary p-6 mb-5">
             <div id="profile-error" class="hidden bg-error-container text-on-error-container font-label-caps text-label-caps p-3 mb-4 border-2 border-error"></div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">NOMBRE *</label>
-                <input id="acc-nombre" class="input-field" placeholder="Tu nombre" oninput="validateProfileField('acc-nombre')"/>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="account.name">NOMBRE *</label>
+                <input id="acc-nombre" class="input-field" placeholder="Tu nombre" data-i18n-placeholder="account.name_pl" oninput="validateProfileField('acc-nombre')"/>
                 <p id="acc-nombre-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
               </div>
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">APELLIDO *</label>
-                <input id="acc-apellido" class="input-field" placeholder="Tu apellido" oninput="validateProfileField('acc-apellido')"/>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="account.lastname">APELLIDO *</label>
+                <input id="acc-apellido" class="input-field" placeholder="Tu apellido" data-i18n-placeholder="account.lastname_pl" oninput="validateProfileField('acc-apellido')"/>
                 <p id="acc-apellido-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
               </div>
               <div class="md:col-span-2">
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">TELÉFONO</label>
-                <input id="acc-tel" class="input-field" placeholder="+54 9 11 0000-0000" oninput="validateProfileField('acc-tel')"/>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="account.phone">TELÉFONO</label>
+                <input id="acc-tel" class="input-field" placeholder="+54 9 11 0000-0000" data-i18n-placeholder="account.phone_pl" oninput="validateProfileField('acc-tel')"/>
                 <p id="acc-tel-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
               </div>
               <div class="md:col-span-2">
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">DNI</label>
-                <input id="acc-dni" class="input-field" placeholder="12.345.678" oninput="validateProfileField('acc-dni')"/>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="account.dni">DNI</label>
+                <input id="acc-dni" class="input-field" placeholder="12.345.678" data-i18n-placeholder="account.dni_pl" oninput="validateProfileField('acc-dni')"/>
                 <p id="acc-dni-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
               </div>
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">FECHA DE NACIMIENTO</label>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="account.birth">FECHA DE NACIMIENTO</label>
                 <input id="acc-bday" class="input-field" type="date" oninput="validateProfileField('acc-bday')"/>
                 <p id="acc-bday-err" class="font-label-caps text-[10px] text-error mt-1 hidden"></p>
               </div>
               <div>
-                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">GÉNERO</label>
+                <label class="font-label-caps text-label-caps text-on-surface-variant block mb-2" data-i18n="account.gender">GÉNERO</label>
                 <select id="acc-genero" class="input-field">
-                  <option value="">Prefiero no decir</option>
-                  <option value="m">Masculino</option>
-                  <option value="f">Femenino</option>
-                  <option value="nb">No binario</option>
-                  <option value="otro">Otro</option>
+                  <option value="" data-i18n="account.gender_none">Prefiero no decir</option>
+                  <option value="m" data-i18n="account.gender_male">Masculino</option>
+                  <option value="f" data-i18n="account.gender_female">Femenino</option>
+                  <option value="nb" data-i18n="account.gender_nb">No binario</option>
+                  <option value="otro" data-i18n="account.gender_other">Otro</option>
                 </select>
               </div>
             </div>
-            <button class="btn-primary" onclick="saveProfile()">
+            <button class="btn-primary" onclick="saveProfile()" data-i18n="account.save">
               <span class="material-symbols-outlined text-[16px]">save</span> GUARDAR CAMBIOS
             </button>
           </div>
@@ -2497,7 +2501,7 @@ tailwind.config = {
 </div>
 
 <!-- ===== WHATSAPP FLOATING BUTTON ===== -->
-<a id="whatsapp-float" href="https://wa.me/5492231234567" target="_blank" rel="noopener" class="whatsapp-float" title="Contactanos por WhatsApp" style="display:none;">
+<a id="whatsapp-float" href="https://wa.me/5492231234567" target="_blank" rel="noopener" class="whatsapp-float" title="Contactanos por WhatsApp" style="display:none;" data-i18n-title="whatsapp.tooltip">
   <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
@@ -2520,12 +2524,12 @@ tailwind.config = {
 <div id="size-guide-modal" class="modal-overlay">
   <div class="bg-surface border-2 border-primary p-8 max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
     <div class="flex justify-between items-center mb-6">
-      <h2 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase">GUÍA DE TALLES</h2>
+      <h2 style="font-family:Montserrat;font-size:28px;font-weight:800;" class="text-primary uppercase" data-i18n="sizeguide.title">GUÍA DE TALLES</h2>
       <button onclick="closeSizeGuide()"><span class="material-symbols-outlined">close</span></button>
     </div>
     <table class="w-full border-collapse font-label-caps text-label-caps">
       <thead><tr class="bg-primary text-on-primary">
-        <th class="p-3 text-left">TALLE</th><th class="p-3">PECHO (CM)</th><th class="p-3">CINTURA (CM)</th><th class="p-3">CADERA (CM)</th>
+        <th class="p-3 text-left" data-i18n="sizeguide.size">TALLE</th><th class="p-3" data-i18n="sizeguide.chest">PECHO (CM)</th><th class="p-3" data-i18n="sizeguide.waist">CINTURA (CM)</th><th class="p-3" data-i18n="sizeguide.hip">CADERA (CM)</th>
       </tr></thead>
       <tbody>
         <tr class="border-b border-outline-variant"><td class="p-3">XS</td><td class="p-3 text-center">82-86</td><td class="p-3 text-center">62-66</td><td class="p-3 text-center">86-90</td></tr>
@@ -2536,7 +2540,7 @@ tailwind.config = {
         <tr class="bg-surface-container-low"><td class="p-3">XXL</td><td class="p-3 text-center">110-118</td><td class="p-3 text-center">90-98</td><td class="p-3 text-center">114-122</td></tr>
       </tbody>
     </table>
-    <p class="font-body-md text-on-surface-variant text-sm mt-4">Medidas en centímetros. En caso de duda, elegí el talle más grande.</p>
+    <p class="font-body-md text-on-surface-variant text-sm mt-4" data-i18n="sizeguide.footer">Medidas en centímetros. En caso de duda, elegí el talle más grande.</p>
   </div>
 </div>
 
