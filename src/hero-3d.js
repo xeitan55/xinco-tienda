@@ -59,14 +59,10 @@ export async function initHero3D(containerId) {
 
   const btn = container.querySelector('.hero-3d-loading');
   if (btn) btn.style.display = '';
-  const isStorefront = containerId === 'hero-3d-container';
-
-  window._onModelProgress?.(10);
 
   new MTLLoader()
     .setPath('/remera/')
     .load('model.mtl', materials => {
-      window._onModelProgress?.(35);
       materials.preload();
       new OBJLoader()
         .setPath('/remera/')
@@ -86,20 +82,10 @@ export async function initHero3D(containerId) {
           modelGroup.add(obj);
           inst.modelObj = obj;
           inst.modelLoaded = true;
-          window._onModelProgress?.(100);
-          if (isStorefront) setTimeout(window.hidePageLoader, 200);
           _applyAura(inst, bannerState.hero.modelAuraStyle || 'none', bannerState.hero.modelAuraColor || '#a78bfa');
           if (btn) btn.style.display = 'none';
-        }, e => {
-          if (e.lengthComputable) window._onModelProgress?.(35 + (e.loaded / e.total) * 55);
-        }, () => {
-          if (btn) btn.textContent = 'ERROR';
-          if (isStorefront) setTimeout(window.hidePageLoader, 500);
-        });
-    }, () => {
-      if (btn) btn.textContent = 'ERROR';
-      if (isStorefront) setTimeout(window.hidePageLoader, 500);
-    });
+        }, undefined, () => { if (btn) btn.textContent = 'ERROR'; });
+    }, undefined, () => { if (btn) btn.textContent = 'ERROR'; });
 
   _setupDrag(container);
 

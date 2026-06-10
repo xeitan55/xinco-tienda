@@ -78,29 +78,6 @@ tailwind.config = {
 </script>
 </head>
 <body>
-<div id="page-loader" style="position:fixed;inset:0;z-index:99999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Montserrat,sans-serif;">
-  <div style="font-size:clamp(48px,12vw,96px);font-weight:900;color:#fff;letter-spacing:0;">XINCO</div>
-  <div style="margin-top:20px;width:120px;height:2px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
-    <div id="page-loader-bar" style="width:0%;height:100%;background:#fff;border-radius:2px;transition:width 0.4s;"></div>
-  </div>
-  <div style="margin-top:12px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.15em;text-transform:uppercase;font-weight:700;">CARGANDO...</div>
-</div>
-<script>
-  window.hidePageLoader = function() {
-    const el = document.getElementById('page-loader');
-    if (!el || el._hidden) return;
-    el._hidden = true;
-    el.style.transition = 'opacity 0.6s';
-    el.style.opacity = '0';
-    setTimeout(() => el.style.display = 'none', 600);
-  };
-  setTimeout(window.hidePageLoader, 15000);
-  function _onModelProgress(pct) {
-    const bar = document.getElementById('page-loader-bar');
-    if (bar) bar.style.width = Math.min(pct, 100) + '%';
-  }
-  window._onModelProgress = _onModelProgress;
-</script>
 
 <!-- ===== BACKGROUND ANIMATION CANVAS ===== -->
 <canvas id="bg-canvas"></canvas>

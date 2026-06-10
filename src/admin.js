@@ -1240,8 +1240,7 @@ export function initBannerEditor() {
   document.getElementById('promo-edit-code').value  = bannerState.promo.code;
   previewPromo();
   _loadHero3DControls();
-  const activeTab = document.querySelector('#config-banners-inner .sub-tab-btn.active');
-  if (activeTab && activeTab.dataset.tab === 'model-3d') _initHero3DPreview();
+  _initHero3DPreview();
 }
 
 function _loadHero3DControls() {
