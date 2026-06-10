@@ -11,7 +11,9 @@ let bannerState = {
     img: 'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80',
     videoUrl: '',
     animStyle: 'default',
-    videoEffect: 'none'
+    videoEffect: 'none',
+    modelPosX: 55,
+    modelPosY: 45
   },
   promo: {
     enabled: false,
