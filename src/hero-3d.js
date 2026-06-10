@@ -66,15 +66,11 @@ export async function initHero3D() {
           obj.scale.set(2.2, 2.2, 2.2);
           obj.position.set(0, 0, 0);
           obj.traverse(child => {
-            if (child.isMesh) {
-              if (child.material) {
-                if (Array.isArray(child.material)) {
-                  child.material.forEach(m => { m.transparent = true; m.depthWrite = false; m.alphaTest = 0.1; });
-                } else {
-                  child.material.transparent = true;
-                  child.material.depthWrite = false;
-                  child.material.alphaTest = 0.1;
-                }
+            if (child.isMesh && child.material) {
+              if (Array.isArray(child.material)) {
+                child.material.forEach(m => { m.alphaTest = 0.5; });
+              } else {
+                child.material.alphaTest = 0.5;
               }
             }
           });
