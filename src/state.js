@@ -13,7 +13,11 @@ let bannerState = {
     animStyle: 'default',
     videoEffect: 'none',
     modelPosX: 22,
-    modelPosY: 32
+    modelPosY: 32,
+    modelFrontLight: 0.85,
+    modelBackLight: 0.3,
+    modelAuraStyle: 'glow',
+    modelAuraColor: '#a78bfa'
   },
   promo: {
     enabled: false,

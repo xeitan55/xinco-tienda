@@ -1235,6 +1235,28 @@ export function initBannerEditor() {
   document.getElementById('promo-edit-title').value = bannerState.promo.title;
   document.getElementById('promo-edit-code').value  = bannerState.promo.code;
   previewPromo();
+  _initHero3DPreview();
+  _loadHero3DControls();
+}
+
+function _loadHero3DControls() {
+  const posX = document.getElementById('hero-model-pos-x');
+  const posY = document.getElementById('hero-model-pos-y');
+  const frontL = document.getElementById('hero-model-front-light');
+  const backL = document.getElementById('hero-model-back-light');
+  if (posX) posX.value = bannerState.hero.modelPosX ?? 22;
+  if (posY) posY.value = bannerState.hero.modelPosY ?? 32;
+  if (frontL) frontL.value = bannerState.hero.modelFrontLight ?? 0.85;
+  if (backL) backL.value = bannerState.hero.modelBackLight ?? 0.3;
+  const auraStyle = bannerState.hero.modelAuraStyle || 'glow';
+  document.querySelectorAll('.hero-aura-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.aura === auraStyle);
+  });
+  const auraColor = document.getElementById('hero-aura-color');
+  const auraHex = document.getElementById('hero-aura-color-hex');
+  const savedColor = bannerState.hero.modelAuraColor || '#a78bfa';
+  if (auraColor) auraColor.value = savedColor;
+  if (auraHex) auraHex.textContent = savedColor;
 }
 
 function _normalizeAnn(msgs) {
@@ -1519,6 +1541,43 @@ export function applyHeroVideoToSection(url) {
   }
 }
 
+// ===== 3D MODEL CONTROLS =====
+let _hero3DPreviewInited = false;
+
+export function updateHero3DFromControl(field, val) {
+  switch (field) {
+    case 'posX': bannerState.hero.modelPosX = val; break;
+    case 'posY': bannerState.hero.modelPosY = val; break;
+    case 'frontLight': bannerState.hero.modelFrontLight = val; break;
+    case 'backLight': bannerState.hero.modelBackLight = val; break;
+  }
+  import('./hero-3d.js').then(m => {
+    if (field === 'posX' || field === 'posY') m.setHero3DPosition(bannerState.hero.modelPosX, bannerState.hero.modelPosY);
+    if (field === 'frontLight' || field === 'backLight') m.updateLights(bannerState.hero.modelFrontLight, bannerState.hero.modelBackLight);
+  }).catch(() => {});
+}
+
+export function selectHeroAura(style, btn) {
+  bannerState.hero.modelAuraStyle = style;
+  document.querySelectorAll('.hero-aura-btn').forEach(b => b.classList.toggle('active', b.dataset.aura === style));
+  import('./hero-3d.js').then(m => m.updateAura(style, bannerState.hero.modelAuraColor)).catch(() => {});
+}
+
+export function selectHeroAuraColor(hex) {
+  bannerState.hero.modelAuraColor = hex;
+  document.getElementById('hero-aura-color-hex').textContent = hex;
+  import('./hero-3d.js').then(m => m.updateAura(bannerState.hero.modelAuraStyle || 'glow', hex)).catch(() => {});
+}
+
+function _initHero3DPreview() {
+  if (_hero3DPreviewInited) return;
+  const preview3d = document.getElementById('hero-preview-3d');
+  if (!preview3d) return;
+  import('./hero-3d.js').then(m => {
+    m.initHero3D('hero-preview-3d');
+    _hero3DPreviewInited = true;
+  }).catch(e => console.warn('hero-3d preview init:', e));
+}
 
 export async function saveHeroBanner() {
   bannerState.hero.badge    = document.getElementById('hero-edit-badge').value.trim();
@@ -1532,6 +1591,14 @@ export async function saveHeroBanner() {
   bannerState.hero.videoUrl    = heroVideoUrl || '';
   bannerState.hero.animStyle   = heroAnimStyle;
   bannerState.hero.videoEffect = heroVideoEffect;
+  const px = document.getElementById('hero-model-pos-x');
+  const py = document.getElementById('hero-model-pos-y');
+  const fl = document.getElementById('hero-model-front-light');
+  const bl = document.getElementById('hero-model-back-light');
+  if (px) bannerState.hero.modelPosX = +px.value;
+  if (py) bannerState.hero.modelPosY = +py.value;
+  if (fl) bannerState.hero.modelFrontLight = +fl.value;
+  if (bl) bannerState.hero.modelBackLight = +bl.value;
   try {
     const { fbSaveBannersRemote, syncFromFirebase } = await import('./firebase.js');
     await fbSaveBannersRemote(bannerState);
@@ -2995,6 +3062,9 @@ export function init() {
   window.stopHeroParticles = stopHeroParticles;
   window.applyHeroVideoToSection = applyHeroVideoToSection;
   window.saveHeroBanner = saveHeroBanner;
+  window.updateHero3DFromControl = updateHero3DFromControl;
+  window.selectHeroAura = selectHeroAura;
+  window.selectHeroAuraColor = selectHeroAuraColor;
   window.previewPromo = previewPromo;
   window.savePromoBanner = savePromoBanner;
   window.renderAnnouncementBar = renderAnnouncementBar;
@@ -3037,6 +3107,16 @@ export function init() {
   window.subscribeNewsletter = subscribeNewsletter;
   window.loadSocialConfigFromFirebase = loadSocialConfigFromFirebase;
   window._adminBgColor = _currentBgColor;
+
+  const _origSetAccent = window.setAccentColor;
+  window.setAccentColor = function(hex) {
+    _origSetAccent?.(hex);
+    const auraColor = document.getElementById('hero-aura-color');
+    const auraHex = document.getElementById('hero-aura-color-hex');
+    if (auraColor) { auraColor.value = hex; bannerState.hero.modelAuraColor = hex; }
+    if (auraHex) auraHex.textContent = hex;
+    import('./hero-3d.js').then(m => m.updateAura(bannerState.hero.modelAuraStyle || 'glow', hex)).catch(() => {});
+  };
 
   window.resetFirebaseData = async function() {
     if (!confirm('⚠️ ¿Estás seguro? Se borrarán TODOS los productos, pedidos, banners y config de Firebase.')) return;
