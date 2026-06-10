@@ -844,15 +844,18 @@ html.dark .admin-solid .admin-card { background: var(--surface-container-lowest)
   #review-stars .star-rating { transition: color 0.15s; }
 
   /* Hero 3D Model */
-  #hero-3d-container {
+  #hero-3d-container,
+  #hero-preview-3d {
     pointer-events: none;
   }
-  #hero-3d-container canvas {
+  #hero-3d-container canvas,
+  #hero-preview-3d canvas {
     width: 100% !important;
     height: 100% !important;
     position: relative;
     z-index: 2;
     display: block;
+    outline: none;
   }
   .hero-3d-glow {
     position: absolute;

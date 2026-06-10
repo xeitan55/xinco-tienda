@@ -227,8 +227,9 @@ function _applyAura(inst, style, color) {
 
   const gradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 180);
   gradient.addColorStop(0, `rgba(${r},${g},${b},0.6)`);
-  gradient.addColorStop(0.4, `rgba(${r},${g},${b},0.2)`);
-  gradient.addColorStop(0.7, `rgba(${r},${g},${b},0.04)`);
+  gradient.addColorStop(0.35, `rgba(${r},${g},${b},0.18)`);
+  gradient.addColorStop(0.6, `rgba(${r},${g},${b},0.04)`);
+  gradient.addColorStop(1, `rgba(${r},${g},${b},0)`);
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 512, 512);
 
