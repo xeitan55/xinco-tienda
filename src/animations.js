@@ -305,7 +305,7 @@ export function initXincoGlitter() {
     const tw = er.width;
     const th = er.height;
     if (tw < 1 || th < 1) return;
-    const font = window.getComputedStyle(el).font || '900 80px Syne';
+    const font = window.getComputedStyle(el).font || '700 80px DM Sans';
     const scale = 2;
     const off = document.createElement('canvas');
     off.width = Math.ceil(tw * scale);
@@ -315,7 +315,7 @@ export function initXincoGlitter() {
     offCtx.fillRect(0, 0, off.width, off.height);
     offCtx.fillStyle = '#fff';
     const fontSize = parseFloat(font.match(/\d+px/)?.[0] || '80');
-    offCtx.font = `${900} ${fontSize * scale}px Syne`;
+    offCtx.font = `${700} ${fontSize * scale}px DM Sans`;
     offCtx.textBaseline = 'top';
     offCtx.textAlign = 'left';
     offCtx.fillText(text, 0, 0);

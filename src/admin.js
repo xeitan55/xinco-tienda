@@ -997,7 +997,7 @@ export function renderHomePageCats() {
       <img src="${c.img || 'https://placehold.co/800x600/1c1c1c/1a1a1a?text=+'}" alt="${c.name}" class="cat-card-img absolute inset-0 w-full h-full object-cover "/>
       <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-300"></div>
       <div class="cat-card-label absolute bottom-0 left-0 p-6 bg-surface border-t-[3px] border-r-[3px] border-primary rounded-tr-xl">
-        <h3 style="font-family:Syne;font-size:28px;font-weight:800;" class="text-primary uppercase">${c.name}</h3>
+        <h3 style="font-family:DM Sans;font-size:28px;font-weight:700;" class="text-primary uppercase">${c.name}</h3>
       </div>
     </div>
   `).join('');
@@ -1012,7 +1012,7 @@ export function renderCategoryPreview() {
       <img src="${c.img || 'https://placehold.co/400x300/1c1c1c/1a1a1a?text=+'}" alt="${c.name}" class="absolute inset-0 w-full h-full object-cover"/>
       <div class="absolute inset-0 bg-primary/20"></div>
       <div class="absolute bottom-0 left-0 p-2 bg-white border-t-2 border-r-2 border-primary rounded-tr-md">
-        <span style="font-family:Syne;font-size:12px;font-weight:800;" class="text-primary uppercase">${c.name}</span>
+        <span style="font-family:DM Sans;font-size:12px;font-weight:700;" class="text-primary uppercase">${c.name}</span>
       </div>
     </div>
   `).join('');
