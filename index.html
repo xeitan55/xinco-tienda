@@ -665,8 +665,8 @@ tailwind.config = {
     </nav>
     <div id="product-content" class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
       <!-- Images -->
-      <div class="md:col-span-6">
-        <div class="aspect-[4/5] bg-surface-container-high overflow-hidden border-2 border-primary mb-3 relative group cursor-crosshair" id="product-img-container">
+      <div class="md:col-span-5">
+        <div class="aspect-[3/4] bg-surface-container-high overflow-hidden border-2 border-primary mb-3 relative group cursor-crosshair" id="product-img-container">
           <img id="product-main-img" src="" alt="" class="w-full h-full object-cover grayscale-hover"/>
           <div id="zoom-lens" class="absolute pointer-events-none z-10 border-2 border-primary" style="width:200px;height:200px;border-radius:50%;display:none;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,0.3), 0 4px 20px rgba(0,0,0,0.15);"></div>
           <div class="absolute bottom-3 right-3 bg-surface/80 backdrop-blur-sm px-2.5 py-1.5 border border-primary rounded text-[10px] font-label-caps text-on-surface opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -676,7 +676,7 @@ tailwind.config = {
         <div class="grid grid-cols-3 gap-2" id="product-thumbs"></div>
       </div>
       <!-- Details -->
-      <div class="md:col-span-5 md:sticky md:top-24">
+      <div class="md:col-span-6 md:sticky md:top-24">
         <span id="product-badge" class="badge badge-violet mb-4 inline-block"></span>
         <h1 id="product-name" style="font-family:DM Sans;font-size:clamp(20px,3vw,32px);font-weight:700;letter-spacing:-0.02em;" class="text-primary uppercase mb-2"></h1>
         <div class="flex items-center gap-3 mb-4">
