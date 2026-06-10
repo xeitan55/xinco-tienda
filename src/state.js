@@ -18,7 +18,7 @@ let bannerState = {
     modelFrontLight: 0.85,
     modelBackLight: 0.3,
     modelAuraStyle: 'glow',
-    modelAuraColor: '#a78bfa'
+    modelAuraColor: '#ffffff'
   },
   promo: {
     enabled: false,

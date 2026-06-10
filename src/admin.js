@@ -1262,7 +1262,7 @@ function _loadHero3DControls() {
   });
   const auraColor = document.getElementById('hero-aura-color');
   const auraHex = document.getElementById('hero-aura-color-hex');
-  const savedColor = bannerState.hero.modelAuraColor || '#a78bfa';
+  const savedColor = bannerState.hero.modelAuraColor || '#ffffff';
   if (auraColor) auraColor.value = savedColor;
   if (auraHex) auraHex.textContent = savedColor;
 }

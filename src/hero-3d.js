@@ -82,7 +82,7 @@ export async function initHero3D(containerId) {
           modelGroup.add(obj);
           inst.modelObj = obj;
           inst.modelLoaded = true;
-          _applyAura(inst, bannerState.hero.modelAuraStyle || 'none', bannerState.hero.modelAuraColor || '#a78bfa');
+          _applyAura(inst, bannerState.hero.modelAuraStyle || 'none', bannerState.hero.modelAuraColor || '#ffffff');
           if (btn) btn.style.display = 'none';
         }, undefined, () => { if (btn) btn.textContent = 'ERROR'; });
     }, undefined, () => { if (btn) btn.textContent = 'ERROR'; });
@@ -195,7 +195,7 @@ export function updateLights(frontIntensity, backIntensity) {
 
 export function updateAura(style, color) {
   _auraStyle = style || 'none';
-  const c = color || bannerState.hero.modelAuraColor || '#a78bfa';
+  const c = color || bannerState.hero.modelAuraColor || '#ffffff';
   for (const inst of _instances.values()) {
     _applyAura(inst, _auraStyle, c);
   }
@@ -226,21 +226,21 @@ function _applyAura(inst, style, color) {
 
   if (style === 'none') return;
 
-  const size = 3.6;
+  const size = 2.4;
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 512;
   const ctx = canvas.getContext('2d');
 
-  const hex = color || '#a78bfa';
-  const r = parseInt(hex.slice(1,3), 16) || 167;
-  const g = parseInt(hex.slice(3,5), 16) || 139;
-  const b = parseInt(hex.slice(5,7), 16) || 250;
+  const hex = color || '#ffffff';
+  const r = parseInt(hex.slice(1,3), 16) || 255;
+  const g = parseInt(hex.slice(3,5), 16) || 255;
+  const b = parseInt(hex.slice(5,7), 16) || 255;
 
   const gradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 180);
-  gradient.addColorStop(0, `rgba(${r},${g},${b},0.95)`);
-  gradient.addColorStop(0.25, `rgba(${r},${g},${b},0.45)`);
-  gradient.addColorStop(0.5, `rgba(${r},${g},${b},0.12)`);
+  gradient.addColorStop(0, `rgba(${r},${g},${b},0.6)`);
+  gradient.addColorStop(0.35, `rgba(${r},${g},${b},0.18)`);
+  gradient.addColorStop(0.6, `rgba(${r},${g},${b},0.04)`);
   gradient.addColorStop(1, `rgba(${r},${g},${b},0)`);
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 512, 512);
