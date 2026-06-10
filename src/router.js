@@ -98,8 +98,7 @@ export async function nav(page, opts) {
     const { init, renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers, renderAdminCupones, renderAdminTracking, renderAdminReports, showAdminSection } = await import('./admin.js');
     init();
     [renderAdminDashboard, renderAdminOrders, renderAdminProducts, renderAdminInventory, renderAdminCustomers, renderAdminCupones, renderAdminTracking, renderAdminReports].forEach(fn => { try { fn(); } catch(e) { console.error(e); } });
-    const lastSection = localStorage.getItem('xinco_admin_section');
-    showAdminSection(lastSection || 'dashboard');
+    showAdminSection('dashboard');
   }
 
   // Update URL

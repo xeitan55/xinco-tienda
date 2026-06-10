@@ -56,7 +56,6 @@ export function showAdminSection(section) {
       if (src) { video.src = src; video.load(); video.play().catch(() => {}); }
     }
   }
-  localStorage.setItem('xinco_admin_section', section);
   state.adminSection = section;
   const allSections = ['dashboard','orders','products','inventory','customers','cupones','tracking','reportes','cobranzas','configuracion'];
   allSections.forEach(s => {
@@ -114,7 +113,10 @@ export function showSectionTab(sectionId, tabName) {
   const btn = container.querySelector('.sub-tab-btn[data-tab="' + tabName + '"]');
   if (btn) btn.classList.add('active');
   if (sectionId === 'config-banners-inner') {
+    const preview = document.getElementById('hero-preview');
     const preview3d = document.getElementById('hero-preview-3d');
+    const show = tabName === 'hero' || tabName === 'model-3d';
+    if (preview) preview.style.display = show ? '' : 'none';
     if (preview3d) preview3d.style.display = tabName === 'model-3d' ? '' : 'none';
   }
 }
