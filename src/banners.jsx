@@ -466,4 +466,10 @@ export function init() {
   window.uploadHeroMedia = uploadHeroMedia;
   window.handleHeroMediaDrop = handleHeroMediaDrop;
   window.clearHeroMedia = clearHeroMedia;
+
+  const _origSetAccent = window.setAccentColor;
+  window.setAccentColor = function(hex) {
+    _origSetAccent?.(hex);
+    import('./hero-3d.js').then(m => m.updateAura(bannerState.hero.modelAuraStyle || 'glow', hex)).catch(() => {});
+  };
 }

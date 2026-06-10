@@ -1068,7 +1068,9 @@ html.dark .admin-solid .admin-card { background: var(--surface-container-lowest)
   /* ===== HOMEPAGE REDESIGN ===== */
 
   .hero-overlay {
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.05) 100%);
+    background:
+      radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.5) 100%),
+      linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.05) 100%);
   }
 
   .hero-badge {
