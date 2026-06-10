@@ -271,7 +271,7 @@ tailwind.config = {
 <div id="page-home" class="page active">
 
   <!-- HERO -->
-  <section id="hero-section" class="relative overflow-hidden" style="min-height:65vh;background:var(--hero-gradient,#000);display:flex;align-items:flex-end;">
+  <section id="hero-section" class="relative" style="min-height:65vh;background:var(--hero-gradient,#000);display:flex;align-items:flex-end;">
     <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
     <img id="hero-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-60"/>
     <div class="absolute inset-0 z-[2] hero-overlay"></div>
@@ -288,7 +288,7 @@ tailwind.config = {
         </div>
       </div>
     </div>
-    <div id="hero-3d-container" class="hidden md:block absolute bottom-12 right-[10%] w-[42vw] h-[42vw] max-w-[480px] max-h-[480px]" style="z-index:5;">
+    <div id="hero-3d-container" class="hidden md:block absolute w-[44vw] h-[44vw] max-w-[520px] max-h-[520px]" style="z-index:5;top:50%;right:5%;transform:translateY(-58%);">
       <div class="hero-3d-glow"></div>
       <div class="hero-3d-loading" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;z-index:1;">CARGANDO MODELO 3D...</div>
     </div>
