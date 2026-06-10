@@ -14,6 +14,7 @@ let bannerState = {
     videoEffect: 'none',
     modelPosX: 22,
     modelPosY: 32,
+    modelScale: 2.2,
     modelFrontLight: 0.85,
     modelBackLight: 0.3,
     modelAuraStyle: 'glow',

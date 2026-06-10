@@ -1247,10 +1247,14 @@ export function initBannerEditor() {
 function _loadHero3DControls() {
   const posX = document.getElementById('hero-model-pos-x');
   const posY = document.getElementById('hero-model-pos-y');
+  const scale = document.getElementById('hero-model-scale');
+  const scaleVal = document.getElementById('hero-model-scale-val');
   const frontL = document.getElementById('hero-model-front-light');
   const backL = document.getElementById('hero-model-back-light');
   if (posX) posX.value = bannerState.hero.modelPosX ?? 22;
   if (posY) posY.value = bannerState.hero.modelPosY ?? 32;
+  if (scale) scale.value = bannerState.hero.modelScale ?? 2.2;
+  if (scaleVal) scaleVal.textContent = (bannerState.hero.modelScale ?? 2.2).toFixed(1);
   if (frontL) frontL.value = bannerState.hero.modelFrontLight ?? 0.85;
   if (backL) backL.value = bannerState.hero.modelBackLight ?? 0.3;
   const auraStyle = bannerState.hero.modelAuraStyle || 'glow';
@@ -1553,12 +1557,17 @@ export function updateHero3DFromControl(field, val) {
   switch (field) {
     case 'posX': bannerState.hero.modelPosX = val; break;
     case 'posY': bannerState.hero.modelPosY = val; break;
+    case 'scale':
+      bannerState.hero.modelScale = val;
+      document.getElementById('hero-model-scale-val').textContent = val.toFixed(1);
+      break;
     case 'frontLight': bannerState.hero.modelFrontLight = val; break;
     case 'backLight': bannerState.hero.modelBackLight = val; break;
   }
   import('./hero-3d.js').then(m => {
     if (field === 'posX' || field === 'posY') m.setHero3DPosition(bannerState.hero.modelPosX, bannerState.hero.modelPosY);
     if (field === 'frontLight' || field === 'backLight') m.updateLights(bannerState.hero.modelFrontLight, bannerState.hero.modelBackLight);
+    if (field === 'scale') m.updateModelScale(val);
   }).catch(() => {});
 }
 
@@ -1598,10 +1607,12 @@ export async function saveHeroBanner() {
   bannerState.hero.videoEffect = heroVideoEffect;
   const px = document.getElementById('hero-model-pos-x');
   const py = document.getElementById('hero-model-pos-y');
+  const sc = document.getElementById('hero-model-scale');
   const fl = document.getElementById('hero-model-front-light');
   const bl = document.getElementById('hero-model-back-light');
   if (px) bannerState.hero.modelPosX = +px.value;
   if (py) bannerState.hero.modelPosY = +py.value;
+  if (sc) bannerState.hero.modelScale = +sc.value;
   if (fl) bannerState.hero.modelFrontLight = +fl.value;
   if (bl) bannerState.hero.modelBackLight = +bl.value;
   try {

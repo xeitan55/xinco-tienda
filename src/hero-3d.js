@@ -54,7 +54,7 @@ export async function initHero3D(containerId) {
   modelGroup.userData.baseY = _posToSceneY(bannerState.hero.modelPosY);
   scene.add(modelGroup);
 
-  const inst = { scene, camera, renderer, container, clock, modelGroup, keyLight, rimLight, auraSprite: null, modelLoaded: false };
+  const inst = { scene, camera, renderer, container, clock, modelGroup, keyLight, rimLight, auraSprite: null, modelLoaded: false, scale: bannerState.hero.modelScale ?? 2.2, modelObj: null };
   _instances.set(containerId, inst);
 
   const btn = container.querySelector('.hero-3d-loading');
@@ -68,7 +68,7 @@ export async function initHero3D(containerId) {
         .setPath('/remera/')
         .setMaterials(materials)
         .load('model.obj', obj => {
-          obj.scale.set(2.2, 2.2, 2.2);
+          obj.scale.set(inst.scale, inst.scale, inst.scale);
           obj.position.set(0, 0, 0);
           obj.traverse(child => {
             if (child.isMesh && child.material) {
@@ -80,6 +80,7 @@ export async function initHero3D(containerId) {
             }
           });
           modelGroup.add(obj);
+          inst.modelObj = obj;
           inst.modelLoaded = true;
           _applyAura(inst, bannerState.hero.modelAuraStyle || 'none', bannerState.hero.modelAuraColor || '#a78bfa');
           if (btn) btn.style.display = 'none';
@@ -125,8 +126,8 @@ function _setupDrag(container) {
     const dy = pt.clientY - startY;
     const pctX = (dx / window.innerWidth) * 100;
     const pctY = (dy / window.innerHeight) * 100;
-    bannerState.hero.modelPosX = Math.max(0, Math.min(100, startPosX + pctX));
-    bannerState.hero.modelPosY = Math.max(0, Math.min(100, startPosY + pctY));
+    bannerState.hero.modelPosX = startPosX + pctX;
+    bannerState.hero.modelPosY = startPosY + pctY;
     _syncModelPosition();
     _syncSlider('hero-model-pos-x', bannerState.hero.modelPosX);
     _syncSlider('hero-model-pos-y', bannerState.hero.modelPosY);
@@ -256,9 +257,18 @@ export function updateModelPosition() {
 }
 
 export function setHero3DPosition(xPct, yPct) {
-  bannerState.hero.modelPosX = Math.max(0, Math.min(100, xPct));
-  bannerState.hero.modelPosY = Math.max(0, Math.min(100, yPct));
+  bannerState.hero.modelPosX = xPct;
+  bannerState.hero.modelPosY = yPct;
   _syncModelPosition();
+}
+
+export function updateModelScale(val) {
+  const s = Math.max(0.2, Math.min(10, val));
+  bannerState.hero.modelScale = s;
+  for (const inst of _instances.values()) {
+    inst.scale = s;
+    if (inst.modelObj) inst.modelObj.scale.set(s, s, s);
+  }
 }
 
 export function destroyHero3D(containerId) {
