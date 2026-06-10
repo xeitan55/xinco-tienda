@@ -94,7 +94,7 @@ function buildAccentSelector() {
     swatch.dataset.color = a.hex;
     swatch.style.background = a.hex;
     swatch.setAttribute('aria-label', a.label);
-    swatch.onclick = () => setAccentColor(a.hex);
+    swatch.onclick = () => window.setAccentColor(a.hex);
     if (a.hex === getAccent()) swatch.classList.add('active');
     container.appendChild(swatch);
   });
