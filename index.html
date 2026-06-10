@@ -2289,7 +2289,19 @@ tailwind.config = {
                 <div class="sub-tab-bar mb-5">
                   <button class="sub-tab-btn active" data-tab="anuncios" onclick="showSectionTab('config-banners-inner','anuncios')">ANUNCIOS</button>
                   <button class="sub-tab-btn" data-tab="hero" onclick="showSectionTab('config-banners-inner','hero')">HERO</button>
+                  <button class="sub-tab-btn" data-tab="model-3d" onclick="showSectionTab('config-banners-inner','model-3d');_initHero3DPreview()">MODELO 3D</button>
                   <button class="sub-tab-btn" data-tab="promo" onclick="showSectionTab('config-banners-inner','promo')">PROMO</button>
+                </div>
+                <div id="hero-preview" class="relative w-full mb-5 border border-gray-100 rounded-xl" style="aspect-ratio:16/9;background:var(--hero-gradient);overflow:visible;">
+                  <img id="hero-preview-img" class="absolute inset-0 w-full h-full object-cover opacity-60" style="display:none;"/>
+                  <video id="hero-preview-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
+                  <div id="hero-preview-3d" class="absolute inset-0" style="pointer-events:auto;margin:0;padding:0;"></div>
+                  <span id="hero-preview-video-badge" class="absolute top-3 right-3 bg-indigo-600 text-white text-[8px] font-bold px-2 py-1 rounded hidden z-20">VIDEO</span>
+                  <span id="hero-preview-badge" class="badge badge-violet mb-4" style="position:absolute;top:20px;left:20px;z-index:20;"></span>
+                  <div style="position:absolute;bottom:20px;left:20px;right:20px;z-index:20;">
+                    <div id="hero-preview-title" style="font-family:Syne;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;text-transform:uppercase;" class="text-white"></div>
+                    <div id="hero-preview-subtitle" class="font-body-md text-white/70 mt-2"></div>
+                  </div>
                 </div>
                 <div class="sub-tab-content active space-y-6" data-tab="anuncios">
                   <div class="border border-gray-100 rounded-xl p-5 bg-white">
@@ -2316,17 +2328,6 @@ tailwind.config = {
                       <span class="material-symbols-outlined text-[18px]">photo</span> HERO PRINCIPAL
                     </h3>
                     <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Personalizá el banner principal de la portada.</p>
-                    <div id="hero-preview" class="relative w-full overflow-hidden mb-5" style="aspect-ratio:16/9;background:var(--hero-gradient);">
-                      <img id="hero-preview-img" class="absolute inset-0 w-full h-full object-cover opacity-60" style="display:none;"/>
-                      <video id="hero-preview-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
-                      <div id="hero-preview-3d" class="absolute inset-0 z-10" style="pointer-events:auto;"></div>
-                      <span id="hero-preview-video-badge" class="absolute top-3 right-3 bg-indigo-600 text-white text-[8px] font-bold px-2 py-1 rounded hidden z-20">VIDEO</span>
-                      <span id="hero-preview-badge" class="badge badge-violet mb-4" style="position:absolute;top:20px;left:20px;z-index:20;"></span>
-                      <div style="position:absolute;bottom:20px;left:20px;right:20px;z-index:20;">
-                        <div id="hero-preview-title" style="font-family:Syne;font-size:clamp(28px,5vw,64px);font-weight:900;letter-spacing:-0.03em;text-transform:uppercase;" class="text-white"></div>
-                        <div id="hero-preview-subtitle" class="font-body-md text-white/70 mt-2"></div>
-                      </div>
-                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">BADGE</label><input id="hero-edit-badge" class="input-field" placeholder="NUEVA TEMPORADA" oninput="previewHero()"/></div>
                       <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO</label><input id="hero-edit-title" class="input-field" placeholder="XINCO" oninput="previewHero()"/></div>
@@ -2376,36 +2377,39 @@ tailwind.config = {
                         <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-effect="contrast" onclick="selectVideoEffect('contrast')">CONTRASTE</button>
                       </div>
                     </div>
-                    <div class="border border-gray-100 rounded-xl p-4 mb-4 bg-gray-50/50">
-                      <h4 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-3 text-[10px]">
-                        <span class="material-symbols-outlined text-[16px]">view_in_ar</span> MODELO 3D
-                      </h4>
-                      <p class="font-body-md text-on-surface-variant/70 text-[10px] mb-3">Arrastrá el modelo en la vista previa o ajustá los controles.</p>
-                      <div class="grid grid-cols-2 gap-3 mb-3">
-                        <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">POSICIÓN X</label><input id="hero-model-pos-x" type="range" min="0" max="100" value="22" class="w-full accent-primary" oninput="updateHero3DFromControl('posX', +this.value)"/></div>
-                        <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">POSICIÓN Y</label><input id="hero-model-pos-y" type="range" min="0" max="100" value="32" class="w-full accent-primary" oninput="updateHero3DFromControl('posY', +this.value)"/></div>
-                      </div>
-                      <div class="grid grid-cols-2 gap-3 mb-3">
-                        <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">LUZ FRONTAL</label><input id="hero-model-front-light" type="range" min="0" max="2" step="0.05" value="0.85" class="w-full accent-primary" oninput="updateHero3DFromControl('frontLight', +this.value)"/></div>
-                        <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">LUZ TRASERA</label><input id="hero-model-back-light" type="range" min="0" max="2" step="0.05" value="0.3" class="w-full accent-primary" oninput="updateHero3DFromControl('backLight', +this.value)"/></div>
-                      </div>
-                      <div class="mb-3">
-                        <label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1.5">ESTILO DE AURA</label>
-                        <div class="flex flex-wrap gap-1.5">
-                          <button class="hero-aura-btn px-2.5 py-1 rounded-lg text-[9px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-aura="none" onclick="selectHeroAura('none')">SIN AURA</button>
-                          <button class="hero-aura-btn px-2.5 py-1 rounded-lg text-[9px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors active" data-aura="glow" onclick="selectHeroAura('glow')">RESPLANDOR</button>
-                          <button class="hero-aura-btn px-2.5 py-1 rounded-lg text-[9px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-aura="pulse" onclick="selectHeroAura('pulse')">LATIDO</button>
-                        </div>
-                      </div>
-                      <div>
-                        <label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">COLOR DE AURA <span class="text-on-surface-variant/40">(vinculado al color de énfasis)</span></label>
-                        <div class="flex items-center gap-2">
-                          <input id="hero-aura-color" type="color" value="#a78bfa" class="w-8 h-8 p-0 border-2 border-outline-variant rounded cursor-pointer" oninput="selectHeroAuraColor(this.value)"/>
-                          <span id="hero-aura-color-hex" class="font-body-md text-[10px] text-on-surface-variant/60">#a78bfa</span>
-                        </div>
+                    <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveHeroBanner()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR HERO</button>
+                  </div>
+                </div>
+                <div class="sub-tab-content space-y-6" data-tab="model-3d">
+                  <div class="border border-gray-100 rounded-xl p-5 bg-white">
+                    <h3 class="font-label-caps text-label-caps text-primary flex items-center gap-2 mb-4 text-[11px]">
+                      <span class="material-symbols-outlined text-[18px]">view_in_ar</span> MODELO 3D
+                    </h3>
+                    <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Ajustá la posición, luces y aura del modelo 3D. Los cambios se ven en tiempo real en la vista previa de arriba.</p>
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                      <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">POSICIÓN X</label><input id="hero-model-pos-x" type="range" min="0" max="100" value="22" class="w-full accent-primary" oninput="updateHero3DFromControl('posX', +this.value)"/></div>
+                      <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">POSICIÓN Y</label><input id="hero-model-pos-y" type="range" min="0" max="100" value="32" class="w-full accent-primary" oninput="updateHero3DFromControl('posY', +this.value)"/></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                      <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">LUZ FRONTAL</label><input id="hero-model-front-light" type="range" min="0" max="2" step="0.05" value="0.85" class="w-full accent-primary" oninput="updateHero3DFromControl('frontLight', +this.value)"/></div>
+                      <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">LUZ TRASERA</label><input id="hero-model-back-light" type="range" min="0" max="2" step="0.05" value="0.3" class="w-full accent-primary" oninput="updateHero3DFromControl('backLight', +this.value)"/></div>
+                    </div>
+                    <div class="mb-4">
+                      <label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1.5">ESTILO DE AURA</label>
+                      <div class="flex flex-wrap gap-1.5">
+                        <button class="hero-aura-btn px-2.5 py-1 rounded-lg text-[9px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-aura="none" onclick="selectHeroAura('none')">SIN AURA</button>
+                        <button class="hero-aura-btn px-2.5 py-1 rounded-lg text-[9px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors active" data-aura="glow" onclick="selectHeroAura('glow')">RESPLANDOR</button>
+                        <button class="hero-aura-btn px-2.5 py-1 rounded-lg text-[9px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-aura="pulse" onclick="selectHeroAura('pulse')">LATIDO</button>
                       </div>
                     </div>
-                    <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveHeroBanner()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR HERO</button>
+                    <div class="mb-4">
+                      <label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">COLOR DE AURA <span class="text-on-surface-variant/40">(vinculado al color de énfasis)</span></label>
+                      <div class="flex items-center gap-2">
+                        <input id="hero-aura-color" type="color" value="#a78bfa" class="w-8 h-8 p-0 border-2 border-outline-variant rounded cursor-pointer" oninput="selectHeroAuraColor(this.value)"/>
+                        <span id="hero-aura-color-hex" class="font-body-md text-[10px] text-on-surface-variant/60">#a78bfa</span>
+                      </div>
+                    </div>
+                    <button class="btn-violet py-2 px-5 text-[10px]" onclick="saveHeroBanner()"><span class="material-symbols-outlined text-[13px]">save</span> GUARDAR CONFIGURACIÓN 3D</button>
                   </div>
                 </div>
                 <div class="sub-tab-content space-y-6" data-tab="promo">

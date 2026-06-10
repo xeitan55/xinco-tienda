@@ -22,8 +22,8 @@ export async function initHero3D(containerId) {
   const h = rect.height || 400;
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(35, w / h, 0.1, 100);
-  camera.position.set(0, 0.15, 4.2);
+  const   camera = new THREE.PerspectiveCamera(30, w / h, 0.1, 100);
+  camera.position.set(0, 0.1, 3.2);
   camera.lookAt(0, 0, 0);
 
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
