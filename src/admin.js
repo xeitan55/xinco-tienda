@@ -1573,13 +1573,17 @@ export function updateHero3DFromControl(field, val) {
 export function selectHeroAura(style, btn) {
   bannerState.hero.modelAuraStyle = style;
   document.querySelectorAll('.hero-aura-btn').forEach(b => b.classList.toggle('active', b.dataset.aura === style));
-  import('./hero-3d.js').then(m => m.updateAura(style, bannerState.hero.modelAuraColor)).catch(() => {});
+  if (style === 'none') {
+    import('./hero-3d.js').then(m => m.updateAura('none')).catch(() => {});
+  } else {
+    window.setAuraColor?.(bannerState.hero.modelAuraColor);
+  }
 }
 
 export function selectHeroAuraColor(hex) {
   bannerState.hero.modelAuraColor = hex;
   document.getElementById('hero-aura-color-hex').textContent = hex;
-  import('./hero-3d.js').then(m => m.updateAura(bannerState.hero.modelAuraStyle || 'glow', hex)).catch(() => {});
+  window.setAuraColor?.(hex);
 }
 
 function _initHero3DPreview() {
@@ -3128,9 +3132,9 @@ export function init() {
     _origSetAccent?.(hex);
     const auraColor = document.getElementById('hero-aura-color');
     const auraHex = document.getElementById('hero-aura-color-hex');
-    if (auraColor) { auraColor.value = hex; bannerState.hero.modelAuraColor = hex; }
+    if (auraColor) auraColor.value = hex;
     if (auraHex) auraHex.textContent = hex;
-    import('./hero-3d.js').then(m => m.updateAura(bannerState.hero.modelAuraStyle || 'glow', hex)).catch(() => {});
+    window.setAuraColor?.(hex);
   };
 
   window.resetFirebaseData = async function() {

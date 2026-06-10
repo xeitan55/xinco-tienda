@@ -469,7 +469,6 @@ export function init() {
   const _origSetAccent = window.setAccentColor;
   window.setAccentColor = function(hex) {
     _origSetAccent?.(hex);
-    bannerState.hero.modelAuraColor = hex;
-    import('./hero-3d.js').then(m => m.updateAura(bannerState.hero.modelAuraStyle || 'glow', hex)).catch(() => {});
+    window.setAuraColor?.(hex);
   };
 }

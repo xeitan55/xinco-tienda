@@ -201,20 +201,32 @@ export function updateAura(style, color) {
   }
 }
 
+function _removeAllAuraSprites(inst) {
+  const THREE = _THREE;
+  if (!THREE || !inst.scene) return;
+  const toRemove = [];
+  for (const child of inst.scene.children) {
+    if (child.isSprite) toRemove.push(child);
+  }
+  for (const s of toRemove) {
+    inst.scene.remove(s);
+    if (s.material) {
+      s.material.map?.dispose();
+      s.material.dispose();
+    }
+  }
+  inst.auraSprite = null;
+}
+
 function _applyAura(inst, style, color) {
   const THREE = _THREE;
   if (!THREE || !inst.scene || !inst.modelLoaded) return;
 
-  if (inst.auraSprite) {
-    inst.scene.remove(inst.auraSprite);
-    inst.auraSprite.material.map?.dispose();
-    inst.auraSprite.material.dispose();
-    inst.auraSprite = null;
-  }
+  _removeAllAuraSprites(inst);
 
   if (style === 'none') return;
 
-  const size = 2.4;
+  const size = 3.6;
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 512;
@@ -226,9 +238,9 @@ function _applyAura(inst, style, color) {
   const b = parseInt(hex.slice(5,7), 16) || 250;
 
   const gradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 180);
-  gradient.addColorStop(0, `rgba(${r},${g},${b},0.6)`);
-  gradient.addColorStop(0.35, `rgba(${r},${g},${b},0.18)`);
-  gradient.addColorStop(0.6, `rgba(${r},${g},${b},0.04)`);
+  gradient.addColorStop(0, `rgba(${r},${g},${b},0.95)`);
+  gradient.addColorStop(0.25, `rgba(${r},${g},${b},0.45)`);
+  gradient.addColorStop(0.5, `rgba(${r},${g},${b},0.12)`);
   gradient.addColorStop(1, `rgba(${r},${g},${b},0)`);
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 512, 512);
@@ -270,6 +282,13 @@ export function updateModelScale(val) {
     if (inst.modelObj) inst.modelObj.scale.set(s, s, s);
   }
 }
+
+export function setAuraColor(hex) {
+  bannerState.hero.modelAuraColor = hex;
+  updateAura(bannerState.hero.modelAuraStyle || 'glow', hex);
+}
+
+window.setAuraColor = setAuraColor;
 
 export function destroyHero3D(containerId) {
   containerId = containerId || 'hero-3d-container';
