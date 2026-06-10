@@ -34,16 +34,16 @@ export async function initHero3D() {
 
   const ambient = new THREE.AmbientLight(0xffffff, 0.15);
   scene.add(ambient);
-  const key = new THREE.DirectionalLight(0xffffff, 0.7);
-  key.position.set(2, 3, 4);
+  const key = new THREE.DirectionalLight(0xffffff, 0.6);
+  key.position.set(1.5, 3, 4);
   scene.add(key);
-  const fill = new THREE.DirectionalLight(0xa78bfa, 0.25);
-  fill.position.set(-2, 1, 2);
-  scene.add(fill);
-  const rim = new THREE.DirectionalLight(0xc4b5fd, 0.35);
-  rim.position.set(0, -1, -3);
-  scene.add(rim);
-  const hemi = new THREE.HemisphereLight(0xa78bfa, 0x1e1b4b, 0.2);
+  const centerGlow = new THREE.PointLight(0xa78bfa, 2.0, 5, 1.5);
+  centerGlow.position.set(0, 0.2, 1.8);
+  scene.add(centerGlow);
+  const backGlow = new THREE.PointLight(0x8b5cf6, 0.8, 4, 2);
+  backGlow.position.set(0, 0, -2);
+  scene.add(backGlow);
+  const hemi = new THREE.HemisphereLight(0xc4b5fd, 0x1e1b4b, 0.3);
   scene.add(hemi);
 
   clock = new THREE.Clock();
