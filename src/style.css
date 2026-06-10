@@ -842,6 +842,31 @@ html.dark .admin-solid .admin-card { background: var(--surface-container-lowest)
     transition: opacity 0.25s ease, transform 0.25s ease;
   }
   #review-stars .star-rating { transition: color 0.15s; }
+
+  /* Hero 3D Model */
+  #hero-3d-container {
+    pointer-events: none;
+    overflow: hidden;
+  }
+  #hero-3d-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-3d-glow {
+    position: absolute;
+    inset: 10%;
+    z-index: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(139,92,246,0.35) 0%, rgba(139,92,246,0.12) 40%, transparent 70%);
+    animation: heroGlowPulse 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes heroGlowPulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
   .color-swatch { width:32px; height:32px; border-radius:50%; border:3px solid transparent; cursor:pointer; transition:all 0.15s; position:relative; }
   .color-swatch.selected { border-color:#000; box-shadow:0 0 0 2px #fff, 0 0 0 4px #000; }
   .color-swatch:hover { transform:scale(1.15); }

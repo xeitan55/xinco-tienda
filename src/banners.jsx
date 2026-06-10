@@ -16,6 +16,8 @@ export function renderAnnouncementBar() {
   ).join('');
 }
 
+let _hero3DStarted = false;
+
 export function renderHeroBanner() {
   const h = bannerState.hero;
   const badge = document.getElementById('hero-badge');
@@ -32,6 +34,10 @@ export function renderHeroBanner() {
     applyHeroVideoToSection('');
     if (img) img.src = h.img;
     applyHeroAnimStyle(h.animStyle || 'default');
+  }
+  if (!_hero3DStarted && document.getElementById('hero-3d-container')) {
+    _hero3DStarted = true;
+    import('./hero-3d.js').then(m => m.initHero3D()).catch(e => console.warn('hero-3d init:', e));
   }
 }
 
