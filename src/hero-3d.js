@@ -101,8 +101,8 @@ export async function initHero3D(containerId) {
   });
 }
 
-function _posToSceneX(pct) { return ((pct ?? 22) - 50) / 50 * 1.8; }
-function _posToSceneY(pct) { return ((pct ?? 32) - 50) / 50 * 1.0; }
+function _posToSceneX(pct) { return ((pct ?? 22) - 50) / 50 * 0.86; }
+function _posToSceneY(pct) { return ((pct ?? 32) - 50) / 50 * 0.86; }
 
 function _setupDrag(container) {
   if (!container) return;

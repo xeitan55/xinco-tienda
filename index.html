@@ -2387,8 +2387,8 @@ tailwind.config = {
                     </h3>
                     <p class="font-body-md text-on-surface-variant/70 text-sm mb-5">Ajustá la posición, tamaño, luces y aura del modelo 3D. Los cambios se ven en tiempo real en la vista previa de arriba.</p>
                     <div class="grid grid-cols-2 gap-3 mb-4">
-                      <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">POSICIÓN X</label><input id="hero-model-pos-x" type="range" min="-50" max="150" value="22" class="w-full accent-primary" oninput="updateHero3DFromControl('posX', +this.value)"/></div>
-                      <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">POSICIÓN Y</label><input id="hero-model-pos-y" type="range" min="-50" max="150" value="32" class="w-full accent-primary" oninput="updateHero3DFromControl('posY', +this.value)"/></div>
+                      <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">POSICIÓN X</label><input id="hero-model-pos-x" type="range" min="0" max="100" value="22" class="w-full accent-primary" oninput="updateHero3DFromControl('posX', +this.value)"/></div>
+                      <div><label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">POSICIÓN Y</label><input id="hero-model-pos-y" type="range" min="0" max="100" value="32" class="w-full accent-primary" oninput="updateHero3DFromControl('posY', +this.value)"/></div>
                     </div>
                     <div class="mb-4">
                       <label class="font-label-caps text-[9px] text-on-surface-variant/70 block mb-1">TAMAÑO (ESCALA)</label>
