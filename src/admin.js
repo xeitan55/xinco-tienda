@@ -96,7 +96,7 @@ export function showAdminSection(section) {
   if (section === 'tracking') { window.initTrackingSection?.(); window.initShippingProviders?.(); }
   if (section === 'reportes') window.initReportesSection?.();
   if (section === 'configuracion') {
-    window.initBannerEditor?.();
+    initBannerEditor();
     window.initCatEditor?.();
     window.initAppearancePanel?.();
     window.loadEmailJsIntoForm?.();
@@ -113,6 +113,10 @@ export function showSectionTab(sectionId, tabName) {
   if (target) target.classList.add('active');
   const btn = container.querySelector('.sub-tab-btn[data-tab="' + tabName + '"]');
   if (btn) btn.classList.add('active');
+  if (sectionId === 'config-banners-inner') {
+    const preview3d = document.getElementById('hero-preview-3d');
+    if (preview3d) preview3d.style.display = tabName === 'model-3d' ? '' : 'none';
+  }
 }
 
 export function renderAdminDashboard() {
@@ -1235,8 +1239,9 @@ export function initBannerEditor() {
   document.getElementById('promo-edit-title').value = bannerState.promo.title;
   document.getElementById('promo-edit-code').value  = bannerState.promo.code;
   previewPromo();
-  _initHero3DPreview();
   _loadHero3DControls();
+  const activeTab = document.querySelector('#config-banners-inner .sub-tab-btn.active');
+  if (activeTab && activeTab.dataset.tab === 'model-3d') _initHero3DPreview();
 }
 
 function _loadHero3DControls() {
