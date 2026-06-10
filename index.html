@@ -2331,44 +2331,38 @@ tailwind.config = {
                       <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">TÍTULO</label><input id="hero-edit-title" class="input-field" placeholder="XINCO" oninput="previewHero()"/></div>
                       <div><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">SUBTÍTULO</label><input id="hero-edit-subtitle" class="input-field" placeholder="Tu estilo, tu identidad" oninput="previewHero()"/></div>
                     </div>
-                    <div class="flex gap-2 mb-4 border-b border-gray-200 pb-2">
-                      <button id="tab-img-btn" class="hero-media-tab active px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('img')"><span class="material-symbols-outlined text-[14px] align-middle">image</span> IMAGEN</button>
-                      <button id="tab-vid-btn" class="hero-media-tab px-5 py-2 rounded-t-lg text-[10px] font-label-caps border-2 border-b-0 border-gray-200 hover:border-primary transition-colors" onclick="switchHeroTab('video')"><span class="material-symbols-outlined text-[14px] align-middle">videocam</span> VIDEO</button>
-                    </div>
-                    <div id="hero-tab-img">
-                      <div class="mb-4"><label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">URL IMAGEN</label><input id="hero-edit-img" class="input-field" placeholder="https://..." oninput="previewHeroImg()"/></div>
-                      <div class="mb-4">
-                        <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">ESTILO DE ANIMACIÓN</label>
-                        <div id="anim-style-selector" class="flex flex-wrap gap-2">
-                          <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="default" onclick="selectAnimStyle('default')">CLÁSICO</button>
-                          <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="glitch" onclick="selectAnimStyle('glitch')">GLITCH</button>
-                          <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="typewriter" onclick="selectAnimStyle('typewriter')">MÁQUINA ESCRIBIR</button>
-                          <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="fade" onclick="selectAnimStyle('fade')">DESVANECER</button>
-                          <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="slide" onclick="selectAnimStyle('slide')">DESLIZAR</button>
-                        </div>
+                    <div class="mb-4">
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-1.5 text-[10px]">URL IMAGEN / VIDEO</label>
+                      <input id="hero-media-url" class="input-field mb-3" placeholder="https://... o arrastrá un archivo" oninput="previewHeroMedia()"/>
+                      <div id="hero-media-dropzone" class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:border-primary transition-colors"
+                           onclick="document.getElementById('hero-media-file').click()"
+                           ondragover="this.classList.add('border-primary','bg-surface-container-high');event.preventDefault()"
+                           ondragleave="this.classList.remove('border-primary','bg-surface-container-high')"
+                           ondrop="handleHeroMediaDrop(event)">
+                        <span class="material-symbols-outlined text-[32px] text-on-surface-variant/40">cloud_upload</span>
+                        <p class="font-body-md text-sm text-on-surface-variant/60 mt-1">Arrastrá una imagen o video, o hacé clic para seleccionar</p>
+                        <p class="font-label-caps text-[9px] text-on-surface-variant/40 mt-0.5">JPG, PNG, WebP, MP4, WebM — máx 10MB</p>
+                      </div>
+                      <input type="file" id="hero-media-file" accept="image/*,video/mp4,video/webm" class="hidden" onchange="uploadHeroMedia(this.files[0])"/>
+                      <div id="hero-media-upload-progress" class="hidden mt-3">
+                        <div class="w-full bg-gray-100 rounded-full h-2"><div id="hero-media-upload-bar" class="bg-primary h-2 rounded-full" style="width:0%"></div></div>
+                        <p id="hero-media-upload-pct" class="font-label-caps text-[9px] text-primary mt-1">0%</p>
+                        <p id="hero-media-upload-status" class="font-label-caps text-[9px] text-on-surface-variant/60 mt-0.5"></p>
+                      </div>
+                      <div id="hero-media-status" class="hidden flex items-center gap-2 mt-2 p-2 rounded-lg border border-gray-100">
+                        <span id="hero-media-type-badge" class="text-[8px] font-bold px-2 py-1 rounded"></span>
+                        <span id="hero-media-url-display" class="font-body-md text-[10px] text-primary break-all flex-1"></span>
+                        <button class="text-error hover:text-error/80 text-[10px] font-label-caps whitespace-nowrap" onclick="clearHeroMedia()">LIMPIAR</button>
                       </div>
                     </div>
-                    <div id="hero-tab-video" class="hidden">
-                      <div class="border border-indigo-100 rounded-xl p-4 bg-[#f8f6ff] mb-4">
-                        <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-[18px] text-indigo-600">videocam</span><span class="font-label-caps text-label-caps text-indigo-800 text-[10px]">VIDEO DE FONDO</span></div>
-                        <p class="font-body-md text-on-surface-variant/70 text-sm mb-3">Subí un video para reemplazar la imagen de fondo del hero.</p>
-                        <div class="space-y-3">
-                          <div class="flex gap-2"><input id="hero-video-url" class="input-field flex-1 py-2" placeholder="URL de video (MP4, WebM)"/><button class="border border-primary rounded-lg py-2 px-3 font-label-caps text-[9px] hover:bg-primary hover:text-on-primary transition-colors" onclick="previewHeroVideo()">VISTA PREVIA</button></div>
-                          <div id="hero-video-status" class="font-label-caps text-[9px] text-on-surface-variant/60"></div>
-                          <button class="border border-error rounded-lg py-1.5 px-3 font-label-caps text-[9px] text-error hover:bg-error hover:text-on-error transition-colors" onclick="clearHeroVideo()">LIMPIAR VIDEO</button>
-                          <div id="hero-video-url-display" class="font-body-md text-[10px] text-indigo-600 break-all"></div>
-                          <div id="hero-video-dropzone" class="border-2 border-dashed border-indigo-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition-colors" onclick="document.getElementById('hero-video-file').click()" ondragover="this.classList.add('border-indigo-500','bg-indigo-50');event.preventDefault()" ondragleave="this.classList.remove('border-indigo-500','bg-indigo-50')" ondrop="handleHeroVideoFileDrop(event)">
-                            <span class="material-symbols-outlined text-[32px] text-indigo-300">cloud_upload</span>
-                            <p class="font-body-md text-sm text-indigo-400 mt-1">Arrastrá un video o hacé clic para seleccionar</p>
-                            <p class="font-label-caps text-[9px] text-indigo-300 mt-0.5">MP4, WebM — máx 10MB</p>
-                          </div>
-                          <input type="file" id="hero-video-file" accept="video/mp4,video/webm" class="hidden" onchange="uploadHeroVideo(this.files[0])"/>
-                          <div id="hero-video-upload-progress" class="hidden mt-3">
-                            <div class="w-full bg-indigo-100 rounded-full h-2"><div id="hero-video-upload-bar" class="bg-indigo-600 h-2 rounded-full" style="width:0%"></div></div>
-                            <p id="hero-video-upload-pct" class="font-label-caps text-[9px] text-indigo-600 mt-1">0%</p>
-                            <p id="hero-video-upload-status" class="font-label-caps text-[9px] text-indigo-400 mt-0.5"></p>
-                          </div>
-                        </div>
+                    <div class="mb-4">
+                      <label class="font-label-caps text-label-caps text-on-surface-variant/70 block mb-2 text-[10px]">ESTILO DE ANIMACIÓN</label>
+                      <div id="anim-style-selector" class="flex flex-wrap gap-2">
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="default" onclick="selectAnimStyle('default')">CLÁSICO</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="glitch" onclick="selectAnimStyle('glitch')">GLITCH</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="typewriter" onclick="selectAnimStyle('typewriter')">MÁQUINA ESCRIBIR</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="fade" onclick="selectAnimStyle('fade')">DESVANECER</button>
+                        <button class="hero-media-tab px-3 py-1.5 rounded-lg text-[10px] font-label-caps border-2 border-gray-200 hover:border-primary transition-colors" data-anim="slide" onclick="selectAnimStyle('slide')">DESLIZAR</button>
                       </div>
                     </div>
                     <div class="mb-4">

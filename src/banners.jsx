@@ -55,32 +55,13 @@ export function renderPromoBanner() {
   if (codeEl) codeEl.textContent = p.code;
 }
 
-// =================== HERO VIDEO & ANIMATION SYSTEM ===================
+// =================== HERO MEDIA & ANIMATION SYSTEM ===================
 let heroVideoUrl = '';
 let heroAnimStyle = 'default';
 let heroVideoEffect = 'none';
 
-export function switchHeroTab(tab) {
-  const imgPanel = document.getElementById('hero-tab-img');
-  const vidPanel = document.getElementById('hero-tab-video');
-  const imgBtn = document.getElementById('tab-img-btn');
-  const vidBtn = document.getElementById('tab-vid-btn');
-  if (!imgPanel || !vidPanel) return;
-  if (tab === 'img') {
-    imgPanel.classList.remove('hidden');
-    vidPanel.classList.add('hidden');
-    imgBtn.classList.add('active');
-    vidBtn.classList.remove('active');
-  } else {
-    imgPanel.classList.add('hidden');
-    vidPanel.classList.remove('hidden');
-    imgBtn.classList.remove('active');
-    vidBtn.classList.add('active');
-    if (bannerState.hero.videoUrl) {
-      document.getElementById('hero-video-url').value = bannerState.hero.videoUrl;
-      showHeroVideoStatus(bannerState.hero.videoUrl);
-    }
-  }
+function _isVideoUrl(url) {
+  return /\.(mp4|webm|mov)(\?|$)/i.test(url);
 }
 
 export function selectHeroAnim(style, btn) {
@@ -189,141 +170,97 @@ export function applyHeroVideoToSection(url) {
   }
 }
 
-export function showHeroVideoStatus(url) {
-  const statusEl = document.getElementById('hero-video-status');
-  const urlDisp = document.getElementById('hero-video-url-display');
-  const prevVid = document.getElementById('hero-preview-video');
-  const prevBadge = document.getElementById('hero-preview-video-badge');
-  if (statusEl) statusEl.classList.remove('hidden');
-  if (urlDisp) urlDisp.textContent = url;
-  if (prevVid) {
-    prevVid.src = url;
-    prevVid.style.display = 'block';
-    prevVid.load();
-    prevVid.play().catch(() => {});
+export function previewHeroMedia() {
+  const url = document.getElementById('hero-media-url')?.value.trim();
+  if (!url) { clearHeroMedia(); return; }
+  const isVid = _isVideoUrl(url);
+  if (isVid) {
+    heroVideoUrl = url;
+    bannerState.hero.videoUrl = url;
+    bannerState.hero.img = '';
+    applyHeroVideoToSection(url);
+    const prevVid = document.getElementById('hero-preview-video');
+    if (prevVid) { prevVid.src = url; prevVid.style.display = 'block'; prevVid.load(); prevVid.play().catch(() => {}); }
+  } else {
+    heroVideoUrl = '';
+    bannerState.hero.videoUrl = '';
+    bannerState.hero.img = url;
+    applyHeroVideoToSection('');
+    const prevImg = document.getElementById('hero-preview-img');
+    if (prevImg) { prevImg.src = url; prevImg.style.display = ''; }
+    const realImg = document.getElementById('hero-img');
+    if (realImg) { realImg.classList.add('loading'); realImg.onload = () => { realImg.classList.remove('loading'); }; realImg.src = url; realImg.style.display = 'block'; }
   }
-  if (prevBadge) prevBadge.classList.remove('hidden');
-  heroVideoUrl = url;
+  _updateHeroStatusBar(url, isVid);
 }
 
-export function handleHeroVideoFileDrop(e) {
-  e.preventDefault();
-  const dz = document.getElementById('hero-video-dropzone');
-  if (dz) dz.classList.remove('drag-over');
-  const file = e.dataTransfer.files[0];
-  if (file) uploadHeroVideo(file);
-}
-
-export async function uploadHeroVideo(file) {
+export function uploadHeroMedia(file) {
   if (!file) return;
-  const progress = document.getElementById('hero-video-upload-progress');
-  const bar = document.getElementById('hero-video-upload-bar');
-  const pct = document.getElementById('hero-video-upload-pct');
-  const statusEl = document.getElementById('hero-video-upload-status');
+  const isVid = file.type.startsWith('video/');
+  const progress = document.getElementById('hero-media-upload-progress');
+  const bar = document.getElementById('hero-media-upload-bar');
+  const pct = document.getElementById('hero-media-upload-pct');
+  const statusEl = document.getElementById('hero-media-upload-status');
   if (progress) progress.classList.remove('hidden');
   if (bar) bar.style.width = '0%';
-  if (statusEl) statusEl.textContent = 'SUBIENDO VIDEO...';
-  window.showToast?.('Subiendo video a Cloudinary... ☁️');
-  try {
-    const videoUrl = await new Promise((resolve, reject) => {
-      window.uploadToCloudinary?.(file,
-        (p) => { if(bar) bar.style.width=p+'%'; if(pct) pct.textContent=p+'%'; if(statusEl) statusEl.textContent = p<100 ? 'SUBIENDO VIDEO...' : 'PROCESANDO...'; },
-        (url) => resolve(url),
-        (err) => reject(err),
-        'video'
-      ) || reject('uploadToCloudinary not available');
-    });
-    if (progress) progress.classList.add('hidden');
-    showHeroVideoStatus(videoUrl);
-    document.getElementById('hero-video-url').value = videoUrl;
-    window.showToast?.('¡Video subido a Cloudinary! ☁️✅');
-  } catch(e) {
-    if (statusEl) statusEl.textContent = 'ERROR AL SUBIR';
-    if (bar) bar.style.background = '#ba1a1a';
-    window.showToast?.('Error al subir el video ❌');
+  if (statusEl) statusEl.textContent = 'SUBIENDO...';
+  window.showToast?.('Subiendo a Cloudinary... ☁️');
+  if (isVid) {
+    const prevVid = document.getElementById('hero-preview-video');
+    if (prevVid) { prevVid.src = URL.createObjectURL(file); prevVid.style.display = 'block'; prevVid.load(); prevVid.play().catch(() => {}); }
+  } else {
+    const reader = new FileReader();
+    reader.onload = (ev) => { document.getElementById('hero-preview-img').src = ev.target.result; };
+    reader.readAsDataURL(file);
   }
+  (window.uploadToCloudinary?.(file,
+    (p) => { if (bar) bar.style.width = p + '%'; if (pct) pct.textContent = p + '%'; if (statusEl) statusEl.textContent = p < 100 ? 'SUBIENDO...' : 'PROCESANDO...'; },
+    (finalUrl) => {
+      if (progress) progress.classList.add('hidden');
+      document.getElementById('hero-media-url').value = finalUrl;
+      previewHeroMedia();
+      window.showToast?.('¡Subido a Cloudinary! ☁️✅');
+    },
+    (err) => { if (statusEl) statusEl.textContent = 'ERROR'; if (bar) bar.style.background = '#ba1a1a'; window.showToast?.('Error al subir ❌'); },
+    isVid ? 'video' : 'image'
+  ));
 }
 
-export function previewHeroVideo() {
-  const url = document.getElementById('hero-video-url')?.value.trim();
-  if (!url) { window.showToast?.('Ingresá una URL de video ❌'); return; }
-  showHeroVideoStatus(url);
-  applyHeroVideoToSection(url);
-  window.showToast?.('Vista previa del video activa ✅');
+export function handleHeroMediaDrop(e) {
+  e.preventDefault();
+  document.getElementById('hero-media-dropzone')?.classList.remove('border-primary', 'bg-surface-container-high');
+  const file = e.dataTransfer.files[0];
+  if (file) uploadHeroMedia(file);
 }
 
-export function clearHeroVideo() {
+export function clearHeroMedia() {
   heroVideoUrl = '';
-  const inputs = ['hero-video-url'];
-  inputs.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  const statusEl = document.getElementById('hero-video-status');
-  const prevVid = document.getElementById('hero-preview-video');
-  const prevBadge = document.getElementById('hero-preview-video-badge');
-  if (statusEl) statusEl.classList.add('hidden');
-  if (prevVid) { prevVid.src = ''; prevVid.style.display = 'none'; }
-  if (prevBadge) prevBadge.classList.add('hidden');
-  const prevImg = document.getElementById('hero-preview-img');
-  if (prevImg && bannerState.hero.img) prevImg.src = bannerState.hero.img;
+  bannerState.hero.videoUrl = '';
+  document.getElementById('hero-media-url').value = '';
+  const statusBar = document.getElementById('hero-media-status');
+  if (statusBar) statusBar.classList.add('hidden');
   applyHeroVideoToSection('');
+  const prevImg = document.getElementById('hero-preview-img');
+  if (prevImg) { prevImg.src = ''; prevImg.style.display = 'none'; }
+  const prevVid = document.getElementById('hero-preview-video');
+  if (prevVid) { prevVid.src = ''; prevVid.style.display = 'none'; }
+  const prevBadge = document.getElementById('hero-preview-video-badge');
+  if (prevBadge) prevBadge.classList.add('hidden');
   const realImg = document.getElementById('hero-img');
   if (realImg && bannerState.hero.img) realImg.src = bannerState.hero.img;
-  window.showToast?.('Video eliminado — se usará la imagen');
 }
 
-export function handleHeroFileDrop(e) {
-  e.preventDefault();
-  document.getElementById('hero-dropzone')?.classList.remove('bg-surface-container');
-  const file = e.dataTransfer.files[0];
-  if (file) uploadHeroImage(file);
-}
-
-export async function uploadHeroImage(file) {
-  if (!file) return;
-  const progress = document.getElementById('hero-upload-progress');
-  const bar = document.getElementById('hero-upload-bar');
-  const pct = document.getElementById('hero-upload-pct');
-  const status = document.getElementById('hero-upload-status');
-  const result = document.getElementById('hero-upload-result');
-  const recentGrid = document.getElementById('hero-recent-uploads');
-  progress.classList.remove('hidden');
-  result.classList.add('hidden');
-  bar.style.width = '0%';
-  bar.style.background = 'var(--admin-accent, #1a1a1a)';
-  status.textContent = 'SUBIENDO...';
-  const reader = new FileReader();
-  reader.onload = (ev) => { document.getElementById('hero-preview-img').src = ev.target.result; };
-  reader.readAsDataURL(file);
-  try {
-    await (window.uploadToCloudinary?.(file,
-      (p) => { bar.style.width = p + '%'; pct.textContent = p + '%'; },
-      (finalUrl) => {
-        document.getElementById('hero-edit-img').value = finalUrl;
-        bannerState.hero.img = finalUrl;
-        document.getElementById('hero-img').src = finalUrl;
-        document.getElementById('hero-preview-img').src = finalUrl;
-        result.classList.remove('hidden');
-        bar.style.width = '100%';
-        pct.textContent = '100%';
-        status.textContent = '¡SUBIDA EXITOSA!';
-        const thumb = document.createElement('div');
-        thumb.className = 'aspect-square border-2 border-primary overflow-hidden cursor-pointer hover:border-secondary-container';
-        thumb.title = 'Usar esta imagen';
-        thumb.innerHTML = '<img src="' + finalUrl + '" class="w-full h-full object-cover" onclick="applyHeroImg(\'' + finalUrl + '\')"/>';
-        if (recentGrid.children.length === 1 && !recentGrid.querySelector('img')) recentGrid.innerHTML = '';
-        recentGrid.prepend(thumb);
-        window.showToast?.('¡Imagen del hero subida a Cloudinary! ☁️✅');
-      },
-      (err) => { status.textContent = 'ERROR: ' + err; bar.style.background = '#ba1a1a'; window.showToast?.('Error al subir imagen del hero ❌'); }
-    ) || Promise.reject('uploadToCloudinary not available'));
-  } catch(e) { console.error(e); }
-}
-
-export function applyHeroImg(url) {
-  document.getElementById('hero-edit-img').value = url;
-  document.getElementById('hero-preview-img').src = url;
-  bannerState.hero.img = url;
-  document.getElementById('hero-img').src = url;
-  window.showToast?.('Imagen del hero aplicada ✅');
+function _updateHeroStatusBar(url, isVid) {
+  const bar = document.getElementById('hero-media-status');
+  const badge = document.getElementById('hero-media-type-badge');
+  const display = document.getElementById('hero-media-url-display');
+  if (!bar) return;
+  bar.classList.remove('hidden');
+  if (badge) {
+    badge.textContent = isVid ? 'VIDEO' : 'IMAGEN';
+    badge.className = 'text-[8px] font-bold px-2 py-1 rounded ' + (isVid ? 'bg-indigo-100 text-indigo-700' : 'bg-amber-100 text-amber-700');
+  }
+  if (display) display.textContent = url;
 }
 
 // =================== BANNER EDITOR ===================
@@ -332,16 +269,13 @@ export function initBannerEditor() {
   document.getElementById('hero-edit-badge').value = bannerState.hero.badge;
   document.getElementById('hero-edit-title').value = bannerState.hero.title;
   document.getElementById('hero-edit-subtitle').value = bannerState.hero.subtitle;
-  document.getElementById('hero-edit-img').value = bannerState.hero.img;
+  const mediaUrl = document.getElementById('hero-media-url');
+  if (mediaUrl) mediaUrl.value = bannerState.hero.videoUrl || bannerState.hero.img;
   previewHero();
   heroVideoUrl = bannerState.hero.videoUrl || '';
   heroAnimStyle = bannerState.hero.animStyle || 'default';
   heroVideoEffect = bannerState.hero.videoEffect || 'none';
-  if (heroVideoUrl) {
-    switchHeroTab('video');
-    document.getElementById('hero-video-url').value = heroVideoUrl;
-    showHeroVideoStatus(heroVideoUrl);
-  }
+  if (heroVideoUrl) previewHeroMedia();
   document.querySelectorAll('#anim-style-selector .hero-media-tab').forEach(b => {
     b.classList.toggle('active', b.dataset.anim === heroAnimStyle);
   });
@@ -431,7 +365,7 @@ export function previewHero() {
 }
 
 export function previewHeroImg() {
-  const url = document.getElementById('hero-edit-img')?.value.trim();
+  const url = document.getElementById('hero-media-url')?.value.trim();
   if (url) {
     const prevImg = document.getElementById('hero-preview-img');
     if (prevImg) { prevImg.src = url; prevImg.style.display = ''; }
@@ -488,9 +422,11 @@ export async function saveHeroBanner() {
   bannerState.hero.badge = document.getElementById('hero-edit-badge').value.trim();
   bannerState.hero.title = document.getElementById('hero-edit-title').value.trim() || 'XINCO';
   bannerState.hero.subtitle = document.getElementById('hero-edit-subtitle').value.trim();
-  const imgUrl = document.getElementById('hero-edit-img')?.value.trim();
-  if (imgUrl) bannerState.hero.img = imgUrl;
-  bannerState.hero.videoUrl = heroVideoUrl || '';
+  const url = document.getElementById('hero-media-url')?.value.trim();
+  if (url) {
+    if (_isVideoUrl(url)) { bannerState.hero.videoUrl = url; bannerState.hero.img = ''; }
+    else { bannerState.hero.img = url; bannerState.hero.videoUrl = ''; }
+  }
   bannerState.hero.animStyle = heroAnimStyle;
   bannerState.hero.videoEffect = heroVideoEffect;
   try {
@@ -516,12 +452,9 @@ export function init() {
   window.moveAnnouncement = moveAnnouncement;
   window.saveAnnouncementBar = saveAnnouncementBar;
   window.previewHero = previewHero;
-  window.previewHeroImg = previewHeroImg;
   window.previewPromo = previewPromo;
   window.savePromoBanner = savePromoBanner;
   window.saveHeroBanner = saveHeroBanner;
-  window.switchHeroTab = switchHeroTab;
-  window.selectHeroAnim = selectHeroAnim;
   window.selectVideoEffect = selectVideoEffect;
   window.selectAnimStyle = selectAnimStyle;
   window.applyHeroAnimStyle = applyHeroAnimStyle;
@@ -529,12 +462,8 @@ export function init() {
   window.startHeroParticles = startHeroParticles;
   window.stopHeroParticles = stopHeroParticles;
   window.applyHeroVideoToSection = applyHeroVideoToSection;
-  window.showHeroVideoStatus = showHeroVideoStatus;
-  window.previewHeroVideo = previewHeroVideo;
-  window.clearHeroVideo = clearHeroVideo;
-  window.handleHeroFileDrop = handleHeroFileDrop;
-  window.uploadHeroImage = uploadHeroImage;
-  window.uploadHeroVideo = uploadHeroVideo;
-  window.handleHeroVideoFileDrop = handleHeroVideoFileDrop;
-  window.applyHeroImg = applyHeroImg;
+  window.previewHeroMedia = previewHeroMedia;
+  window.uploadHeroMedia = uploadHeroMedia;
+  window.handleHeroMediaDrop = handleHeroMediaDrop;
+  window.clearHeroMedia = clearHeroMedia;
 }
