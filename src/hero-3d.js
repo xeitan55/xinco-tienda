@@ -29,21 +29,21 @@ export async function initHero3D() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.9;
+  renderer.toneMappingExposure = 0.8;
   container.appendChild(renderer.domElement);
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.15);
+  const ambient = new THREE.AmbientLight(0xffffff, 0.08);
   scene.add(ambient);
-  const key = new THREE.DirectionalLight(0xffffff, 0.6);
-  key.position.set(1.5, 3, 4);
+  const key = new THREE.DirectionalLight(0xffffff, 0.85);
+  key.position.set(2, 2.5, 3);
   scene.add(key);
-  const centerGlow = new THREE.PointLight(0xa78bfa, 2.0, 5, 1.5);
-  centerGlow.position.set(0, 0.2, 1.8);
-  scene.add(centerGlow);
-  const backGlow = new THREE.PointLight(0x8b5cf6, 0.8, 4, 2);
-  backGlow.position.set(0, 0, -2);
-  scene.add(backGlow);
-  const hemi = new THREE.HemisphereLight(0xc4b5fd, 0x1e1b4b, 0.3);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.2);
+  fill.position.set(-1.5, 0.5, 2);
+  scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xc4b5fd, 0.3);
+  rim.position.set(0, 0.5, -3);
+  scene.add(rim);
+  const hemi = new THREE.HemisphereLight(0xa78bfa, 0x1e1b4b, 0.15);
   scene.add(hemi);
 
   clock = new THREE.Clock();

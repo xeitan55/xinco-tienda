@@ -12,8 +12,8 @@ let bannerState = {
     videoUrl: '',
     animStyle: 'default',
     videoEffect: 'none',
-    modelPosX: 35,
-    modelPosY: 42
+    modelPosX: 22,
+    modelPosY: 32
   },
   promo: {
     enabled: false,
