@@ -1,4 +1,4 @@
-import { state, fbDb } from './firebase.js';
+import { state } from './firebase.js';
 import { AVAILABLE_COLORS } from './state.js';
 import { isAdmin } from './admin.js';
 

@@ -1,5 +1,4 @@
 import { bannerState } from './state.js';
-import { fbDb } from './firebase.js';
 
 function _norm(msgs) {
   return (msgs||[]).map(m => typeof m === 'string' ? { text: m, color: '#ffffff' } : (m && m.text ? m : { text: '', color: '#ffffff' }));
@@ -304,7 +303,7 @@ export function renderAnnouncementEditorList() {
       '<button onclick="moveAnnouncement(' + i + ',1)" ' + dnDisabled + ' class="p-1 border-2 border-primary hover:bg-primary hover:text-on-primary transition-colors">' +
       '<span class="material-symbols-outlined text-[14px]">keyboard_arrow_down</span></button></div>' +
       '<span class="w-7 h-7 bg-primary text-on-primary flex items-center justify-center font-label-caps text-[11px] shrink-0">' + (i + 1) + '</span>' +
-      '<input class="input-field flex-1 py-2 ann-input" value="' + msg + '" data-index="' + i + '" oninput="bannerState.announcements[' + i + ']=this.value;renderAnnouncementBar()"/>' +
+      '<input class="input-field flex-1 py-2 ann-input" value="' + (msg.text || msg) + '" data-index="' + i + '" oninput="bannerState.announcements[' + i + '].text=this.value;renderAnnouncementBar()"/>' +
       '<button onclick="removeAnnouncement(' + i + ')" class="p-2 border-2 border-error text-error hover:bg-error hover:text-on-error transition-colors shrink-0">' +
       '<span class="material-symbols-outlined text-[18px]">delete</span></button></div>'
     );
@@ -332,7 +331,7 @@ export function moveAnnouncement(i, dir) {
 export async function saveAnnouncementBar() {
   document.querySelectorAll('.ann-input').forEach(inp => {
     const idx = parseInt(inp.dataset.index);
-    bannerState.announcements[idx] = inp.value.trim() || bannerState.announcements[idx];
+    bannerState.announcements[idx].text = inp.value.trim() || bannerState.announcements[idx].text;
   });
   try {
     const { fbSaveBannersRemote } = await import('./firebase.js');

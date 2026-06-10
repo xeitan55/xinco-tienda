@@ -157,10 +157,10 @@ export async function placeOrder() {
   if (!ciudad){ window.showToast?.('Ingresá tu ciudad ❌'); checkoutStep(1); return; }
   const payMethod = document.querySelector('input[name="payment"]:checked')?.value;
   if (payMethod === 'card') {
-    const cardNum = document.getElementById('card-number')?.value.replace(/\s/g,'');
-    const cardExp = document.getElementById('card-expiry')?.value.trim();
-    const cardCvv = document.getElementById('card-cvv-input')?.value.trim();
-    const cardName = document.getElementById('card-holder')?.value.trim();
+    const cardNum = document.getElementById('card-number')?.value?.replace(/\s/g,'');
+    const cardExp = document.getElementById('card-expiry')?.value?.trim?.();
+    const cardCvv = document.getElementById('card-cvv-input')?.value?.trim?.();
+    const cardName = document.getElementById('card-holder')?.value?.trim?.();
     if (!cardNum || cardNum.length < 15) { window.showToast?.('Ingresá un número de tarjeta válido ❌'); checkoutStep(3); return; }
     if (!cardExp || !/^\d{2}\/\d{2}$/.test(cardExp)) { window.showToast?.('Ingresá la fecha de vencimiento (MM/AA) ❌'); checkoutStep(3); return; }
     if (!cardCvv || cardCvv.length < 3) { window.showToast?.('Ingresá el CVV ❌'); checkoutStep(3); return; }

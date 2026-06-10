@@ -80,10 +80,10 @@ tailwind.config = {
 <body>
 
 <!-- ===== BACKGROUND ANIMATION CANVAS ===== -->
-<canvas id="bg-canvas"></canvas>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
 
 <!-- ===== MOUSE STITCH CANVAS ===== -->
-<canvas id="mouse-stitch"></canvas>
+<canvas id="mouse-stitch" aria-hidden="true"></canvas>
 
 <!-- ===== SPLASH SCREEN ===== -->
 <div id="splash" class="splash">
@@ -176,7 +176,7 @@ tailwind.config = {
         id="search-input"
         class="w-full bg-transparent border-none pl-14 pr-5 py-4 outline-none"
         style="font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:0.05em;color:var(--on-surface);"
-        placeholder=""
+        placeholder="¿Qué buscás?"
         autocomplete="new-password"
         oninput="handleSearch(this.value)"
       />
@@ -215,7 +215,7 @@ tailwind.config = {
       <button class="md:hidden p-1" onclick="openMobileMenu()"><span class="material-symbols-outlined">menu</span></button>
       <div class="hidden md:flex relative w-full max-w-xs border-2 border-primary group focus-within:border-secondary rounded-full">
         <span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-primary group-focus-within:text-secondary text-[20px]">search</span>
-        <input class="w-full bg-transparent border-none pl-9 pr-3 py-2 font-label-caps text-label-caps focus:ring-0 placeholder:text-on-surface-variant outline-none" placeholder="" type="text" onfocus="openSearch()" id="header-search" autocomplete="off"/>
+        <input class="w-full bg-transparent border-none pl-9 pr-3 py-2 font-label-caps text-label-caps focus:ring-0 placeholder:text-on-surface-variant outline-none" placeholder="Buscar…" type="text" onfocus="openSearch()" id="header-search" autocomplete="off"/>
       </div>
     </div>
     <!-- Center: Logo -->
@@ -275,7 +275,7 @@ tailwind.config = {
     <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-60" autoplay muted loop playsinline style="display:none;"></video>
     <img id="hero-img" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80" alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-60"/>
     <div class="absolute inset-0 z-[2] hero-overlay"></div>
-    <canvas id="xinco-canvas" class="absolute inset-0 z-[11] pointer-events-none" style="width:100%;height:100%;"></canvas>
+    <canvas id="xinco-canvas" class="absolute inset-0 z-[11] pointer-events-none" style="width:100%;height:100%;" aria-hidden="true"></canvas>
 
     <div class="relative z-10 px-6 md:px-12 pb-16 md:pb-24 max-w-[1440px] w-full mx-auto" style="z-index:10;">
       <div class="max-w-2xl">
@@ -479,10 +479,10 @@ tailwind.config = {
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12 pb-12" style="border-bottom:1px solid rgba(255,255,255,0.1);">
         <div class="col-span-2 md:col-span-1">
           <h3 style="font-family:Montserrat;font-size:22px;font-weight:900;letter-spacing:0;" class="text-white mb-4">XINCO</h3>
-          <p class="text-white/40 text-sm leading-relaxed" style="font-family:Plus Jakarta Sans;" data-i18n="footer.rights">Mar del Plata, Buenos Aires, Argentina.</p>
+          <p class="text-white/60 text-sm leading-relaxed" style="font-family:Plus Jakarta Sans;" data-i18n="footer.rights">Mar del Plata, Buenos Aires, Argentina.</p>
         </div>
         <div>
-          <h4 class="text-xs tracking-[0.2em] uppercase text-white/40 mb-5" data-i18n="footer.shop">Tienda</h4>
+          <h4 class="text-xs tracking-[0.2em] uppercase text-white/55 mb-5" data-i18n="footer.shop">Tienda</h4>
           <ul class="space-y-3">
             <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="nav('catalog')" data-i18n="footer.catalog">Catálogo</a></li>
             <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="filterCatalog('newdrops')" data-i18n="footer.new">Novedades</a></li>
@@ -492,7 +492,7 @@ tailwind.config = {
           </ul>
         </div>
         <div>
-          <h4 class="text-xs tracking-[0.2em] uppercase text-white/40 mb-5" data-i18n="footer.help">Ayuda</h4>
+          <h4 class="text-xs tracking-[0.2em] uppercase text-white/55 mb-5" data-i18n="footer.help">Ayuda</h4>
           <ul class="space-y-3">
             <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="showSizeGuide()" data-i18n="footer.sizeguide">Guía de Talles</a></li>
             <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="window.showToast?.('Envíos a todo el país — consultá por WhatsApp')" data-i18n="footer.shipping">Envíos</a></li>
@@ -501,8 +501,8 @@ tailwind.config = {
           </ul>
         </div>
         <div>
-          <h4 class="text-xs tracking-[0.2em] uppercase text-white/40 mb-5" data-i18n="footer.newsletter">Newsletter</h4>
-          <p class="text-white/50 text-sm mb-4 leading-relaxed" style="font-family:Plus Jakarta Sans;" data-i18n="footer.newsletter.desc">Enterate primero de los drops y colecciones nuevas.</p>
+          <h4 class="text-xs tracking-[0.2em] uppercase text-white/55 mb-5" data-i18n="footer.newsletter">Newsletter</h4>
+          <p class="text-white/60 text-sm mb-4 leading-relaxed" style="font-family:Plus Jakarta Sans;" data-i18n="footer.newsletter.desc">Enterate primero de los drops y colecciones nuevas.</p>
           <div class="flex" style="border-bottom:1px solid rgba(255,255,255,0.2);">
             <input id="newsletter-email" class="bg-transparent flex-1 px-0 py-2 text-white text-sm outline-none placeholder:text-white/30" style="font-family:Plus Jakarta Sans;" placeholder="tu@email.com" autocomplete="off" data-i18n-placeholder="footer.newsletter.email"/>
             <button class="text-white/60 hover:text-white text-xs tracking-wider uppercase transition-colors font-bold px-2" onclick="subscribeNewsletter()" data-i18n="footer.newsletter.ok">OK</button>
@@ -510,7 +510,7 @@ tailwind.config = {
         </div>
       </div>
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-        <span class="text-xs tracking-wider text-white/30" data-i18n="footer.copyright">© 2025 XINCO — Mar del Plata, Buenos Aires, Argentina</span>
+        <span class="text-xs tracking-wider text-white/50" data-i18n="footer.copyright">© 2025 XINCO — Mar del Plata, Buenos Aires, Argentina</span>
         <div id="footer-social" class="flex gap-4"></div>
       </div>
     </div>
@@ -570,10 +570,10 @@ tailwind.config = {
           <div class="border-b-2 border-primary pb-6">
             <h3 class="font-label-caps text-label-caps text-primary mb-4" data-i18n="catalog.filter.color">COLOR</h3>
             <div class="flex flex-wrap gap-2" id="filter-colors">
-              <button class="w-8 h-8 border-2 border-primary bg-black filter-color" data-color="negro" title="Negro"></button>
-              <button class="w-8 h-8 border-2 border-primary bg-white filter-color" data-color="blanco" title="Blanco"></button>
-              <button class="w-8 h-8 border-2 border-primary bg-gray-400 filter-color" data-color="gris" title="Gris"></button>
-              <button class="w-8 h-8 border-2 border-primary filter-color" data-color="violeta" title="Violeta" style="background:#7c5cbf;"></button>
+              <button class="w-10 h-10 md:w-8 md:h-8 border-2 border-primary bg-black filter-color" data-color="negro" title="Negro"></button>
+              <button class="w-10 h-10 md:w-8 md:h-8 border-2 border-primary bg-white filter-color" data-color="blanco" title="Blanco"></button>
+              <button class="w-10 h-10 md:w-8 md:h-8 border-2 border-primary bg-gray-400 filter-color" data-color="gris" title="Gris"></button>
+              <button class="w-10 h-10 md:w-8 md:h-8 border-2 border-primary filter-color" data-color="violeta" title="Violeta" style="background:#7c5cbf;"></button>
             </div>
           </div>
           <div class="border-b-2 border-primary pb-6">
@@ -1440,7 +1440,13 @@ tailwind.config = {
 <!-- PAGE: ORDER CONFIRMATION              -->
 <!-- ===================================== -->
 <div id="page-order-confirm" class="page">
-  ...
+  <div class="min-h-[60vh] flex items-center justify-center">
+    <div class="text-center">
+      <span class="material-symbols-outlined text-6xl text-primary mb-4">check_circle</span>
+      <h2 class="text-primary uppercase" style="font-family:Syne;font-size:clamp(20px,3vw,32px);font-weight:800;letter-spacing:-0.02em;" data-i18n="orderconfirm.title">¡PEDIDO CONFIRMADO!</h2>
+      <p class="font-body-md text-on-surface-variant mt-2" data-i18n="orderconfirm.subtitle">Gracias por tu compra. Te enviamos los detalles a tu email.</p>
+    </div>
+  </div>
   </div>
 </div>
 
@@ -2625,3 +2631,4 @@ tailwind.config = {
 <!-- ===== JS ===== -->
 <script type="module" src="/src/main.js"></script>
 </body>
+</html>
