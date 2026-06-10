@@ -216,8 +216,8 @@ function _applyAura(inst, style, color) {
 
   const size = 2.4;
   const canvas = document.createElement('canvas');
-  canvas.width = 256;
-  canvas.height = 256;
+  canvas.width = 512;
+  canvas.height = 512;
   const ctx = canvas.getContext('2d');
 
   const hex = color || '#a78bfa';
@@ -225,13 +225,12 @@ function _applyAura(inst, style, color) {
   const g = parseInt(hex.slice(3,5), 16) || 139;
   const b = parseInt(hex.slice(5,7), 16) || 250;
 
-  const gradient = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+  const gradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 180);
   gradient.addColorStop(0, `rgba(${r},${g},${b},0.6)`);
-  gradient.addColorStop(0.3, `rgba(${r},${g},${b},0.25)`);
-  gradient.addColorStop(0.6, `rgba(${r},${g},${b},0.08)`);
-  gradient.addColorStop(1, `rgba(${r},${g},${b},0)`);
+  gradient.addColorStop(0.4, `rgba(${r},${g},${b},0.2)`);
+  gradient.addColorStop(0.7, `rgba(${r},${g},${b},0.04)`);
   ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, 256, 256);
+  ctx.fillRect(0, 0, 512, 512);
 
   const texture = new THREE.CanvasTexture(canvas);
   const material = new THREE.SpriteMaterial({
