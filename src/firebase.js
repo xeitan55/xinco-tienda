@@ -110,11 +110,21 @@ async function syncFromFirebase() {
   try {
     const prodSnap = await getDocs(collection(fbDb, 'products'));
     if (!prodSnap.empty) {
-      state.products = prodSnap.docs.map(d => normalizeProduct({ id: d.id, ...d.data() }));
+      state.products = prodSnap.docs.map(d => {
+        const p = normalizeProduct({ id: d.id, ...d.data() });
+        p.rating = 0;
+        p.reviews = 0;
+        return p;
+      });
     } else {
       await seedFirebaseProducts();
       const prodSnap2 = await getDocs(collection(fbDb, 'products'));
-      state.products = prodSnap2.docs.map(d => normalizeProduct({ id: d.id, ...d.data() }));
+      state.products = prodSnap2.docs.map(d => {
+        const p = normalizeProduct({ id: d.id, ...d.data() });
+        p.rating = 0;
+        p.reviews = 0;
+        return p;
+      });
     }
   } catch(e) {
     console.error('syncFromFirebase error:', e.message);

@@ -19,6 +19,15 @@ export function loadReviews(productId) {
       const reviews = [];
       snap.forEach(d => reviews.push({ id: d.id, ...d.data() }));
       renderReviews(reviews, list, countEl, empty);
+      const actualCount = reviews.length;
+      const avgRating = actualCount > 0 ? reviews.reduce((s, r) => s + (r.rating || 0), 0) / actualCount : 0;
+      const prod = state.products.find(p => String(p.id) === String(productId));
+      if (prod) { prod.reviews = actualCount; prod.rating = avgRating; }
+      const starsEl = document.getElementById('product-stars');
+      if (starsEl) starsEl.innerHTML = Array.from({length:5},(_,i) =>
+        `<span class="${i < Math.round(avgRating) ? 'star' : 'star empty'}">★</span>`).join('');
+      const reviewsEl = document.getElementById('product-reviews');
+      if (reviewsEl) reviewsEl.textContent = `(${actualCount} reseñas)`;
     })
     .catch(() => { list.innerHTML = ''; });
 }
@@ -97,11 +106,12 @@ export async function submitReview() {
     await addDoc(collection(fbDb, 'reviews', String(_reviewProductId), 'reviews'), review);
     try {
       const prodRef = doc(fbDb, 'products', String(_reviewProductId));
-      const prodSnap = await getDoc(prodRef);
-      if (prodSnap.exists()) {
-        const curr = prodSnap.data().reviews || 0;
-        await setDoc(prodRef, { reviews: curr + 1 }, { merge: true });
-      }
+      const revSnap = await getDocs(collection(fbDb, 'reviews', String(_reviewProductId), 'reviews'));
+      let totalRatings = 0;
+      let count = 0;
+      revSnap.forEach(d => { totalRatings += (d.data().rating || 0); count++; });
+      const newAvg = count > 0 ? Math.round((totalRatings / count) * 10) / 10 : 0;
+      await setDoc(prodRef, { reviews: count, rating: newAvg }, { merge: true });
     } catch(e) { console.warn('review: error updating product review count', e); }
     window.showToast?.('RESEÑA PUBLICADA ✅');
     closeReviewForm();

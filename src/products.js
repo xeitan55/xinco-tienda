@@ -1,11 +1,21 @@
 import { state, fbDb } from './firebase.js';
 import { AVAILABLE_COLORS } from './state.js';
+import { isAdmin } from './admin.js';
 
 export function extractImgUrl(entry) {
   if (!entry) return '';
   if (typeof entry === 'string') return entry;
   if (entry.url) return entry.url;
   return '';
+}
+
+function _getSeenReviews() {
+  try { return JSON.parse(localStorage.getItem('xinco_admin_review_seen') || '[]'); } catch(e) { return []; }
+}
+function _markSeen(productId) {
+  const seen = _getSeenReviews();
+  const sid = String(productId);
+  if (!seen.includes(sid)) { seen.push(sid); localStorage.setItem('xinco_admin_review_seen', JSON.stringify(seen)); }
 }
 
 export function renderProductCard(p, small=false) {
@@ -18,11 +28,15 @@ export function renderProductCard(p, small=false) {
     const border = cid==='blanco'||cid==='beige'||cid==='amarillo' ? 'border:1px solid #ccc;' : '';
     return `<div style="width:12px;height:12px;border-radius:50%;background:${hex};${border}" title="${c?c.label:cid}"></div>`;
   }).join('');
+  const isAdminUser = isAdmin();
+  const seenIds = _getSeenReviews();
+  const showReviewBadge = isAdminUser && p.reviews > 0 && !seenIds.includes(String(p.id));
   return `
     <div class="group relative flex flex-col bg-surface border border-outline-variant product-card card-hover" onclick="openProduct('${p.id}')">
       <div class="relative aspect-[4/5] overflow-hidden border-b border-outline-variant bg-surface-container">
         ${p.badge ? `<div class="absolute top-3 left-3 z-10"><span class="badge badge-violet text-[9px]">${p.badge}</span></div>` : ''}
         ${p.oldPrice && p.badge !== 'SALE' ? `<div class="absolute top-3 right-3 z-10"><span class="badge badge-black text-[9px]">SALE</span></div>` : ''}
+        ${showReviewBadge ? `<div class="absolute bottom-2 right-2 z-20 flex items-center justify-center rounded-full" style="width:26px;height:26px;background:var(--admin-accent,#5d22ff);color:#fff;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;box-shadow:0 2px 6px rgba(0,0,0,0.3);">${p.reviews}</div>` : ''}
         <img src="${img}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover product-thumb-img transition-all duration-700"/>
         <div class="absolute bottom-0 left-0 w-full bg-surface/90 backdrop-blur-sm border-t border-outline-variant size-overlay flex">
           ${(p.sizes||['S','M','L','XL']).slice(0,4).map(s=>`<button class="flex-1 py-2.5 font-label-caps text-on-surface hover:bg-accent-color hover:text-white text-[10px] font-bold border-r border-outline-variant/30 last:border-0 transition-colors duration-200" onclick="event.stopPropagation();quickAddToCart('${p.id}','${s}','${colors[0]||'negro'}')">${s}</button>`).join('')}
@@ -225,6 +239,13 @@ export async function openProduct(id) {
   setTimeout(() => { try { initProductZoom(); } catch(e) {} }, 50);
   setTimeout(() => { try { loadReviews(p.id); } catch(e) {} }, 100);
 
+  if (isAdmin() && p.reviews > 0) {
+    setTimeout(() => {
+      const revSection = document.getElementById('reviews-section');
+      if (revSection) revSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 400);
+  }
+
   // Update URL to product slug
   const { slugify } = await import('./router.js');
   const slug = slugify(p.name);
@@ -239,6 +260,12 @@ export function clearPreProductPage() {
 }
 
 export function closeProductOverlay() {
+  const p = state.currentProduct;
+  if (p && isAdmin() && p.reviews > 0) {
+    _markSeen(p.id);
+    if (state.currentPage === 'catalog') { try { renderCatalog(); } catch(e) {} }
+    else if (state.currentPage === 'accesorios') { try { renderAccessories(); } catch(e) {} }
+  }
   document.getElementById('product-overlay').classList.remove('open');
   document.body.style.overflow = '';
   const page = _preProductPage || 'home';
