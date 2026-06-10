@@ -1218,6 +1218,7 @@ export async function uploadToCloudinary(file, onProgress, onSuccess, onError, r
 
 // ===== BANNERS =====
 export function initBannerEditor() {
+  showSectionTab('config-banners-inner', 'anuncios');
   renderAnnouncementEditorList();
   renderAnnouncementPreview();
   document.getElementById('hero-edit-badge').value    = bannerState.hero.badge;
