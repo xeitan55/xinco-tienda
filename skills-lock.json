@@ -43,6 +43,12 @@
       "skillPath": "skills/frontend-design/SKILL.md",
       "computedHash": "93f53fd1c0352d3d7ec17b8f73d7351bf76f4821e55d123c9d2abc2c53ba48e4"
     },
+    "game-3d-assets": {
+      "source": "opusgamelabs/game-creator",
+      "sourceType": "github",
+      "skillPath": "skills/game-3d-assets/SKILL.md",
+      "computedHash": "150d4c40f89f4d0ba19fd3e2108e17c964a0cda27803f4c3ec595f49b25f97ec"
+    },
     "game-engine": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
