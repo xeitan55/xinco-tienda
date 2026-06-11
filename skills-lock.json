@@ -1,7 +1,7 @@
 {
   "version": 1,
   "skills": {
-    "calendar-automation": {
+"calendar-automation": {
       "source": "claude-office-skills/skills",
       "sourceType": "github",
       "skillPath": "calendar-automation/SKILL.md",
