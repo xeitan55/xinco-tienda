@@ -1,7 +1,7 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 function getAccentHex() {
-  return localStorage.getItem('xinco-accent') || document.documentElement.style.getPropertyValue('--accent-color') || '#3B82F6';
+  return localStorage.getItem('xinco-accent') || getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#3B82F6';
 }
 
 function darkenHex(hex, ratio = 0.7) {
@@ -25,24 +25,26 @@ const DOCK_PATHS = {
   'dock-config':    'M12 16a4 4 0 100-8 4 4 0 000 8zm0-8V4m0 12v4M8 12H4m12 0h4',
 };
 
+let _uid = 0;
 function dockGlassIcon(name, size = 22) {
   const path = DOCK_PATHS[name];
   if (!path) return document.createElementNS(SVG_NS, 'svg');
   const accent = getAccentHex();
   const dark = darkenHex(accent);
+  const uid = `i${++_uid}`;
   const s = document.createElementNS(SVG_NS, 'svg');
   s.setAttribute('viewBox', '0 0 24 24');
   s.setAttribute('width', String(size));
   s.setAttribute('height', String(size));
   const d = document.createElementNS(SVG_NS, 'defs');
   const bgG = document.createElementNS(SVG_NS, 'linearGradient');
-  bgG.setAttribute('id', 'g'); bgG.setAttribute('x1', '0'); bgG.setAttribute('y1', '0');
+  bgG.setAttribute('id', `${uid}g`); bgG.setAttribute('x1', '0'); bgG.setAttribute('y1', '0');
   bgG.setAttribute('x2', '24'); bgG.setAttribute('y2', '24'); bgG.setAttribute('gradientUnits', 'userSpaceOnUse');
   const s1 = document.createElementNS(SVG_NS, 'stop'); s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', accent);
   const s2 = document.createElementNS(SVG_NS, 'stop'); s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', dark);
   bgG.appendChild(s1); bgG.appendChild(s2);
   const hlG = document.createElementNS(SVG_NS, 'linearGradient');
-  hlG.setAttribute('id', 'h'); hlG.setAttribute('x1', '0'); hlG.setAttribute('y1', '0');
+  hlG.setAttribute('id', `${uid}h`); hlG.setAttribute('x1', '0'); hlG.setAttribute('y1', '0');
   hlG.setAttribute('x2', '0'); hlG.setAttribute('y2', '24'); hlG.setAttribute('gradientUnits', 'userSpaceOnUse');
   const s3 = document.createElementNS(SVG_NS, 'stop'); s3.setAttribute('offset', '0%'); s3.setAttribute('stop-color', '#fff'); s3.setAttribute('stop-opacity', '.32');
   const s4 = document.createElementNS(SVG_NS, 'stop'); s4.setAttribute('offset', '40%'); s4.setAttribute('stop-color', '#fff'); s4.setAttribute('stop-opacity', '.04');
@@ -51,10 +53,10 @@ function dockGlassIcon(name, size = 22) {
   d.appendChild(bgG); d.appendChild(hlG); s.appendChild(d);
   const r = document.createElementNS(SVG_NS, 'rect');
   r.setAttribute('x', '1'); r.setAttribute('y', '1'); r.setAttribute('width', '22'); r.setAttribute('height', '22');
-  r.setAttribute('rx', '7'); r.setAttribute('fill', 'url(#g)'); s.appendChild(r);
+  r.setAttribute('rx', '7'); r.setAttribute('fill', `url(#${uid}g)`); s.appendChild(r);
   const hr = document.createElementNS(SVG_NS, 'rect');
   hr.setAttribute('x', '1'); hr.setAttribute('y', '1'); hr.setAttribute('width', '22'); hr.setAttribute('height', '10');
-  hr.setAttribute('rx', '7'); hr.setAttribute('fill', 'url(#h)'); s.appendChild(hr);
+  hr.setAttribute('rx', '7'); hr.setAttribute('fill', `url(#${uid}h)`); s.appendChild(hr);
   const br = document.createElementNS(SVG_NS, 'rect');
   br.setAttribute('x', '1.5'); br.setAttribute('y', '1.5'); br.setAttribute('width', '21'); br.setAttribute('height', '21');
   br.setAttribute('rx', '6.5'); br.setAttribute('fill', 'none');
