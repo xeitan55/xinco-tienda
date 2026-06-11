@@ -36,6 +36,12 @@
       "sourceType": "github",
       "skillPath": "skills/web-design-guidelines/SKILL.md",
       "computedHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
+    },
+    "whatsapp-automation": {
+      "source": "claude-office-skills/skills",
+      "sourceType": "github",
+      "skillPath": "whatsapp-automation/SKILL.md",
+      "computedHash": "f9714da5a8e842b57a7728cdd01731577ca7eb785e5be0f6be1056770f915cfd"
     }
   }
 }
