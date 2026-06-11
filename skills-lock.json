@@ -55,6 +55,12 @@
       "skillPath": "skills/game-engine/SKILL.md",
       "computedHash": "20057f62cf7a8b2d9f940b3de0b18e5426e8f4bb50e236d36b1033aa0d42c4d8"
     },
+    "memory-recall": {
+      "source": "zilliztech/memsearch",
+      "sourceType": "github",
+      "skillPath": "plugins/claude-code/skills/memory-recall/SKILL.md",
+      "computedHash": "484ef15fa82e994c550291322af170e3fd55c7c5d96f69b6a0accbf25ffd4a4c"
+    },
     "postgres": {
       "source": "planetscale/database-skills",
       "sourceType": "github",
