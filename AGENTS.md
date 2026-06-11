@@ -15,7 +15,7 @@ Rediseño completo de iconos del dock del panel de administración:
 | CUPONES | tag (etiqueta) |
 | REPORTES | trending-up (tendencia ascendente) |
 | VOLVER A TIENDA | door-arrow-left (puerta con flecha) |
-| CONFIG | cog (engranaje) |
+| CONFIG | cog (engranaje, path simplificado: círculo + 4 dientes) |
 
 - SVG paths definidos en `src/icons.js` → objeto `ICONS` (prefijo `dock-`)
 - Mapping `data-lucide` → icono interno en `src/icons.js` → `LUCIDE_MAP`
