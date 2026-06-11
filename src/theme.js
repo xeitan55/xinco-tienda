@@ -33,6 +33,7 @@ export function setAccentColor(hex) {
     admin.style.setProperty('--admin-accent-light', `rgba(${r + 40}, ${g + 40}, ${b + 40}, 0.7)`);
     admin.style.setProperty('--admin-accent-dim', `rgba(${r}, ${g}, ${b}, 0.12)`);
   }
+  if (window.refreshDockIcons) window.refreshDockIcons();
 }
 
 export function setTheme(name) {

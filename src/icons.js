@@ -232,6 +232,7 @@ export function replaceIcons() {
     wrapper.style.cssText = el.style.cssText;
     if (isDock) {
       const svgEl = dockGlassIcon(mapped, size);
+      wrapper.setAttribute('data-dock', mapped);
       wrapper.appendChild(svgEl);
       wrapper.style.setProperty('--item-accent', getAccentHex());
     } else {
@@ -245,10 +246,22 @@ export function replaceIcons() {
   });
 }
 
+export function refreshDockIcons() {
+  const accent = getAccentHex();
+  document.querySelectorAll('[data-dock]').forEach(w => {
+    const name = w.getAttribute('data-dock');
+    const oldSvg = w.querySelector('svg');
+    if (oldSvg) oldSvg.remove();
+    w.appendChild(dockGlassIcon(name, parseInt(w.style.width) || 22));
+    w.style.setProperty('--item-accent', accent);
+  });
+}
+
 export function init() {
   window.xincoIcon = icon;
   window.xincoIconEl = iconEl;
   window.replaceIcons = replaceIcons;
+  window.refreshDockIcons = refreshDockIcons;
 
   const run = () => {
     replaceIcons();
