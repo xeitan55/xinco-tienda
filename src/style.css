@@ -34,7 +34,7 @@
     --background: #fafaf9;
     --on-background: #0c0a09;
     --surface-variant: #e7e5e4;
-    --hero-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+    --hero-gradient: linear-gradient(135deg, #05060f 0%, #111125 35%, #1a1035 65%, #0d0a1a 100%);
     --border-primary: #0c0a09;
     --badge-bg: #0c0a09;
     --badge-text: #ffffff;
@@ -1071,8 +1071,8 @@ html.dark .admin-solid .admin-card { background: var(--surface-container-lowest)
 
   .hero-overlay {
     background:
-      radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.5) 100%),
-      linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.05) 100%);
+      radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%),
+      linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.15) 100%);
   }
 
   .hero-badge {
