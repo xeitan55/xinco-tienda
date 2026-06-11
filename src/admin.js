@@ -1230,7 +1230,7 @@ export function initBannerEditor() {
   heroVideoUrl    = bannerState.hero.videoUrl    || '';
   heroAnimStyle   = bannerState.hero.animStyle   || 'default';
   heroVideoEffect = bannerState.hero.videoEffect || 'none';
-  if (heroVideoUrl) previewHeroMedia();
+  previewHeroMedia();
   document.querySelectorAll('#anim-style-selector .hero-media-tab').forEach(b => {
     b.classList.toggle('active', b.dataset.anim === heroAnimStyle);
   });
