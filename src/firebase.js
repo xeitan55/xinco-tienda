@@ -1,12 +1,12 @@
-import { state, bannerState, DB_KEYS, PRODUCTS } from './state.js';
+import { state, bannerState, DB_KEYS, PRODUCTS, subscribe } from './state.js';
 
 const FB_CONFIG = {
-  apiKey: "AIzaSyCHmbuWJM-vYeFm4WUXMTp716Kci26sr2w",
-  authDomain: "xinco-tienda.firebaseapp.com",
-  projectId: "xinco-tienda",
-  storageBucket: "xinco-tienda.firebasestorage.app",
-  messagingSenderId: "111454837862",
-  appId: "1:111454837862:web:e64bb28970e0f7442c21a7"
+  apiKey: import.meta.env.VITE_FB_API_KEY,
+  authDomain: import.meta.env.VITE_FB_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FB_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FB_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FB_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FB_APP_ID,
 };
 
 let fbApp, fbDb, fbAuth;
@@ -355,6 +355,8 @@ export function init() {
   window.fmtPrice = (n) => '$' + n.toLocaleString('es-AR');
   window.waitForFirebase = waitForFirebase;
   window._bootResolved = _bootResolved;
+
+  subscribe('cart', () => { persistAll(); updateCartCount(); });
 }
 
 export {

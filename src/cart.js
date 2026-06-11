@@ -1,4 +1,4 @@
-import { state } from './state.js';
+import { state, subscribe } from './state.js';
 
 export function openCart() {
   document.getElementById('cart-drawer').classList.add('open');
@@ -26,20 +26,14 @@ export function addToCart(productId, size, color) {
   const existing = state.cart.find(i => i.key === key);
   const currentQty = existing ? existing.qty : 0;
   if (currentQty >= product.stock) { window.showToast?.('No hay más stock disponible ❌'); return; }
-  if (existing) { existing.qty++; }
+  if (existing) { existing.qty++; state.cart = [...state.cart]; }
   else { state.cart.push({key, productId, name: product.name, price: product.price, size, color, qty: 1, img: product.img}); }
-  window.updateCartCount?.();
-  window.persistAll?.();
   window.showToast?.('¡' + product.name + ' agregado! 🔥');
 }
 
 export function removeFromCart(key) {
   state.cart = state.cart.filter(i => i.key !== key);
   if (state.cart.every(i => i.isCoupon)) { state.cart = []; }
-  window.updateCartCount?.();
-  window.persistAll?.();
-  renderCartDrawer();
-  if (state.currentPage === 'cart') renderCartPage();
 }
 
 export function updateQty(key, delta) {
@@ -47,7 +41,7 @@ export function updateQty(key, delta) {
   if (!item) return;
   item.qty += delta;
   if (item.qty <= 0) removeFromCart(key);
-  else { window.updateCartCount?.(); window.persistAll?.(); renderCartDrawer(); if(state.currentPage==='cart') renderCartPage(); }
+  else state.cart = [...state.cart];
 }
 
 export function renderCartDrawer() {
@@ -160,4 +154,9 @@ export function init() {
   window.updateQty = updateQty;
   window.renderCartDrawer = renderCartDrawer;
   window.renderCartPage = renderCartPage;
+
+  subscribe('cart', () => {
+    if (document.getElementById('cart-drawer')?.classList.contains('open')) renderCartDrawer();
+    if (state.currentPage === 'cart') renderCartPage();
+  });
 }
