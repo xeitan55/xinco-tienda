@@ -1,18 +1,15 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-const DOCK_COLORS = {
-  'dock-dashboard': ['#BF5AF2','#BF5AF2'],
-  'dock-orders':    ['#0A84FF','#0A84FF'],
-  'dock-customers': ['#0A0A0A','#0A0A0A'],
-  'dock-tracking':  ['#5E5CE6','#5E5CE6'],
-  'dock-inventory': ['#E879F9','#E879F9'],
-  'dock-products':  ['#FF7EB6','#FF7EB6'],
-  'dock-cobranzas': ['#2C2C2E','#2C2C2E'],
-  'dock-cupones':   ['#151515','#151515'],
-  'dock-reportes':  ['#64D2FF','#64D2FF'],
-  'dock-exit':      ['#BF5AF2','#BF5AF2'],
-  'dock-config':    ['#0A84FF','#0A84FF'],
-};
+function getAccentHex() {
+  return localStorage.getItem('xinco-accent') || document.documentElement.style.getPropertyValue('--accent-color') || '#3B82F6';
+}
+
+function darkenHex(hex, ratio = 0.7) {
+  const r = Math.round(parseInt(hex.slice(1,3), 16) * ratio);
+  const g = Math.round(parseInt(hex.slice(3,5), 16) * ratio);
+  const b = Math.round(parseInt(hex.slice(5,7), 16) * ratio);
+  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+}
 
 const DOCK_PATHS = {
   'dock-dashboard': 'M12 4a8 8 0 100 16 8 8 0 000-16zm1 4l-3 5-3-5',
@@ -29,9 +26,10 @@ const DOCK_PATHS = {
 };
 
 function dockGlassIcon(name, size = 22) {
-  const colors = DOCK_COLORS[name];
   const path = DOCK_PATHS[name];
-  if (!colors || !path) return document.createElementNS(SVG_NS, 'svg');
+  if (!path) return document.createElementNS(SVG_NS, 'svg');
+  const accent = getAccentHex();
+  const dark = darkenHex(accent);
   const s = document.createElementNS(SVG_NS, 'svg');
   s.setAttribute('viewBox', '0 0 24 24');
   s.setAttribute('width', String(size));
@@ -40,8 +38,8 @@ function dockGlassIcon(name, size = 22) {
   const bgG = document.createElementNS(SVG_NS, 'linearGradient');
   bgG.setAttribute('id', 'g'); bgG.setAttribute('x1', '0'); bgG.setAttribute('y1', '0');
   bgG.setAttribute('x2', '24'); bgG.setAttribute('y2', '24'); bgG.setAttribute('gradientUnits', 'userSpaceOnUse');
-  const s1 = document.createElementNS(SVG_NS, 'stop'); s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', colors[0]);
-  const s2 = document.createElementNS(SVG_NS, 'stop'); s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', colors[1]);
+  const s1 = document.createElementNS(SVG_NS, 'stop'); s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', accent);
+  const s2 = document.createElementNS(SVG_NS, 'stop'); s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', dark);
   bgG.appendChild(s1); bgG.appendChild(s2);
   const hlG = document.createElementNS(SVG_NS, 'linearGradient');
   hlG.setAttribute('id', 'h'); hlG.setAttribute('x1', '0'); hlG.setAttribute('y1', '0');
@@ -63,7 +61,7 @@ function dockGlassIcon(name, size = 22) {
   br.setAttribute('stroke', 'rgba(255,255,255,.16)'); br.setAttribute('stroke-width', '.5'); s.appendChild(br);
   const g = document.createElementNS(SVG_NS, 'g');
   g.setAttribute('fill', 'none'); g.setAttribute('stroke', '#fff');
-  g.setAttribute('stroke-width', '1.6'); g.setAttribute('stroke-linecap', 'round'); g.setAttribute('stroke-linejoin', 'round');
+  g.setAttribute('stroke-width', '2.2'); g.setAttribute('stroke-linecap', 'round'); g.setAttribute('stroke-linejoin', 'round');
   path.split(/(?=M)/g).forEach(p => { const t = p.trim(); if (t) { const pe = document.createElementNS(SVG_NS, 'path'); pe.setAttribute('d', t); g.appendChild(pe); } });
   s.appendChild(g);
   return s;
@@ -233,7 +231,7 @@ export function replaceIcons() {
     if (isDock) {
       const svgEl = dockGlassIcon(mapped, size);
       wrapper.appendChild(svgEl);
-      wrapper.style.setProperty('--item-accent', DOCK_COLORS[mapped][0]);
+      wrapper.style.setProperty('--item-accent', getAccentHex());
     } else {
       wrapper.innerHTML = icon(mapped, size);
     }
