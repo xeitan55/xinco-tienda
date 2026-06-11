@@ -382,7 +382,7 @@ export async function saveProfile() {
 export async function uploadAvatar(file) {
   if (!file) return;
   window.showToast?.('Subiendo foto de perfil...');
-  const CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME, PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+  const CLOUD = 'damwe7juy', PRESET = 'XINCO TIENDA';
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', PRESET);

@@ -1,5 +1,3 @@
-import { subscribe, notify, createReactiveArray } from './store.js';
-
 let bannerState = {
   announcements: [
     { text: 'ENVÍO GRATIS SUPERANDO LOS $95.000', color: '#ffffff' },
@@ -58,6 +56,24 @@ let CUSTOMERS = [
   {id:5, name:'Juan García', email:'juan@mail.com', orders:1, total:60000, date:'Oct 2025'},
 ];
 
+let state = {
+  currentPage: 'home',
+  cart: [],
+  user: null,
+  currentProduct: null,
+  selectedSize: null,
+  selectedColor: null,
+  filterCat: [],
+  filterSizes: [],
+  filterColors: [],
+  filterPrice: 200000,
+  sortOrder: 'default',
+  products: [],
+  orders: [],
+  coupons: [],
+  adminSection: 'dashboard'
+};
+
 const AVAILABLE_COLORS = [
   { id:'blanco',   hex:'#ffffff', label:'BLANCO' },
   { id:'negro',    hex:'#000000', label:'NEGRO' },
@@ -74,13 +90,13 @@ const AVAILABLE_COLORS = [
 ];
 
 const EMAILJS = {
-  serviceId:  import.meta.env.VITE_EMAILJS_SERVICE_ID,
-  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+  serviceId:  'service_x844xxw',
+  templateId: 'XINCO-VERICATION',
 };
 
 const CLOUDINARY = {
-  cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
-  uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
+  cloudName: 'damwe7juy',
+  uploadPreset: 'XINCO TIENDA',
   uploadUrl: function() { return `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`; },
   uploadVideoUrl: function() { return `https://api.cloudinary.com/v1_1/${this.cloudName}/video/upload`; }
 };
@@ -88,59 +104,6 @@ const CLOUDINARY = {
 const DB_KEYS = {
   cart: 'xinco_cart',
 };
-
-const _raw = {
-  currentPage: 'home',
-  cart: [],
-  user: null,
-  currentProduct: null,
-  selectedSize: null,
-  selectedColor: null,
-  filterCat: [],
-  filterSizes: [],
-  filterColors: [],
-  filterPrice: 200000,
-  sortOrder: 'default',
-  products: [],
-  orders: [],
-  coupons: [],
-  mpConfig: null,
-  adminSection: 'dashboard',
-  _tagFilter: null,
-  _catFilterNav: false,
-};
-
-const ARRAY_KEYS = new Set(['cart', 'filterCat', 'filterSizes', 'filterColors', 'products', 'orders', 'coupons']);
-
-for (const k of ARRAY_KEYS) {
-  _raw[k] = createReactiveArray(k, _raw[k]);
-}
-
-const state = new Proxy(_raw, {
-  set(target, key, value) {
-    const prev = target[key];
-    if (prev === value) return true;
-    if (ARRAY_KEYS.has(key)) {
-      target[key] = createReactiveArray(key, Array.isArray(value) ? value : []);
-    } else {
-      target[key] = value;
-    }
-    notify(key, target[key], prev);
-    return true;
-  },
-  get(target, key) {
-    return target[key];
-  },
-  has(target, key) {
-    return key in target;
-  },
-  ownKeys(target) {
-    return Reflect.ownKeys(target);
-  },
-  getOwnPropertyDescriptor(target, key) {
-    return Reflect.getOwnPropertyDescriptor(target, key);
-  }
-});
 
 export function init() {
   window.bannerState = bannerState;
@@ -155,4 +118,4 @@ export function init() {
   window.coupons = state.coupons;
 }
 
-export { bannerState, state, PRODUCTS, ORDERS, CUSTOMERS, AVAILABLE_COLORS, EMAILJS, CLOUDINARY, DB_KEYS, subscribe, notify };
+export { bannerState, state, PRODUCTS, ORDERS, CUSTOMERS, AVAILABLE_COLORS, EMAILJS, CLOUDINARY, DB_KEYS };

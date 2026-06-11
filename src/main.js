@@ -1,6 +1,5 @@
 import './style.css';
 
-import emailjs from '@emailjs/browser';
 import { init as initState } from './state.js';
 import { init as initFirebase } from './firebase.js';
 import { init as initTheme } from './theme.js';
@@ -18,8 +17,6 @@ import { init as initSendTicket } from './send-ticket.js';
 import { init as initLang } from './lang.js';
 import { init as initIcons } from './icons.js';
 
-emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
-
 initState();
 initLang();
 initFirebase();
@@ -36,7 +33,5 @@ initBanners();
 initCheckout();
 initSendTicket();
 initIcons();
-
-window.emailjs = emailjs;
 
 window.bootFromFirebase();

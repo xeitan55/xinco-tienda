@@ -1,24 +1,17 @@
-import emailjs from '@emailjs/browser';
 import { state } from './firebase.js';
 
 const EJ_KEY = 'xinco_emailjs';
 
-const EJ_DEFAULTS = {
-  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
-  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-};
-
 function loadEmailJsConfig() {
   try {
-    const stored = JSON.parse(localStorage.getItem(EJ_KEY)) || {};
-    return { ...EJ_DEFAULTS, ...stored };
-  } catch(e) { return EJ_DEFAULTS; }
+    return JSON.parse(localStorage.getItem(EJ_KEY)) || {};
+  } catch(e) { return {}; }
 }
 
 export function saveEmailJsConfig(serviceId, templateId, publicKey) {
   const cfg = { serviceId, templateId, publicKey };
   localStorage.setItem(EJ_KEY, JSON.stringify(cfg));
+  // Also save to Firestore
   (async () => {
     const ready = await window.waitForFirebase();
     if (!ready || !window._fb || !window.fbDb) return;
@@ -57,6 +50,7 @@ export async function sendTicket() {
     return;
   }
 
+  // Build items list for the template
   const itemsList = (order.items || []).map(i =>
     `${i.name} x${i.qty} — $${(i.price * i.qty).toLocaleString('es-AR')}`
   ).join('\n');
@@ -65,6 +59,17 @@ export async function sendTicket() {
   const payLabel = order.payMethod === 'card' ? 'TARJETA' : 'MERCADO PAGO';
 
   try {
+    // Load EmailJS SDK dynamically
+    if (typeof emailjs === 'undefined') {
+      await new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+
     await emailjs.send(cfg.serviceId, cfg.templateId, {
       to_email: order.email,
       to_name: order.customer,
