@@ -204,11 +204,11 @@ tailwind.config = {
 </div>
 
 <!-- ===== HEADER ===== -->
-<div id="announcement-bar" class="bg-primary text-on-primary py-2 overflow-hidden border-b-2 border-primary relative">
+<div id="announcement-bar" class="bg-primary text-on-primary py-2 overflow-hidden border-b border-primary/10 relative">
   <div id="announcement-scroller" class="scrolling-text-inner"></div>
 </div>
 
-<header id="main-header" class="bg-background top-0 sticky border-b-2 border-primary z-50">
+<header id="main-header" class="bg-background top-0 sticky border-b border-outline-variant z-50">
   <div class="flex justify-between items-center w-full px-4 md:px-8 py-3 max-w-[1440px] mx-auto">
     <!-- Left: Search + Mobile menu -->
     <div class="flex items-center gap-4 flex-1 justify-start">
@@ -308,10 +308,6 @@ tailwind.config = {
   <!-- COLECCIONES -->
   <section id="home-categories-section" class="px-6 md:px-12 py-20 md:py-28 reveal" style="background:var(--surface);">
     <div class="max-w-[1440px] mx-auto">
-      <div class="mb-12 md:mb-16">
-        <span class="text-xs tracking-[0.25em] uppercase text-on-surface-variant/60 block mb-3">Colecciones</span>
-        <h2 class="text-primary uppercase" style="font-family:DM Sans;font-size:clamp(20px,3vw,32px);font-weight:700;letter-spacing:-0.02em;line-height:1.1;">Descubrí tu estilo</h2>
-      </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         <div class="collection-card relative col-span-2 row-span-2 aspect-[3/4] md:aspect-auto md:h-[520px] overflow-hidden cursor-pointer rounded-2xl" onclick="filterCatalog('remeras')">
           <img id="cat-img-remeras-display" src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=900&q=80" alt="Remeras" class="absolute inset-0 w-full h-full object-cover" loading="lazy"/>
