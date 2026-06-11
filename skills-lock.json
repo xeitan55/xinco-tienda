@@ -19,6 +19,12 @@
       "skillPath": "plugins/claude-md-management/skills/claude-md-improver/SKILL.md",
       "computedHash": "7b765125563b4e1490c925f72da35dcd004151e1469b9b680b3af7fa5f0b94e6"
     },
+    "css-animations": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/css-animations/SKILL.md",
+      "computedHash": "df468749b06a8ec7369cfea69bf71bf65e46cfc376e837e439e26f4230852c6b"
+    },
     "deploy": {
       "source": "vercel/vercel-deploy-claude-code-plugin",
       "sourceType": "github",
