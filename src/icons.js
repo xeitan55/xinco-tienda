@@ -224,7 +224,7 @@ export function replaceIcons() {
   document.querySelectorAll('[data-lucide]:not(.xinco-icon-replaced)').forEach(el => {
     const name = el.getAttribute('data-lucide');
     const mapped = LUCIDE_MAP[name];
-    if (!mapped || !ICONS[mapped]) return;
+    if (!mapped || (!ICONS[mapped] && !DOCK_PATHS[mapped])) return;
     const size = parseInt(el.getAttribute('width')) || parseInt(el.style.width) || 22;
     const isDock = !!DOCK_PATHS[mapped];
     const wrapper = document.createElement('span');
