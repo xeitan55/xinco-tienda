@@ -2220,92 +2220,16 @@ table{border-collapse:collapse}.page-break{page-break-before:always}</style></he
   setTimeout(() => { try { printWin.focus(); } catch(e) {} }, 500);
 }
 
-export const BG_COLORS = {
-  violet: { label:'Violeta', hue:[240,290], css:'#9b87f5', cssLight:'#c4b5fd' },
-  blue: { label:'Azul', hue:[200,240], css:'#5b9cf5', cssLight:'#8bbaff' },
-  pink: { label:'Rosa', hue:[300,340], css:'#e87be8', cssLight:'#f5b0f5' },
-  green: { label:'Verde', hue:[120,160], css:'#5cc97a', cssLight:'#8edfa3' },
-  gold: { label:'Dorado', hue:[40,60], css:'#e8c84a', cssLight:'#f0db6e' },
-  red: { label:'Rojo', hue:[0,30], css:'#f56060', cssLight:'#f59090' }
-};
-let _currentBgColor = localStorage.getItem('adminBgColor') || 'violet';
-
-
-function applyBgColor(scheme) {
-  _currentBgColor = scheme;
-  localStorage.setItem('adminBgColor', scheme);
-  const c = BG_COLORS[scheme];
-  let css, cssLight;
-  if (c) {
-    css = c.css; cssLight = c.cssLight;
-  } else {
-    const customMatch = scheme?.match(/^custom_#([a-f\d]{6})$/i);
-    if (customMatch) { css = '#' + customMatch[1]; cssLight = css + '99'; }
-    else return;
-  }
-  if (css === '#000000') { css = '#9b87f5'; cssLight = '#c4b5fd'; }
-  const r = document.querySelector('#page-admin');
-  if (!r) return;
-  r.style.setProperty('--admin-accent', css);
-  r.style.setProperty('--admin-accent-light', cssLight);
-  r.style.setProperty('--admin-accent-dim', css + '18');
-  document.querySelectorAll('.color-swatch').forEach(el => el.classList.toggle('active', el.dataset.color === scheme));
-  const avatar = document.querySelector('.admin-avatar');
-  if (avatar) avatar.style.background = css;
-  const iconEl = document.querySelector('.section-icon');
-  if (iconEl) iconEl.style.color = css;
-}
-
-export function setAdminColor(scheme) {
-  if (!BG_COLORS[scheme]) return;
-  applyBgColor(scheme);
-  const picker = document.getElementById('ap-vector-color');
-  if (picker) picker.value = BG_COLORS[scheme].css;
-}
-
-export function getBgColor() {
-  if (BG_COLORS[_currentBgColor]) return BG_COLORS[_currentBgColor];
-  const customMatch = _currentBgColor?.match(/^custom_#([a-f\d]{6})$/i);
-  if (customMatch) {
-    const hex = customMatch[1];
-    const r = parseInt(hex.slice(0,2), 16);
-    const g = parseInt(hex.slice(2,4), 16);
-    const b = parseInt(hex.slice(4,6), 16);
-    const hsl = rgbToHsl(r, g, b);
-    return { label:'Personalizado', hue:[hsl.h - 20, hsl.h + 20], css:'#' + hex, cssLight: '#' + hex + '99' };
-  }
-  return BG_COLORS.violet;
-}
-
-function rgbToHsl(r, g, b) {
-  r /= 255; g /= 255; b /= 255;
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h, s, l = (max + min) / 2;
-  if (max === min) { h = s = 0; }
-  else {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) * 60; break;
-      case g: h = ((b - r) / d + 2) * 60; break;
-      case b: h = ((r - g) / d + 4) * 60; break;
-    }
-  }
-  return { h: Math.round(h || 0), s: Math.round(s * 100), l: Math.round(l * 100) };
-}
-
-export function setAdminCustomColor(hex) {
-  const match = hex.match(/^#?([a-f\d]{6})$/i);
-  if (!match || hex === '#000000') return;
-  localStorage.setItem('adminBgColor', 'custom_' + hex);
-  const r = document.querySelector('#page-admin');
-  if (r) {
-    r.style.setProperty('--admin-accent', hex);
-    r.style.setProperty('--admin-accent-light', hex + '99');
-    r.style.setProperty('--admin-accent-dim', hex + '18');
-  }
-  document.querySelectorAll('.color-swatch').forEach(el => el.classList.remove('active'));
-  document.getElementById('ap-vector-color').value = hex;
+function applyAccentToAdmin() {
+  const hex = localStorage.getItem('xinco-accent') || '#3B82F6';
+  const r = parseInt(hex.slice(1,3), 16) || 59;
+  const g = parseInt(hex.slice(3,5), 16) || 130;
+  const b = parseInt(hex.slice(5,7), 16) || 246;
+  const admin = document.querySelector('#page-admin');
+  if (!admin) return;
+  admin.style.setProperty('--admin-accent', hex);
+  admin.style.setProperty('--admin-accent-light', `rgba(${r + 40}, ${g + 40}, ${b + 40}, 0.7)`);
+  admin.style.setProperty('--admin-accent-dim', `rgba(${r}, ${g}, ${b}, 0.12)`);
 }
 
 // ===== ADMIN VIDEO BACKGROUND =====
@@ -2468,8 +2392,14 @@ export function initPageBg() {
   resize();
   window.addEventListener('resize', resize);
 
-  const scheme = getBgColor();
-  const hue = (scheme.hue[0] + scheme.hue[1]) / 2;
+  const root = getComputedStyle(document.documentElement);
+  const [rr, gg, bb] = (root.getPropertyValue('--accent-color-rgb') || '59,130,246').split(',').map(Number);
+  const mx = Math.max(rr,gg,bb), mn = Math.min(rr,gg,bb);
+  let hue = 260;
+  if (mx !== mn) {
+    const d = mx - mn;
+    hue = mx === rr ? ((gg - bb) / d + (gg < bb ? 6 : 0)) * 60 : mx === gg ? ((bb - rr) / d + 2) * 60 : ((rr - gg) / d + 4) * 60;
+  }
 
   function createParticle() {
     const size = 2 + Math.random() * 4;
@@ -2807,7 +2737,7 @@ export function initAdminThemeSelector() {
 }
 
 export function init() {
-  applyBgColor(_currentBgColor);
+  applyAccentToAdmin();
   const dock = document.getElementById('admin-dock');
   if (dock && !dock._dockZoom) {
     dock._dockZoom = true;
@@ -3115,7 +3045,6 @@ export function init() {
   window.previewReport = previewReport;
   window.printReport = printReport;
   window.initCatEditor = initCatEditor;
-  window.setAdminColor = setAdminColor;
   window.setAdminBgVideo = setAdminBgVideo;
   window.uploadAdminBgVideo = uploadAdminBgVideo;
   window.selectAdminBg = selectAdminBg;
@@ -3129,8 +3058,6 @@ export function init() {
   window.saveSocialConfig = saveSocialConfig;
   window.subscribeNewsletter = subscribeNewsletter;
   window.loadSocialConfigFromFirebase = loadSocialConfigFromFirebase;
-  window._adminBgColor = _currentBgColor;
-
   const _origSetAccent = window.setAccentColor;
   window.setAccentColor = function(hex) {
     _origSetAccent?.(hex);

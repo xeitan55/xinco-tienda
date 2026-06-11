@@ -22,6 +22,13 @@ Rediseño completo de los 11 iconos del dock con estética **liquid glass premiu
 - `--item-accent` se setea en el wrapper para estados hover/active/drag.
 - `.dock-item` CSS cambió a vidrio esmerilado con `::after` highlight y borde translúcido.
 
+## Accent Color Sync (11 Jun 2026)
+El admin ya no tiene selector de color independiente. El `--admin-accent` se sincroniza con el store:
+- `admin.js::applyAccentToAdmin()` lee `xinco-accent` de localStorage y aplica `--admin-accent`, `--admin-accent-light`, `--admin-accent-dim` en `#page-admin`
+- `theme.js::setAccentColor()` ya escribía esos mismos CSS vars cuando `#page-admin` existe
+- Se eliminó: `BG_COLORS`, `_currentBgColor`, `applyBgColor()`, `setAdminColor()`, `getBgColor()`, `rgbToHsl()`, `setAdminCustomColor()`, swatches HTML en settings
+- Partículas admin ahora leen `--accent-color-rgb` de `:root` para el hue
+
 ## Infrastructure
 - Firebase (Firestore + Auth) vía CDN (no npm)
 - EmailJS vía CDN
