@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "calendar-automation": {
+      "source": "claude-office-skills/skills",
+      "sourceType": "github",
+      "skillPath": "calendar-automation/SKILL.md",
+      "computedHash": "b4b7980ddaaf2adc56feec3fd5d7da8aac85210a680720452f194161764b3ba6"
+    },
     "claude-api": {
       "source": "anthropics/skills",
       "sourceType": "github",
