@@ -31,9 +31,42 @@ const DOCK_PATHS = {
 function dockGlassIcon(name, size = 22) {
   const colors = DOCK_COLORS[name];
   const path = DOCK_PATHS[name];
-  if (!colors || !path) return '';
-  const [c1, c2] = colors;
-  return `<svg xmlns="${SVG_NS}" viewBox="0 0 24 24" width="${size}" height="${size}"><defs><linearGradient id="g" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient><linearGradient id="h" x1="0" y1="0" x2="0" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fff" stop-opacity=".32"/><stop offset="40%" stop-color="#fff" stop-opacity=".04"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect x="1" y="1" width="22" height="22" rx="7" fill="url(#g)"/><rect x="1" y="1" width="22" height="10" rx="7" fill="url(#h)"/><rect x="1.5" y="1.5" width="21" height="21" rx="6.5" fill="none" stroke="rgba(255,255,255,.16)" stroke-width=".5"/><g fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${path.split(/(?=M)/g).map(p => `<path d="${p.trim()}"/>`).join('')}</g></svg>`;
+  if (!colors || !path) return document.createElementNS(SVG_NS, 'svg');
+  const s = document.createElementNS(SVG_NS, 'svg');
+  s.setAttribute('viewBox', '0 0 24 24');
+  s.setAttribute('width', String(size));
+  s.setAttribute('height', String(size));
+  const d = document.createElementNS(SVG_NS, 'defs');
+  const bgG = document.createElementNS(SVG_NS, 'linearGradient');
+  bgG.setAttribute('id', 'g'); bgG.setAttribute('x1', '0'); bgG.setAttribute('y1', '0');
+  bgG.setAttribute('x2', '24'); bgG.setAttribute('y2', '24'); bgG.setAttribute('gradientUnits', 'userSpaceOnUse');
+  const s1 = document.createElementNS(SVG_NS, 'stop'); s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', colors[0]);
+  const s2 = document.createElementNS(SVG_NS, 'stop'); s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', colors[1]);
+  bgG.appendChild(s1); bgG.appendChild(s2);
+  const hlG = document.createElementNS(SVG_NS, 'linearGradient');
+  hlG.setAttribute('id', 'h'); hlG.setAttribute('x1', '0'); hlG.setAttribute('y1', '0');
+  hlG.setAttribute('x2', '0'); hlG.setAttribute('y2', '24'); hlG.setAttribute('gradientUnits', 'userSpaceOnUse');
+  const s3 = document.createElementNS(SVG_NS, 'stop'); s3.setAttribute('offset', '0%'); s3.setAttribute('stop-color', '#fff'); s3.setAttribute('stop-opacity', '.32');
+  const s4 = document.createElementNS(SVG_NS, 'stop'); s4.setAttribute('offset', '40%'); s4.setAttribute('stop-color', '#fff'); s4.setAttribute('stop-opacity', '.04');
+  const s5 = document.createElementNS(SVG_NS, 'stop'); s5.setAttribute('offset', '100%'); s5.setAttribute('stop-color', '#fff'); s5.setAttribute('stop-opacity', '0');
+  hlG.appendChild(s3); hlG.appendChild(s4); hlG.appendChild(s5);
+  d.appendChild(bgG); d.appendChild(hlG); s.appendChild(d);
+  const r = document.createElementNS(SVG_NS, 'rect');
+  r.setAttribute('x', '1'); r.setAttribute('y', '1'); r.setAttribute('width', '22'); r.setAttribute('height', '22');
+  r.setAttribute('rx', '7'); r.setAttribute('fill', 'url(#g)'); s.appendChild(r);
+  const hr = document.createElementNS(SVG_NS, 'rect');
+  hr.setAttribute('x', '1'); hr.setAttribute('y', '1'); hr.setAttribute('width', '22'); hr.setAttribute('height', '10');
+  hr.setAttribute('rx', '7'); hr.setAttribute('fill', 'url(#h)'); s.appendChild(hr);
+  const br = document.createElementNS(SVG_NS, 'rect');
+  br.setAttribute('x', '1.5'); br.setAttribute('y', '1.5'); br.setAttribute('width', '21'); br.setAttribute('height', '21');
+  br.setAttribute('rx', '6.5'); br.setAttribute('fill', 'none');
+  br.setAttribute('stroke', 'rgba(255,255,255,.16)'); br.setAttribute('stroke-width', '.5'); s.appendChild(br);
+  const g = document.createElementNS(SVG_NS, 'g');
+  g.setAttribute('fill', 'none'); g.setAttribute('stroke', '#fff');
+  g.setAttribute('stroke-width', '1.6'); g.setAttribute('stroke-linecap', 'round'); g.setAttribute('stroke-linejoin', 'round');
+  path.split(/(?=M)/g).forEach(p => { const t = p.trim(); if (t) { const pe = document.createElementNS(SVG_NS, 'path'); pe.setAttribute('d', t); g.appendChild(pe); } });
+  s.appendChild(g);
+  return s;
 }
 
 const ICONS = {
@@ -194,16 +227,20 @@ export function replaceIcons() {
     if (!mapped || !ICONS[mapped]) return;
     const size = parseInt(el.getAttribute('width')) || parseInt(el.style.width) || 22;
     const isDock = !!DOCK_PATHS[mapped];
-    const svgStr = isDock ? dockGlassIcon(mapped, size) : icon(mapped, size);
     const wrapper = document.createElement('span');
     wrapper.className = el.className + ' xinco-icon-replaced';
     wrapper.style.cssText = el.style.cssText;
-    wrapper.innerHTML = svgStr;
+    if (isDock) {
+      const svgEl = dockGlassIcon(mapped, size);
+      wrapper.appendChild(svgEl);
+      wrapper.style.setProperty('--item-accent', DOCK_COLORS[mapped][0]);
+    } else {
+      wrapper.innerHTML = icon(mapped, size);
+    }
     wrapper.style.display = 'inline-flex';
     wrapper.style.alignItems = 'center';
     wrapper.style.justifyContent = 'center';
     wrapper.style.width = wrapper.style.height = size + 'px';
-    if (isDock) wrapper.style.setProperty('--item-accent', DOCK_COLORS[mapped][0]);
     el.replaceWith(wrapper);
   });
 }
