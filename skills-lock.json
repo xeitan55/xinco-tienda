@@ -43,6 +43,12 @@
       "skillPath": "skills/frontend-design/SKILL.md",
       "computedHash": "93f53fd1c0352d3d7ec17b8f73d7351bf76f4821e55d123c9d2abc2c53ba48e4"
     },
+    "game-engine": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/game-engine/SKILL.md",
+      "computedHash": "20057f62cf7a8b2d9f940b3de0b18e5426e8f4bb50e236d36b1033aa0d42c4d8"
+    },
     "postgres": {
       "source": "planetscale/database-skills",
       "sourceType": "github",
