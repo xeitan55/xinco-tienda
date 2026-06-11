@@ -61,6 +61,12 @@
       "skillPath": "skills/postgres/SKILL.md",
       "computedHash": "f0632544d951152bf28c4f5cbb02593af296a3abe75f8949d003718c61a9a90b"
     },
+    "token-optimizer": {
+      "source": "asif2bd/openclaw-token-optimizer",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "ba03c47ac1cf9c6a4bc6108ead2067dc69bdf7437ecf609c8ffa3aa3b7ecb462"
+    },
     "web-design-guidelines": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
