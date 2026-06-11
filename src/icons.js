@@ -1,17 +1,42 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+const DOCK_COLORS = {
+  'dock-dashboard': ['#3B82F6','#1E40AF'],
+  'dock-orders':    ['#8B5CF6','#6D28D9'],
+  'dock-customers': ['#34D399','#047857'],
+  'dock-tracking':  ['#22D3EE','#0E7490'],
+  'dock-inventory': ['#F59E0B','#B45309'],
+  'dock-products':  ['#F472B6','#BE185D'],
+  'dock-cobranzas': ['#EF4444','#B91C1C'],
+  'dock-cupones':   ['#FB923C','#C2410C'],
+  'dock-reportes':  ['#6366F1','#4338CA'],
+  'dock-exit':      ['#9CA3AF','#4B5563'],
+  'dock-config':    ['#6B7280','#374151'],
+};
+
+const DOCK_PATHS = {
+  'dock-dashboard': 'M12 4a8 8 0 100 16 8 8 0 000-16zm1 4l-3 5-3-5',
+  'dock-orders':    'M8 4h8l1 2v13a2 2 0 01-2 2H9a2 2 0 01-2-2V6l1-2zm2 8l2 2 4-4',
+  'dock-customers': 'M9 10a3 3 0 100-6 3 3 0 000 6zm-5 9a5 5 0 0110 0m3-12a3 3 0 100-6 3 3 0 000 6zm3 12h-3',
+  'dock-tracking':  'M12 2a10 10 0 110 20 10 10 0 010-20zm-2 14l8-4-8-4v8z',
+  'dock-inventory': 'M4 6h16v2H4zm0 5h16v2H4zm0 5h12v2H4z',
+  'dock-products':  'M12 4l-4 5h3v5h2V9h3l-4-5z',
+  'dock-cobranzas': 'M4 10h16v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8zM6 8V6a2 2 0 012-2h12v2zM6 14a2 2 0 014 0',
+  'dock-cupones':   'M8 2h10l4 4-8 8-6-6 4-4zm0 0l4 4',
+  'dock-reportes':  'M6 14l4-4 4 4 6-6m-4 0h4v4',
+  'dock-exit':      'M8 20H4V4h4m14 10l-4-4 4-4M10 12h10',
+  'dock-config':    'M12 16a4 4 0 100-8 4 4 0 000 8zm0-8V4m0 12v4M8 12H4m12 0h4',
+};
+
+function dockGlassIcon(name, size = 22) {
+  const colors = DOCK_COLORS[name];
+  const path = DOCK_PATHS[name];
+  if (!colors || !path) return '';
+  const [c1, c2] = colors;
+  return `<svg xmlns="${SVG_NS}" viewBox="0 0 24 24" width="${size}" height="${size}"><defs><linearGradient id="g" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient><linearGradient id="h" x1="0" y1="0" x2="0" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fff" stop-opacity=".32"/><stop offset="40%" stop-color="#fff" stop-opacity=".04"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect x="1" y="1" width="22" height="22" rx="7" fill="url(#g)"/><rect x="1" y="1" width="22" height="10" rx="7" fill="url(#h)"/><rect x="1.5" y="1.5" width="21" height="21" rx="6.5" fill="none" stroke="rgba(255,255,255,.16)" stroke-width=".5"/><g fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${path.split(/(?=M)/g).map(p => `<path d="${p.trim()}"/>`).join('')}</g></svg>`;
+}
+
 const ICONS = {
-  'dock-dashboard':  'M12 4a8 8 0 100 16 8 8 0 000-16zM12 8v4l3 2',
-  'dock-orders':     'M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M9 14l2 2 4-4M10 2v4h4V2',
-  'dock-customers':  'M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2M11 7a4 4 0 100 8 4 4 0 000-8zm6-2a3 3 0 100 6 3 3 0 000-6z',
-  'dock-tracking':   'M12 2a10 10 0 110 20 10 10 0 010-20zm4 6l-4 8-4-8 8 4z',
-  'dock-inventory':  'M4 8h16M4 8V4a1 1 0 011-1h14a1 1 0 011 1v4M4 12h16M4 12v8a1 1 0 001 1h14a1 1 0 001-1v-8',
-  'dock-products':   'M14 6a2 2 0 10-4 0c0 3-4 5-4 5h12s-4-2-4-5zM6 11v8a1 1 0 001 1h10a1 1 0 001-1v-8',
-  'dock-cobranzas':  'M4 10h16M4 10V6a2 2 0 012-2h12a2 2 0 012 2v4M4 10v8a2 2 0 002 2h12a2 2 0 002-2v-8m-4 2a2 2 0 11-4 0 2 2 0 014 0z',
-  'dock-cupones':    'M20 12a2 2 0 00-2-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 010 4v4a2 2 0 002 2h12a2 2 0 002-2v-4a2 2 0 002-2zM9 9h.01M9 15h.01M12 9l-2 6',
-  'dock-reportes':   'M22 7l-7 7-4-4-5 5M22 7h-5m5 0v5',
-  'dock-exit':       'M15 21h4a2 2 0 002-2V5a2 2 0 00-2-2h-4M8 7l-5 5 5 5M3 12h14',
-  'dock-config':     'M12 16a4 4 0 100-8 4 4 0 000 8zM12 6v2m0 8v2M8 12h2m4 0h2',
   home:       'M4 10l8-6 8 6v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8zM9 21v-9h6v9',
   search:     'M20 20l-5.5-5.5M14.5 9.5a5 5 0 11-10 0 5 5 0 0110 0z',
   cart:       'M5 4h14l2 4H4l1-4zM4 8h16l-1.5 10a2 2 0 01-2 2h-9a2 2 0 01-2-2L4 8zm5 4v5m6-5v5',
@@ -168,7 +193,8 @@ export function replaceIcons() {
     const mapped = LUCIDE_MAP[name];
     if (!mapped || !ICONS[mapped]) return;
     const size = parseInt(el.getAttribute('width')) || parseInt(el.style.width) || 22;
-    const svgStr = icon(mapped, size);
+    const isDock = !!DOCK_PATHS[mapped];
+    const svgStr = isDock ? dockGlassIcon(mapped, size) : icon(mapped, size);
     const wrapper = document.createElement('span');
     wrapper.className = el.className + ' xinco-icon-replaced';
     wrapper.style.cssText = el.style.cssText;
@@ -177,6 +203,7 @@ export function replaceIcons() {
     wrapper.style.alignItems = 'center';
     wrapper.style.justifyContent = 'center';
     wrapper.style.width = wrapper.style.height = size + 'px';
+    if (isDock) wrapper.style.setProperty('--item-accent', DOCK_COLORS[mapped][0]);
     el.replaceWith(wrapper);
   });
 }
