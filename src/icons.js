@@ -1,17 +1,17 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 const DOCK_COLORS = {
-  'dock-dashboard': ['#3B82F6','#1E40AF'],
-  'dock-orders':    ['#8B5CF6','#6D28D9'],
-  'dock-customers': ['#34D399','#047857'],
-  'dock-tracking':  ['#22D3EE','#0E7490'],
-  'dock-inventory': ['#F59E0B','#B45309'],
-  'dock-products':  ['#F472B6','#BE185D'],
-  'dock-cobranzas': ['#EF4444','#B91C1C'],
-  'dock-cupones':   ['#FB923C','#C2410C'],
-  'dock-reportes':  ['#6366F1','#4338CA'],
-  'dock-exit':      ['#9CA3AF','#4B5563'],
-  'dock-config':    ['#6B7280','#374151'],
+  'dock-dashboard': ['#BF5AF2','#BF5AF2'],
+  'dock-orders':    ['#0A84FF','#0A84FF'],
+  'dock-customers': ['#0A0A0A','#0A0A0A'],
+  'dock-tracking':  ['#5E5CE6','#5E5CE6'],
+  'dock-inventory': ['#E879F9','#E879F9'],
+  'dock-products':  ['#FF7EB6','#FF7EB6'],
+  'dock-cobranzas': ['#2C2C2E','#2C2C2E'],
+  'dock-cupones':   ['#151515','#151515'],
+  'dock-reportes':  ['#64D2FF','#64D2FF'],
+  'dock-exit':      ['#BF5AF2','#BF5AF2'],
+  'dock-config':    ['#0A84FF','#0A84FF'],
 };
 
 const DOCK_PATHS = {
