@@ -7,6 +7,12 @@
       "skillPath": "skills/claude-api/SKILL.md",
       "computedHash": "c2f9c36c50162d34dfd045e8831f3ef98c523ccf66bc056b3c88d91a64c090bb"
     },
+    "claude-md-improver": {
+      "source": "anthropics/claude-plugins-official",
+      "sourceType": "github",
+      "skillPath": "plugins/claude-md-management/skills/claude-md-improver/SKILL.md",
+      "computedHash": "7b765125563b4e1490c925f72da35dcd004151e1469b9b680b3af7fa5f0b94e6"
+    },
     "deploy": {
       "source": "vercel/vercel-deploy-claude-code-plugin",
       "sourceType": "github",
