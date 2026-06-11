@@ -11,6 +11,7 @@ const ACCENTS = [
 ];
 
 export function setAccentColor(hex) {
+  if (hex === '#000000' || !hex) hex = '#3B82F6';
   const r = parseInt(hex.slice(1,3), 16) || 59;
   const g = parseInt(hex.slice(3,5), 16) || 130;
   const b = parseInt(hex.slice(5,7), 16) || 246;

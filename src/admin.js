@@ -2243,6 +2243,7 @@ function applyBgColor(scheme) {
     if (customMatch) { css = '#' + customMatch[1]; cssLight = css + '99'; }
     else return;
   }
+  if (css === '#000000') { css = '#9b87f5'; cssLight = '#c4b5fd'; }
   const r = document.querySelector('#page-admin');
   if (!r) return;
   r.style.setProperty('--admin-accent', css);
@@ -2295,7 +2296,7 @@ function rgbToHsl(r, g, b) {
 
 export function setAdminCustomColor(hex) {
   const match = hex.match(/^#?([a-f\d]{6})$/i);
-  if (!match) return;
+  if (!match || hex === '#000000') return;
   localStorage.setItem('adminBgColor', 'custom_' + hex);
   const r = document.querySelector('#page-admin');
   if (r) {
