@@ -1,6 +1,17 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 const ICONS = {
+  'dock-dashboard':  'M12 4a8 8 0 100 16 8 8 0 000-16zM12 8v4l3 2',
+  'dock-orders':     'M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M9 14l2 2 4-4M10 2v4h4V2',
+  'dock-customers':  'M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2M11 7a4 4 0 100 8 4 4 0 000-8zm6-2a3 3 0 100 6 3 3 0 000-6z',
+  'dock-tracking':   'M12 2a10 10 0 110 20 10 10 0 010-20zm4 6l-4 8-4-8 8 4z',
+  'dock-inventory':  'M4 8h16M4 8V4a1 1 0 011-1h14a1 1 0 011 1v4M4 12h16M4 12v8a1 1 0 001 1h14a1 1 0 001-1v-8',
+  'dock-products':   'M14 6a2 2 0 10-4 0c0 3-4 5-4 5h12s-4-2-4-5zM6 11v8a1 1 0 001 1h10a1 1 0 001-1v-8',
+  'dock-cobranzas':  'M4 10h16M4 10V6a2 2 0 012-2h12a2 2 0 012 2v4M4 10v8a2 2 0 002 2h12a2 2 0 002-2v-8m-4 2a2 2 0 11-4 0 2 2 0 014 0z',
+  'dock-cupones':    'M20 12a2 2 0 00-2-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 010 4v4a2 2 0 002 2h12a2 2 0 002-2v-4a2 2 0 002-2zM9 9h.01M9 15h.01M12 9l-2 6',
+  'dock-reportes':   'M22 7l-7 7-4-4-5 5M22 7h-5m5 0v5',
+  'dock-exit':       'M15 21h4a2 2 0 002-2V5a2 2 0 00-2-2h-4M8 7l-5 5 5 5M3 12h14',
+  'dock-config':     'M12 15a3 3 0 100-6 3 3 0 000 6zm-8.47-2.33a1.5 1.5 0 010-1.34l.43-.75a1.5 1.5 0 01.54-.54l.01-.01a1.5 1.5 0 00.54-2.05l-.43-.75a1.5 1.5 0 011.34-2.17h.86a1.5 1.5 0 001.5-1.5V4.5a1.5 1.5 0 013 0v.86a1.5 1.5 0 001.5 1.5h.86a1.5 1.5 0 011.34 2.17l-.43.75a1.5 1.5 0 00.54 2.05 4.5 4.5 0 010 2.34l-.43.75a1.5 1.5 0 01-.54.54 1.5 1.5 0 00-.54 2.05l.43.75a1.5 1.5 0 01-1.34 2.17h-.86a1.5 1.5 0 00-1.5 1.5v.86a1.5 1.5 0 01-3 0v-.86a1.5 1.5 0 00-1.5-1.5h-.86a1.5 1.5 0 01-1.34-2.17l.43-.75a1.5 1.5 0 00-.54-2.05 1.5 1.5 0 01-.54-.54l-.43-.75z',
   home:       'M4 10l8-6 8 6v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8zM9 21v-9h6v9',
   search:     'M20 20l-5.5-5.5M14.5 9.5a5 5 0 11-10 0 5 5 0 0110 0z',
   cart:       'M5 4h14l2 4H4l1-4zM4 8h16l-1.5 10a2 2 0 01-2 2h-9a2 2 0 01-2-2L4 8zm5 4v5m6-5v5',
@@ -114,11 +125,12 @@ const MAP = {
 };
 
 const LUCIDE_MAP = {
-  'layout-dashboard': 'dashboard', 'shopping-bag': 'orders',
-  users: 'customers', truck: 'tracking', boxes: 'inventory',
-  package: 'products', 'credit-card': 'payment', percent: 'coupon',
-  'bar-chart-3': 'chart', store: 'store', settings: 'settings',
-  'log-out': 'logout',
+  gauge: 'dock-dashboard', 'clipboard-check': 'dock-orders',
+  'users-round': 'dock-customers', compass: 'dock-tracking',
+  shelves: 'dock-inventory', shirt: 'dock-products',
+  wallet: 'dock-cobranzas', tag: 'dock-cupones',
+  'trending-up': 'dock-reportes', store: 'store',
+  cog: 'dock-config', 'door-arrow-left': 'dock-exit',
 };
 
 function getIconSize(el) {
