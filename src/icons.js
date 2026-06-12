@@ -12,17 +12,17 @@ function darkenHex(hex, ratio = 0.7) {
 }
 
 const DOCK_PATHS = {
-  'dock-dashboard': 'M4 12a8 8 0 0116 0M12 12l4-6',                               // speedometer
-  'dock-orders':    'M8 3h8l2 2v15a2 2 0 01-2 2H8a2 2 0 01-2-2V5l2-2zm3 10l2 2 4-4',   // clipboard+check
-  'dock-customers': 'M7 4a3 3 0 100 6 3 3 0 100-6M3 16a4 4 0 008 0M15 4a3 3 0 100 6 3 3 0 100-6M11 16a4 4 0 008 0', // 2 people
-  'dock-tracking':  'M12 2a10 10 0 110 20 10 10 0 010-20zm-2 14l8-4-8-4v8z',       // compass
-  'dock-inventory': 'M3 5h18v2H3zm0 7h18v2H3zm0 7h14v2H3z',                       // shelves
-  'dock-products':  'M12 3l-6 7h4v6h4v-6h4l-6-7z',                               // t-shirt
+  'dock-dashboard': 'M12 4a8 8 0 101.6 13.6M12 12l4-5',                            // speedometer
+  'dock-orders':    'M8 4h8l2 2v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6l2-2zm3 10l2 2 4-4', // clipboard+check
+  'dock-customers': 'M8 10a3 3 0 100-6 3 3 0 000 6zm-5 9a5 5 0 0110 0M16 9a3 3 0 100-6 3 3 0 000 6zm-3 10h-3', // 2 people
+  'dock-tracking':  'M12 3a9 9 0 100 18 9 9 0 000-18zM10 14l6-4-6-4v8z',          // compass
+  'dock-inventory': 'M4 5h16v2H4zm0 7h16v2H4zm0 7h14v2H4z',                        // shelves
+  'dock-products':  'M12 4l-5 6h3v7h4v-7h3l-5-6z',                                // t-shirt
   'dock-cobranzas': 'M4 9h16v9a2 2 0 01-2 2H6a2 2 0 01-2-2V9zm2-4h14v4H6V5zm4 9a2 2 0 104 0 2 2 0 10-4 0', // wallet
-  'dock-cupones':   'M8 3h10l4 4-8 8-6-6 4-4zm0 0l4 4',                           // tag
-  'dock-reportes':  'M5 17l5-7 4 4 6-9m-3 0h5v5',                                // chart
-  'dock-exit':      'M8 20H4V4h4m4 6h8m-4-4l4 4-4 4',                             // door
-  'dock-config':    'M12 16a4 4 0 100-8 4 4 0 000 8zm0-8V4m0 12v4M8 12H4m12 0h4', // gear
+  'dock-cupones':   'M8 2h10l4 4-8 8-6-6 4-4zM8 2l4 4',                            // tag
+  'dock-reportes':  'M5 17l5-7 4 4 6-9m-3 0h5v5',                                 // chart
+  'dock-exit':      'M8 20H4V4h4m4 6h8m-4-4l4 4-4 4',                              // door
+  'dock-config':    'M12 16a4 4 0 100-8 4 4 0 000 8zm0-8V4m0 12v4M8 12H4m12 0h4',  // gear
 };
 
 let _uid = 0;
@@ -63,7 +63,7 @@ function dockGlassIcon(name, size = 22) {
   br.setAttribute('stroke', 'rgba(255,255,255,.16)'); br.setAttribute('stroke-width', '.5'); s.appendChild(br);
   const g = document.createElementNS(SVG_NS, 'g');
   g.setAttribute('fill', 'none'); g.setAttribute('stroke', '#fff');
-  g.setAttribute('stroke-width', '2.2'); g.setAttribute('stroke-linecap', 'round'); g.setAttribute('stroke-linejoin', 'round');
+  g.setAttribute('stroke-width', '1.4'); g.setAttribute('stroke-linecap', 'round'); g.setAttribute('stroke-linejoin', 'round');
   g.setAttribute('transform', 'translate(-3,-3) scale(1.25)');
   path.split(/(?=M)/g).forEach(p => { const t = p.trim(); if (t) { const pe = document.createElementNS(SVG_NS, 'path'); pe.setAttribute('d', t); g.appendChild(pe); } });
   s.appendChild(g);
