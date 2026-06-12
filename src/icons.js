@@ -12,17 +12,17 @@ function darkenHex(hex, ratio = 0.7) {
 }
 
 const DOCK_PATHS = {
-  'dock-dashboard': 'M12 4a8 8 0 100 16 8 8 0 000-16zm1 4l-3 5-3-5',
-  'dock-orders':    'M8 4h8l1 2v13a2 2 0 01-2 2H9a2 2 0 01-2-2V6l1-2zm2 8l2 2 4-4',
-  'dock-customers': 'M9 10a3 3 0 100-6 3 3 0 000 6zm-5 9a5 5 0 0110 0m3-12a3 3 0 100-6 3 3 0 000 6zm3 12h-3',
-  'dock-tracking':  'M12 2a10 10 0 110 20 10 10 0 010-20zm-2 14l8-4-8-4v8z',
-  'dock-inventory': 'M4 6h16v2H4zm0 5h16v2H4zm0 5h12v2H4z',
-  'dock-products':  'M12 4l-4 5h3v5h2V9h3l-4-5z',
-  'dock-cobranzas': 'M4 10h16v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8zM6 8V6a2 2 0 012-2h12v2zM6 14a2 2 0 014 0',
-  'dock-cupones':   'M8 2h10l4 4-8 8-6-6 4-4zm0 0l4 4',
-  'dock-reportes':  'M6 14l4-4 4 4 6-6m-4 0h4v4',
-  'dock-exit':      'M8 20H4V4h4m14 10l-4-4 4-4M10 12h10',
-  'dock-config':    'M12 16a4 4 0 100-8 4 4 0 000 8zm0-8V4m0 12v4M8 12H4m12 0h4',
+  'dock-dashboard': 'M4 12a8 8 0 0116 0M12 12l4-6',                               // speedometer
+  'dock-orders':    'M8 3h8l2 2v15a2 2 0 01-2 2H8a2 2 0 01-2-2V5l2-2zm3 10l2 2 4-4',   // clipboard+check
+  'dock-customers': 'M7 4a3 3 0 100 6 3 3 0 100-6M3 16a4 4 0 008 0M15 4a3 3 0 100 6 3 3 0 100-6M11 16a4 4 0 008 0', // 2 people
+  'dock-tracking':  'M12 2a10 10 0 110 20 10 10 0 010-20zm-2 14l8-4-8-4v8z',       // compass
+  'dock-inventory': 'M3 5h18v2H3zm0 7h18v2H3zm0 7h14v2H3z',                       // shelves
+  'dock-products':  'M12 3l-6 7h4v6h4v-6h4l-6-7z',                               // t-shirt
+  'dock-cobranzas': 'M4 9h16v9a2 2 0 01-2 2H6a2 2 0 01-2-2V9zm2-4h14v4H6V5zm4 9a2 2 0 104 0 2 2 0 10-4 0', // wallet
+  'dock-cupones':   'M8 3h10l4 4-8 8-6-6 4-4zm0 0l4 4',                           // tag
+  'dock-reportes':  'M5 17l5-7 4 4 6-9m-3 0h5v5',                                // chart
+  'dock-exit':      'M8 20H4V4h4m4 6h8m-4-4l4 4-4 4',                             // door
+  'dock-config':    'M12 16a4 4 0 100-8 4 4 0 000 8zm0-8V4m0 12v4M8 12H4m12 0h4', // gear
 };
 
 let _uid = 0;
