@@ -1104,9 +1104,6 @@ tailwind.config = {
             <button class="tab-btn w-full text-left" id="acc-tab-profile" onclick="showAccountTab('profile')" data-i18n="account.profile">
               <span class="material-symbols-outlined text-[16px] mr-2">person</span>MI PERFIL
             </button>
-            <button class="tab-btn w-full text-left" id="acc-tab-addresses" onclick="showAccountTab('addresses')" data-i18n="account.addresses">
-              <span class="material-symbols-outlined text-[16px] mr-2">location_on</span>DIRECCIONES
-            </button>
             <button class="tab-btn w-full text-left" id="acc-tab-security" onclick="showAccountTab('security')" data-i18n="account.security">
               <span class="material-symbols-outlined text-[16px] mr-2">lock</span>SEGURIDAD
             </button>
@@ -1201,13 +1198,10 @@ tailwind.config = {
               <div class="accent-options" id="accent-selector"></div>
             </div>
           </div>
-        </div>
 
-        <!-- MÉTODOS DE PAGO -->
-        <!-- DIRECCIONES -->
-        <div id="acc-content-addresses" class="hidden">
-          <h2 style="font-family:DM Sans;font-size:22px;font-weight:700;" class="text-primary uppercase mb-5">MIS DIRECCIONES</h2>
-          <div class="bg-surface border-2 border-primary p-6">
+          <!-- DIRECCIONES -->
+          <div class="bg-surface border-2 border-primary p-6 mt-6">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4" style="font-family:Inter;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;">MIS DIRECCIONES</h3>
             <div id="addresses-list" class="space-y-3 mb-4"></div>
             <button class="btn-outline text-[11px]" onclick="showAddAddressForm()">
               <span class="material-symbols-outlined text-[14px]">add</span> AGREGAR DIRECCIÓN

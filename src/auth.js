@@ -315,7 +315,7 @@ export function renderAccountPage() {
 }
 
 export function showAccountTab(tab) {
-  ['orders','profile','addresses','security','datos'].forEach(t => {
+  ['orders','profile','security','datos'].forEach(t => {
     const content = document.getElementById('acc-content-'+t);
     const btn = document.getElementById('acc-tab-'+t);
     if (content) content.classList.toggle('hidden', t !== tab);
