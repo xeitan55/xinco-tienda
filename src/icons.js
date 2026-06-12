@@ -64,7 +64,7 @@ function dockGlassIcon(name, size = 22) {
   const g = document.createElementNS(SVG_NS, 'g');
   g.setAttribute('fill', 'none'); g.setAttribute('stroke', '#fff');
   g.setAttribute('stroke-width', '2.2'); g.setAttribute('stroke-linecap', 'round'); g.setAttribute('stroke-linejoin', 'round');
-  g.setAttribute('transform', 'translate(-1.8,-1.8) scale(1.15)');
+  g.setAttribute('transform', 'translate(-3,-3) scale(1.25)');
   path.split(/(?=M)/g).forEach(p => { const t = p.trim(); if (t) { const pe = document.createElementNS(SVG_NS, 'path'); pe.setAttribute('d', t); g.appendChild(pe); } });
   s.appendChild(g);
   return s;
