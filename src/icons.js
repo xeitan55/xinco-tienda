@@ -25,6 +25,10 @@ const DOCK_PATHS = {
   'dock-config':    'M12 15a3 3 0 100-6 3 3 0 000 6zm0-8V5m0 12v2M8 12H6m12 0h2',         // gear
 };
 
+const DOCK_CFG = {
+  'clear-light': { bg: null, bgEnd: null, hl: false, border: null, path: 'rgba(255,255,255,0.55)', sw: 2.5, po: 1 },
+};
+
 let _uid = 0;
 
 const VARIANTS = {
@@ -44,7 +48,8 @@ function dockGlassIcon(name, size = 22, variant) {
   if (!path) return document.createElementNS(SVG_NS, 'svg');
   const accent = getAccentHex();
   if (!variant) {
-    variant = (window._appearanceCfg && window._appearanceCfg.dockIconPack) || getRecommendedIconPack();
+    const saved = window._appearanceCfg && window._appearanceCfg.dockIconPack;
+    variant = (saved && saved !== 'auto') ? saved : getRecommendedIconPack();
   }
   const uid = `i${++_uid}`;
   const s = document.createElementNS(SVG_NS, 'svg');
@@ -52,9 +57,7 @@ function dockGlassIcon(name, size = 22, variant) {
   s.setAttribute('width', String(size));
   s.setAttribute('height', String(size));
 
-  const vcfg = {
-    'clear-light': { bg: null, bgEnd: null, hl: false, border: null, path: 'rgba(255,255,255,0.55)', sw: 2.5, po: 1 },
-  }[variant] || vcfg['clear-light'];
+  const vcfg = DOCK_CFG[variant] || DOCK_CFG['clear-light'];
 
   const needDefs = vcfg.bg || vcfg.hl;
   if (needDefs) {
