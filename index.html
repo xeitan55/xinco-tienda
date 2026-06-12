@@ -1113,6 +1113,9 @@ tailwind.config = {
             <button class="tab-btn w-full text-left" id="acc-tab-security" onclick="showAccountTab('security')" data-i18n="account.security">
               <span class="material-symbols-outlined text-[16px] mr-2">lock</span>SEGURIDAD
             </button>
+            <button class="tab-btn w-full text-left" id="acc-tab-datos" onclick="showAccountTab('datos')" data-i18n="account.data">
+              <span class="material-symbols-outlined text-[16px] mr-2">shield</span>TUS DATOS
+            </button>
           </nav>
           <div class="p-3">
             <button class="btn-outline w-full justify-center py-2 text-[11px]" onclick="doLogout()" data-i18n="account.logout">
@@ -1427,6 +1430,64 @@ tailwind.config = {
             <button class="btn-outline" onclick="sendPasswordReset()">
               <span class="material-symbols-outlined text-[16px]">lock_reset</span> ENVIAR EMAIL DE RESTABLECIMIENTO
             </button>
+          </div>
+        </div>
+
+        <!-- TUS DATOS -->
+        <div id="acc-content-datos" class="hidden">
+          <h2 style="font-family:DM Sans;font-size:22px;font-weight:700;" class="text-primary uppercase mb-5">TUS DATOS</h2>
+
+          <div class="bg-surface border border-primary rounded-2xl shadow-sm p-6 mb-5">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="material-symbols-outlined text-[28px]" style="color:#009ee3;">verified_user</span>
+              <div>
+                <h3 class="font-label-caps text-label-caps text-primary font-bold">SEGURIDAD Y PRIVACIDAD</h3>
+                <p class="font-label-caps text-[10px] text-on-surface-variant mt-0.5">CÓMO MANEJAMOS TU INFORMACIÓN</p>
+              </div>
+            </div>
+
+            <div class="space-y-5">
+              <div>
+                <h4 class="font-label-caps text-label-caps text-primary mb-2 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px]">storage</span> ALMACENAMIENTO
+                </h4>
+                <p class="text-sm text-on-surface-variant" style="font-family:Inter;line-height:1.7;">
+                  Tus datos se guardan de forma segura en <strong>Firebase</strong> (Google Cloud), la misma plataforma que usan aplicaciones como Google Drive, Spotify y miles de servicios más. La información viaja encriptada con certificado SSL.
+                </p>
+              </div>
+
+              <div>
+                <h4 class="font-label-caps text-label-caps text-primary mb-2 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px]">badge</span> QUÉ DATOS GUARDAMOS
+                </h4>
+                <p class="text-sm text-on-surface-variant" style="font-family:Inter;line-height:1.7;">
+                  Solo almacenamos la información que nos proporcionás voluntariamente: nombre, email, dirección, teléfono, métodos de pago (encriptados) y tu historial de pedidos. Nunca accedemos a tu cuenta bancaria ni a tu clave de Mercado Pago.
+                </p>
+              </div>
+
+              <div>
+                <h4 class="font-label-caps text-label-caps text-primary mb-2 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px]">visibility_off</span> QUIÉN VE TUS DATOS
+                </h4>
+                <p class="text-sm text-on-surface-variant" style="font-family:Inter;line-height:1.7;">
+                  Solo vos y los administradores de XINCO pueden ver tu información. No compartimos datos personales con terceros sin tu consentimiento. Los datos de pago se procesan a través de Mercado Pago, que cumple con los estándares de seguridad PCI-DSS.
+                </p>
+              </div>
+
+              <div>
+                <h4 class="font-label-caps text-label-caps text-primary mb-2 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px]">delete</span> BAJAR O ELIMINAR TUS DATOS
+                </h4>
+                <p class="text-sm text-on-surface-variant" style="font-family:Inter;line-height:1.7;">
+                  Podés solicitar la descarga o eliminación completa de tus datos en cualquier momento escribiendo a <strong>xinco.tienda@gmail.com</strong>. Procesamos tu solicitud en un plazo máximo de 72 horas hábiles.
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-5 border-t border-outline-variant flex items-center gap-2">
+              <span class="material-symbols-outlined text-[14px] text-on-surface-variant/50">lock</span>
+              <span class="font-label-caps text-[9px] text-on-surface-variant/50">TUS DATOS ESTÁN PROTEGIDOS CON ENCRIPTACIÓN SSL DE 256 BITS</span>
+            </div>
           </div>
         </div>
 

@@ -375,7 +375,7 @@ export function unlinkMP() {
 }
 
 export function showAccountTab(tab) {
-  ['orders','profile','payment','addresses','security'].forEach(t => {
+  ['orders','profile','payment','addresses','security','datos'].forEach(t => {
     const content = document.getElementById('acc-content-'+t);
     const btn = document.getElementById('acc-tab-'+t);
     if (content) content.classList.toggle('hidden', t !== tab);
