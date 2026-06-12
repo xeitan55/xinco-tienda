@@ -491,6 +491,11 @@ tailwind.config = {
     <div class="flex flex-col md:flex-row gap-10">
       <!-- Sidebar Filters -->
       <aside class="w-full md:w-64 shrink-0">
+        <button id="catalog-filter-toggle" class="md:hidden w-full flex items-center justify-between px-4 py-3 border-2 border-primary mb-4 bg-surface font-label-caps text-label-caps text-primary" onclick="toggleCatalogFilters()">
+          <span class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">filter_list</span> FILTROS</span>
+          <span id="filter-toggle-icon" class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
+        </button>
+        <div id="catalog-filters-panel" class="md:!block">
         <div class="md:sticky md:top-24 space-y-8">
           <div class="border-b-2 border-primary pb-6">
             <h3 class="font-label-caps text-label-caps text-primary mb-4" data-i18n="catalog.filter.category">CATEGORÍA</h3>
@@ -544,6 +549,7 @@ tailwind.config = {
           </div>
           <button class="btn-outline w-full justify-center" onclick="resetFilters()" data-i18n="catalog.filter.clear">LIMPIAR FILTROS</button>
         </div>
+      </div>
       </aside>
       <!-- Products Grid -->
       <main class="flex-1">

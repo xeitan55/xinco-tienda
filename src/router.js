@@ -168,6 +168,13 @@ export function init() {
     document.getElementById('mobile-menu')?.classList.add('open');
     document.body.style.overflow = 'hidden';
   };
+  window.toggleCatalogFilters = () => {
+    const panel = document.getElementById('catalog-filters-panel');
+    const icon = document.getElementById('filter-toggle-icon');
+    if (!panel) return;
+    const open = panel.classList.toggle('open');
+    if (icon) icon.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+  };
   // Close overlays on backdrop click
   document.addEventListener('click', (e) => {
     const menu = document.getElementById('mobile-menu');
