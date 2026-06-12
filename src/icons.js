@@ -26,45 +26,122 @@ const DOCK_PATHS = {
 };
 
 let _uid = 0;
-function dockGlassIcon(name, size = 22) {
+
+const VARIANTS = {
+  default: {
+    label: 'DEFAULT',
+    desc: 'blanco + acento',
+  },
+  'clear-light': {
+    label: 'CLEAR (LIGHT)',
+    desc: 'transparente sutil',
+  },
+  'tinted-light': {
+    label: 'TINTED (LIGHT)',
+    desc: 'solo acento',
+  },
+  dark: {
+    label: 'DARK',
+    desc: 'negro + acento',
+  },
+  'clear-dark': {
+    label: 'CLEAR (DARK)',
+    desc: 'transparente oscuro',
+  },
+  'tinted-dark': {
+    label: 'TINTED (DARK)',
+    desc: 'oscuro + acento',
+  },
+};
+
+function getRecommendedIconPack(cfg) {
+  cfg = cfg || window._appearanceCfg || {};
+  const dark = cfg.theme === 'dark';
+  const solid = !!cfg.adminSolid;
+  if (dark && solid) return 'dark';
+  if (dark && !solid) return 'clear-dark';
+  if (!dark && solid) return 'default';
+  return 'clear-light';
+}
+
+function dockGlassIcon(name, size = 22, variant) {
   const path = DOCK_PATHS[name];
   if (!path) return document.createElementNS(SVG_NS, 'svg');
   const accent = getAccentHex();
-  const dark = darkenHex(accent);
+  if (!variant) {
+    variant = (window._appearanceCfg && window._appearanceCfg.dockIconPack) || getRecommendedIconPack();
+  }
   const uid = `i${++_uid}`;
   const s = document.createElementNS(SVG_NS, 'svg');
   s.setAttribute('viewBox', '0 0 24 24');
   s.setAttribute('width', String(size));
   s.setAttribute('height', String(size));
-  const d = document.createElementNS(SVG_NS, 'defs');
-  const bgG = document.createElementNS(SVG_NS, 'linearGradient');
-  bgG.setAttribute('id', `${uid}g`); bgG.setAttribute('x1', '0'); bgG.setAttribute('y1', '0');
-  bgG.setAttribute('x2', '24'); bgG.setAttribute('y2', '24'); bgG.setAttribute('gradientUnits', 'userSpaceOnUse');
-  const s1 = document.createElementNS(SVG_NS, 'stop'); s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', accent);
-  const s2 = document.createElementNS(SVG_NS, 'stop'); s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', dark);
-  bgG.appendChild(s1); bgG.appendChild(s2);
-  const hlG = document.createElementNS(SVG_NS, 'linearGradient');
-  hlG.setAttribute('id', `${uid}h`); hlG.setAttribute('x1', '0'); hlG.setAttribute('y1', '0');
-  hlG.setAttribute('x2', '0'); hlG.setAttribute('y2', '24'); hlG.setAttribute('gradientUnits', 'userSpaceOnUse');
-  const s3 = document.createElementNS(SVG_NS, 'stop'); s3.setAttribute('offset', '0%'); s3.setAttribute('stop-color', '#fff'); s3.setAttribute('stop-opacity', '.32');
-  const s4 = document.createElementNS(SVG_NS, 'stop'); s4.setAttribute('offset', '40%'); s4.setAttribute('stop-color', '#fff'); s4.setAttribute('stop-opacity', '.04');
-  const s5 = document.createElementNS(SVG_NS, 'stop'); s5.setAttribute('offset', '100%'); s5.setAttribute('stop-color', '#fff'); s5.setAttribute('stop-opacity', '0');
-  hlG.appendChild(s3); hlG.appendChild(s4); hlG.appendChild(s5);
-  d.appendChild(bgG); d.appendChild(hlG); s.appendChild(d);
-  const r = document.createElementNS(SVG_NS, 'rect');
-  r.setAttribute('x', '1'); r.setAttribute('y', '1'); r.setAttribute('width', '22'); r.setAttribute('height', '22');
-  r.setAttribute('rx', '7'); r.setAttribute('fill', `url(#${uid}g)`); s.appendChild(r);
-  const hr = document.createElementNS(SVG_NS, 'rect');
-  hr.setAttribute('x', '1'); hr.setAttribute('y', '1'); hr.setAttribute('width', '22'); hr.setAttribute('height', '10');
-  hr.setAttribute('rx', '7'); hr.setAttribute('fill', `url(#${uid}h)`); s.appendChild(hr);
-  const br = document.createElementNS(SVG_NS, 'rect');
-  br.setAttribute('x', '1.5'); br.setAttribute('y', '1.5'); br.setAttribute('width', '21'); br.setAttribute('height', '21');
-  br.setAttribute('rx', '6.5'); br.setAttribute('fill', 'none');
-  br.setAttribute('stroke', 'rgba(255,255,255,.16)'); br.setAttribute('stroke-width', '.5'); s.appendChild(br);
+
+  const vcfg = {
+    default:       { bg: '#fff',      bgEnd: '#ececf0', hl: true,  border: 'rgba(0,0,0,.06)',                   path: accent,       sw: 3, po: 1 },
+    'clear-light': { bg: null,        bgEnd: null,       hl: false, border: null,                                path: 'rgba(255,255,255,0.55)', sw: 2.5, po: 1 },
+    'tinted-light':{ bg: null,        bgEnd: null,       hl: false, border: null,                                path: accent,       sw: 3, po: 1 },
+    dark:          { bg: '#2c2c2e',   bgEnd: '#1c1c1e',  hl: true,  border: 'rgba(255,255,255,.08)',            path: accent,       sw: 3, po: 1 },
+    'clear-dark':  { bg: null,        bgEnd: null,       hl: false, border: null,                                path: 'rgba(255,255,255,0.3)',  sw: 2.5, po: 1 },
+    'tinted-dark': { bg: '#1c1c1e',   bgEnd: '#111111',  hl: true,  border: 'rgba(255,255,255,.06)',            path: accent,       sw: 3, po: 1 },
+  }[variant] || vcfg.default;
+
+  const needDefs = vcfg.bg || vcfg.hl;
+  if (needDefs) {
+    const d = document.createElementNS(SVG_NS, 'defs');
+    if (vcfg.bg) {
+      const bgG = document.createElementNS(SVG_NS, 'linearGradient');
+      bgG.setAttribute('id', `${uid}g`); bgG.setAttribute('x1', '0'); bgG.setAttribute('y1', '0');
+      bgG.setAttribute('x2', '24'); bgG.setAttribute('y2', '24'); bgG.setAttribute('gradientUnits', 'userSpaceOnUse');
+      const s1 = document.createElementNS(SVG_NS, 'stop'); s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', vcfg.bg);
+      const s2 = document.createElementNS(SVG_NS, 'stop'); s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', vcfg.bgEnd || vcfg.bg);
+      bgG.appendChild(s1); bgG.appendChild(s2); d.appendChild(bgG);
+    }
+    if (vcfg.hl) {
+      const hlG = document.createElementNS(SVG_NS, 'linearGradient');
+      hlG.setAttribute('id', `${uid}h`); hlG.setAttribute('x1', '0'); hlG.setAttribute('y1', '0');
+      hlG.setAttribute('x2', '0'); hlG.setAttribute('y2', '24'); hlG.setAttribute('gradientUnits', 'userSpaceOnUse');
+      const stops = [
+        [ '0%',   '#fff', '.2' ],
+        [ '40%',  '#fff', '.03' ],
+        [ '100%', '#fff', '0' ],
+      ];
+      stops.forEach(([off, col, op]) => {
+        const st = document.createElementNS(SVG_NS, 'stop');
+        st.setAttribute('offset', off); st.setAttribute('stop-color', col); st.setAttribute('stop-opacity', op);
+        hlG.appendChild(st);
+      });
+      d.appendChild(hlG);
+    }
+    s.appendChild(d);
+  }
+
+  if (vcfg.bg) {
+    const r = document.createElementNS(SVG_NS, 'rect');
+    r.setAttribute('x', '1'); r.setAttribute('y', '1'); r.setAttribute('width', '22'); r.setAttribute('height', '22');
+    r.setAttribute('rx', '7'); r.setAttribute('fill', `url(#${uid}g)`); s.appendChild(r);
+  }
+
+  if (vcfg.hl) {
+    const hr = document.createElementNS(SVG_NS, 'rect');
+    hr.setAttribute('x', '1'); hr.setAttribute('y', '1'); hr.setAttribute('width', '22'); hr.setAttribute('height', '10');
+    hr.setAttribute('rx', '7'); hr.setAttribute('fill', `url(#${uid}h)`); s.appendChild(hr);
+  }
+
+  if (vcfg.border) {
+    const br = document.createElementNS(SVG_NS, 'rect');
+    br.setAttribute('x', '1.5'); br.setAttribute('y', '1.5'); br.setAttribute('width', '21'); br.setAttribute('height', '21');
+    br.setAttribute('rx', '6.5'); br.setAttribute('fill', 'none');
+    br.setAttribute('stroke', vcfg.border); br.setAttribute('stroke-width', '.5'); s.appendChild(br);
+  }
+
   const g = document.createElementNS(SVG_NS, 'g');
-  g.setAttribute('fill', 'none'); g.setAttribute('stroke', '#fff');
-  g.setAttribute('stroke-width', '3'); g.setAttribute('stroke-linecap', 'round'); g.setAttribute('stroke-linejoin', 'round');
+  g.setAttribute('fill', 'none');
+  g.setAttribute('stroke', vcfg.path);
+  g.setAttribute('stroke-width', String(vcfg.sw));
+  g.setAttribute('stroke-linecap', 'round'); g.setAttribute('stroke-linejoin', 'round');
   g.setAttribute('transform', 'translate(-3,-3) scale(1.25)');
+  if (vcfg.po !== undefined) g.setAttribute('opacity', String(vcfg.po));
   path.split(/(?=M)/g).forEach(p => { const t = p.trim(); if (t) { const pe = document.createElementNS(SVG_NS, 'path'); pe.setAttribute('d', t); g.appendChild(pe); } });
   s.appendChild(g);
   return s;
@@ -263,6 +340,8 @@ export function init() {
   window.xincoIconEl = iconEl;
   window.replaceIcons = replaceIcons;
   window.refreshDockIcons = refreshDockIcons;
+  window.VARIANTS = VARIANTS;
+  window.getRecommendedIconPack = getRecommendedIconPack;
 
   const run = () => {
     replaceIcons();

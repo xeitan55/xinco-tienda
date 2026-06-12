@@ -2451,7 +2451,7 @@ export function loadAppearance() {
     const saved = JSON.parse(localStorage.getItem(APP_KEY));
     if (saved) return saved;
   } catch(e) {}
-  return { theme: 'light', dockOpacity: 50, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockDraggable: true, adminSolid: false, bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
+  return { theme: 'light', dockOpacity: 50, dockWidth: 18, dockHeight: 44, dockPosition: 'bottom', dockStyle: 'blur', dockDraggable: true, adminSolid: false, dockIconPack: 'auto', bgVideo1: '', bgVideo2: '', bgVideo3: '', bgVideo4: '' };
 }
 
 export function saveAppearance() {
@@ -2463,6 +2463,7 @@ export function saveAppearance() {
     dockPosition: document.querySelector('input[name="dock-position"]:checked')?.value || 'bottom',
     dockStyle: document.querySelector('input[name="dock-style"]:checked')?.value || 'blur',
     dockDraggable: document.getElementById('ap-dock-draggable')?.checked ?? true,
+    dockIconPack: document.querySelector('input[name="dock-icon-pack"]:checked')?.value || 'auto',
     adminSolid: document.querySelector('input[name="cfg-solid"]:checked')?.value === 'solid',
     bgVideo1: document.getElementById('ap-bg-video-1')?.value.trim() || '',
     bgVideo2: document.getElementById('ap-bg-video-2')?.value.trim() || '',
@@ -2517,10 +2518,21 @@ export async function applyAllChanges() {
   }
 }
 
+export function autoSelectIconPack() {
+  const theme = document.querySelector('input[name="cfg-theme"]:checked')?.value || 'light';
+  const solid = document.querySelector('input[name="cfg-solid"]:checked')?.value === 'solid';
+  const cfg = { theme, adminSolid: solid };
+  const rec = window.getRecommendedIconPack?.(cfg) || 'clear-light';
+  const radio = document.querySelector(`input[name="dock-icon-pack"][value="${rec}"]`);
+  if (radio) radio.checked = true;
+}
+window.autoSelectIconPack = autoSelectIconPack;
+
 export function setAdminSolid(enabled) {
   document.documentElement.classList.toggle('admin-solid', !!enabled);
   const radio = document.querySelector(`input[name="cfg-solid"][value="${enabled ? 'solid' : 'glass'}"]`);
   if (radio) radio.checked = true;
+  autoSelectIconPack();
 }
 
 export function applyAppearance(cfg) {
@@ -2535,8 +2547,13 @@ export function applyAppearance(cfg) {
   document.documentElement.classList.toggle('admin-solid', !!cfg.adminSolid);
   const solidRadio = document.querySelector(`input[name="cfg-solid"][value="${cfg.adminSolid ? 'solid' : 'glass'}"]`);
   if (solidRadio) solidRadio.checked = true;
+  const pack = (!cfg.dockIconPack || cfg.dockIconPack === 'auto') ? (window.getRecommendedIconPack?.(cfg) || 'clear-light') : cfg.dockIconPack;
+  const packRadio = document.querySelector(`input[name="dock-icon-pack"][value="${pack}"]`);
+  if (packRadio) packRadio.checked = true;
   window._appearanceCfg = cfg;
   try { window.syncDockDraggable?.(); } catch(_) {}
+  try { window.refreshDockIcons?.(); } catch(_) {}
+  try { if (window.autoSelectIconPack) window.autoSelectIconPack(); } catch(_) {}
 }
 
 export function initAppearancePanel() {

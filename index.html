@@ -2142,14 +2142,14 @@ tailwind.config = {
                   </h3>
                   <p class="font-body-md text-on-surface-variant/70 text-sm mb-4">Elegí el estilo del panel de administración.</p>
                   <div class="flex gap-3">
-                    <label class="theme-option" onclick="setTheme('light');setTimeout(saveAppearance,50)">
+                    <label class="theme-option" onclick="setTheme('light');autoSelectIconPack();setTimeout(saveAppearance,50)">
                       <input type="radio" name="cfg-theme" value="light" class="sr-only"/>
                       <div class="theme-option-box">
                         <div class="theme-preview" style="background:rgba(255,255,255,0.3);border:2px solid var(--accent-color,#3B82F6);backdrop-filter:blur(4px);"><span style="color:#1a1c1c;font-size:16px;font-weight:700;">Aa</span></div>
                         <span class="font-label-caps text-[10px] text-primary">CLARO</span>
                       </div>
                     </label>
-                    <label class="theme-option" onclick="setTheme('dark');setTimeout(saveAppearance,50)">
+                    <label class="theme-option" onclick="setTheme('dark');autoSelectIconPack();setTimeout(saveAppearance,50)">
                       <input type="radio" name="cfg-theme" value="dark" class="sr-only"/>
                       <div class="theme-option-box">
                         <div class="theme-preview" style="background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.6);backdrop-filter:blur(4px);"><span style="color:#fff;font-size:16px;font-weight:700;">Aa</span></div>
@@ -2255,6 +2255,59 @@ tailwind.config = {
                           <input type="radio" name="dock-style" value="acrylic" class="sr-only" onchange="saveAppearance()"/>
                           <span class="material-symbols-outlined text-[18px] block mb-1" style="color:var(--admin-accent,#9b87f5);">blur_on</span>
                           <span class="font-label-caps text-[9px] text-primary">ACRÍLICO</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div>
+                      <span class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-2">ICON PACK</span>
+                      <div class="grid grid-cols-3 gap-1.5" id="ap-icon-pack-options">
+                        <label class="ip-option" data-pack="default">
+                          <input type="radio" name="dock-icon-pack" value="default" class="sr-only" onchange="saveAppearance()"/>
+                          <div class="ip-preview" style="background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:6px;height:24px;display:flex;align-items:center;justify-content:center;">
+                            <span class="font-label-caps text-[7px] font-bold" style="color:var(--admin-accent,#9b87f5);">●</span>
+                          </div>
+                          <span class="font-label-caps text-[7px] text-primary block text-center mt-0.5 leading-tight">DEFAULT</span>
+                          <span class="font-label-caps text-[6px] text-on-surface-variant/50 block text-center leading-tight">blanco</span>
+                        </label>
+                        <label class="ip-option" data-pack="clear-light">
+                          <input type="radio" name="dock-icon-pack" value="clear-light" class="sr-only" onchange="saveAppearance()"/>
+                          <div class="ip-preview" style="background:rgba(255,255,255,0.15);border:1px dashed rgba(255,255,255,0.25);border-radius:6px;height:24px;display:flex;align-items:center;justify-content:center;">
+                            <span class="font-label-caps text-[7px]" style="color:rgba(255,255,255,0.55);">●</span>
+                          </div>
+                          <span class="font-label-caps text-[7px] text-primary block text-center mt-0.5 leading-tight">CLEAR</span>
+                          <span class="font-label-caps text-[6px] text-on-surface-variant/50 block text-center leading-tight">transparente</span>
+                        </label>
+                        <label class="ip-option" data-pack="tinted-light">
+                          <input type="radio" name="dock-icon-pack" value="tinted-light" class="sr-only" onchange="saveAppearance()"/>
+                          <div class="ip-preview" style="background:rgba(255,255,255,0.15);border:1px dashed rgba(255,255,255,0.25);border-radius:6px;height:24px;display:flex;align-items:center;justify-content:center;">
+                            <span class="font-label-caps text-[7px] font-bold" style="color:var(--admin-accent,#9b87f5);">●</span>
+                          </div>
+                          <span class="font-label-caps text-[7px] text-primary block text-center mt-0.5 leading-tight">TINTED</span>
+                          <span class="font-label-caps text-[6px] text-on-surface-variant/50 block text-center leading-tight">solo acento</span>
+                        </label>
+                        <label class="ip-option" data-pack="dark">
+                          <input type="radio" name="dock-icon-pack" value="dark" class="sr-only" onchange="saveAppearance()"/>
+                          <div class="ip-preview" style="background:#2c2c2e;border:1px solid rgba(255,255,255,0.12);border-radius:6px;height:24px;display:flex;align-items:center;justify-content:center;">
+                            <span class="font-label-caps text-[7px] font-bold" style="color:var(--admin-accent,#9b87f5);">●</span>
+                          </div>
+                          <span class="font-label-caps text-[7px] text-primary block text-center mt-0.5 leading-tight">DARK</span>
+                          <span class="font-label-caps text-[6px] text-on-surface-variant/50 block text-center leading-tight">negro</span>
+                        </label>
+                        <label class="ip-option" data-pack="clear-dark">
+                          <input type="radio" name="dock-icon-pack" value="clear-dark" class="sr-only" onchange="saveAppearance()"/>
+                          <div class="ip-preview" style="background:rgba(255,255,255,0.06);border:1px dashed rgba(255,255,255,0.12);border-radius:6px;height:24px;display:flex;align-items:center;justify-content:center;">
+                            <span class="font-label-caps text-[7px]" style="color:rgba(255,255,255,0.3);">●</span>
+                          </div>
+                          <span class="font-label-caps text-[7px] text-primary block text-center mt-0.5 leading-tight">CLEAR D</span>
+                          <span class="font-label-caps text-[6px] text-on-surface-variant/50 block text-center leading-tight">transp. oscuro</span>
+                        </label>
+                        <label class="ip-option" data-pack="tinted-dark">
+                          <input type="radio" name="dock-icon-pack" value="tinted-dark" class="sr-only" onchange="saveAppearance()"/>
+                          <div class="ip-preview" style="background:#1c1c1e;border:1px solid rgba(255,255,255,0.08);border-radius:6px;height:24px;display:flex;align-items:center;justify-content:center;">
+                            <span class="font-label-caps text-[7px] font-bold" style="color:var(--admin-accent,#9b87f5);">●</span>
+                          </div>
+                          <span class="font-label-caps text-[7px] text-primary block text-center mt-0.5 leading-tight">TINTED D</span>
+                          <span class="font-label-caps text-[6px] text-on-surface-variant/50 block text-center leading-tight">oscuro acento</span>
                         </label>
                       </div>
                     </div>

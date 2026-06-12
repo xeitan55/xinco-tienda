@@ -629,6 +629,9 @@ html.dark .product-card:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.3) !importa
   @keyframes dockPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 .dock-style-option { border-color: transparent; }
 .dock-style-option:has(input:checked) { border-color: var(--admin-accent, #9b87f5) !important; background: color-mix(in srgb, var(--admin-accent, #9b87f5) 8%, transparent); }
+.ip-option { display: block; text-align: center; cursor: pointer; padding: 4px 2px; border-radius: 8px; border: 1px solid transparent; transition: all 0.2s; }
+.ip-option:hover { border-color: rgba(255,255,255,0.15); }
+.ip-option:has(input:checked) { border-color: var(--admin-accent, #9b87f5) !important; background: color-mix(in srgb, var(--admin-accent, #9b87f5) 10%, transparent); }
 html.dark .admin-dock.dock-blur { background: linear-gradient(135deg, rgba(30,30,40,0.6) 0%, rgba(20,20,30,0.5) 100%); border-color: rgba(255,255,255,0.06); }
 html.dark .admin-dock.dock-acrylic { background: linear-gradient(135deg, rgba(30,30,40,0.85) 0%, rgba(20,20,25,0.78) 100%); border-color: rgba(255,255,255,0.08); }
 html.dark .admin-dock.dock-colored-on.dock-blur { background: linear-gradient(135deg, color-mix(in srgb, var(--admin-accent, #9b87f5) 20%, rgba(30,30,40,0.6)) 0%, color-mix(in srgb, var(--admin-accent, #9b87f5) 12%, rgba(20,20,30,0.5)) 100%); }
