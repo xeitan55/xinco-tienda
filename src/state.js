@@ -5,9 +5,9 @@ let bannerState = {
     { text: 'HASTA 30% OFF EN SELECCIONADOS', color: '#ffffff' }
   ],
   hero: {
-    badge: 'NUEVA TEMPORADA',
+    badge: 'NUEVA COLECCIÓN',
     title: 'XINCO',
-    subtitle: 'Tu estilo, tu identidad',
+    subtitle: 'Donde el estilo define tu identidad',
     img: 'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=1800&q=80',
     videoUrl: '',
     animStyle: 'default',

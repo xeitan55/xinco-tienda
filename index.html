@@ -277,18 +277,17 @@ tailwind.config = {
     <div class="absolute inset-0 z-[2] hero-overlay"></div>
     <canvas id="xinco-canvas" class="absolute inset-0 z-[11] pointer-events-none" style="width:100%;height:100%;" aria-hidden="true"></canvas>
 
-    <div class="relative z-10 px-6 md:px-12 pb-12 md:pb-20 max-w-[1440px] w-full mx-auto" style="z-index:10;">
+    <div class="relative z-10 px-6 md:px-12 pb-12 md:pb-24 max-w-[1440px] w-full mx-auto" style="z-index:10;">
       <div class="max-w-2xl">
-        <div class="flex items-center gap-3 mb-4 hero-anim-badge">
-          <span class="w-8 h-[2px] rounded-full" style="background:var(--accent-color,#a78bfa);"></span>
-          <span id="hero-badge" class="font-label-caps text-[10px] tracking-[0.25em] uppercase text-white/50"></span>
+        <div class="mb-6 hero-anim-badge">
+          <span id="hero-badge" class="hero-badge"></span>
         </div>
-        <h1 id="hero-title" class="uppercase hero-anim-title" style="font-family:DM Sans;font-size:clamp(32px,7vw,72px);font-weight:800;line-height:0.88;letter-spacing:-0.05em;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,0.85);text-stroke:2px rgba(255,255,255,0.85);"></h1>
+        <h1 id="hero-title" class="hero-title hero-anim-title"></h1>
         <div class="w-16 h-[3px] rounded-full mb-6 hero-anim-title" style="background:var(--accent-color,#a78bfa);"></div>
-        <p id="hero-subtitle" class="text-white/50 mb-8 max-w-md hero-anim-subtitle" style="font-family:Inter;font-size:clamp(13px,1.1vw,16px);line-height:1.8;letter-spacing:0.02em;"></p>
+        <p id="hero-subtitle" class="hero-subtitle hero-anim-subtitle"></p>
         <div class="flex gap-3 flex-wrap hero-anim-btns">
-          <button class="px-7 py-3 text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300 rounded-full" style="background:var(--accent-color,#a78bfa);color:#fff;border:none;" onclick="nav('catalog')" data-i18n="hero.explore">EXPLORAR</button>
-          <button class="px-7 py-3 text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300 rounded-full border border-white/20 text-white/70 hover:text-white hover:border-white/50 bg-white/5 backdrop-blur-sm" onclick="filterCatalog('newdrops')" data-i18n="hero.new">NOVEDADES</button>
+          <button class="hero-cta hero-cta-primary" onclick="nav('catalog')" data-i18n="hero.explore">EXPLORAR</button>
+          <button class="hero-cta hero-cta-secondary" onclick="filterCatalog('newdrops')" data-i18n="hero.new">NOVEDADES</button>
         </div>
       </div>
     </div>
