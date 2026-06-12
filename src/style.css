@@ -359,8 +359,7 @@
   .page { display: none; animation: fadeInUp 0.35s ease-out; background: rgba(255,255,255,0.85); }
   html.dark .page { background: rgba(18,18,18,0.85); }
   .page.active { display: block; }
-  #page-account { background: var(--surface); }
-  html.dark #page-account { background: var(--surface); }
+
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
   ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); }

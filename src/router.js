@@ -44,13 +44,14 @@ export async function nav(page, opts) {
   window.scrollTo(0, 0);
 
   const hideHeader = ['admin','login','register'].includes(page);
+  const hideStitch = ['admin','login','register','account'].includes(page);
   document.getElementById('main-header').style.display = hideHeader ? 'none' : '';
   document.getElementById('announcement-bar').style.display = hideHeader ? 'none' : '';
 
   const stitchEl = document.getElementById('mouse-stitch');
   if (stitchEl) {
-    stitchEl.style.display = hideHeader ? 'none' : '';
-    if (!hideHeader) setTimeout(() => { try { window.updateStitchClip?.(); } catch(e) {} }, 50);
+    stitchEl.style.display = hideStitch ? 'none' : '';
+    if (!hideStitch) setTimeout(() => { try { window.updateStitchClip?.(); } catch(e) {} }, 50);
   }
   const bgCanvas = document.getElementById('bg-canvas');
   if (bgCanvas) bgCanvas.style.display = hideHeader ? 'none' : '';
