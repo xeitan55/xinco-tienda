@@ -1329,6 +1329,54 @@ html.dark .admin-solid .admin-card { background: var(--surface-container-lowest)
     background-position: right 12px center;
     padding-right: 36px;
   }
+  /* ===== ACCOUNT ANIMATIONS ===== */
+  #page-account .tab-btn {
+    position: relative;
+  }
+  #page-account .tab-btn.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    background: var(--primary);
+    border-radius: 0 3px 3px 0;
+    animation: tabActiveIn 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+  @keyframes tabActiveIn {
+    from { transform: scaleY(0); opacity: 0; }
+    to { transform: scaleY(1); opacity: 1; }
+  }
+  #page-account .tab-enter {
+    animation: tabFadeIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  #page-account .tab-exit {
+    animation: tabFadeOut 0.2s ease-in both;
+    pointer-events: none;
+  }
+  @keyframes tabFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes tabFadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-6px); }
+  }
+  .address-item {
+    animation: addrIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes addrIn {
+    from { opacity: 0; transform: translateX(-12px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  #page-account .profile-card > * {
+    animation: fieldIn 0.3s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes fieldIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
     .hero-particle { display: none; }

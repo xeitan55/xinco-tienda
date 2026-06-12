@@ -315,10 +315,26 @@ export function renderAccountPage() {
 }
 
 export function showAccountTab(tab) {
+  const newContent = document.getElementById('acc-content-'+tab);
+  if (!newContent) return;
+
+  document.querySelectorAll('[id^="acc-content-"]').forEach(c => {
+    if (!c.classList.contains('hidden') && c !== newContent) {
+      c.classList.add('tab-exit');
+      setTimeout(() => {
+        c.classList.add('hidden');
+        c.classList.remove('tab-exit', 'tab-enter');
+      }, 200);
+    }
+  });
+
+  newContent.classList.remove('hidden');
+  void newContent.offsetWidth;
+  newContent.classList.remove('tab-exit', 'tab-prepare');
+  newContent.classList.add('tab-enter');
+
   ['orders','profile','security','datos'].forEach(t => {
-    const content = document.getElementById('acc-content-'+t);
     const btn = document.getElementById('acc-tab-'+t);
-    if (content) content.classList.toggle('hidden', t !== tab);
     if (btn) btn.classList.toggle('active', t === tab);
   });
 }
@@ -434,7 +450,7 @@ export function renderAddresses() {
   const addrs = state.user?.addresses || [];
   if (!addrs.length) { el.innerHTML = '<p class="font-label-caps text-[10px] text-on-surface-variant">NO HAY DIRECCIONES GUARDADAS</p>'; return; }
   el.innerHTML = addrs.map((a,i) => `
-    <div class="flex justify-between items-start p-3 border-[2px] border-primary">
+    <div class="flex justify-between items-start p-3 border-[2px] border-primary address-item" style="animation-delay:${i * 0.06}s">
       <div>
         <div class="font-label-caps text-label-caps text-primary">${window.escapeHtml(a.street)}</div>
         <div class="font-label-caps text-[10px] text-on-surface-variant">${window.escapeHtml(a.city)}, ${window.escapeHtml(a.prov)} (${window.escapeHtml(a.cp)})</div>
