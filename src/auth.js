@@ -312,66 +312,10 @@ export function renderAccountPage() {
       </div>`).join('');
   }
   renderAddresses();
-  renderMPStatus();
-}
-
-function renderMPStatus() {
-  const unlinked = document.getElementById('mp-unlinked');
-  const linked = document.getElementById('mp-linked');
-  const badge = document.getElementById('user-mp-status');
-  if (!badge) return;
-  const saved = state.user?.paymentData;
-  if (saved && saved.mp_email) {
-    badge.textContent = 'VINCULADO ✓';
-    badge.className = 'badge badge-violet shrink-0';
-    if (unlinked) unlinked.classList.add('hidden');
-    if (linked) { linked.classList.remove('hidden'); document.getElementById('mp-linked-email').textContent = saved.mp_email; }
-  } else {
-    loadMPFromFirestore();
-  }
-}
-
-async function loadMPFromFirestore() {
-  if (!fbDb || !window._fb || !state.user) return;
-  try {
-    const { doc, getDoc } = window._fb;
-    const snap = await getDoc(doc(fbDb, 'users', state.user.uid));
-    if (!snap.exists()) return;
-    const data = snap.data();
-    const payment = data.payment;
-    if (payment && payment.mp_email) {
-      if (!state.user.paymentData) state.user.paymentData = payment;
-      const badge = document.getElementById('user-mp-status');
-      const unlinked = document.getElementById('mp-unlinked');
-      const linked = document.getElementById('mp-linked');
-      if (badge) { badge.textContent = 'VINCULADO ✓'; badge.className = 'badge badge-violet shrink-0'; }
-      if (unlinked) unlinked.classList.add('hidden');
-      if (linked) { linked.classList.remove('hidden'); const el = document.getElementById('mp-linked-email'); if (el) el.textContent = payment.mp_email; }
-    }
-  } catch(e) { console.warn('loadMP:', e); }
-}
-
-export function unlinkMP() {
-  const c = confirm('¿Desvincular cuenta de Mercado Pago?');
-  if (!c) return;
-  const unlinked = document.getElementById('mp-unlinked');
-  const linked = document.getElementById('mp-linked');
-  const badge = document.getElementById('user-mp-status');
-  const els = ['user-mp-cbu', 'user-mp-alias', 'user-mp-email'];
-  els.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  if (badge) { badge.textContent = 'NO VINCULADO'; badge.className = 'badge badge-outline shrink-0'; }
-  if (unlinked) unlinked.classList.remove('hidden');
-  if (linked) linked.classList.add('hidden');
-  if (state.user) delete state.user.paymentData;
-  if (fbDb && window._fb && state.user) {
-    const { doc, setDoc } = window._fb;
-    setDoc(doc(fbDb, 'users', state.user.uid), { payment: {} }, { merge: true }).catch(() => {});
-  }
-  window.showToast?.('Cuenta desvinculada');
 }
 
 export function showAccountTab(tab) {
-  ['orders','profile','payment','addresses','security','datos'].forEach(t => {
+  ['orders','profile','addresses','security','datos'].forEach(t => {
     const content = document.getElementById('acc-content-'+t);
     const btn = document.getElementById('acc-tab-'+t);
     if (content) content.classList.toggle('hidden', t !== tab);
@@ -461,138 +405,6 @@ export async function uploadAvatar(file) {
       window.showToast?.('¡Foto de perfil actualizada! ');
     }
   } catch(e) { window.showToast?.('Error al subir la foto '); }
-}
-
-export function validatePaymentField(id) {
-  const el = document.getElementById(id);
-  const errEl = document.getElementById(id+'-err');
-  if (!el || !errEl) return true;
-  const val = el.value.trim();
-  let msg = '';
-  if ((id === 'user-mp-cbu' || id === 'user-bank-cbu') && val && !/^\d{22}$/.test(val)) msg = 'EL CBU/CVU DEBE TENER 22 DÍGITOS';
-  if ((id === 'user-mp-alias' || id === 'user-bank-alias') && val && !/^[A-Za-z0-9\.\-]{6,20}$/.test(val)) msg = 'ALIAS INVÁLIDO (6-20 CARACTERES, SOLO LETRAS, NÚMEROS Y PUNTOS)';
-  if (id === 'user-mp-email' && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) msg = 'EMAIL INVÁLIDO';
-  if (msg) { errEl.textContent = msg; errEl.classList.remove('hidden'); el.style.borderColor='#ba1a1a'; return false; }
-  else { errEl.classList.add('hidden'); el.style.borderColor=''; return true; }
-}
-
-export async function saveUserPayment(type) {
-  if (type === 'mp') {
-    const valid = ['user-mp-cbu','user-mp-alias','user-mp-email'].map(validatePaymentField).every(Boolean);
-    if (!valid) { window.showToast?.('CORREGÍ LOS CAMPOS MARCADOS '); return; }
-    const data = {
-      mp_cbu: document.getElementById('user-mp-cbu')?.value.trim(),
-      mp_alias: document.getElementById('user-mp-alias')?.value.trim(),
-      mp_email: document.getElementById('user-mp-email')?.value.trim(),
-    };
-    if (!data.mp_cbu && !data.mp_alias) { window.showToast?.('INGRESÁ AL MENOS EL CBU O EL ALIAS '); return; }
-    if (fbDb && window._fb && state.user) {
-      const { doc, setDoc } = window._fb;
-      await setDoc(doc(fbDb,'users',state.user.uid), { payment: data }, { merge: true });
-    }
-    if (state.user) state.user.paymentData = data;
-    const badge = document.getElementById('user-mp-status');
-    const unlinked = document.getElementById('mp-unlinked');
-    const linked = document.getElementById('mp-linked');
-    ['user-mp-cbu','user-mp-alias'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    if (badge) { badge.textContent = 'VINCULADO ✓'; badge.className = 'badge badge-violet shrink-0'; }
-    if (unlinked) unlinked.classList.add('hidden');
-    if (linked) { linked.classList.remove('hidden'); const el = document.getElementById('mp-linked-email'); if (el) el.textContent = data.mp_email; }
-    window.showToast?.('Mercado Pago vinculado exitosamente ');
-  }
-  if (type === 'bank') {
-    const cbuValid = validatePaymentField('user-bank-cbu');
-    if (!cbuValid) { window.showToast?.('CBU INVÁLIDO '); return; }
-    const data = {
-      bank_name: document.getElementById('user-bank-name')?.value.trim(),
-      bank_titular: document.getElementById('user-bank-titular')?.value.trim(),
-      bank_cbu: document.getElementById('user-bank-cbu')?.value.trim(),
-      bank_alias: document.getElementById('user-bank-alias')?.value.trim(),
-    };
-    if (!data.bank_name || !data.bank_cbu) { window.showToast?.('BANCO Y CBU SON OBLIGATORIOS '); return; }
-    if (fbDb && window._fb && state.user) {
-      const { doc, setDoc } = window._fb;
-      await setDoc(doc(fbDb,'users',state.user.uid), { bank: data }, { merge: true });
-    }
-    ['user-bank-name','user-bank-titular','user-bank-cbu','user-bank-alias'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    window.showToast?.('Datos bancarios guardados ');
-  }
-}
-
-export function showAddCardForm() { document.getElementById('add-card-form')?.classList.remove('hidden'); }
-
-export function validateCardField() {
-  const num = document.getElementById('card-num')?.value.replace(/\s/g,'');
-  const exp = document.getElementById('card-exp')?.value;
-  const err = document.getElementById('card-err');
-  if (num && num.length > 0 && num.length < 15) { if(err){err.textContent='NÚMERO DE TARJETA INCOMPLETO';err.classList.remove('hidden');} return false; }
-  if (exp && !/^\d{2}\/\d{2}$/.test(exp)) { if(err){err.textContent='FORMATO DE VENCIMIENTO: MM/AA';err.classList.remove('hidden');} return false; }
-  if (err) err.classList.add('hidden');
-  return true;
-}
-
-export async function saveCard() {
-  const numEl = document.getElementById('card-num');
-  const num = numEl?.value.replace(/\s/g,'');
-  const exp = document.getElementById('card-exp')?.value.trim();
-  const name = document.getElementById('card-name')?.value.trim();
-  const err = document.getElementById('card-err');
-  if (!num || num.length < 15) { if(err){err.textContent='INGRESÁ UN NÚMERO DE TARJETA VÁLIDO';err.classList.remove('hidden');} return; }
-  if (!exp || !/^\d{2}\/\d{2}$/.test(exp)) { if(err){err.textContent='INGRESÁ LA FECHA MM/AA';err.classList.remove('hidden');} return; }
-  const [mm,yy] = exp.split('/');
-  if (new Date(2000+parseInt(yy), parseInt(mm)-1) < new Date()) { if(err){err.textContent='LA TARJETA ESTÁ VENCIDA';err.classList.remove('hidden');} return; }
-  if (!name) { if(err){err.textContent='INGRESÁ EL NOMBRE DE LA TARJETA';err.classList.remove('hidden');} return; }
-  if (err) err.classList.add('hidden');
-  const masked = '**** **** **** ' + num.slice(-4);
-  const brand = num[0]==='4'?'VISA':num[0]==='5'?'MASTERCARD':num.startsWith('34')||num.startsWith('37')?'AMEX':'TARJETA';
-  if (numEl) numEl.value = '';
-  const expEl = document.getElementById('card-exp');
-  if (expEl) expEl.value = '';
-  const card = { masked, brand, exp, name, addedAt: new Date().toISOString() };
-  if (!state.user) return;
-  if (!state.user.cards) state.user.cards = [];
-  state.user.cards.push(card);
-  if (fbDb && window._fb) {
-    const { doc, setDoc } = window._fb;
-    await setDoc(doc(fbDb,'users',state.user.uid), { cards: state.user.cards }, { merge: true });
-  }
-  document.getElementById('add-card-form')?.classList.add('hidden');
-  renderUserCards();
-  window.showToast?.(`Tarjeta ${brand} ****${num.slice(-4)} guardada `);
-}
-
-export function renderUserCards() {
-  const el = document.getElementById('user-cards-list');
-  if (!el) return;
-  const cards = state.user?.cards || [];
-  if (!cards.length) {
-    el.innerHTML = '<div class="text-center py-6 border-[2px] border-dashed border-outline-variant"><span class="material-symbols-outlined text-[32px] text-outline-variant">credit_card_off</span><p class="font-label-caps text-[10px] text-on-surface-variant mt-2">NO HAY TARJETAS GUARDADAS</p></div>';
-    return;
-  }
-  el.innerHTML = cards.map((c,i) => `
-    <div class="flex items-center gap-4 p-3 border-[2px] border-primary">
-      <div class="w-10 h-10 bg-primary flex items-center justify-center shrink-0">
-        <span class="material-symbols-outlined text-white text-[18px]">credit_card</span>
-      </div>
-      <div class="flex-1">
-        <div class="font-label-caps text-label-caps text-primary">${window.escapeHtml(c.brand)} ${window.escapeHtml(c.masked)}</div>
-        <div class="font-label-caps text-[10px] text-on-surface-variant">${window.escapeHtml(c.name)} · VENCE ${window.escapeHtml(c.exp)}</div>
-      </div>
-      <button onclick="removeCard(${i})" class="p-1 border-2 border-error text-error hover:bg-error hover:text-white transition-colors">
-        <span class="material-symbols-outlined text-[16px]">delete</span>
-      </button>
-    </div>`).join('');
-}
-
-export async function removeCard(i) {
-  if (!state.user?.cards) return;
-  state.user.cards.splice(i, 1);
-  if (fbDb && window._fb) {
-    const { doc, setDoc } = window._fb;
-    await setDoc(doc(fbDb,'users',state.user.uid), { cards: state.user.cards }, { merge: true });
-  }
-  renderUserCards();
-  window.showToast?.('Tarjeta eliminada');
 }
 
 export function showAddAddressForm() { document.getElementById('add-address-form')?.classList.remove('hidden'); }
@@ -745,23 +557,14 @@ export function init() {
   window.showAccountTab = showAccountTab;
   window.saveProfile = saveProfile;
   window.uploadAvatar = uploadAvatar;
-  window.showAddCardForm = showAddCardForm;
-  window.validateCardField = validateCardField;
-  window.saveCard = saveCard;
-  window.removeCard = removeCard;
-  window.saveUserPayment = saveUserPayment;
   window.showAddAddressForm = showAddAddressForm;
   window.saveAddress = saveAddress;
   window.removeAddress = removeAddress;
   window.validateNewEmail = validateNewEmail;
   window.changeUserEmail = changeUserEmail;
   window.sendPasswordReset = sendPasswordReset;
-  window.validatePaymentField = validatePaymentField;
   window.validateProfileField = validateProfileField;
-  window.renderUserCards = renderUserCards;
   window.renderAddresses = renderAddresses;
-  window.renderMPStatus = renderMPStatus;
-  window.unlinkMP = unlinkMP;
   window.handleEmailVerification = handleEmailVerification;
   // Process email verification link on load
   setTimeout(() => handleEmailVerification(), 500);
