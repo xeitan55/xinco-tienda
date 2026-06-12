@@ -219,10 +219,8 @@ export function initStitches() {
     for (const p of pts) {
       const s = STITCH_SIZE * (0.6 + 0.4 * (1 - Math.min(1, Math.sqrt((p.x - mx) ** 2 + (p.y - my) ** 2) / MOUSE_RADIUS)));
       const accentStrong = getComputedStyle(document.documentElement).getPropertyValue('--accent-strong').trim() || 'rgba(93,34,255,0.5)';
-      ctx.strokeStyle = accentStrong;
-      ctx.lineWidth = 1.2;
-      ctx.beginPath(); ctx.moveTo(p.x - s, p.y - s); ctx.lineTo(p.x + s, p.y + s); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(p.x + s, p.y - s); ctx.lineTo(p.x - s, p.y + s); ctx.stroke();
+      ctx.fillStyle = accentStrong;
+      ctx.beginPath(); ctx.arc(p.x, p.y, s * 0.35, 0, Math.PI * 2); ctx.fill();
     }
     animId = requestAnimationFrame(draw);
   }
