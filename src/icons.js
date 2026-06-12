@@ -32,15 +32,10 @@ const VARIANTS = {
     label: 'TRANSPARENTE CLEAR',
     desc: 'fondo transparente, trazo blanco',
   },
-  'transparent-total': {
-    label: 'TRANSPARENTE TOTAL',
-    desc: 'totalmente transparente, sin color',
-  },
 };
 
 function getRecommendedIconPack(cfg) {
   cfg = cfg || window._appearanceCfg || {};
-  if (!cfg.adminSolid) return 'transparent-total';
   return 'clear-light';
 }
 
@@ -58,8 +53,7 @@ function dockGlassIcon(name, size = 22, variant) {
   s.setAttribute('height', String(size));
 
   const vcfg = {
-    'clear-light':      { bg: null,        bgEnd: null,       hl: false, border: null,  path: 'rgba(255,255,255,0.55)', sw: 2.5, po: 1 },
-    'transparent-total':{ bg: null,        bgEnd: null,       hl: false, border: null,  path: 'rgba(255,255,255,0.15)', sw: 2,   po: 1 },
+    'clear-light': { bg: null, bgEnd: null, hl: false, border: null, path: 'rgba(255,255,255,0.55)', sw: 2.5, po: 1 },
   }[variant] || vcfg['clear-light'];
 
   const needDefs = vcfg.bg || vcfg.hl;
