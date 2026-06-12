@@ -32,14 +32,15 @@ const VARIANTS = {
     label: 'TRANSPARENTE CLEAR',
     desc: 'fondo transparente, trazo blanco',
   },
-  'tinted-light': {
-    label: 'SOLO ACENTO',
-    desc: 'solo color de énfasis',
+  'transparent-total': {
+    label: 'TRANSPARENTE TOTAL',
+    desc: 'totalmente transparente, sin color',
   },
 };
 
 function getRecommendedIconPack(cfg) {
   cfg = cfg || window._appearanceCfg || {};
+  if (!cfg.adminSolid) return 'transparent-total';
   return 'clear-light';
 }
 
@@ -57,13 +58,9 @@ function dockGlassIcon(name, size = 22, variant) {
   s.setAttribute('height', String(size));
 
   const vcfg = {
-    default:       { bg: '#fff',      bgEnd: '#ececf0', hl: true,  border: 'rgba(0,0,0,.06)',                   path: accent,       sw: 3, po: 1 },
-    'clear-light': { bg: null,        bgEnd: null,       hl: false, border: null,                                path: 'rgba(255,255,255,0.55)', sw: 2.5, po: 1 },
-    'tinted-light':{ bg: null,        bgEnd: null,       hl: false, border: null,                                path: accent,       sw: 3, po: 1 },
-    dark:          { bg: '#2c2c2e',   bgEnd: '#1c1c1e',  hl: true,  border: 'rgba(255,255,255,.08)',            path: accent,       sw: 3, po: 1 },
-    'clear-dark':  { bg: null,        bgEnd: null,       hl: false, border: null,                                path: 'rgba(255,255,255,0.3)',  sw: 2.5, po: 1 },
-    'tinted-dark': { bg: '#1c1c1e',   bgEnd: '#111111',  hl: true,  border: 'rgba(255,255,255,.06)',            path: accent,       sw: 3, po: 1 },
-  }[variant] || vcfg.default;
+    'clear-light':      { bg: null,        bgEnd: null,       hl: false, border: null,  path: 'rgba(255,255,255,0.55)', sw: 2.5, po: 1 },
+    'transparent-total':{ bg: null,        bgEnd: null,       hl: false, border: null,  path: 'rgba(255,255,255,0.15)', sw: 2,   po: 1 },
+  }[variant] || vcfg['clear-light'];
 
   const needDefs = vcfg.bg || vcfg.hl;
   if (needDefs) {
