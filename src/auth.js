@@ -312,6 +312,66 @@ export function renderAccountPage() {
       </div>`).join('');
   }
   renderAddresses();
+  renderMPStatus();
+}
+
+function renderMPStatus() {
+  const unlinked = document.getElementById('mp-unlinked');
+  const linked = document.getElementById('mp-linked');
+  const badge = document.getElementById('user-mp-status');
+  if (!badge) return;
+  const saved = state.user?.paymentData;
+  if (saved && saved.mp_email) {
+    badge.textContent = 'VINCULADO ✓';
+    badge.className = 'badge badge-violet shrink-0';
+    if (unlinked) unlinked.classList.add('hidden');
+    if (linked) { linked.classList.remove('hidden'); document.getElementById('mp-linked-email').textContent = saved.mp_email; }
+  } else {
+    loadMPFromFirestore();
+  }
+}
+
+async function loadMPFromFirestore() {
+  if (!fbDb || !window._fb || !state.user) return;
+  try {
+    const { doc, getDoc } = window._fb;
+    const snap = await getDoc(doc(fbDb, 'users', state.user.uid));
+    if (!snap.exists()) return;
+    const data = snap.data();
+    const payment = data.payment;
+    if (payment && payment.mp_email) {
+      if (!state.user.paymentData) state.user.paymentData = payment;
+      const inp = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+      inp('user-mp-cbu', payment.mp_cbu || '');
+      inp('user-mp-alias', payment.mp_alias || '');
+      inp('user-mp-email', payment.mp_email || '');
+      const badge = document.getElementById('user-mp-status');
+      const unlinked = document.getElementById('mp-unlinked');
+      const linked = document.getElementById('mp-linked');
+      if (badge) { badge.textContent = 'VINCULADO ✓'; badge.className = 'badge badge-violet shrink-0'; }
+      if (unlinked) unlinked.classList.add('hidden');
+      if (linked) { linked.classList.remove('hidden'); const el = document.getElementById('mp-linked-email'); if (el) el.textContent = payment.mp_email; }
+    }
+  } catch(e) { console.warn('loadMP:', e); }
+}
+
+export function unlinkMP() {
+  const c = confirm('¿Desvincular cuenta de Mercado Pago?');
+  if (!c) return;
+  const unlinked = document.getElementById('mp-unlinked');
+  const linked = document.getElementById('mp-linked');
+  const badge = document.getElementById('user-mp-status');
+  const els = ['user-mp-cbu', 'user-mp-alias', 'user-mp-email'];
+  els.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  if (badge) { badge.textContent = 'NO VINCULADO'; badge.className = 'badge badge-outline shrink-0'; }
+  if (unlinked) unlinked.classList.remove('hidden');
+  if (linked) linked.classList.add('hidden');
+  if (state.user) delete state.user.paymentData;
+  if (fbDb && window._fb && state.user) {
+    const { doc, setDoc } = window._fb;
+    setDoc(doc(fbDb, 'users', state.user.uid), { payment: {} }, { merge: true }).catch(() => {});
+  }
+  window.showToast?.('Cuenta desvinculada');
 }
 
 export function showAccountTab(tab) {
@@ -432,9 +492,14 @@ export async function saveUserPayment(type) {
       const { doc, setDoc } = window._fb;
       await setDoc(doc(fbDb,'users',state.user.uid), { payment: data }, { merge: true });
     }
+    if (state.user) state.user.paymentData = data;
     const badge = document.getElementById('user-mp-status');
-    if (badge) { badge.textContent = 'VINCULADO ✓'; badge.className = 'badge badge-violet ml-auto shrink-0'; }
-    window.showToast?.('Mercado Pago guardado en Firebase ✅');
+    const unlinked = document.getElementById('mp-unlinked');
+    const linked = document.getElementById('mp-linked');
+    if (badge) { badge.textContent = 'VINCULADO ✓'; badge.className = 'badge badge-violet shrink-0'; }
+    if (unlinked) unlinked.classList.add('hidden');
+    if (linked) { linked.classList.remove('hidden'); const el = document.getElementById('mp-linked-email'); if (el) el.textContent = data.mp_email; }
+    window.showToast?.('Mercado Pago vinculado exitosamente ✅');
   }
   if (type === 'bank') {
     const cbuValid = validatePaymentField('user-bank-cbu');
@@ -695,6 +760,8 @@ export function init() {
   window.validateProfileField = validateProfileField;
   window.renderUserCards = renderUserCards;
   window.renderAddresses = renderAddresses;
+  window.renderMPStatus = renderMPStatus;
+  window.unlinkMP = unlinkMP;
   window.handleEmailVerification = handleEmailVerification;
   // Process email verification link on load
   setTimeout(() => handleEmailVerification(), 500);
