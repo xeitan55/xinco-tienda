@@ -341,10 +341,6 @@ async function loadMPFromFirestore() {
     const payment = data.payment;
     if (payment && payment.mp_email) {
       if (!state.user.paymentData) state.user.paymentData = payment;
-      const inp = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-      inp('user-mp-cbu', payment.mp_cbu || '');
-      inp('user-mp-alias', payment.mp_alias || '');
-      inp('user-mp-email', payment.mp_email || '');
       const badge = document.getElementById('user-mp-status');
       const unlinked = document.getElementById('mp-unlinked');
       const linked = document.getElementById('mp-linked');
@@ -496,6 +492,7 @@ export async function saveUserPayment(type) {
     const badge = document.getElementById('user-mp-status');
     const unlinked = document.getElementById('mp-unlinked');
     const linked = document.getElementById('mp-linked');
+    ['user-mp-cbu','user-mp-alias'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
     if (badge) { badge.textContent = 'VINCULADO ✓'; badge.className = 'badge badge-violet shrink-0'; }
     if (unlinked) unlinked.classList.add('hidden');
     if (linked) { linked.classList.remove('hidden'); const el = document.getElementById('mp-linked-email'); if (el) el.textContent = data.mp_email; }
@@ -515,6 +512,7 @@ export async function saveUserPayment(type) {
       const { doc, setDoc } = window._fb;
       await setDoc(doc(fbDb,'users',state.user.uid), { bank: data }, { merge: true });
     }
+    ['user-bank-name','user-bank-titular','user-bank-cbu','user-bank-alias'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
     window.showToast?.('Datos bancarios guardados ');
   }
 }
