@@ -28,39 +28,24 @@ const DOCK_PATHS = {
 let _uid = 0;
 
 const VARIANTS = {
-  default: {
-    label: 'DEFAULT',
-    desc: 'blanco + acento',
-  },
   'clear-light': {
-    label: 'CLEAR (LIGHT)',
-    desc: 'transparente sutil',
+    label: 'TRANSPARENTE CLEAR',
+    desc: 'fondo transparente, trazo blanco',
   },
   'tinted-light': {
-    label: 'TINTED (LIGHT)',
-    desc: 'solo acento',
-  },
-  dark: {
-    label: 'DARK',
-    desc: 'negro + acento',
-  },
-  'clear-dark': {
-    label: 'CLEAR (DARK)',
-    desc: 'transparente oscuro',
+    label: 'SOLO ACENTO',
+    desc: 'solo color de énfasis',
   },
   'tinted-dark': {
-    label: 'TINTED (DARK)',
-    desc: 'oscuro + acento',
+    label: 'TRANSPARENTE OSCURO',
+    desc: 'fondo oscuro, trazo acento',
   },
 };
 
 function getRecommendedIconPack(cfg) {
   cfg = cfg || window._appearanceCfg || {};
   const dark = cfg.theme === 'dark';
-  const solid = !!cfg.adminSolid;
-  if (dark && solid) return 'dark';
-  if (dark && !solid) return 'clear-dark';
-  if (!dark && solid) return 'default';
+  if (dark) return 'tinted-dark';
   return 'clear-light';
 }
 
