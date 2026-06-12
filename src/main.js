@@ -1,5 +1,11 @@
 import './style.css';
 
+window.escapeHtml = str => {
+  const el = document.createElement('div');
+  el.textContent = str;
+  return el.innerHTML;
+};
+
 import { init as initState } from './state.js';
 import { init as initFirebase } from './firebase.js';
 import { init as initTheme } from './theme.js';

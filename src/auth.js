@@ -304,7 +304,7 @@ export function renderAccountPage() {
           </div>
           <span class="badge ${o.status==='pending'?'badge-black':o.status==='shipped'?'badge-outline':'badge-violet'}">${o.status.toUpperCase()}</span>
         </div>
-        <div class="font-body-md text-on-surface-variant text-sm mb-2">${(o.items||[]).map(i=>i.name).join(', ')}</div>
+        <div class="font-body-md text-on-surface-variant text-sm mb-2">${(o.items||[]).map(i=>window.escapeHtml(i.name)).join(', ')}</div>
         <div class="flex justify-between items-center">
           <span class="font-label-caps text-label-caps text-primary">${window.fmtPrice?.(o.total) || '$' + o.total}</span>
           <span class="font-label-caps text-[10px] text-on-surface-variant">${o.payMethod ? o.payMethod.toUpperCase() : ''}</span>
@@ -622,8 +622,8 @@ export function renderAddresses() {
   el.innerHTML = addrs.map((a,i) => `
     <div class="flex justify-between items-start p-3 border-[2px] border-primary">
       <div>
-        <div class="font-label-caps text-label-caps text-primary">${a.street}</div>
-        <div class="font-label-caps text-[10px] text-on-surface-variant">${a.city}, ${a.prov} (${a.cp})</div>
+        <div class="font-label-caps text-label-caps text-primary">${window.escapeHtml(a.street)}</div>
+        <div class="font-label-caps text-[10px] text-on-surface-variant">${window.escapeHtml(a.city)}, ${window.escapeHtml(a.prov)} (${window.escapeHtml(a.cp)})</div>
       </div>
       <button onclick="removeAddress(${i})" class="p-1 border-2 border-error text-error hover:bg-error hover:text-white transition-colors ml-3">
         <span class="material-symbols-outlined text-[16px]">delete</span>

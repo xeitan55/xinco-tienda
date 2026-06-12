@@ -23,6 +23,17 @@ export function isAdmin(overrideUser) {
   return false;
 }
 
+export async function hasAdminClaim() {
+  const u = state.user;
+  if (!u) return false;
+  try {
+    const token = await u.getIdTokenResult();
+    return token.claims.admin === true;
+  } catch {
+    return false;
+  }
+}
+
 export function renderAdmin() {
   renderAdminDashboard();
   renderAdminOrders();
@@ -174,7 +185,7 @@ export function renderAdminOrders() {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h4 class="font-label-caps text-label-caps text-primary mb-2">ITEMS</h4>
-            ${o.items?.map(i => `<div class="flex justify-between py-1 border-b border-outline-variant/30"><span class="font-body-md text-sm">${i.name} x${i.qty}</span><span class="font-label-caps text-[11px] text-primary">${window.fmtPrice?.(i.price * i.qty) || '$' + (i.price * i.qty)}</span></div>`).join('') || '<span class="text-on-surface-variant text-sm">Sin items</span>'}
+            ${o.items?.map(i => `<div class="flex justify-between py-1 border-b border-outline-variant/30"><span class="font-body-md text-sm">${window.escapeHtml(i.name)} x${i.qty}</span><span class="font-label-caps text-[11px] text-primary">${window.fmtPrice?.(i.price * i.qty) || '$' + (i.price * i.qty)}</span></div>`).join('') || '<span class="text-on-surface-variant text-sm">Sin items</span>'}
           </div>
           <div>
             <h4 class="font-label-caps text-label-caps text-primary mb-2">DETALLES</h4>
@@ -619,8 +630,8 @@ export async function renderAdminCustomers() {
     ${customers.map(c => `
     <tr class="border-b border-outline-variant hover:bg-surface-container-low transition-all">
       <td class="py-3 px-4 font-label-caps text-[10px]">#${c.id}</td>
-      <td class="py-3 px-4 font-body-md text-sm">${c.name}</td>
-      <td class="py-3 px-4 font-body-md text-sm">${c.email}</td>
+      <td class="py-3 px-4 font-body-md text-sm">${window.escapeHtml(c.name)}</td>
+      <td class="py-3 px-4 font-body-md text-sm">${window.escapeHtml(c.email)}</td>
       <td class="py-3 px-4 font-label-caps text-[10px] text-center">${c.orders}</td>
       <td class="py-3 px-4 font-label-caps text-[11px] text-primary">${window.fmtPrice?.(c.total) || '$' + c.total}</td>
       <td class="py-3 px-4 font-label-caps text-[10px]">${c.date}</td>
@@ -1939,7 +1950,7 @@ export function loadTrackingOrder(orderId) {
       <div><span class="font-label-caps text-[9px] text-on-surface-variant block">FECHA</span>${order.date}</div>
       <div><span class="font-label-caps text-[9px] text-on-surface-variant block">ESTADO</span><span class="badge badge-black text-[9px]">${order.status.toUpperCase()}</span></div>
     </div>
-    <div class="mt-2 text-[10px] text-on-surface-variant">${order.items.map(i=>i.name+'×'+i.qty).join(' · ')}</div>`;
+    <div class="mt-2 text-[10px] text-on-surface-variant">${order.items.map(i=>window.escapeHtml(i.name)+'×'+i.qty).join(' · ')}</div>`;
   }
 }
 

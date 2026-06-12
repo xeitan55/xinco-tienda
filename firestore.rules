@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Usuarios ──────────────────────────────────
+    // Cada usuario solo puede leer/escribir su propio documento
+    // Los admins (con custom claim admin=true) pueden leer todos los users
+    // pero NO el subdocumento /payment (datos bancarios)
+    match /users/{userId} {
+
+      // Datos generales del usuario (profile, dirección, etc.)
+      allow read, write: if request.auth != null
+        && (request.auth.uid == userId
+            || request.auth.token.admin == true);
+
+      // Subdocumento payment — SOLO el dueño
+      match /payment {
+        allow read, write: if request.auth != null
+          && request.auth.uid == userId;
+      }
+
+      // Subdocumento bank — SOLO el dueño
+      match /bank {
+        allow read, write: if request.auth != null
+          && request.auth.uid == userId;
+      }
+    }
+
+    // ─── Órdenes ────────────────────────────────────
+    // El cliente dueño de la orden puede leer su propia orden
+    // Los admins pueden leer y escribir todas las órdenes
+    // Los clientes pueden crear órdenes nuevas (write si son dueños)
+    match /orders/{orderId} {
+      allow read: if request.auth != null
+        && (request.auth.uid == resource.data.userId
+            || request.auth.token.admin == true);
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.userId;
+      allow update: if request.auth != null
+        && request.auth.token.admin == true;
+      allow delete: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+
+    // ─── Productos ──────────────────────────────────
+    // Lectura pública, escritura solo admins
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+
+    // ─── Categorías ─────────────────────────────────
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+
+    // ─── Configuración ──────────────────────────────
+    // Lectura pública (MP public key, bank data de la tienda, etc.)
+    // Escritura solo admins
+    match /config/{configId} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+
+    // ─── Cupones ────────────────────────────────────
+    match /coupons/{couponId} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+
+    // ─── Newsletter / Suscripciones ─────────────────
+    match /newsletter/{email} {
+      allow read: if request.auth != null
+        && request.auth.token.admin == true;
+      allow create: if true;
+      allow write: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+
+    // ─── Denegar todo lo demás ──────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
