@@ -148,12 +148,43 @@ tailwind.config = {
 
 <!-- ===== MOBILE MENU ===== -->
 <div id="mobile-menu" class="mobile-menu">
-  <button onclick="closeMobileMenu()" class="absolute top-6 right-6 close-btn-anim" style="color:var(--inverse-on-surface,#fff)"><span class="material-symbols-outlined text-[32px]">close</span></button>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:DM Sans;font-size:clamp(20px,5vw,40px);font-weight:700;" onclick="nav('home');closeMobileMenu()" data-i18n="mobile.home">INICIO</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:DM Sans;font-size:clamp(20px,5vw,40px);font-weight:700;" onclick="nav('catalog');closeMobileMenu()" data-i18n="mobile.catalog">CATÁLOGO</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:DM Sans;font-size:clamp(20px,5vw,40px);font-weight:700;" onclick="nav('accesorios');closeMobileMenu()" data-i18n="mobile.accessories">ACCESORIOS</a>
-  <a class="font-display-xl text-white uppercase cursor-pointer" style="font-family:DM Sans;font-size:clamp(20px,5vw,40px);font-weight:700;" onclick="nav('catalog');closeMobileMenu()" data-i18n="mobile.new">NOVEDADES</a>
-  <a class="font-display-xl uppercase cursor-pointer" style="font-family:DM Sans;font-size:clamp(20px,5vw,40px);font-weight:700;" onclick="filterCatalog('exclusive');closeMobileMenu()" data-i18n="mobile.exclusive">EXCLUSIVE</a>
+  <button onclick="closeMobileMenu()" class="mobile-menu-close"><span class="material-symbols-outlined text-[28px]">close</span></button>
+  <div class="mobile-menu-brand">XINCO</div>
+  <nav class="mobile-menu-nav">
+    <a class="mobile-menu-link" onclick="nav('home');closeMobileMenu()">
+      <span class="material-symbols-outlined ico">home</span>
+      <span class="lbl" data-i18n="mobile.home">INICIO</span>
+      <span class="material-symbols-outlined arr">chevron_right</span>
+    </a>
+    <a class="mobile-menu-link" onclick="nav('catalog');closeMobileMenu()">
+      <span class="material-symbols-outlined ico">grid_view</span>
+      <span class="lbl" data-i18n="mobile.catalog">CATÁLOGO</span>
+      <span class="material-symbols-outlined arr">chevron_right</span>
+    </a>
+    <a class="mobile-menu-link" onclick="nav('accesorios');closeMobileMenu()">
+      <span class="material-symbols-outlined ico">watch</span>
+      <span class="lbl" data-i18n="mobile.accessories">ACCESORIOS</span>
+      <span class="material-symbols-outlined arr">chevron_right</span>
+    </a>
+    <a class="mobile-menu-link" onclick="nav('catalog');closeMobileMenu()">
+      <span class="material-symbols-outlined ico">auto_awesome</span>
+      <span class="lbl" data-i18n="mobile.new">NOVEDADES</span>
+      <span class="material-symbols-outlined arr">chevron_right</span>
+    </a>
+    <a class="mobile-menu-link" onclick="filterCatalog('exclusive');closeMobileMenu()">
+      <span class="material-symbols-outlined ico">diamond</span>
+      <span class="lbl" data-i18n="mobile.exclusive">EXCLUSIVE</span>
+      <span class="material-symbols-outlined arr">chevron_right</span>
+    </a>
+  </nav>
+  <div class="mobile-menu-footer">
+    <a onclick="nav('account');closeMobileMenu()">
+      <span class="material-symbols-outlined text-[16px]">person</span> MI CUENTA
+    </a>
+    <a onclick="doLogout();closeMobileMenu()">
+      <span class="material-symbols-outlined text-[16px]">logout</span> CERRAR SESIÓN
+    </a>
+  </div>
 </div>
 
 <!-- ===== SEARCH OVERLAY ===== -->
