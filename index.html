@@ -2260,8 +2260,8 @@ tailwind.config = {
                     </div>
                     <div>
                       <span class="font-label-caps text-[10px] text-on-surface-variant/70 block mb-2">ICON PACK</span>
-                      <div class="grid grid-cols-3 gap-1.5" id="ap-icon-pack-options">
-                        <label class="ip-option" data-pack="clear-light">
+                      <div class="flex gap-2" id="ap-icon-pack-options">
+                        <label class="ip-option flex-1" data-pack="clear-light">
                           <input type="radio" name="dock-icon-pack" value="clear-light" class="sr-only" onchange="saveAppearance()"/>
                           <div class="ip-preview" style="background:rgba(255,255,255,0.15);border:1px dashed rgba(255,255,255,0.25);border-radius:6px;height:24px;display:flex;align-items:center;justify-content:center;">
                             <span style="color:rgba(255,255,255,0.55);font-size:10px;line-height:1;">○</span>
@@ -2269,21 +2269,13 @@ tailwind.config = {
                           <span class="font-label-caps text-[7px] text-primary block text-center mt-0.5 leading-tight">TRANSPARENTE</span>
                           <span class="font-label-caps text-[6px] text-on-surface-variant/50 block text-center leading-tight">fondo claro</span>
                         </label>
-                        <label class="ip-option" data-pack="tinted-light">
+                        <label class="ip-option flex-1" data-pack="tinted-light">
                           <input type="radio" name="dock-icon-pack" value="tinted-light" class="sr-only" onchange="saveAppearance()"/>
                           <div class="ip-preview" style="background:rgba(255,255,255,0.15);border:1px dashed rgba(255,255,255,0.25);border-radius:6px;height:24px;display:flex;align-items:center;justify-content:center;">
                             <span style="color:var(--admin-accent,#9b87f5);font-size:10px;font-weight:700;line-height:1;">●</span>
                           </div>
                           <span class="font-label-caps text-[7px] text-primary block text-center mt-0.5 leading-tight">SOLO ACENTO</span>
                           <span class="font-label-caps text-[6px] text-on-surface-variant/50 block text-center leading-tight">tinteado</span>
-                        </label>
-                        <label class="ip-option" data-pack="tinted-dark">
-                          <input type="radio" name="dock-icon-pack" value="tinted-dark" class="sr-only" onchange="saveAppearance()"/>
-                          <div class="ip-preview" style="background:#1c1c1e;border:1px solid rgba(255,255,255,0.08);border-radius:6px;height:24px;display:flex;align-items:center;justify-content:center;">
-                            <span style="color:var(--admin-accent,#9b87f5);font-size:10px;font-weight:700;line-height:1;">●</span>
-                          </div>
-                          <span class="font-label-caps text-[7px] text-primary block text-center mt-0.5 leading-tight">TRANSPARENTE</span>
-                          <span class="font-label-caps text-[6px] text-on-surface-variant/50 block text-center leading-tight">fondo oscuro</span>
                         </label>
                       </div>
                     </div>

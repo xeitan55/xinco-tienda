@@ -36,16 +36,10 @@ const VARIANTS = {
     label: 'SOLO ACENTO',
     desc: 'solo color de énfasis',
   },
-  'tinted-dark': {
-    label: 'TRANSPARENTE OSCURO',
-    desc: 'fondo oscuro, trazo acento',
-  },
 };
 
 function getRecommendedIconPack(cfg) {
   cfg = cfg || window._appearanceCfg || {};
-  const dark = cfg.theme === 'dark';
-  if (dark) return 'tinted-dark';
   return 'clear-light';
 }
 
