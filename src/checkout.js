@@ -49,8 +49,8 @@ export function renderCheckoutPage() {
     <div class="flex gap-3">
       <img src="${item.img}" alt="${item.name}" loading="lazy" class="w-14 h-16 object-cover border-2 border-primary shrink-0"/>
       <div class="flex-1 min-w-0">
-        <div class="font-label-caps text-[11px] text-primary truncate">${item.name}</div>
-        <div class="font-label-caps text-[10px] text-on-surface-variant">${item.size} / x${item.qty}</div>
+        <div class="font-label-caps text-[11px] text-primary truncate">${window.escapeHtml(item.name)}</div>
+        <div class="font-label-caps text-[10px] text-on-surface-variant">${window.escapeHtml(item.size)} / x${item.qty}</div>
       </div>
       <div class="font-label-caps text-[11px] text-primary">${window.fmtPrice?.(item.price * item.qty) || '$' + (item.price * item.qty)}</div>
     </div>`).join('');
@@ -58,7 +58,7 @@ export function renderCheckoutPage() {
     el.innerHTML += `
       <div class="flex items-center gap-2 pt-3 border-t-2 border-outline-variant">
         <span class="material-symbols-outlined text-secondary-container text-[16px]">sell</span>
-        <span class="font-label-caps text-[11px] text-secondary-container flex-1">${couponItem.name}</span>
+        <span class="font-label-caps text-[11px] text-secondary-container flex-1">${window.escapeHtml(couponItem.name)}</span>
         <span class="font-label-caps text-[11px] text-secondary-container">${window.fmtPrice?.(couponItem.price) || '$' + couponItem.price}</span>
       </div>`;
   }

@@ -402,8 +402,10 @@ export async function saveProfile() {
   const fields = ['acc-nombre','acc-apellido','acc-tel','acc-dni','acc-bday'];
   let valid = true;
   fields.forEach(f => { if (!validateProfileField(f)) valid = false; });
-  const nombre = document.getElementById('acc-nombre')?.value.trim();
-  const apellido = document.getElementById('acc-apellido')?.value.trim();
+  let nombre = document.getElementById('acc-nombre')?.value.trim();
+  let apellido = document.getElementById('acc-apellido')?.value.trim();
+  nombre = nombre.replace(/<[^>]*>/g, '');
+  apellido = apellido.replace(/<[^>]*>/g, '');
   if (!nombre || !apellido) { window.showToast?.('NOMBRE Y APELLIDO SON OBLIGATORIOS '); return; }
   if (!valid) { window.showToast?.('CORREGÍ LOS CAMPOS MARCADOS EN ROJO '); return; }
   const btn = document.querySelector('#acc-content-profile .btn-primary');
@@ -573,8 +575,8 @@ export function renderUserCards() {
         <span class="material-symbols-outlined text-white text-[18px]">credit_card</span>
       </div>
       <div class="flex-1">
-        <div class="font-label-caps text-label-caps text-primary">${c.brand} ${c.masked}</div>
-        <div class="font-label-caps text-[10px] text-on-surface-variant">${c.name} · VENCE ${c.exp}</div>
+        <div class="font-label-caps text-label-caps text-primary">${window.escapeHtml(c.brand)} ${window.escapeHtml(c.masked)}</div>
+        <div class="font-label-caps text-[10px] text-on-surface-variant">${window.escapeHtml(c.name)} · VENCE ${window.escapeHtml(c.exp)}</div>
       </div>
       <button onclick="removeCard(${i})" class="p-1 border-2 border-error text-error hover:bg-error hover:text-white transition-colors">
         <span class="material-symbols-outlined text-[16px]">delete</span>

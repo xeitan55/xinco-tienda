@@ -64,8 +64,8 @@ export function renderCartDrawer() {
     <div class="flex gap-3 border-b-2 border-outline-variant pb-4">
       <img src="${item.img}" alt="${item.name}" loading="lazy" class="w-20 h-24 object-cover border-2 border-primary grayscale-hover shrink-0"/>
       <div class="flex-1 min-w-0">
-        <div class="font-label-caps text-label-caps text-primary truncate">${item.name}</div>
-        <div class="font-label-caps text-[10px] text-on-surface-variant mt-1">TALLE: ${item.size} / ${item.color.toUpperCase()}</div>
+        <div class="font-label-caps text-label-caps text-primary truncate">${window.escapeHtml(item.name)}</div>
+        <div class="font-label-caps text-[10px] text-on-surface-variant mt-1">TALLE: ${window.escapeHtml(item.size)} / ${window.escapeHtml(item.color.toUpperCase())}</div>
         <div class="font-label-caps text-label-caps text-primary mt-2">${window.fmtPrice?.(item.price) || '$' + item.price}</div>
         <div class="flex items-center gap-2 mt-2">
           <button class="w-7 h-7 border-2 border-primary flex items-center justify-center font-label-caps" onclick="updateQty('${item.key}',-1)">−</button>
@@ -83,7 +83,7 @@ export function renderCartDrawer() {
           <span class="material-symbols-outlined text-secondary-container" style="font-size:22px;">sell</span>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="font-label-caps text-label-caps text-secondary-container truncate">${couponItem.name}</div>
+          <div class="font-label-caps text-label-caps text-secondary-container truncate">${window.escapeHtml(couponItem.name)}</div>
           <div class="font-label-caps text-[11px] text-secondary-container font-bold">${window.fmtPrice?.(couponItem.price) || '$' + couponItem.price}</div>
         </div>
         <button class="text-error hover:text-error/70" onclick="removeCoupon()"><span class="material-symbols-outlined text-[20px]">delete</span></button>
@@ -113,8 +113,8 @@ export function renderCartPage() {
           <div class="col-span-6 flex items-center gap-3">
             <img src="${item.img}" alt="${item.name}" loading="lazy" class="w-16 h-20 object-cover border-2 border-primary shrink-0 grayscale-hover"/>
             <div>
-              <div class="font-label-caps text-label-caps text-primary">${item.name}</div>
-              <div class="font-label-caps text-[10px] text-on-surface-variant mt-1">T: ${item.size} / ${item.color.toUpperCase()}</div>
+              <div class="font-label-caps text-label-caps text-primary">${window.escapeHtml(item.name)}</div>
+              <div class="font-label-caps text-[10px] text-on-surface-variant mt-1">T: ${window.escapeHtml(item.size)} / ${window.escapeHtml(item.color.toUpperCase())}</div>
               <button class="font-label-caps text-[10px] text-error underline mt-1" onclick="removeFromCart('${item.key}')">ELIMINAR</button>
             </div>
           </div>

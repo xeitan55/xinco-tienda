@@ -46,9 +46,9 @@ export function renderReviews(reviews, list, countEl, empty) {
     <div class="border-2 border-primary p-5">
       <div class="flex items-start justify-between mb-3">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-label-caps text-sm font-bold">${(r.userName||'A')[0].toUpperCase()}</div>
+          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-label-caps text-sm font-bold">${window.escapeHtml((r.userName||'A')[0]).toUpperCase()}</div>
           <div>
-            <div class="font-label-caps text-label-caps text-primary">${r.userName || 'Anónimo'}</div>
+            <div class="font-label-caps text-label-caps text-primary">${window.escapeHtml(r.userName || 'Anónimo')}</div>
             <div class="flex items-center gap-2 text-[11px] text-on-surface-variant font-label-caps">
               <span>${new Date(r.createdAt?.toDate?.() || r.createdAt).toLocaleDateString('es-AR', { day:'numeric', month:'short', year:'numeric' })}</span>
               ${r.verified ? `<span class="text-secondary-container">● VERIFICADO</span>` : ''}
@@ -59,8 +59,8 @@ export function renderReviews(reviews, list, countEl, empty) {
           ${Array.from({length:5},(_,i) => `<span class="text-sm ${i < r.rating ? 'text-primary' : 'text-outline-variant'}">★</span>`).join('')}
         </div>
       </div>
-      ${r.title ? `<div class="font-label-caps text-label-caps text-primary mb-1 text-sm">${r.title}</div>` : ''}
-      <p class="font-body-md text-on-surface-variant text-sm">${r.text}</p>
+      ${r.title ? `<div class="font-label-caps text-label-caps text-primary mb-1 text-sm">${window.escapeHtml(r.title)}</div>` : ''}
+      <p class="font-body-md text-on-surface-variant text-sm">${window.escapeHtml(r.text)}</p>
       ${r.delivery ? `<div class="flex items-center gap-2 mt-3 text-[11px] font-label-caps text-secondary-container"><span class="material-symbols-outlined text-[14px]">check_circle</span> ENVÍO CONFORME</div>` : ''}
     </div>
   `).join('');
