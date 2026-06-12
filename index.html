@@ -1461,7 +1461,16 @@ tailwind.config = {
                   <span class="material-symbols-outlined text-[16px]">badge</span> QUÉ DATOS GUARDAMOS
                 </h4>
                 <p class="text-sm text-on-surface-variant" style="font-family:Inter;line-height:1.7;">
-                  Solo almacenamos la información que nos proporcionás voluntariamente: nombre, email, dirección, teléfono, métodos de pago (encriptados) y tu historial de pedidos. Nunca accedemos a tu cuenta bancaria ni a tu clave de Mercado Pago.
+                  Solo almacenamos la información que nos proporcionás voluntariamente: nombre, email, dirección, teléfono, métodos de pago y tu historial de pedidos. Nunca accedemos a tu cuenta bancaria ni a tu clave de Mercado Pago.
+                </p>
+              </div>
+
+              <div>
+                <h4 class="font-label-caps text-label-caps text-primary mb-2 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px]">encrypted</span> DATOS BANCARIOS
+                </h4>
+                <p class="text-sm text-on-surface-variant" style="font-family:Inter;line-height:1.7;">
+                  Cuando vinculás tu cuenta de Mercado Pago o guardás tu CBU/ALIAS, los datos se almacenan de forma segura en <strong>Firebase</strong> con encriptación en reposo y se <strong>eliminan automáticamente del sitio</strong> una vez guardados. No quedan visibles en la página ni accesibles desde el navegador. Si un atacante abre las herramientas de desarrollo (F12), no va a encontrar tus datos bancarios en el código.
                 </p>
               </div>
 
@@ -1470,7 +1479,7 @@ tailwind.config = {
                   <span class="material-symbols-outlined text-[16px]">visibility_off</span> QUIÉN VE TUS DATOS
                 </h4>
                 <p class="text-sm text-on-surface-variant" style="font-family:Inter;line-height:1.7;">
-                  Solo vos y los administradores de XINCO pueden ver tu información. No compartimos datos personales con terceros sin tu consentimiento. Los datos de pago se procesan a través de Mercado Pago, que cumple con los estándares de seguridad PCI-DSS.
+                  Solo vos podés ver tus datos bancarios y de pago. Los administradores de XINCO pueden ver tu perfil y pedidos pero <strong>no tienen acceso a tu CBU, ALIAS ni información bancaria</strong>. No compartimos datos personales con terceros sin tu consentimiento. Los pagos se procesan a través de Mercado Pago, que cumple con los estándares de seguridad PCI-DSS.
                 </p>
               </div>
 
