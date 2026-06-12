@@ -12,17 +12,17 @@ function darkenHex(hex, ratio = 0.7) {
 }
 
 const DOCK_PATHS = {
-  'dock-dashboard': 'M12 4a8 8 0 101.6 13.6M12 12l4-5',                            // speedometer
-  'dock-orders':    'M8 4h8l2 2v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6l2-2zm3 10l2 2 4-4', // clipboard+check
-  'dock-customers': 'M8 10a3 3 0 100-6 3 3 0 000 6zm-5 9a5 5 0 0110 0M16 9a3 3 0 100-6 3 3 0 000 6zm-3 10h-3', // 2 people
-  'dock-tracking':  'M12 3a9 9 0 100 18 9 9 0 000-18zM10 14l6-4-6-4v8z',          // compass
-  'dock-inventory': 'M4 5h16v2H4zm0 7h16v2H4zm0 7h14v2H4z',                        // shelves
-  'dock-products':  'M12 4l-5 6h3v7h4v-7h3l-5-6z',                                // t-shirt
-  'dock-cobranzas': 'M4 9h16v9a2 2 0 01-2 2H6a2 2 0 01-2-2V9zm2-4h14v4H6V5zm4 9a2 2 0 104 0 2 2 0 10-4 0', // wallet
-  'dock-cupones':   'M8 2h10l4 4-8 8-6-6 4-4zM8 2l4 4',                            // tag
-  'dock-reportes':  'M5 17l5-7 4 4 6-9m-3 0h5v5',                                 // chart
-  'dock-exit':      'M8 20H4V4h4m4 6h8m-4-4l4 4-4 4',                              // door
-  'dock-config':    'M12 16a4 4 0 100-8 4 4 0 000 8zm0-8V4m0 12v4M8 12H4m12 0h4',  // gear
+  'dock-dashboard': 'M12 4a8 8 0 100 16 8 8 0 000-16m-1 11l4-5-5-1M12 12a1 1 0 100-2',                     // gauge+needle
+  'dock-orders':    'M8 4h8l2 2v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6l2-2zm0 3h8M8 10h5m-2 5l2 2 4-4',           // clipboard+form
+  'dock-customers': 'M9 9a3 3 0 100-6 3 3 0 000 6m-6 10a5 5 0 0111 0M17 8a3 3 0 100-6 3 3 0 000 6m-4 11h-3', // 2 personas
+  'dock-tracking':  'M12 3a9 9 0 100 18 9 9 0 000-18zm-2 14l6-4-6-4v8zM12 7v2m0 6v2M7 12h2m6 0h2',          // compass+cruceta
+  'dock-inventory': 'M3 5h18v2H3zm0 7h18v2H3zm0 7h18v2H3zM4 5v16m6 0V5m6 0v16',                             // estantes
+  'dock-products':  'M12 4l-5 6h3v7h4v-7h3l-5-6zm-3 0l1 3m4-3l1 3',                                        // remera
+  'dock-cobranzas': 'M4 9h16v9a2 2 0 01-2 2H6a2 2 0 01-2-2V9zm2-4h14v4H6V5zm4 9a2 2 0 104 0m-7-2a2 2 0 104 0', // billetera
+  'dock-cupones':   'M6 3h13l3 3-9 9-7-7 3-3zm0 0l3 3m-2 3h5',                                            // etiqueta
+  'dock-reportes':  'M6 18h3v-7H6zm5 0h3V5h-3zm5 0h3V9h-3z',                                              // barras
+  'dock-exit':      'M8 20H4V4h4m2 6h8m-4-4l4 4-4 4M7 12h4',                                               // puerta
+  'dock-config':    'M12 16a4 4 0 100-8 4 4 0 000 8zm0-2a2 2 0 100-4 2 2 0 000 4zm0-6V4m0 12v4M8 12H4m12 0h4', // engranaje
 };
 
 let _uid = 0;
