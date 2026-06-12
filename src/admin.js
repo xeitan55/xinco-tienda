@@ -1,4 +1,4 @@
-import { state, fbDb } from './firebase.js';
+﻿import { state, fbDb } from './firebase.js';
 import { bannerState, AVAILABLE_COLORS, CLOUDINARY, DB_KEYS } from './state.js';
 
 let _catImages = {};
@@ -218,7 +218,7 @@ export async function saveEditOrder() {
   order.total = total;
   const { fbUpdateOrderStatusRemote } = await import('./firebase.js');
   fbUpdateOrderStatusRemote(id, status).catch(e => console.error(e));
-  window.showToast?.(`✅ Pedido ${id} actualizado`);
+  window.showToast?.(` Pedido ${id} actualizado`);
   closeEditOrder();
   renderAdminOrders();
 }
@@ -234,7 +234,7 @@ export async function updateOrderStatus(id, status) {
   order.status = status;
   const { fbUpdateOrderStatusRemote } = await import('./firebase.js');
   fbUpdateOrderStatusRemote(id, status).catch(e => console.error(e));
-  window.showToast?.(`✅ ${id} → ${status}`);
+  window.showToast?.(` ${id} → ${status}`);
   renderAdminOrders();
 }
 
@@ -338,7 +338,7 @@ export async function saveProductAdmin() {
     img: document.getElementById('ep-img').value.trim(),
     images: document.getElementById('ep-images').value.split(';').map(u => u.trim()).filter(Boolean),
   };
-  if (!data.name || !data.cat || !data.price) { window.showToast?.('Nombre, categoría y precio son obligatorios ❌'); return; }
+  if (!data.name || !data.cat || !data.price) { window.showToast?.('Nombre, categoría y precio son obligatorios '); return; }
   if (isNew) {
     const maxId = state.products.reduce((m, p) => Math.max(m, p.id), 0);
     data.id = maxId + 1;
@@ -349,7 +349,7 @@ export async function saveProductAdmin() {
   }
   const { fbSaveProductRemote } = await import('./firebase.js');
   fbSaveProductRemote(data).catch(e => console.error(e));
-  window.showToast?.(`✅ Producto ${isNew ? 'creado' : 'actualizado'}`);
+  window.showToast?.(` Producto ${isNew ? 'creado' : 'actualizado'}`);
   closeProductModal();
   renderAdminProducts();
 }
@@ -376,17 +376,17 @@ export function addCustomColor() {
 }
 export function addProductImageUrl(colorId) {
   const url = document.getElementById('pf-img-url')?.value?.trim();
-  if (!url) { window.showToast?.('Pegá una URL primero ❌'); return; }
+  if (!url) { window.showToast?.('Pegá una URL primero '); return; }
   const cid = colorId || '';
   // normalize legacy entries
   pfImages = pfImages.map(e => typeof e === 'string' ? { url: e, colorId: '' } : e);
   const perColor = pfImages.filter(img => (img.colorId || '') === cid);
-  if (perColor.length >= 4) { window.showToast?.('Máximo 4 imágenes por color ❌'); return; }
+  if (perColor.length >= 4) { window.showToast?.('Máximo 4 imágenes por color '); return; }
   const hidden = document.getElementById('pf-img');
   if (hidden) hidden.value = url;
   pfImages.push({ url, colorId: cid });
   renderProductImageSlots();
-  window.showToast?.('✅ Imagen agregada');
+  window.showToast?.(' Imagen agregada');
 }
 
 export async function saveProduct() {
@@ -399,10 +399,10 @@ export async function saveProduct() {
   const oldPriceVal = document.getElementById('pf-old-price')?.value;
   const oldPrice = oldPriceVal ? parseInt(oldPriceVal) : null;
   const editId = document.getElementById('pf-id')?.value;
-  if (!name)  { window.showToast?.('EL NOMBRE ES OBLIGATORIO ❌'); return; }
-  if (!price) { window.showToast?.('EL PRECIO ES OBLIGATORIO ❌'); return; }
-  if (pfImages.length === 0) { window.showToast?.('AGREGÁ AL MENOS UNA IMAGEN ❌'); return; }
-  if (pfSelectedColors.length === 0) { window.showToast?.('SELECCIONÁ AL MENOS UN COLOR ❌'); return; }
+  if (!name)  { window.showToast?.('EL NOMBRE ES OBLIGATORIO '); return; }
+  if (!price) { window.showToast?.('EL PRECIO ES OBLIGATORIO '); return; }
+  if (pfImages.length === 0) { window.showToast?.('AGREGÁ AL MENOS UNA IMAGEN '); return; }
+  if (pfSelectedColors.length === 0) { window.showToast?.('SELECCIONÁ AL MENOS UN COLOR '); return; }
   const normalizedImages = pfImages.map(entry =>
     typeof entry === 'string' ? { url: entry, colorId: '' } : entry
   );
@@ -436,7 +436,7 @@ export async function saveProduct() {
     const saved = editId ? state.products.find(p=>String(p.id)===String(editId)) : productData;
     const { fbSaveProductRemote } = await import('./firebase.js');
     await fbSaveProductRemote(saved);
-    window.showToast?.(editId ? 'Producto actualizado en Firebase ✅' : 'Producto creado en Firebase ✅');
+    window.showToast?.(editId ? 'Producto actualizado en Firebase ' : 'Producto creado en Firebase ');
   } catch(e) {
     console.error('Error guardando producto en Firestore:', e);
     window.showToast?.('⚠️ Error al guardar producto en Firebase: ' + e.message);
@@ -476,13 +476,13 @@ export function openCloudinaryUploader(fieldId) {
       if (data.secure_url) {
         const el = document.getElementById(fieldId);
         if (el) el.value = data.secure_url;
-        window.showToast?.('✅ Imagen subida');
+        window.showToast?.(' Imagen subida');
         closeUploadModal();
       } else {
-        window.showToast?.('❌ Error: ' + (data.error?.message || 'error'));
+        window.showToast?.(' Error: ' + (data.error?.message || 'error'));
       }
     } catch(err) {
-      window.showToast?.('❌ Error de conexión');
+      window.showToast?.(' Error de conexión');
     }
     if (btn) { btn.disabled = false; btn.textContent = 'SUBIR'; }
   };
@@ -506,10 +506,10 @@ export function uploadFromUrl() {
   const fieldId = modal?.dataset?.fieldId || 'ep-img';
   const urlEl = document.getElementById('upload-url-input');
   const url = urlEl?.value?.trim();
-  if (!url) { window.showToast?.('Ingresá una URL ❌'); return; }
+  if (!url) { window.showToast?.('Ingresá una URL '); return; }
   const el = document.getElementById(fieldId);
   if (el) el.value = url;
-  window.showToast?.('✅ URL cargada');
+  window.showToast?.(' URL cargada');
   closeUploadModal();
   if (urlEl) urlEl.value = '';
 }
@@ -651,15 +651,15 @@ export function showAdminCouponTab(tab) {
 
 export async function createCoupon() {
   const code = document.getElementById('cp-code').value.trim().toUpperCase();
-  if (!code) { window.showToast?.('Ingresá un código ❌'); return; }
+  if (!code) { window.showToast?.('Ingresá un código '); return; }
   const disc = parseFloat(document.getElementById('cp-discount').value);
-  if (!disc || disc <= 0 || disc > 100) { window.showToast?.('Ingresá un descuento válido (1-100) ❌'); return; }
+  if (!disc || disc <= 0 || disc > 100) { window.showToast?.('Ingresá un descuento válido (1-100) '); return; }
   const type = document.getElementById('cp-type').value;
   const min = parseFloat(document.getElementById('cp-min').value) || 0;
   const maxUses = parseInt(document.getElementById('cp-max-uses').value) || 0;
   const exp = document.getElementById('cp-expiration').value;
-  if (!exp) { window.showToast?.('Seleccioná una fecha de expiración ❌'); return; }
-  if (new Date(exp) <= new Date()) { window.showToast?.('La fecha debe ser futura ❌'); return; }
+  if (!exp) { window.showToast?.('Seleccioná una fecha de expiración '); return; }
+  if (new Date(exp) <= new Date()) { window.showToast?.('La fecha debe ser futura '); return; }
   const data = {
     code, type,
     value: disc,
@@ -674,7 +674,7 @@ export async function createCoupon() {
   } catch(e) {
     console.error('Error guardando cupón:', e);
   }
-  window.showToast?.(`✅ Cupón ${code} creado`);
+  window.showToast?.(` Cupón ${code} creado`);
   ['cp-code','cp-discount','cp-min','cp-max-uses','cp-expiration'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   document.getElementById('cp-type').value = 'percentage';
   renderAdminCupones?.();
@@ -737,7 +737,7 @@ export function renderAdminCupones() {
             <div class="font-body-md text-sm mt-1">${fmtDiscount(c)}
               ${c.minPurchase > 0 ? ' / mín ' + window.fmtPrice?.(c.minPurchase) : ''}</div>
             <div class="font-label-caps text-[9px] text-on-surface-variant mt-1">Exp: ${expiresKey(c) || '—'} | Usos: ${usedKey(c)}${c.maxUses ? '/' + c.maxUses : ''}</div>
-            <button onclick="navigator.clipboard.writeText('${c.code}').then(()=>showToast?.('✅ Código copiado'))" class="btn-violet w-full mt-3 py-2 text-[9px]">COPIAR CÓDIGO</button>
+            <button onclick="navigator.clipboard.writeText('${c.code}').then(()=>showToast?.(' Código copiado'))" class="btn-violet w-full mt-3 py-2 text-[9px]">COPIAR CÓDIGO</button>
           </div>`).join('')}
       </div>` : '<div class="text-on-surface-variant font-body-md text-sm p-8 text-center">No hay cupones activos</div>'),
     ].join('');
@@ -782,7 +782,7 @@ export async function updateTrackingNumber(id, number) {
   order.trackingNumber = number;
   const { fbSaveOrderRemote } = await import('./firebase.js');
   fbSaveOrderRemote(order).catch(e => console.error(e));
-  window.showToast?.('✅ Tracking actualizado');
+  window.showToast?.(' Tracking actualizado');
 }
 
 // Reports
@@ -910,9 +910,9 @@ export async function uploadCategoryImg(idx, file) {
       const imgPreview = document.getElementById('cat-preview-' + idx);
       if (imgPreview) imgPreview.src = data.secure_url;
       renderCategoryPreview();
-      window.showToast?.('Imagen subida ✅');
-    } else window.showToast?.('Error al subir ❌');
-  } catch(e) { window.showToast?.('Error de conexión ❌'); }
+      window.showToast?.('Imagen subida ');
+    } else window.showToast?.('Error al subir ');
+  } catch(e) { window.showToast?.('Error de conexión '); }
 }
 
 export function addCategory() {
@@ -959,7 +959,7 @@ export async function saveCategories() {
     renderAdminCatFilters();
     renderAdminCatSelect();
     renderHomePageCats();
-    window.showToast?.('✅ Categorías guardadas en Firebase');
+    window.showToast?.(' Categorías guardadas en Firebase');
   } catch(e) {
     console.error('saveCategories:', e);
     window.showToast?.('⚠️ Error al guardar: ' + e.message);
@@ -1096,7 +1096,7 @@ export async function uploadSlotImage(file, colorId, slotIndex) {
   if (!file) return;
   pfImages = pfImages.map(e => typeof e === 'string' ? { url: e, colorId: '' } : e);
   const perColor = pfImages.filter(img => (img.colorId || '') === colorId);
-  if (perColor.length >= 4) { window.showToast?.('Máximo 4 imágenes por color ❌'); return; }
+  if (perColor.length >= 4) { window.showToast?.('Máximo 4 imágenes por color '); return; }
   const progressEl = document.getElementById('pf-slot-progress-'+colorId+'-'+slotIndex);
   const barEl = document.getElementById('pf-slot-bar-'+colorId+'-'+slotIndex);
   if (progressEl) progressEl.classList.remove('hidden');
@@ -1107,9 +1107,9 @@ export async function uploadSlotImage(file, colorId, slotIndex) {
         pfImages.push({ url, colorId });
         document.getElementById('pf-img').value = getFirstImageUrl();
         renderProductImageSlots();
-        window.showToast?.('Imagen subida ☁️✅');
+        window.showToast?.('Imagen subida ☁️');
       },
-      (err) => { window.showToast?.('Error: '+err+' ❌'); if(progressEl) progressEl.classList.add('hidden'); }
+      (err) => { window.showToast?.('Error: '+err+' '); if(progressEl) progressEl.classList.add('hidden'); }
     );
   } catch(e) { console.error(e); }
 }
@@ -1130,7 +1130,7 @@ export function moveProductImageFirst(i) {
   pfImages.unshift(img);
   document.getElementById('pf-img').value = getFirstImageUrl();
   renderProductImageSlots();
-  window.showToast?.('Imagen principal actualizada ✅');
+  window.showToast?.('Imagen principal actualizada ');
 }
 
 // ===== COLOR SWATCHES =====
@@ -1330,7 +1330,7 @@ export async function saveAnnouncementBar() {
     await fbSaveBannersRemote(bannerState);
     await syncFromFirebase();
     renderAnnouncementBar();
-    window.showToast?.('✅ Barra de anuncios guardada en Firebase');
+    window.showToast?.(' Barra de anuncios guardada en Firebase');
   } catch(e) {
     console.error('saveAnnouncementBar:', e);
     window.showToast?.('⚠️ Error al guardar en Firebase: ' + e.message);
@@ -1414,9 +1414,9 @@ export function uploadHeroMedia(file) {
       if (progress) progress.classList.add('hidden');
       document.getElementById('hero-media-url').value = finalUrl;
       previewHeroMedia();
-      window.showToast?.('¡Subido a Cloudinary! ☁️✅');
+      window.showToast?.('¡Subido a Cloudinary! ☁️');
     },
-    (err) => { if (statusEl) statusEl.textContent = 'ERROR'; if (bar) bar.style.background = '#ba1a1a'; window.showToast?.('Error al subir ❌'); },
+    (err) => { if (statusEl) statusEl.textContent = 'ERROR'; if (bar) bar.style.background = '#ba1a1a'; window.showToast?.('Error al subir '); },
     isVid ? 'video' : 'image'
   );
 }
@@ -1626,7 +1626,7 @@ export async function saveHeroBanner() {
     await fbSaveBannersRemote(bannerState);
     await syncFromFirebase();
     renderHeroBanner();
-    window.showToast?.('✅ Hero banner guardado en Firebase');
+    window.showToast?.(' Hero banner guardado en Firebase');
   } catch(e) {
     console.error('saveHeroBanner:', e);
     window.showToast?.('⚠️ Error al guardar en Firebase: ' + e.message);
@@ -1666,7 +1666,7 @@ export async function savePromoBanner() {
     await fbSaveBannersRemote(bannerState);
     await syncFromFirebase();
     renderPromoBanner();
-    window.showToast?.('✅ Banner promo guardado en Firebase');
+    window.showToast?.(' Banner promo guardado en Firebase');
   } catch(e) {
     console.error('savePromoBanner:', e);
     window.showToast?.('⚠️ Error al guardar en Firebase: ' + e.message);
@@ -1762,7 +1762,7 @@ export async function saveMPConfig() {
   const pk      = document.getElementById('mp-public-key').value.trim();
   const at      = document.getElementById('mp-access-token').value.trim();
   const enabled = document.getElementById('mp-enabled').checked;
-  if (!pk) { window.showToast?.('Ingresá la Public Key ❌'); return; }
+  if (!pk) { window.showToast?.('Ingresá la Public Key '); return; }
   if (at) {
     document.getElementById('mp-access-token').value = '';
     window.showToast?.('⚠️ Access Token NO se guarda aquí — cargalo en Vercel');
@@ -1788,7 +1788,7 @@ export async function saveMPConfig() {
     badge.textContent = enabled ? 'ACTIVO ✓' : 'CONFIGURADO';
     badge.className   = enabled ? 'badge badge-violet ml-auto shrink-0' : 'badge badge-outline ml-auto shrink-0';
   }
-  window.showToast?.(enabled ? '✅ Mercado Pago configurado' : '✅ Configuración guardada');
+  window.showToast?.(enabled ? ' Mercado Pago configurado' : ' Configuración guardada');
 }
 
 export async function saveBankConfig() {
@@ -1796,13 +1796,13 @@ export async function saveBankConfig() {
   const titular = document.getElementById('bank-titular')?.value.trim();
   const cbu     = document.getElementById('bank-cbu')?.value.trim();
   const alias   = document.getElementById('bank-alias')?.value.trim();
-  if (!name || !cbu) { window.showToast?.('BANCO Y CBU SON OBLIGATORIOS ❌'); return; }
-  if (cbu && !/^\d{22}$/.test(cbu)) { window.showToast?.('EL CBU DEBE TENER 22 DÍGITOS ❌'); return; }
+  if (!name || !cbu) { window.showToast?.('BANCO Y CBU SON OBLIGATORIOS '); return; }
+  if (cbu && !/^\d{22}$/.test(cbu)) { window.showToast?.('EL CBU DEBE TENER 22 DÍGITOS '); return; }
   try {
     const { doc, setDoc } = window._fb || {};
     if (!doc || !setDoc || !fbDb) throw new Error('Firebase no disponible');
     await setDoc(doc(fbDb, 'config', 'bank'), { name, titular, cbu, alias }, { merge: true });
-    window.showToast?.('✅ Datos bancarios guardados en Firebase');
+    window.showToast?.(' Datos bancarios guardados en Firebase');
   } catch(e) {
     console.error('saveBankConfig:', e);
     window.showToast?.('⚠️ Error al guardar: ' + e.message);
@@ -1830,7 +1830,7 @@ export async function saveShippingProviders() {
     if (!doc || !setDoc || !fbDb) throw new Error('Firebase no disponible');
     await setDoc(doc(fbDb, 'config', 'shipping'), { providers }, { merge: true });
     shippingProviders = providers;
-    window.showToast?.('✅ Proveedores de envío guardados en Firebase');
+    window.showToast?.(' Proveedores de envío guardados en Firebase');
   } catch(e) {
     console.error('saveShippingProviders:', e);
     window.showToast?.('⚠️ Error al guardar: ' + e.message);
@@ -1947,14 +1947,14 @@ export async function assignTracking() {
   const orderId = document.getElementById('track-order-select').value;
   const number = document.getElementById('track-number-input').value.trim().toUpperCase();
   const service = document.getElementById('track-service').value;
-  if (!orderId) { window.showToast?.('Seleccioná un pedido ❌'); return; }
-  if (!number) { window.showToast?.('Ingresá el número de seguimiento ❌'); return; }
+  if (!orderId) { window.showToast?.('Seleccioná un pedido '); return; }
+  if (!number) { window.showToast?.('Ingresá el número de seguimiento '); return; }
   trackingData[orderId] = { number, service, assignedAt: new Date().toLocaleDateString('es-AR'),
     events: [{date: new Date().toLocaleDateString('es-AR'), time: new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}), status:'EN PREPARACIÓN', desc:'El paquete está siendo preparado para envío', icon:'inventory_2'}]
   };
   const order = state.orders.find(o => o.id === orderId);
   if (order && order.status === 'pending') order.status = 'shipped';
-  window.showToast?.(`✅ Tracking #${number} asignado al pedido #${orderId}`);
+  window.showToast?.(` Tracking #${number} asignado al pedido #${orderId}`);
   const { persistAll } = await import('./firebase.js');
   persistAll();
   renderTrackingList();
@@ -2359,18 +2359,18 @@ export function uploadAdminBgVideo(slot, file) {
             fetchAdminBgList().then(() => renderAdminBgSelection());
             setAdminBgVideo(res.secure_url);
           }
-          window.showToast?.('✅ Video subido a Cloudinary');
+          window.showToast?.(' Video subido a Cloudinary');
         } else {
           let msg = 'Error al subir';
           try { const err = JSON.parse(xhr.responseText); msg = err.error?.message || msg; } catch(e) {}
-          window.showToast?.('❌ ' + msg);
+          window.showToast?.(' ' + msg);
         }
       };
-      xhr.onerror = () => { window.showToast?.('❌ Error de conexión'); };
+      xhr.onerror = () => { window.showToast?.(' Error de conexión'); };
       xhr.send(fd);
     })
     .catch(e => {
-      window.showToast?.('❌ Error al obtener firma de subida');
+      window.showToast?.(' Error al obtener firma de subida');
       console.error('uploadAdminBgVideo sign error:', e);
     });
 }
@@ -2486,7 +2486,7 @@ export async function saveAppearanceToFirebase() {
   try {
     const { doc, setDoc, collection } = window._fb;
     await setDoc(doc(window.fbDb, 'config', 'apariencia'), cfg, { merge: true });
-    window.showToast?.('✅ Configuración guardada en la nube');
+    window.showToast?.(' Configuración guardada en la nube');
   } catch(e) {
     console.error('saveAppearanceToFirebase error:', e);
     const msg = e.code === 'permission-denied'
@@ -2509,7 +2509,7 @@ export async function applyAllChanges() {
     // Re-render background selection
     await fetchAdminBgList();
     renderAdminBgSelection();
-    window.showToast?.('✅ Todos los cambios aplicados y sincronizados');
+    window.showToast?.(' Todos los cambios aplicados y sincronizados');
   } catch(e) {
     console.error('applyAllChanges error:', e);
     window.showToast?.('⚠️ Error al aplicar cambios');
@@ -2647,7 +2647,7 @@ export function saveSocialConfig() {
     try {
       const { doc, setDoc } = window._fb;
       await setDoc(doc(window.fbDb, 'config', 'social'), cfg, { merge: true });
-      window.showToast?.('✅ Redes sociales guardadas en la nube');
+      window.showToast?.(' Redes sociales guardadas en la nube');
     } catch(e) {
       console.error('saveSocialConfig error:', e);
       const msg = e.code === 'permission-denied'
@@ -2737,7 +2737,7 @@ export function subscribeNewsletter() {
     try {
       const { doc, setDoc, collection } = window._fb;
       await setDoc(doc(collection(fbDb, 'suscriptores'), email.replace(/[.#$]/g,'_')), { email, date: new Date().toISOString() });
-      window.showToast?.('✅ ¡Suscripto exitosamente!');
+      window.showToast?.(' ¡Suscripto exitosamente!');
       input.value = '';
     } catch(e) {
       console.error(e);
@@ -3095,7 +3095,7 @@ export function init() {
       const refs = ['productos','pedidos','banners','config'].map(c => doc(window.fbDb, c, 'data'));
       await Promise.all(refs.map(r => deleteDoc(r).catch(() => {})));
       localStorage.clear();
-      window.showToast?.('✅ Todos los datos eliminados');
+      window.showToast?.(' Todos los datos eliminados');
       setTimeout(() => location.reload(), 1000);
     } catch(e) {
       window.showToast?.('⚠️ Error: ' + e.message);

@@ -1,4 +1,4 @@
-import { state, fbDb, fbAuth, fbLoginUser, fbLogoutUser } from './firebase.js';
+﻿import { state, fbDb, fbAuth, fbLoginUser, fbLogoutUser } from './firebase.js';
 
 let _lastRegisteredUser = null;
 
@@ -10,7 +10,7 @@ export async function doLogin() {
   const verWarn = document.getElementById('login-verify-warning');
 
   if (!email || !pass) { window.showToast?.('Completá email y contraseña'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { window.showToast?.('El email no tiene un formato válido ❌'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { window.showToast?.('El email no tiene un formato válido '); return; }
 
   const btn = document.querySelector('#page-login .btn-primary');
   if (btn) { btn.textContent = 'CONECTANDO...'; btn.disabled = true; }
@@ -56,7 +56,7 @@ export async function doLogin() {
     if (e.code === 'auth/invalid-email')      msg = 'EL EMAIL NO ES VÁLIDO';
     if (e.message === 'Firebase no disponible') msg = 'ERROR DE CONEXIÓN — RECARGÁ LA PÁGINA';
     if (err) { err.textContent = msg; err.classList.remove('hidden'); }
-    window.showToast?.(msg + ' ❌');
+    window.showToast?.(msg + ' ');
   }
 }
 
@@ -71,7 +71,7 @@ export async function doRegister() {
 
   function showRegError(msg) {
     if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); }
-    window.showToast?.(msg + ' ❌');
+    window.showToast?.(msg + ' ');
   }
 
   if (!nombre)  { showRegError('INGRESÁ TU NOMBRE'); return; }
@@ -125,10 +125,10 @@ export async function resendVerificationEmail() {
     try {
       const { sendEmailVerification } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
       await sendEmailVerification(fbAuth.currentUser, { url: 'https://xinco.shop/verificar-email' });
-      window.showToast?.('✅ Email de verificación reenviado — revisá tu bandeja');
+      window.showToast?.(' Email de verificación reenviado — revisá tu bandeja');
     } catch(e) {
       console.error('resendVerificationEmail:', e);
-      window.showToast?.('❌ Error al reenviar: ' + (e.message || e.code));
+      window.showToast?.(' Error al reenviar: ' + (e.message || e.code));
     }
     return;
   }
@@ -139,7 +139,7 @@ export async function resendVerificationEmail() {
       const user = fbAuth?.currentUser;
       if (user) {
       await sendEmailVerification(user, { url: 'https://xinco.shop/verificar-email' });
-        window.showToast?.('✅ Email de verificación reenviado');
+        window.showToast?.(' Email de verificación reenviado');
         return;
       }
     } catch(e) {}
@@ -179,9 +179,9 @@ export async function doLoginGoogle() {
     nav('home');
   } catch(e) {
     if (e.code === 'auth/popup-closed-by-user') return;
-    if (e.code === 'auth/popup-blocked') window.showToast?.('El popup fue bloqueado. Permitilo en tu navegador ❌');
-    else if (!fbAuth) window.showToast?.('Firebase no disponible. Usá email y contraseña ❌');
-    else window.showToast?.('Error al iniciar con Google: ' + (e.message || e.code) + ' ❌');
+    if (e.code === 'auth/popup-blocked') window.showToast?.('El popup fue bloqueado. Permitilo en tu navegador ');
+    else if (!fbAuth) window.showToast?.('Firebase no disponible. Usá email y contraseña ');
+    else window.showToast?.('Error al iniciar con Google: ' + (e.message || e.code) + ' ');
   }
 }
 
@@ -193,7 +193,7 @@ export async function showForgotPassword() {
     await sendPasswordResetEmail(fbAuth, email);
     window.showToast?.('¡Email de recuperación enviado! Revisá tu bandeja 📧');
   } catch(e) {
-    window.showToast?.('Error: ' + (e.code === 'auth/user-not-found' ? 'Email no registrado' : e.message) + ' ❌');
+    window.showToast?.('Error: ' + (e.code === 'auth/user-not-found' ? 'Email no registrado' : e.message) + ' ');
   }
 }
 
@@ -408,8 +408,8 @@ export async function saveProfile() {
   fields.forEach(f => { if (!validateProfileField(f)) valid = false; });
   const nombre = document.getElementById('acc-nombre')?.value.trim();
   const apellido = document.getElementById('acc-apellido')?.value.trim();
-  if (!nombre || !apellido) { window.showToast?.('NOMBRE Y APELLIDO SON OBLIGATORIOS ❌'); return; }
-  if (!valid) { window.showToast?.('CORREGÍ LOS CAMPOS MARCADOS EN ROJO ❌'); return; }
+  if (!nombre || !apellido) { window.showToast?.('NOMBRE Y APELLIDO SON OBLIGATORIOS '); return; }
+  if (!valid) { window.showToast?.('CORREGÍ LOS CAMPOS MARCADOS EN ROJO '); return; }
   const btn = document.querySelector('#acc-content-profile .btn-primary');
   if (btn) { btn.textContent = 'GUARDANDO...'; btn.disabled = true; }
   try {
@@ -431,9 +431,9 @@ export async function saveProfile() {
     if (state.user) state.user.displayName = fullName;
     document.getElementById('account-name').textContent = fullName.toUpperCase();
     await updateAuthUI();
-    window.showToast?.('¡Perfil actualizado! ✅');
+    window.showToast?.('¡Perfil actualizado! ');
   } catch(e) {
-    window.showToast?.('Error al guardar: ' + e.message + ' ❌');
+    window.showToast?.('Error al guardar: ' + e.message + ' ');
   } finally {
     if (btn) { btn.textContent = 'GUARDAR CAMBIOS'; btn.disabled = false; }
   }
@@ -460,9 +460,9 @@ export async function uploadAvatar(file) {
       const avatarInitials = document.getElementById('account-avatar-initials');
       if (avatarImg) { avatarImg.src = url; avatarImg.classList.remove('hidden'); }
       if (avatarInitials) avatarInitials.classList.add('hidden');
-      window.showToast?.('¡Foto de perfil actualizada! ✅');
+      window.showToast?.('¡Foto de perfil actualizada! ');
     }
-  } catch(e) { window.showToast?.('Error al subir la foto ❌'); }
+  } catch(e) { window.showToast?.('Error al subir la foto '); }
 }
 
 export function validatePaymentField(id) {
@@ -481,13 +481,13 @@ export function validatePaymentField(id) {
 export async function saveUserPayment(type) {
   if (type === 'mp') {
     const valid = ['user-mp-cbu','user-mp-alias','user-mp-email'].map(validatePaymentField).every(Boolean);
-    if (!valid) { window.showToast?.('CORREGÍ LOS CAMPOS MARCADOS ❌'); return; }
+    if (!valid) { window.showToast?.('CORREGÍ LOS CAMPOS MARCADOS '); return; }
     const data = {
       mp_cbu: document.getElementById('user-mp-cbu')?.value.trim(),
       mp_alias: document.getElementById('user-mp-alias')?.value.trim(),
       mp_email: document.getElementById('user-mp-email')?.value.trim(),
     };
-    if (!data.mp_cbu && !data.mp_alias) { window.showToast?.('INGRESÁ AL MENOS EL CBU O EL ALIAS ❌'); return; }
+    if (!data.mp_cbu && !data.mp_alias) { window.showToast?.('INGRESÁ AL MENOS EL CBU O EL ALIAS '); return; }
     if (fbDb && window._fb && state.user) {
       const { doc, setDoc } = window._fb;
       await setDoc(doc(fbDb,'users',state.user.uid), { payment: data }, { merge: true });
@@ -499,23 +499,23 @@ export async function saveUserPayment(type) {
     if (badge) { badge.textContent = 'VINCULADO ✓'; badge.className = 'badge badge-violet shrink-0'; }
     if (unlinked) unlinked.classList.add('hidden');
     if (linked) { linked.classList.remove('hidden'); const el = document.getElementById('mp-linked-email'); if (el) el.textContent = data.mp_email; }
-    window.showToast?.('Mercado Pago vinculado exitosamente ✅');
+    window.showToast?.('Mercado Pago vinculado exitosamente ');
   }
   if (type === 'bank') {
     const cbuValid = validatePaymentField('user-bank-cbu');
-    if (!cbuValid) { window.showToast?.('CBU INVÁLIDO ❌'); return; }
+    if (!cbuValid) { window.showToast?.('CBU INVÁLIDO '); return; }
     const data = {
       bank_name: document.getElementById('user-bank-name')?.value.trim(),
       bank_titular: document.getElementById('user-bank-titular')?.value.trim(),
       bank_cbu: document.getElementById('user-bank-cbu')?.value.trim(),
       bank_alias: document.getElementById('user-bank-alias')?.value.trim(),
     };
-    if (!data.bank_name || !data.bank_cbu) { window.showToast?.('BANCO Y CBU SON OBLIGATORIOS ❌'); return; }
+    if (!data.bank_name || !data.bank_cbu) { window.showToast?.('BANCO Y CBU SON OBLIGATORIOS '); return; }
     if (fbDb && window._fb && state.user) {
       const { doc, setDoc } = window._fb;
       await setDoc(doc(fbDb,'users',state.user.uid), { bank: data }, { merge: true });
     }
-    window.showToast?.('Datos bancarios guardados ✅');
+    window.showToast?.('Datos bancarios guardados ');
   }
 }
 
@@ -558,7 +558,7 @@ export async function saveCard() {
   }
   document.getElementById('add-card-form')?.classList.add('hidden');
   renderUserCards();
-  window.showToast?.(`Tarjeta ${brand} ****${num.slice(-4)} guardada ✅`);
+  window.showToast?.(`Tarjeta ${brand} ****${num.slice(-4)} guardada `);
 }
 
 export function renderUserCards() {
@@ -602,8 +602,8 @@ export async function saveAddress() {
   const city = document.getElementById('addr-city')?.value.trim();
   const cp = document.getElementById('addr-cp')?.value.trim();
   const prov = document.getElementById('addr-prov')?.value;
-  if (!street || !city || !cp) { window.showToast?.('CALLE, CIUDAD Y CP SON OBLIGATORIOS ❌'); return; }
-  if (!/^\d{4,8}$/.test(cp)) { window.showToast?.('CÓDIGO POSTAL INVÁLIDO ❌'); return; }
+  if (!street || !city || !cp) { window.showToast?.('CALLE, CIUDAD Y CP SON OBLIGATORIOS '); return; }
+  if (!/^\d{4,8}$/.test(cp)) { window.showToast?.('CÓDIGO POSTAL INVÁLIDO '); return; }
   const addr = { street, city, cp, prov, addedAt: new Date().toISOString() };
   if (!state.user.addresses) state.user.addresses = [];
   state.user.addresses.push(addr);
@@ -613,7 +613,7 @@ export async function saveAddress() {
   }
   document.getElementById('add-address-form')?.classList.add('hidden');
   renderAddresses();
-  window.showToast?.('Dirección guardada ✅');
+  window.showToast?.('Dirección guardada ');
 }
 
 export function renderAddresses() {
@@ -659,9 +659,9 @@ export async function changeUserEmail() {
   const newEmail = document.getElementById('acc-email-new')?.value.trim();
   const pass = document.getElementById('acc-email-pass')?.value;
   const msgEl = document.getElementById('email-change-msg');
-  if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) { window.showToast?.('INGRESÁ UN EMAIL VÁLIDO ❌'); return; }
-  if (!pass) { window.showToast?.('INGRESÁ TU CONTRASEÑA ACTUAL ❌'); return; }
-  if (newEmail === state.user?.email) { window.showToast?.('ESE ES TU EMAIL ACTUAL ❌'); return; }
+  if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) { window.showToast?.('INGRESÁ UN EMAIL VÁLIDO '); return; }
+  if (!pass) { window.showToast?.('INGRESÁ TU CONTRASEÑA ACTUAL '); return; }
+  if (newEmail === state.user?.email) { window.showToast?.('ESE ES TU EMAIL ACTUAL '); return; }
   const btn = document.querySelector('#acc-content-security .btn-primary');
   if (btn) { btn.textContent = 'ENVIANDO...'; btn.disabled = true; }
   try {
@@ -669,15 +669,15 @@ export async function changeUserEmail() {
     const cred = EmailAuthProvider.credential(state.user.email, pass);
     await reauthenticateWithCredential(fbAuth.currentUser, cred);
     await verifyBeforeUpdateEmail(fbAuth.currentUser, newEmail, { url: 'https://xinco.shop/verificar-email' });
-    if (msgEl) { msgEl.textContent = `✅ EMAIL DE VERIFICACIÓN ENVIADO A ${newEmail.toUpperCase()} — VERIFICÁ PARA APLICAR EL CAMBIO`; msgEl.classList.remove('hidden'); }
+    if (msgEl) { msgEl.textContent = ` EMAIL DE VERIFICACIÓN ENVIADO A ${newEmail.toUpperCase()} — VERIFICÁ PARA APLICAR EL CAMBIO`; msgEl.classList.remove('hidden'); }
     document.getElementById('acc-email-new').value = '';
     document.getElementById('acc-email-pass').value = '';
-    window.showToast?.('Email de verificación enviado ✅');
+    window.showToast?.('Email de verificación enviado ');
   } catch(e) {
     let msg = 'ERROR AL CAMBIAR EMAIL';
-    if (e.code === 'auth/wrong-password') msg = 'CONTRASEÑA INCORRECTA ❌';
-    if (e.code === 'auth/email-already-in-use') msg = 'ESE EMAIL YA ESTÁ EN USO ❌';
-    if (e.code === 'auth/requires-recent-login') msg = 'SESIÓN EXPIRADA — CERRÁ SESIÓN Y VOLVÉ A ENTRAR ❌';
+    if (e.code === 'auth/wrong-password') msg = 'CONTRASEÑA INCORRECTA ';
+    if (e.code === 'auth/email-already-in-use') msg = 'ESE EMAIL YA ESTÁ EN USO ';
+    if (e.code === 'auth/requires-recent-login') msg = 'SESIÓN EXPIRADA — CERRÁ SESIÓN Y VOLVÉ A ENTRAR ';
     window.showToast?.(msg);
   } finally {
     if (btn) { btn.textContent = 'ENVIAR VERIFICACIÓN AL NUEVO EMAIL'; btn.disabled = false; }
@@ -689,8 +689,8 @@ export async function sendPasswordReset() {
   try {
     const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
     await sendPasswordResetEmail(fbAuth, state.user.email);
-    window.showToast?.('Email de restablecimiento enviado a ' + state.user.email + ' ✅');
-  } catch(e) { window.showToast?.('Error al enviar: ' + e.message + ' ❌'); }
+    window.showToast?.('Email de restablecimiento enviado a ' + state.user.email + ' ');
+  } catch(e) { window.showToast?.('Error al enviar: ' + e.message + ' '); }
 }
 
 export async function handleEmailVerification() {
@@ -705,20 +705,20 @@ export async function handleEmailVerification() {
   if (mode === 'verifyEmail' && oobCode) {
     try {
       await window._fb.applyActionCode(oobCode);
-      statusEl.innerHTML = '✅ EMAIL VERIFICADO<br><span style="font-size:13px;color:#666;margin-top:8px;display:block;">Ahora podés iniciar sesión.</span>';
+      statusEl.innerHTML = ' EMAIL VERIFICADO<br><span style="font-size:13px;color:#666;margin-top:8px;display:block;">Ahora podés iniciar sesión.</span>';
       setTimeout(() => { import('./router.js').then(m => m.nav('login')); }, 3000);
       return;
     } catch(e) {
       let msg = 'Error al verificar';
       if (e.code === 'auth/invalid-action-code') msg = 'El link ya expiró o ya fue usado';
-      statusEl.innerHTML = '❌ ' + msg;
+      statusEl.innerHTML = ' ' + msg;
       return;
     }
   }
 
   // Case 2: Redirect after Firebase Auth handler processed verification
   if (window.location.pathname === '/verificar-email') {
-    statusEl.innerHTML = '✅ EMAIL VERIFICADO<br><span style="font-size:13px;color:#666;margin-top:8px;display:block;">Ya podés iniciar sesión.</span>';
+    statusEl.innerHTML = ' EMAIL VERIFICADO<br><span style="font-size:13px;color:#666;margin-top:8px;display:block;">Ya podés iniciar sesión.</span>';
     setTimeout(() => { import('./router.js').then(m => m.nav('login')); }, 3000);
     return;
   }

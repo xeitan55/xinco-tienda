@@ -1,4 +1,4 @@
-import { state } from './firebase.js';
+﻿import { state } from './firebase.js';
 
 const EJ_KEY = 'xinco_emailjs';
 
@@ -81,7 +81,7 @@ export async function sendTicket() {
       customer: order.customer,
     }, cfg.publicKey);
 
-    console.log('✅ Ticket enviado a', order.email);
+    console.log(' Ticket enviado a', order.email);
   } catch(e) {
     console.warn('sendTicket error (no bloquea):', e);
   }
@@ -126,11 +126,11 @@ export function saveEmailJsConfigFromPanel() {
   const templateId = document.getElementById('ej-template-id')?.value.trim();
   const publicKey = document.getElementById('ej-public-key')?.value.trim();
   if (!serviceId || !templateId || !publicKey) {
-    window.showToast?.('Completá todos los campos de EmailJS ❌');
+    window.showToast?.('Completá todos los campos de EmailJS ');
     return;
   }
   saveEmailJsConfig(serviceId, templateId, publicKey);
-  window.showToast?.('✅ EmailJS configurado');
+  window.showToast?.(' EmailJS configurado');
 }
 
 export function loadEmailJsIntoForm() {

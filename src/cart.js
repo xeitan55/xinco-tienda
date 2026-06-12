@@ -1,4 +1,4 @@
-import { state } from './state.js';
+﻿import { state } from './state.js';
 
 export function openCart() {
   document.getElementById('cart-drawer').classList.add('open');
@@ -21,11 +21,11 @@ export function goToCheckout() {
 export function addToCart(productId, size, color) {
   const product = state.products.find(p => p.id === productId);
   if (!product) return;
-  if (product.stock <= 0) { window.showToast?.('Producto sin stock ❌'); return; }
+  if (product.stock <= 0) { window.showToast?.('Producto sin stock '); return; }
   const key = productId + '-' + size + '-' + color;
   const existing = state.cart.find(i => i.key === key);
   const currentQty = existing ? existing.qty : 0;
-  if (currentQty >= product.stock) { window.showToast?.('No hay más stock disponible ❌'); return; }
+  if (currentQty >= product.stock) { window.showToast?.('No hay más stock disponible '); return; }
   if (existing) { existing.qty++; }
   else { state.cart.push({key, productId, name: product.name, price: product.price, size, color, qty: 1, img: product.img}); }
   window.updateCartCount?.();
