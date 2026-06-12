@@ -12,9 +12,11 @@
  */
 
 const admin = require('firebase-admin');
+const { getAuth } = require('firebase-admin/auth');
 const serviceAccount = require('./serviceAccountKey.json');
 
-admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+admin.initializeApp({ credential: admin.cert(serviceAccount) });
+const auth = getAuth();
 
 const ADMIN_EMAILS = [
   'xinco.tienda.adm@gmail.com',
@@ -26,8 +28,8 @@ const ADMIN_EMAILS = [
 async function setClaims() {
   for (const email of ADMIN_EMAILS) {
     try {
-      const user = await admin.auth().getUserByEmail(email);
-      await admin.auth().setCustomUserClaims(user.uid, { admin: true });
+      const user = await auth.getUserByEmail(email);
+      await auth.setCustomUserClaims(user.uid, { admin: true });
       console.log(`✅ ${email} → admin claim seteado`);
     } catch (err) {
       console.error(`❌ ${email} → error:`, err.message);
