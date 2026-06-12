@@ -1003,8 +1003,9 @@ export function renderHomePageCats() {
   _ensureCategoriesArray();
   const section = document.getElementById('home-categories-section');
   if (!section) return;
-  const grid = section.querySelector('.grid');
+  const grid = section.querySelector('.cat-grid, .grid');
   if (!grid) return;
+  grid.className = 'cat-grid';
   grid.innerHTML = bannerState.categories.map(c => `
     <div class="cat-card group relative block w-full h-[280px] border-[3px] border-primary overflow-hidden cursor-pointer rounded-xl" onclick="filterCatalog('${c.slug}')">
       <img src="${c.img || 'https://placehold.co/800x600/1c1c1c/1a1a1a?text=+'}" alt="${c.name}" class="cat-card-img absolute inset-0 w-full h-full object-cover "/>

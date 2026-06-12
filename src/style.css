@@ -394,6 +394,8 @@
   }
   .grayscale-hover { filter: grayscale(0.6); transition: filter 0.4s cubic-bezier(0.22,1,0.36,1), transform 0.4s cubic-bezier(0.22,1,0.36,1); }
   .grayscale-hover:hover { filter: grayscale(0); transform: scale(1.03); }
+  .cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (min-width: 768px) { .cat-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; } }
   .cat-card { transition: all 0.35s cubic-bezier(0.22,1,0.36,1); }
   .cat-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
   .cat-card:hover .cat-card-img { transform: scale(1.05); }
