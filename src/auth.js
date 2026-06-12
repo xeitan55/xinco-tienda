@@ -255,10 +255,10 @@ export function checkPasswordMatch() {
 }
 
 // ---- Account Page ----
-export function renderAccountPage() {
+export async function renderAccountPage() {
   if (!state.user) { import('./router.js').then(m => m.nav('login')); return; }
-  const name = state.user.displayName || state.user.name || state.user.email.split('@')[0];
-  const email = state.user.email;
+  const email = state.user.email || '';
+  const name = state.user.displayName || state.user.name || email.split('@')[0] || 'USUARIO';
   const initials = name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
   const avatarImg = document.getElementById('account-avatar-img');
   const avatarInitials = document.getElementById('account-avatar-initials');
@@ -284,6 +284,22 @@ export function renderAccountPage() {
   inp('acc-apellido', parts.slice(1).join(' '));
   inp('acc-tel', state.user.phoneNumber || '');
   inp('acc-email-current', email);
+  // Load profile fields from Firestore
+  try {
+    if (fbDb && window._fb && state.user?.uid) {
+      const { doc, getDoc } = window._fb;
+      const snap = await getDoc(doc(fbDb, 'users', state.user.uid));
+      if (snap.exists()) {
+        const data = snap.data();
+        inp('acc-dni', data.dni);
+        inp('acc-bday', data.birthday);
+        inp('acc-genero', data.gender);
+        if (Array.isArray(data.addresses)) { state.user.addresses = data.addresses; }
+        if (data.displayName && !state.user.displayName) state.user.displayName = data.displayName;
+      }
+    }
+  } catch(e) { console.warn('Error loading profile from Firestore:', e); }
+  renderAddresses();
   const userOrders = state.orders.filter(o => o.email === email);
   const ordersEl = document.getElementById('account-orders-list');
   const emptyEl = document.getElementById('account-orders-empty');
@@ -311,7 +327,6 @@ export function renderAccountPage() {
         </div>
       </div>`).join('');
   }
-  renderAddresses();
 }
 
 export function showAccountTab(tab) {
@@ -330,7 +345,7 @@ export function showAccountTab(tab) {
 
   newContent.classList.remove('hidden');
   void newContent.offsetWidth;
-  newContent.classList.remove('tab-exit', 'tab-prepare');
+  newContent.classList.remove('tab-exit');
   newContent.classList.add('tab-enter');
 
   ['orders','profile','security','datos'].forEach(t => {
@@ -364,8 +379,8 @@ export async function saveProfile() {
   fields.forEach(f => { if (!validateProfileField(f)) valid = false; });
   let nombre = document.getElementById('acc-nombre')?.value.trim();
   let apellido = document.getElementById('acc-apellido')?.value.trim();
-  nombre = nombre.replace(/<[^>]*>/g, '');
-  apellido = apellido.replace(/<[^>]*>/g, '');
+  nombre = nombre?.replace(/<[^>]*>/g, '') || '';
+  apellido = apellido?.replace(/<[^>]*>/g, '') || '';
   if (!nombre || !apellido) { window.showToast?.('NOMBRE Y APELLIDO SON OBLIGATORIOS '); return; }
   if (!valid) { window.showToast?.('CORREGÍ LOS CAMPOS MARCADOS EN ROJO '); return; }
   const btn = document.querySelector('#acc-content-profile .btn-primary');
@@ -414,13 +429,19 @@ export async function uploadAvatar(file) {
         await updateProfile(fbAuth.currentUser, { photoURL: url });
         if (state.user) state.user.photoURL = url;
       }
+      if (fbDb && window._fb && state.user?.uid) {
+        const { doc, setDoc } = window._fb;
+        await setDoc(doc(fbDb, 'users', state.user.uid), { photoURL: url }, { merge: true });
+      }
       const avatarImg = document.getElementById('account-avatar-img');
       const avatarInitials = document.getElementById('account-avatar-initials');
       if (avatarImg) { avatarImg.src = url; avatarImg.classList.remove('hidden'); }
       if (avatarInitials) avatarInitials.classList.add('hidden');
       window.showToast?.('¡Foto de perfil actualizada! ');
+    } else {
+      window.showToast?.('Error al subir la foto: respuesta inválida del servidor ');
     }
-  } catch(e) { window.showToast?.('Error al subir la foto '); }
+  } catch(e) { window.showToast?.('Error al subir la foto: ' + (e.message || 'conexión fallida') + ' '); }
 }
 
 export function showAddAddressForm() { document.getElementById('add-address-form')?.classList.remove('hidden'); }
@@ -430,7 +451,7 @@ export async function saveAddress() {
   const city = document.getElementById('addr-city')?.value.trim();
   const cp = document.getElementById('addr-cp')?.value.trim();
   const prov = document.getElementById('addr-prov')?.value;
-  if (!street || !city || !cp) { window.showToast?.('CALLE, CIUDAD Y CP SON OBLIGATORIOS '); return; }
+  if (!street || !city || !cp || !prov) { window.showToast?.('CALLE, CIUDAD, PROVINCIA Y CP SON OBLIGATORIOS '); return; }
   if (!/^\d{4,8}$/.test(cp)) { window.showToast?.('CÓDIGO POSTAL INVÁLIDO '); return; }
   const addr = { street, city, cp, prov, addedAt: new Date().toISOString() };
   if (!state.user.addresses) state.user.addresses = [];

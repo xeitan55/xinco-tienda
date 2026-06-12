@@ -295,6 +295,9 @@ const translations = {
     'sizeguide.waist': 'CINTURA (CM)',
     'sizeguide.hip': 'CADERA (CM)',
     'sizeguide.footer': 'Medidas en centímetros. En caso de duda, elegí el talle más grande.',
+    // ORDER CONFIRMATION
+    'orderconfirm.title': '¡PEDIDO CONFIRMADO!',
+    'orderconfirm.subtitle': 'Gracias por tu compra. Te enviamos los detalles a tu email.',
   },
   en: {
     // SPLASH
@@ -590,6 +593,9 @@ const translations = {
     'sizeguide.waist': 'WAIST (CM)',
     'sizeguide.hip': 'HIP (CM)',
     'sizeguide.footer': 'Measurements in centimeters. When in doubt, choose the larger size.',
+    // ORDER CONFIRMATION
+    'orderconfirm.title': 'ORDER CONFIRMED!',
+    'orderconfirm.subtitle': 'Thank you for your purchase. We sent the details to your email.',
   },
 };
 
