@@ -165,7 +165,16 @@ export function init() {
     document.body.style.overflow = '';
   };
   window.openMobileMenu = () => {
-    document.getElementById('mobile-menu')?.classList.add('open');
+    const menu = document.getElementById('mobile-menu');
+    const footer = document.getElementById('mobile-menu-footer');
+    if (footer) {
+      if (state.user) {
+        footer.innerHTML = '<a onclick="nav(\'account\');closeMobileMenu()"><span class="material-symbols-outlined text-[16px]">person</span> MI CUENTA</a><a onclick="doLogout();closeMobileMenu()"><span class="material-symbols-outlined text-[16px]">logout</span> CERRAR SESIÓN</a>';
+      } else {
+        footer.innerHTML = '<a onclick="nav(\'login\');closeMobileMenu()"><span class="material-symbols-outlined text-[16px]">login</span> INICIAR SESIÓN</a>';
+      }
+    }
+    menu?.classList.add('open');
     document.body.style.overflow = 'hidden';
   };
   window.toggleCatalogFilters = () => {
