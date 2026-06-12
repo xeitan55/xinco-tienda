@@ -233,22 +233,7 @@ tailwind.config = {
         <span class="material-symbols-outlined text-primary">translate</span>
         <span id="lang-label" class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 text-[8px] font-bold font-label-caps text-primary leading-none">ES</span>
       </button>
-      <div class="relative" id="theme-panel-container">
-        <button class="relative p-1" id="theme-toggle" onclick="toggleThemePanel()" title="Personalizar" data-i18n-title="header.customize">
-          <span class="material-symbols-outlined text-primary">palette</span>
-        </button>
-        <div id="theme-panel">
-          <div class="theme-panel-inner">
-            <h4 data-i18n="theme.title">Tema</h4>
-            <div class="theme-options" id="theme-selector">
-              <button class="theme-btn active" data-theme="light" onclick="setTheme('light')" data-i18n="theme.light">Claro</button>
-              <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')" data-i18n="theme.dark">Oscuro</button>
-            </div>
-            <h4 data-i18n="theme.accent">Acento</h4>
-            <div class="accent-options" id="accent-selector"></div>
-          </div>
-        </div>
-      </div>
+      
       <button class="relative p-1" onclick="openCart()">
         <span class="material-symbols-outlined text-primary">shopping_bag</span>
         <span id="cart-count" class="absolute -top-1 -right-1 bg-secondary-container text-primary font-label-caps text-[10px] w-5 h-5 flex items-center justify-center border-2 border-primary rounded-full">0</span>
@@ -980,14 +965,7 @@ tailwind.config = {
           <a class="font-label-caps text-label-caps text-primary underline cursor-pointer" onclick="nav('register')" data-i18n="login.register">REGISTRATE</a>
                 </div>
               </div>
-              <!-- Save button -->
-              <div class="border border-gray-100 rounded-xl p-5 bg-white">
-                <button onclick="saveAppearanceToFirebase()" class="btn-violet w-full py-3 text-[11px] font-label-caps tracking-wider flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined text-[18px]">cloud_upload</span>
-                  <span data-i18n="login.save">GUARDAR CAMBIOS EN LA NUBE</span>
-                </button>
-                <p class="font-label-caps text-[9px] text-on-surface-variant/50 text-center mt-2" data-i18n="login.save_helper">Los cambios se guardan localmente al instante. Usá este botón para sincronizar con Firebase.</p>
-              </div>
+              
             </div>
           </div>
         </div>
@@ -1206,6 +1184,22 @@ tailwind.config = {
             <button class="btn-primary" onclick="saveProfile()" data-i18n="account.save">
               <span class="material-symbols-outlined text-[16px]">save</span> GUARDAR CAMBIOS
             </button>
+          </div>
+
+          <!-- APARIENCIA -->
+          <div class="bg-surface border-2 border-primary p-6 mt-6">
+            <h3 class="font-label-caps text-label-caps text-primary mb-4" style="font-family:Inter;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;">APARIENCIA</h3>
+            <div class="mb-4">
+              <h4 class="font-label-caps text-label-caps text-on-surface-variant mb-2" data-i18n="theme.title">Tema</h4>
+              <div class="theme-options" id="theme-selector">
+                <button class="theme-btn active" data-theme="light" onclick="setTheme('light')" data-i18n="theme.light">Claro</button>
+                <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')" data-i18n="theme.dark">Oscuro</button>
+              </div>
+            </div>
+            <div>
+              <h4 class="font-label-caps text-label-caps text-on-surface-variant mb-2" data-i18n="theme.accent">Acento</h4>
+              <div class="accent-options" id="accent-selector"></div>
+            </div>
           </div>
         </div>
 

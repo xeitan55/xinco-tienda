@@ -232,8 +232,7 @@ const translations = {
     'login.google': 'INICIAR CON GOOGLE',
     'login.noaccount': '¿No tenés cuenta?',
     'login.register': 'REGISTRATE',
-    'login.save': 'GUARDAR CAMBIOS EN LA NUBE',
-    'login.save_helper': 'Los cambios se guardan localmente al instante. Usá este botón para sincronizar con Firebase.',
+    
     // REGISTER
     'register.subtitle': 'CREÁ TU CUENTA',
     'register.name': 'NOMBRE *',
@@ -527,8 +526,7 @@ const translations = {
     'login.google': 'SIGN IN WITH GOOGLE',
     'login.noaccount': "Don't have an account?",
     'login.register': 'SIGN UP',
-    'login.save': 'SAVE CHANGES TO CLOUD',
-    'login.save_helper': 'Changes are saved locally instantly. Use this button to sync with Firebase.',
+    
     // REGISTER
     'register.subtitle': 'CREATE YOUR ACCOUNT',
     'register.name': 'FIRST NAME *',

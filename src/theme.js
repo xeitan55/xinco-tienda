@@ -75,15 +75,7 @@ export function init() {
   const savedAccent = getAccent();
   setTheme(savedTheme);
   setAccentColor(savedAccent);
-
-  document.addEventListener('click', (e) => {
-    const panel = document.getElementById('theme-panel');
-    const container = document.getElementById('theme-panel-container');
-    if (!panel || !container) return;
-    if (!container.contains(e.target)) {
-      panel.classList.remove('open');
-    }
-  });
+  buildAccentSelector();
 }
 
 function buildAccentSelector() {
