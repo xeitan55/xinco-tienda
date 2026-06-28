@@ -166,11 +166,9 @@ export async function updateAuthUI() {
   if (state.user) {
     if (label) label.textContent = admin ? 'ADMIN' : (state.user.displayName || state.user.name || state.user.email?.split('@')[0] || 'USUARIO').split(' ')[0].toUpperCase();
     if (panelBtn) panelBtn.classList.toggle('hidden', !admin);
-    if (wrapper) wrapper.classList.remove('hidden');
   } else {
     if (label) label.textContent = 'ACCEDER';
     if (panelBtn) panelBtn.classList.add('hidden');
-    if (wrapper) wrapper.classList.remove('hidden');
     if (dropdown) dropdown.classList.add('hidden');
   }
 }
