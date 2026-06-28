@@ -51,6 +51,8 @@ export async function nav(page, opts) {
   const footerEl = document.getElementById('global-footer');
   if (footerEl) footerEl.style.display = hideHeader ? 'none' : '';
 
+  import('./auth.js').then(m => m.updateAuthUI());
+
   const stitchEl = document.getElementById('mouse-stitch');
   if (stitchEl) {
     stitchEl.style.display = hideStitch ? 'none' : '';
