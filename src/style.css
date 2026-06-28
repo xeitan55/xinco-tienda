@@ -1444,6 +1444,8 @@ html.dark .admin-solid .admin-card { background: var(--surface-container-lowest)
     #product-overlay, #search-overlay, .cart-drawer, #review-modal > .relative { -webkit-overflow-scrolling: touch; }
     html.dark #page-account aside nav .tab-btn.active { background: transparent; }
     .checkout-section .grid-cols-1 { gap: 0.75rem; }
+    .whatsapp-float { bottom: max(24px, calc(24px + var(--sab, 0px))); right: max(24px, calc(24px + var(--sar, 0px))); }
+    .toast { bottom: max(24px, calc(24px + var(--sab, 0px))); right: max(24px, calc(24px + var(--sar, 0px))); }
   }
 
   @media (prefers-reduced-motion: reduce) {
