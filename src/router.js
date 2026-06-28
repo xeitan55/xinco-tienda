@@ -126,12 +126,29 @@ export async function nav(page, opts) {
 export async function handleAuthBtn() {
   if (state.user) {
     const { isAdmin } = await import('./admin.js');
-    if (await isAdmin()) await nav('admin');
-    else await nav('account');
+    if (await isAdmin()) {
+      const dd = document.getElementById('auth-dropdown');
+      if (dd) dd.classList.toggle('hidden');
+    } else {
+      await nav('account');
+    }
   } else {
     await nav('login');
   }
 }
+
+window.closeDropdown = () => {
+  const dd = document.getElementById('auth-dropdown');
+  if (dd) dd.classList.add('hidden');
+};
+
+document.addEventListener('click', (e) => {
+  const dd = document.getElementById('auth-dropdown');
+  const btn = document.getElementById('auth-btn');
+  if (dd && !dd.classList.contains('hidden') && !e.target.closest('#auth-wrapper')) {
+    dd.classList.add('hidden');
+  }
+});
 
 export async function filterCatalog(tag) {
   state._tagFilter = ['newdrops','stylo','esenciales','exclusive'].includes(tag) ? tag : null;

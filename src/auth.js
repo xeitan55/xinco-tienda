@@ -158,12 +158,20 @@ export async function doLogout() {
 
 export async function updateAuthUI() {
   const label = document.getElementById('auth-label');
+  const panelBtn = document.getElementById('admin-panel-btn');
+  const dropdown = document.getElementById('auth-dropdown');
+  const wrapper = document.getElementById('auth-wrapper');
   const { isAdmin } = await import('./admin.js');
-  const admin = await isAdmin();
+  const admin = state.user && await isAdmin();
   if (state.user) {
     if (label) label.textContent = admin ? 'ADMIN' : (state.user.displayName || state.user.name || state.user.email?.split('@')[0] || 'USUARIO').split(' ')[0].toUpperCase();
+    if (panelBtn) panelBtn.classList.toggle('hidden', !admin);
+    if (wrapper) wrapper.classList.remove('hidden');
   } else {
     if (label) label.textContent = 'ACCEDER';
+    if (panelBtn) panelBtn.classList.add('hidden');
+    if (wrapper) wrapper.classList.remove('hidden');
+    if (dropdown) dropdown.classList.add('hidden');
   }
 }
 
