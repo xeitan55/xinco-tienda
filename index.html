@@ -435,49 +435,52 @@ tailwind.config = {
   </section>
 
 
-  <!-- FOOTER -->
-  <footer class="px-6 md:px-12 py-16 md:py-20" style="background:var(--primary);">
-    <div class="max-w-[1440px] mx-auto">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12 pb-12" style="border-bottom:1px solid rgba(255,255,255,0.1);">
-        <div class="col-span-2 md:col-span-1">
-          <h3 style="font-family:Montserrat;font-size:22px;font-weight:700;letter-spacing:0;" class="text-white mb-4">XINCO</h3>
-          <p class="text-white/60 text-sm leading-relaxed" style="font-family:Inter;" data-i18n="footer.rights">Mar del Plata, Buenos Aires, Argentina.</p>
-        </div>
-        <div>
-          <h4 class="text-xs tracking-[0.2em] uppercase text-white/55 mb-5" data-i18n="footer.shop">Tienda</h4>
-          <ul class="space-y-3">
-            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="nav('catalog')" data-i18n="footer.catalog">Catálogo</a></li>
-            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="filterCatalog('newdrops')" data-i18n="footer.new">Novedades</a></li>
-            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="filterCatalog('buzos')" data-i18n="footer.hoodies">Buzos</a></li>
-            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="filterCatalog('remeras')" data-i18n="footer.shirts">Remeras</a></li>
-            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="nav('accesorios')" data-i18n="footer.accessories">Accesorios</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-xs tracking-[0.2em] uppercase text-white/55 mb-5" data-i18n="footer.help">Ayuda</h4>
-          <ul class="space-y-3">
-            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="showSizeGuide()" data-i18n="footer.sizeguide">Guía de Talles</a></li>
-            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="window.showToast?.('Envíos a todo el país — consultá por WhatsApp')" data-i18n="footer.shipping">Envíos</a></li>
-            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="window.showToast?.('Aceptamos cambios dentro de los 30 días')" data-i18n="footer.returns">Devoluciones</a></li>
-            <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" data-i18n="footer.contact">Contacto</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-xs tracking-[0.2em] uppercase text-white/55 mb-5" data-i18n="footer.newsletter">Newsletter</h4>
-          <p class="text-white/60 text-sm mb-4 leading-relaxed" style="font-family:Inter;" data-i18n="footer.newsletter.desc">Enterate primero de los drops y colecciones nuevas.</p>
-          <div class="flex" style="border-bottom:1px solid rgba(255,255,255,0.2);">
-            <input id="newsletter-email" class="bg-transparent flex-1 px-0 py-2 text-white text-sm outline-none placeholder:text-white/30" style="font-family:Inter;" placeholder="tu@email.com" autocomplete="off" data-i18n-placeholder="footer.newsletter.email"/>
-            <button class="text-white/60 hover:text-white text-xs tracking-wider uppercase transition-colors font-bold px-2" onclick="subscribeNewsletter()" data-i18n="footer.newsletter.ok">OK</button>
-          </div>
-        </div>
+</div>
+
+<!-- ===================================== -->
+<!-- GLOBAL FOOTER                         -->
+<!-- ===================================== -->
+<footer id="global-footer" class="px-6 md:px-12 py-16 md:py-20 hidden" style="background:var(--primary);">
+  <div class="max-w-[1440px] mx-auto">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12 pb-12" style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <div class="col-span-2 md:col-span-1">
+        <h3 style="font-family:Montserrat;font-size:22px;font-weight:700;letter-spacing:0;" class="text-white mb-4">XINCO</h3>
+        <p class="text-white/60 text-sm leading-relaxed" style="font-family:Inter;" data-i18n="footer.rights">Mar del Plata, Buenos Aires, Argentina.</p>
       </div>
-      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-        <span class="text-xs tracking-wider text-white/50" data-i18n="footer.copyright">© 2026 XINCO — Mar del Plata, Buenos Aires, Argentina</span>
-        <div id="footer-social" class="flex gap-4"></div>
+      <div>
+        <h4 class="text-xs tracking-[0.2em] uppercase text-white/55 mb-5" data-i18n="footer.shop">Tienda</h4>
+        <ul class="space-y-3">
+          <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="nav('catalog')" data-i18n="footer.catalog">Catálogo</a></li>
+          <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="filterCatalog('newdrops')" data-i18n="footer.new">Novedades</a></li>
+          <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="filterCatalog('buzos')" data-i18n="footer.hoodies">Buzos</a></li>
+          <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="filterCatalog('remeras')" data-i18n="footer.shirts">Remeras</a></li>
+          <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="nav('accesorios')" data-i18n="footer.accessories">Accesorios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs tracking-[0.2em] uppercase text-white/55 mb-5" data-i18n="footer.help">Ayuda</h4>
+        <ul class="space-y-3">
+          <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="showSizeGuide()" data-i18n="footer.sizeguide">Guía de Talles</a></li>
+          <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="window.showToast?.('Envíos a todo el país — consultá por WhatsApp')" data-i18n="footer.shipping">Envíos</a></li>
+          <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="window.showToast?.('Aceptamos cambios dentro de los 30 días')" data-i18n="footer.returns">Devoluciones</a></li>
+          <li><a class="text-white/70 hover:text-white text-sm transition-colors cursor-pointer" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" data-i18n="footer.contact">Contacto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs tracking-[0.2em] uppercase text-white/55 mb-5" data-i18n="footer.newsletter">Newsletter</h4>
+        <p class="text-white/60 text-sm mb-4 leading-relaxed" style="font-family:Inter;" data-i18n="footer.newsletter.desc">Enterate primero de los drops y colecciones nuevas.</p>
+        <div class="flex" style="border-bottom:1px solid rgba(255,255,255,0.2);">
+          <input id="newsletter-email" class="bg-transparent flex-1 px-0 py-2 text-white text-sm outline-none placeholder:text-white/30" style="font-family:Inter;" placeholder="tu@email.com" autocomplete="off" data-i18n-placeholder="footer.newsletter.email"/>
+          <button class="text-white/60 hover:text-white text-xs tracking-wider uppercase transition-colors font-bold px-2" onclick="subscribeNewsletter()" data-i18n="footer.newsletter.ok">OK</button>
+        </div>
       </div>
     </div>
-  </footer>
-</div>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+      <span class="text-xs tracking-wider text-white/50" data-i18n="footer.copyright">© 2026 XINCO — Mar del Plata, Buenos Aires, Argentina</span>
+      <div id="footer-social" class="flex gap-4"></div>
+    </div>
+  </div>
+</footer>
 
 <!-- ===================================== -->
 <!-- PAGE: CATALOG                         -->

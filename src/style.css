@@ -370,7 +370,7 @@
   }
   html.dark .theme-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
   html.dark .theme-btn.active { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.25); }
-  .page { display: none; animation: fadeInUp 0.35s ease-out; background: rgba(255,255,255,0.85); }
+  .page { display: none; animation: fadeInUp 0.35s ease-out; background: rgba(255,255,255,0.85); min-height: 100vh; }
   html.dark .page { background: rgba(18,18,18,0.85); }
   .page.active { display: block; }
 

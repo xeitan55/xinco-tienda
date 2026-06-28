@@ -48,6 +48,9 @@ export async function nav(page, opts) {
   document.getElementById('main-header').style.display = hideHeader ? 'none' : '';
   document.getElementById('announcement-bar').style.display = hideHeader ? 'none' : '';
 
+  const footerEl = document.getElementById('global-footer');
+  if (footerEl) footerEl.style.display = hideHeader ? 'none' : '';
+
   const stitchEl = document.getElementById('mouse-stitch');
   if (stitchEl) {
     stitchEl.style.display = hideStitch ? 'none' : '';
