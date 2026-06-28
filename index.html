@@ -252,10 +252,6 @@ tailwind.config = {
       <button id="admin-panel-btn" class="hidden p-1" onclick="nav('admin')" title="PANEL">
         <span class="material-symbols-outlined text-[22px] text-primary hover:text-secondary-container transition-colors">dashboard</span>
       </button>
-      <button class="relative p-1 group" id="lang-toggle" onclick="toggleLang()" title="Cambiar idioma">
-        <span class="material-symbols-outlined text-primary">translate</span>
-        <span id="lang-label" class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 text-[8px] font-bold font-label-caps text-primary leading-none">ES</span>
-      </button>
       <div id="auth-wrapper" class="hidden md:flex items-center relative">
         <div class="relative">
           <button id="auth-btn" class="flex items-center gap-1 font-label-caps text-label-caps hover:text-secondary-container transition-colors" onclick="handleAuthBtn()">
@@ -273,6 +269,10 @@ tailwind.config = {
       <button id="cart-btn" class="relative p-1" onclick="openCart()">
         <span class="material-symbols-outlined text-primary">shopping_bag</span>
         <span id="cart-count" class="absolute -top-1 -right-1 bg-secondary-container text-primary font-label-caps text-[10px] w-5 h-5 flex items-center justify-center border-2 border-primary rounded-full">0</span>
+      </button>
+      <button class="relative p-1 group" id="lang-toggle" onclick="toggleLang()" title="Cambiar idioma">
+        <span class="material-symbols-outlined text-primary">translate</span>
+        <span id="lang-label" class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 text-[8px] font-bold font-label-caps text-primary leading-none">ES</span>
       </button>
     </div>
   </div>
