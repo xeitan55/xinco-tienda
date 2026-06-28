@@ -619,6 +619,7 @@ function setLang(lang) {
   const btn = document.getElementById('lang-toggle');
   if (btn) btn.title = lang === 'en' ? 'Switch language' : 'Cambiar idioma';
   applyTranslations();
+  import('./auth.js').then(m => m.updateAuthUI());
 }
 
 function toggleLang() {
